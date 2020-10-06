@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "706334074656",
+    "firebase_url": "https://gymfit-52494.firebaseio.com",
+    "project_id": "gymfit-52494",
+    "storage_bucket": "gymfit-52494.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:706334074656:android:04e69c6da12d1e2e08d945",
+        "android_client_info": {
+          "package_name": "com.example.gymfit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "706334074656-jcop6b6b1qqtuatbao446cgbogb7t4i9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gymfit",
+            "certificate_hash": "5923face6e332e069bc5a83741de8111afa81e54"
+          }
+        },
+        {
+          "client_id": "706334074656-2f5s6fcakt1374bn9aaphao40jnoavec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBf9tTPxpq1P-9Ju9AXMKvkzjIjtTK-rSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "706334074656-2f5s6fcakt1374bn9aaphao40jnoavec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
