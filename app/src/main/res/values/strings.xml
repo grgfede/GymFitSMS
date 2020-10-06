@@ -9,4 +9,6 @@
     <string name="no_account">"Non hai un account?"</string>
     <string name="signup">"Registrati"</string>
     <string name="accept_condition">"Continuando accetti termini e condizioni dell'applicazione"</string>
+    <string name="title_main_page">"Inizia il cambiamento"</string>
+    <string name="subtitle_main_page">Accedi subito per prenotare un turno nella tua palestra preferita</string>
 </resources>

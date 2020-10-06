@@ -10,4 +10,6 @@
     <string name="no_account">Do not have an account?</string>
     <string name="signup">Sign up</string>
     <string name="accept_condition">By continuing you accept the terms and conditions of the application</string>
+    <string name="title_main_page">"The change begins "</string>
+    <string name="subtitle_main_page">Log in now to book a shift at your favorite gym</string>
 </resources>
