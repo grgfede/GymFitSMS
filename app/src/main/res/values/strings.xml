@@ -15,4 +15,14 @@
     <string name="forgot_password">Password dimenticata?</string>
     <string name="dont_have_account">Non hai un account?</string>
     <string name="create_account">Creane uno</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="male">Maschio</string>
+    <string name="female">Femmina</string>
+    <string name="select_gender">Seleziona genere</string>
+    <string name="name">Nome</string>
+    <string name="surname">Cognome</string>
+    <string name="phoneNumber">Numero di telefono</string>
+    <string name="signUpTitle">Benvenuto!</string>
+    <string name="signUpSubTitle">Avanti, non mollare! Ti invitiamo a compilare i campi con i dati richiesti per poter creare un account</string>
+    <string name="repeat_password">Ripeti password</string>
 </resources>
