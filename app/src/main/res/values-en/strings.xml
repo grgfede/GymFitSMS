@@ -10,4 +10,6 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="create_account">Create</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 </resources>

@@ -13,4 +13,12 @@
     <string name="forgot_password">Password dimenticata?</string>
     <string name="dont_have_account">Non hai un account?</string>
     <string name="create_account">Creane uno</string>
+    <string name="title_activity_gym_profile" translatable="false">GymProfile</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
+    <string name="next">Successivo</string>
+    <string name="previous">Precedente</string>
+    <string name="gym_name_default" translatable="false">Fit and Work</string>
+
 </resources>
