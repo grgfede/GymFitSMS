@@ -1,12 +1,17 @@
 package com.example.gymfit;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -26,6 +31,9 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     FirebaseAuth mFirebaseAuth;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +41,19 @@ public class Login extends AppCompatActivity {
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
+
+        //NASCONDO LA TITLE BAR
+        getSupportActionBar().hide();
+
         //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
         mFirebaseAuth = FirebaseAuth.getInstance();
         //MI INSTANZIO GLI ELEMENTI
         emailId = findViewById(R.id.txtEmail);
         password = findViewById(R.id.txtPassword);
         btnLogin = findViewById(R.id.btnLogin);
+
+
+
 
         //CREO UN LISTENER CHE E' SEMPRE IN ASCOLTO SUL CLICK DEL BOTTONE DI LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -89,5 +104,8 @@ public class Login extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+
+
 
 }
