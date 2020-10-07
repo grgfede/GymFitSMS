@@ -1,12 +1,10 @@
 <resources>
-    <string name="app_name">GymFit</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in_short">Registrati</string>
-    <string name="login_email">"Login via Email"</string>
+    <string name="app_name" translatable="false">GymFit</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password</string>
+    <string name="login_email">Accedi via Email</string>
     <string name="login_gym">"Sei una palestra? Registrati"</string>
-    <string name="no_account">"Non hai un account?"</string>
     <string name="signup">"Registrati"</string>
     <string name="accept_condition">"Continuando accetti termini e condizioni dell'applicazione"</string>
     <string name="title_main_page">"Inizia il cambiamento"</string>

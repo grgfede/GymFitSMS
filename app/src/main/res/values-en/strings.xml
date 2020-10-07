@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GymFit</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in_short">Sign up</string>
     <string name="login_email">Login with Email</string>
     <string name="login_gym">Are you a gym? Sign in</string>
-    <string name="no_account">Do not have an account?</string>
     <string name="signup">Sign up</string>
     <string name="accept_condition">By continuing you accept the terms and conditions of the application</string>
     <string name="title_main_page">"The change begins "</string>

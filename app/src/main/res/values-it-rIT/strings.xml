@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_email">Accedi via Email</string>
+    <string name="login_gym">Sei una palestra? Registrati</string>
+    <string name="signup">Registrati</string>
+    <string name="accept_condition">Continuando accetti termini e condizioni dell\'applicazione</string>
+    <string name="title_main_page">Inizia il cambiamento</string>
+    <string name="subtitle_main_page">Accedi subito per prenotare un turno nella tua palestra preferita</string>
+    <string name="subtitle_login_page">Compila le informazioni sottostanti per effettuare il login ed accedere al tuo profilo</string>
+    <string name="forgot_password">Password dimenticata?</string>
+    <string name="dont_have_account">Non hai un account?</string>
+    <string name="create_account">Creane uno</string>
+</resources>
