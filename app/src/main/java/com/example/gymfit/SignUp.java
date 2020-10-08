@@ -78,8 +78,7 @@ public class SignUp extends AppCompatActivity {
 
 }
 
-
-    class AuthenticationPagerAdapter extends FragmentPagerAdapter {
+class AuthenticationPagerAdapter extends FragmentPagerAdapter {
         private ArrayList<Fragment> fragmentList = new ArrayList<>();
 
         public AuthenticationPagerAdapter(FragmentManager fm) {
