@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">GymFit</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short">Sign up</string>
     <string name="login_email">Login with Email</string>
     <string name="login_gym">Are you a gym? Sign in</string>
+    <string name="no_account">Do not have an account?</string>
     <string name="signup">Sign up</string>
     <string name="accept_condition">By continuing you accept the terms and conditions of the application</string>
     <string name="title_main_page">"The change begins "</string>
@@ -10,6 +16,13 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="dont_have_account">Don\'t have an account?</string>
     <string name="create_account">Create</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="select_gender">Select gender</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="phoneNumber">Phone number</string>
+    <string name="signUpTitle">You\'re welcome!</string>
+    <string name="signUpSubTitle">Come on, don\'t give up! We invite you to fill in the fields with the required data in order to create an account</string>
+    <string name="repeat_password">Repeat password</string>
 </resources>
