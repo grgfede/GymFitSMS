@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">GymFit</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
+    <string name="app_name" translatable="false">GymFit</string>
+    <string name="title_activity_login" translatable="false">LoginActivity</string>
+    <string name="prompt_email" translatable="false">Email</string>
+    <string name="prompt_password" translatable="false">Password</string>
     <string name="action_sign_in_short">Registrati</string>
     <string name="login_email">"Login via Email"</string>
     <string name="login_gym">"Sei una palestra? Registrati"</string>
@@ -25,4 +25,15 @@
     <string name="signUpTitle">Benvenuto!</string>
     <string name="signUpSubTitle">Avanti, non mollare! Ti invitiamo a compilare i campi con i dati richiesti per poter creare un account</string>
     <string name="repeat_password">Ripeti password</string>
+    <string name="next">Successivo</string>
+    <string name="previous">Precedente</string>
+    <string name="gym_button_calendar">Orari</string>
+    <string name="gym_button_map">Mappa</string>
+    <string name="gym_name_default" translatable="false">Fit and Work</string>
+    <string name="gym_email_default" translatable="false">fitandwork@gmail.com</string>
+    <string name="gym_number_default" translatable="false">+39 3280883540</string>
+    <string name="gym_andress_default" translatable="false">Via Orabona, 15, Bari</string>
+    <string name="title_activity_gym_profile" translatable="false">GymProfile</string>
+    <string name="first_fragment_label" translatable="false">FirstFragment</string>
+    <string name="second_fragment_label" translatable="false">SecondFragment</string>
 </resources>

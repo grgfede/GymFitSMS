@@ -9,7 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignUp"></activity>
+        <activity android:name=".system.onboard.FirstOnboardActivity"></activity>
+        <activity
+            android:name=".gym.GymProfile"
+            android:label="@string/title_activity_gym_profile"
+            android:parentActivityName=".Login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SignUp" />
         <activity android:name=".Login" />
         <activity android:name=".MainActivity">
             <intent-filter>
