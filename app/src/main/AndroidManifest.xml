@@ -10,14 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".system.onboard.FirstOnboardActivity" />
-        <activity
-            android:name=".gym.profile.GymProfile"
-            android:label="@string/title_activity_gym_profile"
-            android:parentActivityName=".user.signin.Login"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".system.MainActivity" />
         <activity android:name=".user.signup.SignUp" />
         <activity android:name=".user.signin.Login" />
-        <activity android:name=".system.MainActivity">
+        <activity
+            android:name=".gym.profile.GymProfile"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

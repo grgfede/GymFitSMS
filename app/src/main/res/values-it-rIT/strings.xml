@@ -26,4 +26,5 @@
     <string name="signUpSubTitle">Avanti, non mollare! Ti invitiamo a compilare i campi con i dati richiesti per poter creare un account</string>
     <string name="repeat_password">Ripeti password</string>
     <string name="signin">Accedi</string>
+    <string name="prompt_andress">Indirizzo</string>
 </resources>
