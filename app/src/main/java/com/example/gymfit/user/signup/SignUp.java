@@ -78,9 +78,8 @@ public class SignUp extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-}
 
-class AuthenticationPagerAdapter extends FragmentPagerAdapter {
+    class AuthenticationPagerAdapter extends FragmentPagerAdapter {
         private ArrayList<Fragment> fragmentList = new ArrayList<>();
 
         public AuthenticationPagerAdapter(FragmentManager fm) {
@@ -101,3 +100,9 @@ class AuthenticationPagerAdapter extends FragmentPagerAdapter {
             fragmentList.add(fragment);
         }
     }
+
+
+}
+
+
+

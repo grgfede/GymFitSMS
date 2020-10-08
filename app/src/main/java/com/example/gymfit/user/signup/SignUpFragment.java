@@ -67,9 +67,9 @@ public class SignUpFragment extends Fragment {
         String female = getView().getResources().getString(R.string.female);
         String gender = getView().getResources().getString(R.string.select_gender);
         String [] values = {male, female,};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, values);
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        spinner.setAdapter(adapter);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_item, values);
+        //adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        //spinner.setAdapter(adapter);
 
 
 
