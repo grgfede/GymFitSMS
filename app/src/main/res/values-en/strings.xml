@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GymFit</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
     <string name="action_sign_in_short">Sign up</string>
     <string name="login_email">Login with Email</string>
     <string name="login_gym">Are you a gym? Sign in</string>
@@ -25,4 +21,8 @@
     <string name="signUpTitle">You\'re welcome!</string>
     <string name="signUpSubTitle">Come on, don\'t give up! We invite you to fill in the fields with the required data in order to create an account</string>
     <string name="repeat_password">Repeat password</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="gym_button_calendar">Calendar</string>
+    <string name="gym_button_map">Map</string>
 </resources>
