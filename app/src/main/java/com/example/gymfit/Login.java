@@ -53,6 +53,13 @@ public class Login extends AppCompatActivity {
         signUp = findViewById(R.id.textCreate);
         btnLogin = findViewById(R.id.btnLogin);
 
+
+        signUp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                startActivity(new Intent(Login.this, SignUp.class));
+            }
+        });
         //CREO UN LISTENER CHE E' SEMPRE IN ASCOLTO SUL CLICK DEL BOTTONE DI LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
@@ -112,9 +119,7 @@ public class Login extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private void signUpIntent(View v){
-        startActivity(new Intent(Login.this, SignUp.class));
-    }
+
 
 
 }
