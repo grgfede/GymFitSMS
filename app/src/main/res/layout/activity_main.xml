@@ -9,8 +9,7 @@
     app:layout_constraintHorizontal_bias="0.498"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:context=".MainActivity">
-
+    tools:context=".system.MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -32,7 +31,7 @@
         android:fontFamily="@font/avenirheavy"
         android:text="@string/title_main_page"
         android:textColor="@color/colorPrimary"
-        android:textSize="29dp"
+        android:textSize="29sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +89,7 @@
         android:fontFamily="@font/avenirltstdlight"
         android:text="@string/accept_condition"
         android:textAlignment="center"
-        android:textSize="12dp"
+        android:textSize="12sp"
         android:textColor="@color/stringColor"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -99,7 +98,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.977" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

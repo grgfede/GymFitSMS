@@ -36,4 +36,5 @@
     <string name="title_activity_gym_profile" translatable="false">GymProfile</string>
     <string name="first_fragment_label" translatable="false">FirstFragment</string>
     <string name="second_fragment_label" translatable="false">SecondFragment</string>
+    <string name="signin">Accedi</string>
 </resources>

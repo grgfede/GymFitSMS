@@ -1,26 +1,22 @@
-package com.example.gymfit;
+package com.example.gymfit.user.signin;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.gymfit.gym.GymProfile;
+import com.example.gymfit.R;
+import com.example.gymfit.user.signup.SignUp;
+import com.example.gymfit.gym.profile.GymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -68,7 +64,7 @@ public class Login extends AppCompatActivity {
                 } else if (pswd.isEmpty()) {
                     password.setError("Attenzione! Inserisci password");
                     password.requestFocus();
-                } else if (!(email.isEmpty()) && !(pswd.isEmpty())) {
+                } else {
                     Toast.makeText(Login.this, "ENTRATA IF.",
                             Toast.LENGTH_SHORT).show();
                     //SE I CAMPI RICHIESTI SONO CORRETTAMENTE COMPILATI, VADO AD ESEGUIRE IL LOGIN
@@ -112,7 +108,7 @@ public class Login extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private void signUpIntent(View v){
+    public void signUpIntent(View v){
         startActivity(new Intent(Login.this, SignUp.class));
     }
 

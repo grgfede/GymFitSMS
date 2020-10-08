@@ -1,10 +1,15 @@
-package com.example.gymfit;
+package com.example.gymfit.system;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.gymfit.user.signin.Login;
+import com.example.gymfit.R;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //NASCONDO LA TITLE BAR
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
     }
 

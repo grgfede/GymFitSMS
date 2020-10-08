@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SignUpFragment">
+    tools:context=".user.signup.SignUpFragment">
 
     <TextView
         android:id="@+id/tv_logo"
@@ -19,7 +19,7 @@
         android:textColor="@color/colorPrimary"
         android:text="@string/signUpTitle"
         android:textAlignment="center"
-        android:textSize="30dp" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tv_subtitle"
@@ -34,7 +34,7 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/txtNameSignUp"
@@ -49,6 +49,7 @@
         android:inputType="textPersonName"
         android:padding="15dp"
         android:textSize="18sp" />
+
     <EditText
         android:id="@+id/txtSurnameSignUp"
         android:layout_width="match_parent"
@@ -119,8 +120,6 @@
             android:fontFamily="@font/avenirltstdlight"
             android:text="Swipe per continuare"
             android:textSize="15sp" />
-
-
 
     </RelativeLayout>
 

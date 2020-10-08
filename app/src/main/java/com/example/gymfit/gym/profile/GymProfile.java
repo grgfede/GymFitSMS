@@ -1,4 +1,4 @@
-package com.example.gymfit.gym;
+package com.example.gymfit.gym.profile;
 
 import android.os.Bundle;
 

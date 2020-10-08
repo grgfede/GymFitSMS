@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SignUp2Fragment">
+    tools:context=".user.signup.SignUp2Fragment">
 
     <TextView
         android:id="@+id/tv_logo"
@@ -90,7 +90,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/radiousbuttonlightblue"
             android:fontFamily="@font/avenirltstdlight"
-            android:text="Registrati"
+            android:text="@string/signup"
             android:textColor="@android:color/white" />
 
         <ImageView

@@ -1,4 +1,4 @@
-package com.example.gymfit;
+package com.example.gymfit.user.signup;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +12,9 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.example.gymfit.R;
+import com.example.gymfit.user.signin.Login;
 
 import java.util.ArrayList;
 

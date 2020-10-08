@@ -25,4 +25,5 @@
     <string name="previous">Previous</string>
     <string name="gym_button_calendar">Calendar</string>
     <string name="gym_button_map">Map</string>
+    <string name="signin">Login</string>
 </resources>
