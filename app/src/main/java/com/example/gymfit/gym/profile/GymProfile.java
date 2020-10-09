@@ -1,17 +1,31 @@
 package com.example.gymfit.gym.profile;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gymfit.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class GymProfile extends AppCompatActivity {
+    private static final String FIRE_LOG = "fire_log";
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     private Animation rotateOpen;
     private Animation rotateClose;
     private Animation fromButton;
@@ -21,12 +35,17 @@ public class GymProfile extends AppCompatActivity {
     private FloatingActionButton fabSetting;
     private FloatingActionButton fabSubscription;
     private FloatingActionButton fabRound;
+
+    private String userUid = null;
+    private Gym gym = null;
     private boolean clicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
+        setUserUid();
+        setGym();
 
         this.fab = findViewById(R.id.fab_add);
         this.fabSetting = findViewById(R.id.fab_setting);
@@ -118,6 +137,40 @@ public class GymProfile extends AppCompatActivity {
             this.fabSubscription.setClickable(false);
             this.fabRound.setClickable(false);
         }
+    }
+
+    private void setUserUid() {
+        this.userUid = getIntent().getStringExtra("userUid");
+    }
+
+    private void setGym() {
+
+        this.db.collection("gyms").document(userUid).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        assert documentSnapshot != null;
+
+                        TextView gymNameField = findViewById(R.id.gymNameField);
+                        gymNameField.setText(documentSnapshot.getString("name"));
+                        TextView gymEmailField = findViewById(R.id.gymEmailField);
+                        gymEmailField.setText(documentSnapshot.getString("email"));
+                        TextView gymPhoneField = findViewById(R.id.gymPhoneField);
+                        gymPhoneField.setText(Objects.requireNonNull(documentSnapshot.get("phone")).toString());
+                        TextView gymAddressField = findViewById(R.id.gymAddressField);
+
+                        String address = Objects.requireNonNull(documentSnapshot.get("address")).toString();
+                        Log.d(FIRE_LOG, "INFO: " + address);
+
+                    } else {
+                        Log.d(FIRE_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
+                    }
+                }
+        });
     }
 
 }

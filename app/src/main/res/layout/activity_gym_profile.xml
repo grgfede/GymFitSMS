@@ -39,11 +39,11 @@
 
             <!-- Title -->
             <TextView
+                android:id="@+id/gymNameField"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="5dp"
-                android:text="@string/gym_name_default"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="24sp"
@@ -182,10 +182,10 @@
                         </TextView>
 
                         <TextView
+                            android:id="@+id/gymEmailField"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="@string/gym_email_default"
                             android:textSize="14sp">
 
                         </TextView>
@@ -236,10 +236,10 @@
                         </TextView>
 
                         <TextView
+                            android:id="@+id/gymPhoneField"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:text="@string/gym_number_default"
                             android:textSize="14sp">
 
                         </TextView>
@@ -290,6 +290,7 @@
                         </TextView>
 
                         <TextView
+                            android:id="@+id/gymAddressField"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"

@@ -61,7 +61,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         //get the spinner from the xml.
-        Spinner spinner = (Spinner) getView().findViewById(R.id.spinnerGender);
+        //Spinner spinner = (Spinner) getView().findViewById(R.id.spinnerGender);
         //create a list of items for the spinner.
         String male = getView().getResources().getString(R.string.male);
         String female = getView().getResources().getString(R.string.female);

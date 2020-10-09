@@ -5,6 +5,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.example.gymfit"
         minSdkVersion 19
         targetSdkVersion 30
@@ -38,10 +39,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-core:17.5.0'
     implementation 'com.google.firebase:firebase-auth:19.4.0'
+    implementation 'com.google.firebase:firebase-firestore:21.7.0'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation "androidx.navigation:navigation-fragment:2.3.0"
     implementation "androidx.navigation:navigation-ui:2.3.0"
-
+    implementation 'com.android.support:multidex:1.0.3'
 }
