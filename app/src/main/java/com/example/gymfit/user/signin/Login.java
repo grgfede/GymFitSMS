@@ -15,8 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
-import com.example.gymfit.gym.profile.GymProfile;
+import com.example.gymfit.system.GenericUser;
 import com.example.gymfit.user.signup.SignUp;
+import com.example.gymfit.gym.profile.GymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,6 +52,7 @@ public class Login extends AppCompatActivity {
 
         //CREO UN LISTENER CHE E' SEMPRE IN ASCOLTO SUL CLICK DEL BOTTONE DI LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick (View v){
             String email = emailId.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA EMAIL INSERITA DALL'UTENTE
@@ -62,8 +64,6 @@ public class Login extends AppCompatActivity {
                     password.setError("Attenzione! Inserisci password");
                     password.requestFocus();
                 } else {
-                    Toast.makeText(Login.this, "ENTRATA IF.",
-                            Toast.LENGTH_SHORT).show();
                     //SE I CAMPI RICHIESTI SONO CORRETTAMENTE COMPILATI, VADO AD ESEGUIRE IL LOGIN
                     mFirebaseAuth.signInWithEmailAndPassword(email, pswd).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -76,9 +76,10 @@ public class Login extends AppCompatActivity {
                                 FirebaseUser user = mFirebaseAuth.getCurrentUser();
                                 Toast.makeText(Login.this, "Autenticazione riuscita.",
                                         Toast.LENGTH_SHORT).show();
-                                //TODO: UserProfile (Execution)
-                                //TODO: GymProfile (Under Test)
-                                startActivity(new Intent(Login.this, GymProfile.class));
+
+                                assert user != null;
+                                signInIntent(user.getUid());
+
                             } else {
                                 // SE IL LOGIN NON VA A BUON FINE, MOSTRO UN MESSAGGIO POPUP ALL'UTENTE PER AVVISARLO
                                 Toast.makeText(Login.this, "Autenticazione fallita.", Toast.LENGTH_SHORT).show();
@@ -91,23 +92,34 @@ public class Login extends AppCompatActivity {
 
         //CODICE CHE PERMETTE DI CHIUDERE LA TASTIERA IN AUTOMATICO QUANDO SI CLICCA SULLO SCHERMO
         findViewById(R.id.loginParentLayout).
+
         setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
                 hideKeyboard(view);
             }
         });
+    }
 
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                startActivity(new Intent(Login.this, SignUp.class));
-            }
-        });
+    private void signInIntent(String uid) {
+        //TODO: inserire "p" come stringa di confronto
+        if(uid.endsWith("3")) {
+            Intent intent = new Intent(Login.this, GymProfile.class);
+            intent.putExtra("userUid", uid);
+            startActivity(intent);
+        } else {
+            //TODO: UserProfile (Execution)
+        }
     }
 
     private void hideKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
+    public void signUpIntent(View v){
+        startActivity(new Intent(Login.this, SignUp.class));
+    }
+
+
 }
