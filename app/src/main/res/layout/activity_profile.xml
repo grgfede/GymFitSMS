@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F9FF">
+
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="405dp"
+        android:layout_height="388dp"
+        android:background="@drawable/radiousframe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="40dp"
+            app:srcCompat="@drawable/icons8_document_100" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="110dp"
+            app:srcCompat="@drawable/icons8_calendar_100" />
+
+        <ImageView
+            android:id="@+id/imageView12"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="190dp"
+            app:srcCompat="@drawable/icons8_exit_100" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenirltstdlight"
+            android:text="prenotazioni in corso"
+            android:layout_marginTop="120dp"
+            android:layout_marginLeft="130dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenirltstdlight"
+            android:text="mostra abbonamento"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="130dp"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenirltstdlight"
+            android:text="logout"
+            android:layout_marginTop="210dp"
+            android:layout_marginLeft="130dp"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/imageView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="55dp"
+            android:layout_marginLeft="330dp"
+            app:srcCompat="@drawable/icons8_right_16" />
+
+        <ImageView
+            android:id="@+id/imageView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="125dp"
+            android:layout_marginLeft="330dp"
+            app:srcCompat="@drawable/icons8_right_16" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="180dp"
+            android:background="?android:attr/listDivider" />
+
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nickname"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.878" />
+
+    <ImageView
+        android:layout_width="139dp"
+        android:layout_height="143dp"
+        android:background="@drawable/img"
+        tools:layout_editor_absoluteX="136dp"
+        tools:layout_editor_absoluteY="99dp"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="91dp"
+        android:layout_height="32dp"
+        android:background="@drawable/edit"
+        android:fontFamily="@font/avenirltstdlight"
+        android:text="Edit"
+        android:textAlignment="center"
+        android:textColor="@android:color/tab_indicator_text"
+        tools:layout_editor_absoluteX="301dp"
+        tools:layout_editor_absoluteY="16dp"
+        tools:ignore="MissingConstraints" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
