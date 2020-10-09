@@ -5,11 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +20,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.gymfit.R;
+import com.example.gymfit.system.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,17 +125,13 @@ public class SignUp2Fragment extends Fragment {
 
                 //RECUPERO I DATI INSERITI DALL'UTENTE NEL FRAGMENT 2
                 recoverDataFragmentTwo(email, password, repeatPassword);
-                emailSignUp.setText(name);
             }
         });
-        //emailSignUp.setText(name);
-
-
         return view;
     }
 
     private void recoverDataFragmentTwo(String emailP, String passwordP, String repeatPasswordP) {
-        email = emailSignUp.getText().toString();
+        email = emailSignUp.getText().toString().trim();
         password = passwordSignUp.getText().toString();
         repeatPassword = repeatPasswordSignUp.getText().toString();
 
@@ -142,14 +150,40 @@ public class SignUp2Fragment extends Fragment {
 
     private void doSignUp() {
         mFirebaseAuth = FirebaseAuth.getInstance();
+        final ProgressBar progressBar = myContext.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        //create user
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(myContext, new OnCompleteListener<AuthResult>() {
+                    @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toast.makeText(myContext, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getActivity(),"ERROR!",Toast.LENGTH_SHORT).show();
-
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthWeakPasswordException e) {
+                                passwordSignUp.setError(getString(R.string.error_weak_password));
+                                passwordSignUp.requestFocus();
+                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                                emailSignUp.setError(getString(R.string.error_invalid_email));
+                                emailSignUp.requestFocus();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                emailSignUp.setError(getString(R.string.error_user_exists));
+                                emailSignUp.requestFocus();
+                            } catch(Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
                         } else {
-                            Toast.makeText(getActivity(),"Success!",Toast.LENGTH_SHORT).show();
+
+                            /*String oldUid = mFirebaseAuth.getCurrentUser().getUid();
+                            String newUid = oldUid + "_u";
+                            FirebaseUser user = mFirebaseAuth.getCurrentUser().create;*/
+
+
                         }
                     }
                 });

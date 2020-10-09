@@ -27,4 +27,7 @@
     <string name="repeat_password">Ripeti password</string>
     <string name="signin">Accedi</string>
     <string name="prompt_andress">Indirizzo</string>
+    <string name="error_weak_password">Attenzione! La password deve contenere minimo 6 caratteri</string>
+    <string name="error_user_exists">Attenzione! Utente già esistente</string>
+    <string name="error_invalid_email">Attenzione! Email non valida</string>
 </resources>

@@ -25,6 +25,7 @@ public class SignUp extends AppCompatActivity {
     private ViewPager viewPager;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
