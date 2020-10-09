@@ -9,9 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignUp"></activity>
-        <activity android:name=".Login" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".PasswordRecovery" />
+        <activity android:name=".system.onboard.FirstOnboardActivity" />
+        <activity android:name=".gym.profile.GymProfile"
+            android:parentActivityName=".user.signin.Login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".user.signup.SignUp" />
+        <activity android:name=".user.signin.Login" />
+        <activity android:name=".system.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_email">Accedi via Email</string>
+    <string name="login_gym">Sei una palestra? Registrati</string>
+    <string name="signup">Registrati</string>
+    <string name="accept_condition">Continuando accetti termini e condizioni dell\'applicazione</string>
+    <string name="title_main_page">Inizia il cambiamento</string>
+    <string name="subtitle_main_page">Accedi subito per prenotare un turno nella tua palestra preferita</string>
+    <string name="subtitle_login_page">Compila le informazioni sottostanti per effettuare il login ed accedere al tuo profilo</string>
+    <string name="forgot_password">Password dimenticata?</string>
+    <string name="dont_have_account">Non hai un account?</string>
+    <string name="create_account">Creane uno</string>
+    <string name="next">Successivo</string>
+    <string name="previous">Precedente</string>
+    <string name="gym_button_calendar">Orari</string>
+    <string name="gym_button_map">Mappa</string>
+    <string name="no_account">Non hai un account?</string>
+    <string name="action_sign_in_short">Registrati</string>
+    <string name="male">Maschio</string>
+    <string name="female">Femmina</string>
+    <string name="select_gender">Seleziona genere</string>
+    <string name="name">Nome</string>
+    <string name="surname">Cognome</string>
+    <string name="phoneNumber">Numero di telefono</string>
+    <string name="signUpTitle">Benvenuto!</string>
+    <string name="signUpSubTitle">Avanti, non mollare! Ti invitiamo a compilare i campi con i dati richiesti per poter creare un account</string>
+    <string name="repeat_password">Ripeti password</string>
+    <string name="signin">Accedi</string>
+    <string name="prompt_andress">Indirizzo</string>
+</resources>
