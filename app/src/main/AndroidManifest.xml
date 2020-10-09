@@ -9,11 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".user.EditProfile"></activity>
         <activity android:name=".PasswordRecovery" />
         <activity android:name=".system.onboard.FirstOnboardActivity" />
-        <activity android:name=".gym.profile.GymProfile"
+        <activity
+            android:name=".gym.profile.GymProfile"
             android:parentActivityName=".user.signin.Login"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Profile" />
+
         <activity android:name=".user.signup.SignUp" />
         <activity android:name=".user.signin.Login" />
         <activity android:name=".system.MainActivity">
@@ -23,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
