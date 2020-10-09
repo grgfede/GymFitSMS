@@ -1,14 +1,14 @@
 package com.example.gymfit.system;
 
 public abstract class GenericUser {
-    private final String uid;
-    private final String email;
-    private final int number;
+    private String uid;
+    private String email;
+    private String phone;
 
-    public GenericUser(String uid, String email, int number) {
+    public GenericUser(String uid, String email, String phone) {
         this.uid = uid;
         this.email = email;
-        this.number = number;
+        this.phone = phone;
     }
 
     public String getUid() {
@@ -19,7 +19,7 @@ public abstract class GenericUser {
         return email;
     }
 
-    public int getNumber() {
-        return number;
+    public String getPhone() {
+        return phone;
     }
 }

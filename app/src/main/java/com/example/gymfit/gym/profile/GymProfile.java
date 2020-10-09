@@ -18,7 +18,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -37,7 +36,7 @@ public class GymProfile extends AppCompatActivity {
     private FloatingActionButton fabRound;
 
     private String userUid = null;
-    private Gym gym = null;
+    private Gym gym;
     private boolean clicked = false;
 
     @Override
@@ -45,7 +44,12 @@ public class GymProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
         setUserUid();
-        setGym();
+        setGymInterface(new GymDBCallback() {
+            @Override
+            public void onCallback(Gym gymTmp) {
+                gym = gymTmp;
+            }
+        });
 
         this.fab = findViewById(R.id.fab_add);
         this.fabSetting = findViewById(R.id.fab_setting);
@@ -143,33 +147,47 @@ public class GymProfile extends AppCompatActivity {
         this.userUid = getIntent().getStringExtra("userUid");
     }
 
-    private void setGym() {
+    private void setGymInterface(final GymDBCallback gymDBCallback) {
 
-        this.db.collection("gyms").document(userUid).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        this.db.collection("gyms").document(userUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                    if(task.isSuccessful()) {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        assert documentSnapshot != null;
+                if(task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    assert documentSnapshot != null;
 
-                        TextView gymNameField = findViewById(R.id.gymNameField);
-                        gymNameField.setText(documentSnapshot.getString("name"));
-                        TextView gymEmailField = findViewById(R.id.gymEmailField);
-                        gymEmailField.setText(documentSnapshot.getString("email"));
-                        TextView gymPhoneField = findViewById(R.id.gymPhoneField);
-                        gymPhoneField.setText(Objects.requireNonNull(documentSnapshot.get("phone")).toString());
-                        TextView gymAddressField = findViewById(R.id.gymAddressField);
+                    TextView gymNameField = findViewById(R.id.gymNameField);
+                    String name = documentSnapshot.getString("name");
+                    gymNameField.setText(name);
 
-                        String address = Objects.requireNonNull(documentSnapshot.get("address")).toString();
-                        Log.d(FIRE_LOG, "INFO: " + address);
+                    TextView gymEmailField = findViewById(R.id.gymEmailField);
+                    String email = documentSnapshot.getString("email");
+                    gymEmailField.setText(email);
 
-                    } else {
-                        Log.d(FIRE_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
-                    }
+                    TextView gymPhoneField = findViewById(R.id.gymPhoneField);
+                    String phone = Objects.requireNonNull(documentSnapshot.get("phone")).toString();
+                    gymPhoneField.setText(phone);
+
+                    TextView gymAddressField = findViewById(R.id.gymAddressField);
+                    HashMap<String, Object> addressFields = new HashMap<>();
+                    addressFields.put("city", documentSnapshot.getString("address.city"));
+                    addressFields.put("country", documentSnapshot.getString("address.country"));
+                    addressFields.put("numberStreet", Objects.requireNonNull(documentSnapshot.get("address.numberStreet")).toString());
+                    addressFields.put("street", documentSnapshot.getString("address.street"));
+                    addressFields.put("zipCode", Objects.requireNonNull(documentSnapshot.get("address.zipCode")).toString());
+                    String address = addressFields.get("street") + " " + addressFields.get("numberStreet") + ", " +
+                                    addressFields.get("city");
+                    gymAddressField.setText(address);
+
+                    Gym gymTmp = new Gym(userUid, email, phone, name, addressFields);
+                    gymDBCallback.onCallback(gymTmp);
+
+                } else {
+                    Log.d(FIRE_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
                 }
+            }
         });
     }
 
