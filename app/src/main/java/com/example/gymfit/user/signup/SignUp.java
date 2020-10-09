@@ -15,30 +15,30 @@ import android.view.MenuItem;
 
 import com.example.gymfit.R;
 import com.example.gymfit.user.signin.Login;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class SignUp extends AppCompatActivity {
 
+    private FirebaseAuth mAuth;
+    private ViewPager viewPager;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        toolbarSettings(); //MI INIZIALIZZO LE IMPOSTAZIONI DELL'ACTIONBAR
 
-
-        ViewPager viewPager = findViewById(R.id.viewPager);
-
-        AuthenticationPagerAdapter pagerAdapter = new AuthenticationPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragmet(new SignUpFragment());
-        pagerAdapter.addFragmet(new SignUp2Fragment());
-        viewPager.setAdapter(pagerAdapter);
+        toolbarSettings();
+        SignUpFragment fragmentOne = new SignUpFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.viewPager, fragmentOne).commit();
     }
 
 
     /*
-    *  METODO CHE MI PERMETTE DI TORNARE INDIETRO QUANDO CLICCO SULLA FRECCIA
-    */
+     *  METODO CHE MI PERMETTE DI TORNARE INDIETRO QUANDO CLICCO SULLA FRECCIA
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -78,7 +78,6 @@ public class SignUp extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-
     class AuthenticationPagerAdapter extends FragmentPagerAdapter {
         private ArrayList<Fragment> fragmentList = new ArrayList<>();
 
@@ -100,9 +99,4 @@ public class SignUp extends AppCompatActivity {
             fragmentList.add(fragment);
         }
     }
-
-
 }
-
-
-

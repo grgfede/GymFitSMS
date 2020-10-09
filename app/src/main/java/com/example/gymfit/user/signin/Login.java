@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
-import com.example.gymfit.user.signup.SignUp;
 import com.example.gymfit.gym.profile.GymProfile;
+import com.example.gymfit.user.signup.SignUp;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -51,11 +51,8 @@ public class Login extends AppCompatActivity {
 
         //CREO UN LISTENER CHE E' SEMPRE IN ASCOLTO SUL CLICK DEL BOTTONE DI LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick (View v){
-                //startActivity(new Intent(Login.this, GymProfile.class));
-
             String email = emailId.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA EMAIL INSERITA DALL'UTENTE
             String pswd = password.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA PASSWORD INSERITA DALL'UTENTE
                 if (email.isEmpty()) {
@@ -94,11 +91,17 @@ public class Login extends AppCompatActivity {
 
         //CODICE CHE PERMETTE DI CHIUDERE LA TASTIERA IN AUTOMATICO QUANDO SI CLICCA SULLO SCHERMO
         findViewById(R.id.loginParentLayout).
-
         setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick (View view){
                 hideKeyboard(view);
+            }
+        });
+
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick (View view){
+                startActivity(new Intent(Login.this, SignUp.class));
             }
         });
     }
@@ -107,10 +110,4 @@ public class Login extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-
-    public void signUpIntent(View v){
-        startActivity(new Intent(Login.this, SignUp.class));
-    }
-
-
 }

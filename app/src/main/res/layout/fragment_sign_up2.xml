@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".user.signup.SignUp2Fragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".user.signup.SignUp2Fragment"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_logo"
@@ -90,7 +89,7 @@
             android:layout_marginBottom="30dp"
             android:background="@drawable/radiousbuttonlightblue"
             android:fontFamily="@font/avenirltstdlight"
-            android:text="@string/signup"
+            android:text="Registrati"
             android:textColor="@android:color/white" />
 
         <ImageView

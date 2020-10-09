@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".user.signup.SignUpFragment">
+    tools:context=".user.signup.SignUpFragment"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_logo"
@@ -28,12 +27,12 @@
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="50dp"
-        android:fontFamily="@font/avenirltstdlight"
-        android:text="@string/signUpSubTitle"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
+        android:fontFamily="@font/avenirltstdlight"
+        android:text="@string/signUpSubTitle"
         android:textSize="20sp" />
 
     <EditText
@@ -83,7 +82,7 @@
         />
 
     <EditText
-        android:id="@+id/txtPhone"
+        android:id="@+id/txtPhoneSignUp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
@@ -93,7 +92,7 @@
         android:textColorHint="@color/stringColor"
         android:fontFamily="@font/avenirltstdlight"
         android:hint="@string/phoneNumber"
-        android:inputType="textPersonName"
+        android:inputType="textPhonetic"
         android:padding="15dp"
         android:textSize="18sp" />
 
@@ -103,24 +102,20 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_above="@id/swipeRight"
-            android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/ic_arrow_right" />
 
-        <TextView
-            android:id="@+id/swipeRight"
+
+        <Button
+            android:id="@+id/btnContinue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
+            android:background="@drawable/radiousbuttonlightblue"
             android:fontFamily="@font/avenirltstdlight"
-            android:text="Swipe per continuare"
-            android:textSize="15sp" />
+            android:text="Continua" />
 
     </RelativeLayout>
+
 
 </LinearLayout>

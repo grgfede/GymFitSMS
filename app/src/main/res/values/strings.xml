@@ -38,4 +38,6 @@
     <string name="second_fragment_label" translatable="false">SecondFragment</string>
     <string name="signin">Accedi</string>
     <string name="prompt_andress">Indirizzo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
