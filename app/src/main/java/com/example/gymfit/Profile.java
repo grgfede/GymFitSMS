@@ -54,6 +54,8 @@ private FirebaseAuth mAuth;
     public void logoutIntent (View v) {
         mAuth.signOut();
         startActivity(new Intent(Profile.this, Login.class));
+
+        Toast.makeText(Profile.this, "Torna a trovarci, a presto!", Toast.LENGTH_SHORT).show();
     }
 
 }

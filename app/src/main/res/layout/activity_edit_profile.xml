@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".user.EditProfile">
+
+    <Button
+        android:id="@+id/Backtoprofile"
+        android:layout_width="91dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:background="@drawable/edit"
+        android:fontFamily="@font/avenirltstdlight"
+        android:text="back"
+        android:textAlignment="center"
+        android:textColor="@android:color/tab_indicator_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.028"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/tv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/avenirheavy"
+        android:text="Ciao!"
+        android:textAlignment="center"
+        android:textSize="50sp" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/avenirltstdlight"
+        android:text="Modifica qui le tue informazioni"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/txtEmailSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/et_custom"
+        android:fontFamily="@font/avenirltstdlight"
+        android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress"
+        android:padding="15dp"
+        android:textColorHint="@color/stringColor"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/txtPasswordSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_custom"
+        android:textColorHint="@color/stringColor"
+        android:fontFamily="@font/avenirltstdlight"
+        android:hint="@string/prompt_password"
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/txtRepeatPasswordSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_custom"
+        android:textColorHint="@color/stringColor"
+        android:fontFamily="@font/avenirltstdlight"
+        android:hint="@string/repeat_password"
+        android:inputType="textPassword"
+        android:padding="15dp"
+        android:textSize="18sp" />
+
+</LinearLayout>
