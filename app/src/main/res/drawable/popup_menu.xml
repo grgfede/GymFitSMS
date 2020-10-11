@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#E8F3FF"/>
+
+    <corners
+        android:radius="20dp"/>
+
+    <padding
+        android:bottom="8dp"
+        android:top="8dp"/>
+
+    <!--<item name="android:textColorPrimary">@color/colorPrimary</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:gravity">center_horizontal</item>
+
+    <item name="android:fontFamily">@font/bebaskai</item> -->
+
+</shape>

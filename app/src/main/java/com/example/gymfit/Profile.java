@@ -65,6 +65,8 @@ private FirebaseAuth mAuth;
                         MenuInflater inflater = popup.getMenuInflater();
                         inflater.inflate(R.menu.popuppic, popup.getMenu());
                         popup.show();
+
+
                     }
                 }
         );

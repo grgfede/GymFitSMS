@@ -6,6 +6,5 @@
 
     <item
         android:id="@+id/two"
-        android:title="Cambia immagine"/>
-
+        android:title="Cambia immagine" />
 </menu>
