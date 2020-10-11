@@ -1,8 +1,8 @@
 package com.example.gymfit.gym.profile;
 
-import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,18 +26,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class GymProfile extends AppCompatActivity {
     private static final String FIRE_LOG = "fire_log";
 
-    // Get and set Firebase DB/Storage
-    private static final StorageReference _FIREBASE_STORAGE_REF = FirebaseStorage.getInstance().getReference();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Animation rotateOpen;
@@ -62,25 +64,6 @@ public class GymProfile extends AppCompatActivity {
             @Override
             public void onCallback(Gym gymTmp) {
                 gym = gymTmp;
-            }
-        });
-
-        _FIREBASE_STORAGE_REF.child("img/gyms/dota2.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d(FIRE_LOG, "INFO: " + uri.getPath());
-                //ImageView imageView = findViewById(R.id.gymImageField);
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                    //imageView.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
             }
         });
 
@@ -197,6 +180,29 @@ public class GymProfile extends AppCompatActivity {
                     String address = addressFields.get("street") + " " + addressFields.get("numberStreet") + ", " +
                                     addressFields.get("city");
                     gymAddressField.setText(address);
+
+                    final ImageView gymImgField = findViewById(R.id.gymImgField);
+
+                    /*assert imgPath != null;
+                    Bitmap bitmap=BitmapFactory.decodeStream(getContentResolver().openInputStream(Uri.fromFile(new File(imgPath))));
+                    gymImgField.setImageBitmap(bitmap);*/
+
+                    StorageReference imageRef = storage.getReference().child("img/gyms/dota2.jpg");
+                    long MAXBYTES = 1024 * 1024;
+
+                    imageRef.getBytes(MAXBYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Log.d(FIRE_LOG, "COMPLETE");
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            gymImgField.setImageBitmap(bitmap);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(FIRE_LOG, "ERROR");
+                        }
+                    });
 
                     Gym gymTmp = new Gym(userUid, email, phone, name, addressFields);
                     gymDBCallback.onCallback(gymTmp);
