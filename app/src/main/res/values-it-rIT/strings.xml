@@ -12,7 +12,7 @@
     <string name="create_account">Creane uno</string>
     <string name="next">Successivo</string>
     <string name="previous">Precedente</string>
-    <string name="gym_button_calendar">Orari</string>
+    <string name="gym_button_calendar">Programmazione orari</string>
     <string name="gym_button_map">Mappa</string>
     <string name="no_account">Non hai un account?</string>
     <string name="action_sign_in_short">Registrati</string>
@@ -26,5 +26,5 @@
     <string name="signUpSubTitle">Avanti, non mollare! Ti invitiamo a compilare i campi con i dati richiesti per poter creare un account</string>
     <string name="repeat_password">Ripeti password</string>
     <string name="signin">Accedi</string>
-    <string name="prompt_andress">Indirizzo</string>
+    <string name="prompt_address">Indirizzo</string>
 </resources>

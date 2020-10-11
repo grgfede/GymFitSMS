@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
-import com.example.gymfit.system.GenericUser;
 import com.example.gymfit.user.signup.SignUp;
 import com.example.gymfit.gym.profile.GymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -102,8 +101,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void signInIntent(String uid) {
-        //TODO: inserire "p" come stringa di confronto
-        if(uid.endsWith("3")) {
+        if(uid.endsWith("2")) {
             Intent intent = new Intent(Login.this, GymProfile.class);
             intent.putExtra("userUid", uid);
             startActivity(intent);
