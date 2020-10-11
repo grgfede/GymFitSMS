@@ -21,10 +21,14 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.example.gymfit.R;
 import com.example.gymfit.system.MainActivity;
+import com.example.gymfit.user.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -32,6 +36,12 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -60,6 +70,7 @@ public class SignUp2Fragment extends Fragment {
 
 
     FirebaseAuth mFirebaseAuth;
+    private FirebaseFirestore db;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -157,7 +168,6 @@ public class SignUp2Fragment extends Fragment {
                 .addOnCompleteListener(myContext, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(myContext, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -165,28 +175,52 @@ public class SignUp2Fragment extends Fragment {
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
-                            } catch(FirebaseAuthWeakPasswordException e) {
+                            } catch (FirebaseAuthWeakPasswordException e) {
                                 passwordSignUp.setError(getString(R.string.error_weak_password));
                                 passwordSignUp.requestFocus();
-                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
                                 emailSignUp.setError(getString(R.string.error_invalid_email));
                                 emailSignUp.requestFocus();
-                            } catch(FirebaseAuthUserCollisionException e) {
+                            } catch (FirebaseAuthUserCollisionException e) {
                                 emailSignUp.setError(getString(R.string.error_user_exists));
                                 emailSignUp.requestFocus();
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
                             }
                         } else {
-
-                            /*String oldUid = mFirebaseAuth.getCurrentUser().getUid();
-                            String newUid = oldUid + "_u";
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser().create;*/
-
-
+                            String uid = mFirebaseAuth.getUid();
+                            User user = new User(name, surname, phone, email, uid);
+                            writeDb(user, uid);
                         }
                     }
                 });
+    }
+
+    private void writeDb(User user, String uid) {
+        db = FirebaseFirestore.getInstance();
+        Map<String, String> newUser = new HashMap<>();
+        newUser.put("name", user.getName());
+        newUser.put("username", user.getSurname());
+        newUser.put("phoneNumber", user.getPhone());
+        newUser.put("email", user.getEmail());
+        newUser.put("uid", user.getUid());
+        db.collection("users").document(uid).set(newUser)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        //TODO: Far apparire il fragment di avvenuta registrazione
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast errorToast = Toast.makeText(getContext(), "Errore durante la registrazione. Riprovare più tardi", Toast.LENGTH_LONG);
+                        errorToast.show();
+                        getActivity().onBackPressed();
+                    }
+                });
+
+
     }
 
     private boolean controlPasswords(String password, String repassword) {

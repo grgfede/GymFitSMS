@@ -27,4 +27,10 @@
     <string name="gym_button_map">Map</string>
     <string name="signin">Login</string>
     <string name="prompt_andress">Andress</string>
+    <string name="error_weak_password">Warning! The password must contain at least 6 characters</string>
+    <string name="error_invalid_email">Warning! The email entered is not valid</string>
+    <string name="error_user_exists">Warning! Email already used for another user</string>
+    <string name="continueSignUp">Proceed</string>
+    <string name="signUpSubTitle2">Enter the latest information with which you will be able to access GymFit</string>
+    <string name="signUpTitle2">You\'re almost there!</string>
 </resources>
