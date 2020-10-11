@@ -26,7 +26,7 @@
     <string name="gym_button_calendar">Calendar</string>
     <string name="gym_button_map">Map</string>
     <string name="signin">Login</string>
-    <string name="prompt_andress">Andress</string>
+    <string name="prompt_address">Address</string>
     <string name="error_weak_password">Warning! The password must contain at least 6 characters</string>
     <string name="error_invalid_email">Warning! The email entered is not valid</string>
     <string name="error_user_exists">Warning! Email already used for another user</string>

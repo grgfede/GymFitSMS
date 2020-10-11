@@ -39,7 +39,7 @@
     <string name="error_invalid_email">Attenzione! La email inserita non è valida</string>
     <string name="error_user_exists">Attenzione! Email già utilizzata per un altro utente</string>
     <string name="continueSignUp">Procedi</string>
-    <string name="prompt_andress">Indirizzo</string>
+    <string name="prompt_address">Indirizzo</string>
     <string name="signUpSubTitle2">Inserisci le ultime informazioni con le quali potrai accedere a GymFit</string>
     <string name="signUpTitle2">Ci sei quasi!</string>
 </resources>

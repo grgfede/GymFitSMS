@@ -1,10 +1,16 @@
 package com.example.gymfit.gym.profile;
 
+import android.content.ContentResolver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,16 +19,25 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gymfit.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class GymProfile extends AppCompatActivity {
     private static final String FIRE_LOG = "fire_log";
+
+    // Get and set Firebase DB/Storage
+    private static final StorageReference _FIREBASE_STORAGE_REF = FirebaseStorage.getInstance().getReference();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Animation rotateOpen;
@@ -31,7 +46,6 @@ public class GymProfile extends AppCompatActivity {
     private Animation toButton;
 
     private FloatingActionButton fab;
-    private FloatingActionButton fabSetting;
     private FloatingActionButton fabSubscription;
     private FloatingActionButton fabRound;
 
@@ -51,8 +65,26 @@ public class GymProfile extends AppCompatActivity {
             }
         });
 
+        _FIREBASE_STORAGE_REF.child("img/gyms/dota2.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d(FIRE_LOG, "INFO: " + uri.getPath());
+                //ImageView imageView = findViewById(R.id.gymImageField);
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
+                    //imageView.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
+            }
+        });
+
         this.fab = findViewById(R.id.fab_add);
-        this.fabSetting = findViewById(R.id.fab_setting);
         this.fabSubscription = findViewById(R.id.fab_subscription);
         this.fabRound = findViewById(R.id.fab_round);
 
@@ -66,15 +98,6 @@ public class GymProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onAddButtons();
-            }
-        });
-
-        this.fabSetting.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //TODO: Open GymSetting activity
-                Toast.makeText(GymProfile.this, "Setting Opt", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -107,11 +130,9 @@ public class GymProfile extends AppCompatActivity {
 
     private void setAnimation(boolean clicked) {
         if(!clicked) {
-            this.fabSetting.setVisibility(View.VISIBLE);
             this.fabSubscription.setVisibility(View.VISIBLE);
             this.fabRound.setVisibility(View.VISIBLE);
         } else {
-            this.fabSetting.setVisibility(View.INVISIBLE);
             this.fabSubscription.setVisibility(View.INVISIBLE);
             this.fabRound.setVisibility(View.INVISIBLE);
         }
@@ -119,12 +140,10 @@ public class GymProfile extends AppCompatActivity {
 
     private void setVisibility(boolean clicked) {
         if(!clicked) {
-            this.fabSetting.startAnimation(this.fromButton);
             this.fabSubscription.startAnimation(this.fromButton);
             this.fabRound.startAnimation(this.fromButton);
             this.fab.startAnimation(this.rotateOpen);
         } else {
-            this.fabSetting.startAnimation(this.toButton);
             this.fabSubscription.startAnimation(this.toButton);
             this.fabRound.startAnimation(this.toButton);
             this.fab.startAnimation(this.rotateClose);
@@ -133,11 +152,9 @@ public class GymProfile extends AppCompatActivity {
 
     private void setClickable(boolean clicked) {
         if(!clicked) {
-            this.fabSetting.setClickable(true);
             this.fabSubscription.setClickable(true);
             this.fabRound.setClickable(true);
         } else {
-            this.fabSetting.setClickable(false);
             this.fabSubscription.setClickable(false);
             this.fabRound.setClickable(false);
         }
