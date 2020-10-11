@@ -27,20 +27,13 @@
     <string name="repeat_password">Ripeti password</string>
     <string name="next">Successivo</string>
     <string name="previous">Precedente</string>
-    <string name="gym_button_calendar">Orari</string>
+    <string name="gym_button_calendar">Programmazione orari</string>
     <string name="gym_button_map">Mappa</string>
-    <string name="gym_name_default" translatable="false">Fit and Work</string>
-    <string name="gym_email_default" translatable="false">fitandwork@gmail.com</string>
-    <string name="gym_number_default" translatable="false">+39 3280883540</string>
-    <string name="gym_andress_default" translatable="false">Via Orabona, 15, Bari</string>
     <string name="title_activity_gym_profile" translatable="false">GymProfile</string>
     <string name="first_fragment_label" translatable="false">FirstFragment</string>
     <string name="second_fragment_label" translatable="false">SecondFragment</string>
     <string name="signin">Accedi</string>
-    <string name="prompt_andress">Indirizzo</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="error_weak_password">Attenzione! La password deve contenere minimo 6 caratteri</string>
-    <string name="error_invalid_email">Attenzione! Email non valida</string>
-    <string name="error_user_exists">Attenzione! Utente già esistente</string>
+    <string name="prompt_address">Indirizzo</string>
+    <string name="password_hide" translatable="false">******</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
 </resources>

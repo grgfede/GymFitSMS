@@ -27,7 +27,4 @@
     <string name="gym_button_map">Map</string>
     <string name="signin">Login</string>
     <string name="prompt_andress">Andress</string>
-    <string name="error_weak_password">Warning! The password must contain at least 6 characters</string>
-    <string name="error_invalid_email">Warning! Invalid email</string>
-    <string name="error_user_exists">Warning! Already existing user</string>
 </resources>
