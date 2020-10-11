@@ -3,8 +3,8 @@
     android:fillAfter="true">
 
     <translate
-        android:fromYDelta="100%"
-        android:toYDelta="0%"
+        android:fromYDelta="0%"
+        android:toYDelta="20%"
         android:duration="400" />
 
     <scale
