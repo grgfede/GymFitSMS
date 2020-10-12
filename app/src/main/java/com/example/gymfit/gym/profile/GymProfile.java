@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gymfit.R;
@@ -22,12 +23,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -169,15 +173,18 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                                 addressFields.get("city");
                 gymAddressField.setText(address);
 
-                //TODO: get it from db
                 final ImageView gymImgField = findViewById(R.id.gymImgField);
+                //String imageRef = documentSnapshot.getString("img");
+                //assert imageRef != null;
                 StorageReference imageRef = storage.getReference().child("img/gyms/dota2.jpg");
                 long MAXBYTES = 1024 * 1024;
 
                 imageRef.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     gymImgField.setImageBitmap(bitmap);
-                }).addOnFailureListener(e -> Log.d(FIRE_LOG, "ERROR"));
+                }).addOnFailureListener(e -> {
+                    Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
+                });
 
                 Gym gymTmp = new Gym(userUid, email, phone, name, addressFields);
                 gymDBCallback.onCallback(gymTmp);
