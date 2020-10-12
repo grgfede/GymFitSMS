@@ -56,18 +56,34 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="@color/colorPrimary"
-            android:gravity="bottom"
-
-            android:orientation="horizontal"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <!-- Image -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/gymImgField"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="15dp"
+                android:focusable="true"
+                android:clickable="true"
+                app:civ_border_color="@color/white"
+                app:civ_circle_background_color="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/contentBlock"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0">
+
+            </de.hdodenhof.circleimageview.CircleImageView>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/fab_margin"
-                android:layout_marginBottom="@dimen/fab_margin">
+                android:layout_margin="@dimen/fab_margin">
 
                 <!-- Title -->
                 <TextView
@@ -98,24 +114,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <!-- Image -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/gymImgField"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="15dp"
-            android:focusable="true"
-            android:clickable="true"
-            app:civ_border_color="@color/white"
-            app:civ_circle_background_color="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/contentBlock"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0">
-
-        </de.hdodenhof.circleimageview.CircleImageView>
 
         <!-- Info Block -->
         <LinearLayout
@@ -428,7 +426,7 @@
 
                 </LinearLayout>
 
-                <!-- Buttons -->
+                <!-- Frame -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -437,7 +435,7 @@
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="250dp"
                         android:layout_marginHorizontal="25dp"
                         android:layout_marginVertical="5dp"
                         app:cardElevation="4dp">
@@ -447,83 +445,15 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
 
-                            <ImageView
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="15dp"
-                                app:srcCompat="@drawable/ic_orari">
 
-                            </ImageView>
-
-                            <TextView
+                            <androidx.fragment.app.FragmentContainerView
+                                android:id="@+id/gymMapField"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginEnd="10dp"
-                                android:text="@string/gym_button_calendar"
-                                android:textColor="@color/stringColorTitle"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:drawableEndCompat="@drawable/ic_menu_vertical"
-                                app:drawableTint="@color/stringColorParagraph">
-
-                            </TextView>
+                                android:layout_height="match_parent"
+                                android:name="com.google.android.gms.maps.SupportMapFragment" />
 
                         </LinearLayout>
-
                     </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginHorizontal="25dp"
-                        android:layout_marginVertical="5dp"
-                        app:cardElevation="4dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="26dp"
-                                android:layout_height="26dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="15dp"
-                                app:srcCompat="@drawable/ic_map">
-
-                            </ImageView>
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginStart="15dp"
-                                android:layout_marginEnd="10dp"
-                                android:text="@string/gym_button_map"
-                                android:textColor="@color/stringColorTitle"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                app:drawableEndCompat="@drawable/ic_menu_vertical"
-                                app:drawableTint="@color/stringColorParagraph">
-
-                            </TextView>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Divisor -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="25dp"
-                        android:layout_marginHorizontal="20dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
 
                 </LinearLayout>
 
