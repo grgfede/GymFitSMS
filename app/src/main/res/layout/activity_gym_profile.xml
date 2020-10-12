@@ -79,25 +79,39 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin">
 
-                <!-- Title -->
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/gymNameField"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:paddingStart="28dp"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold">
 
                 </com.google.android.material.textview.MaterialTextView>
 
-                <!-- Edit title -->
+                <ImageView
+                    android:id="@+id/abortTitleGymButton"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="top"
+                    android:layout_marginHorizontal="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="invisible"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/ic_delete"
+                    app:tint="@color/white">
+
+                </ImageView>
+
                 <ImageView
                     android:id="@+id/editTitleGymButton"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="top"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginHorizontal="2dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="centerInside"
@@ -131,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginVertical="5dp">
+                    android:layout_marginVertical="30dp">
 
                     <!-- Email -->
                     <LinearLayout
@@ -184,18 +198,40 @@
 
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/editEmailGymButton"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_weight="0"
-                            android:focusable="true"
-                            android:clickable="true"
-                            app:srcCompat="@drawable/ic_edit"
-                            app:tint="@color/stringColorParagraph">
+                            android:orientation="horizontal"
+                            android:layout_gravity="center">
 
-                        </ImageView>
+                            <ImageView
+                                android:id="@+id/abortEmailGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="2dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/ic_delete"
+                                app:tint="@color/design_default_color_error">
+
+                            </ImageView>
+
+                            <ImageView
+                                android:id="@+id/editEmailGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="2dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:srcCompat="@drawable/ic_edit"
+                                app:tint="@color/stringColorParagraph">
+
+                            </ImageView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -251,18 +287,39 @@
 
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/editKeyGymButton"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_weight="0"
-                            android:focusable="true"
-                            android:clickable="true"
-                            app:srcCompat="@drawable/ic_edit"
-                            app:tint="@color/stringColorParagraph">
+                            android:orientation="horizontal"
+                            android:layout_gravity="center">
 
-                        </ImageView>
+                            <ImageView
+                                android:id="@+id/abortKeyGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="2dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/ic_delete"
+                                app:tint="@color/design_default_color_error">
+
+                            </ImageView>
+
+                            <ImageView
+                                android:id="@+id/editKeyGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:srcCompat="@drawable/ic_edit"
+                                app:tint="@color/stringColorParagraph">
+
+                            </ImageView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -327,18 +384,39 @@
 
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/editPhoneGymButton"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_weight="0"
-                            android:focusable="true"
-                            android:clickable="true"
-                            app:srcCompat="@drawable/ic_edit"
-                            app:tint="@color/stringColorParagraph">
+                            android:orientation="horizontal"
+                            android:layout_gravity="center">
 
-                        </ImageView>
+                            <ImageView
+                                android:id="@+id/abortPhoneGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="2dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/ic_delete"
+                                app:tint="@color/design_default_color_error">
+
+                            </ImageView>
+
+                            <ImageView
+                                android:id="@+id/editPhoneGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:srcCompat="@drawable/ic_edit"
+                                app:tint="@color/stringColorParagraph">
+
+                            </ImageView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -393,18 +471,39 @@
 
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/editAddressGymButton"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_weight="0"
-                            android:focusable="true"
-                            android:clickable="true"
-                            app:srcCompat="@drawable/ic_edit"
-                            app:tint="@color/stringColorParagraph">
+                            android:orientation="horizontal"
+                            android:layout_gravity="center">
 
-                        </ImageView>
+                            <ImageView
+                                android:id="@+id/abortAddressGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="2dp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:visibility="invisible"
+                                app:srcCompat="@drawable/ic_delete"
+                                app:tint="@color/design_default_color_error">
+
+                            </ImageView>
+
+                            <ImageView
+                                android:id="@+id/editAddressGymButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:clickable="true"
+                                android:focusable="true"
+                                app:srcCompat="@drawable/ic_edit"
+                                app:tint="@color/stringColorParagraph">
+
+                            </ImageView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
