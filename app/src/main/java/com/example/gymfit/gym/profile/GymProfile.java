@@ -1,6 +1,5 @@
 package com.example.gymfit.gym.profile;
 
-import android.app.AppComponentFactory;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -56,12 +55,15 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gymMapField);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
-
         setUserUid();
-        setGymInterface(gymTmp -> gym = gymTmp);
+        setGymInterface(gymTmp -> {
+            gym = gymTmp;
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gymMapField);
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
+
+        });
 
         this.fab = findViewById(R.id.fab_add);
         this.fabSubscription = findViewById(R.id.fab_subscription);
@@ -90,8 +92,8 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
 
-        LatLng latLngUser = new LatLng(41.051477, 16.698150);
-        this.map.addMarker(new MarkerOptions().position(latLngUser));
+        LatLng latLngUser = new LatLng(Double.parseDouble(Objects.requireNonNull(gym.getAddress().get("latitude"))), Double.parseDouble(Objects.requireNonNull(gym.getAddress().get("longitude"))));
+        this.map.addMarker(new MarkerOptions().position(latLngUser)).setTitle(gym.getName());
         this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngUser, 15));
     }
 
@@ -159,25 +161,28 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                 gymPhoneField.setText(phone);
 
                 TextView gymAddressField = findViewById(R.id.gymAddressField);
-                HashMap<String, Object> addressFields = new HashMap<>();
+                HashMap<String, String> addressFields = new HashMap<>();
                 addressFields.put("city", documentSnapshot.getString("address.city"));
                 addressFields.put("country", documentSnapshot.getString("address.country"));
                 addressFields.put("numberStreet", Objects.requireNonNull(documentSnapshot.get("address.numberStreet")).toString());
                 addressFields.put("street", documentSnapshot.getString("address.street"));
                 addressFields.put("zipCode", Objects.requireNonNull(documentSnapshot.get("address.zipCode")).toString());
+                addressFields.put("latitude", Objects.requireNonNull(documentSnapshot.get("address.latitude")).toString());
+                addressFields.put("longitude", Objects.requireNonNull(documentSnapshot.get("address.longitude")).toString());
                 String address = addressFields.get("street") + " " + addressFields.get("numberStreet") + ", " +
                                 addressFields.get("city");
                 gymAddressField.setText(address);
 
-                //TODO: get it from db
                 final ImageView gymImgField = findViewById(R.id.gymImgField);
+                //String imageRef = documentSnapshot.getString("img");
+                //assert imageRef != null;
                 StorageReference imageRef = storage.getReference().child("img/gyms/dota2.jpg");
                 long MAXBYTES = 1024 * 1024;
 
                 imageRef.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     gymImgField.setImageBitmap(bitmap);
-                }).addOnFailureListener(e -> Log.d(FIRE_LOG, "ERROR"));
+                }).addOnFailureListener(e -> Log.d(FIRE_LOG, "ERROR: " + e.getMessage()));
 
                 Gym gymTmp = new Gym(userUid, email, phone, name, addressFields);
                 gymDBCallback.onCallback(gymTmp);

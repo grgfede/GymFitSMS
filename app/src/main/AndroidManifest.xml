@@ -15,17 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".user.EditProfile" />
         <activity android:name=".PasswordRecovery" />
-        <activity android:name=".system.onboard.FirstOnboardActivity" />
-        <activity
-            android:name=".gym.profile.GymProfile"
+        <activity android:name=".Profile" />
+        <activity android:name=".gym.profile.GymProfile"
             android:parentActivityName=".user.signin.Login"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Profile" />
-
         <activity android:name=".user.signup.SignUp" />
         <activity android:name=".user.signin.Login" />
+        <activity android:name=".user.EditProfile" />
+        <activity android:name=".system.onboard.FirstOnboardActivity" />
         <activity android:name=".system.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
