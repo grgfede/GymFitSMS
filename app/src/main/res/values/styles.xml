@@ -5,7 +5,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name = "android:popupMenuStyle">@style/PopupMenu </item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -18,12 +17,8 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name = "PopupMenu" parent = "@android:style/Widget.PopupMenu">
-        <item name = "android:popupBackground">@drawable/popup_menu</item>
-        <item name="android:dropDownHorizontalOffset">-25dp</item>
-        <item name="android:dropDownVerticalOffset">4dp</item>
+    <style name="LabelStyle" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
     </style>
-
-
 
 </resources>

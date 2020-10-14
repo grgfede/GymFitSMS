@@ -33,9 +33,15 @@
     <string name="continueSignUp">Procedi</string>
     <string name="signUpSubTitle2">Inserisci le ultime informazioni con le quali potrai accedere a GymFit</string>
     <string name="signUpTitle2">Ci sei quasi!</string>
-    <string name="skip">Salta</string>
-    <string name="signUpSubTitle3">Hai completato la registrazione. Adesso non ti resta che caricare una foto del profilo</string>
-    <string name="congratulations_signUp">Complimenti!</string>
-    <string name="seepic">Visualizza immagine</string>
-    <string name="changepic">Modifica immagine</string>
+    <string name="helper_email_hover">Inserisci una email</string>
+    <string name="helper_email_error">"Inserisci una email valida. "</string>
+    <string name="update_email_success">Email aggiornata.</string>
+    <string name="update_email_error">Email non aggiornata.</string>
+    <string name="helper_psw_hover">Inserisci una nuova password.</string>
+    <string name="helper_psw_error">Inserisci una password valida.</string>
+    <string name="update_password_error">Password non aggiornata.</string>
+    <string name="update_password_success">Password aggiornata.</string>
+    <string name="password_recovery_title">Recupera Password</string>
+    <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
+    <string name="passwrd_recover_button_send">Invia</string>
 </resources>
