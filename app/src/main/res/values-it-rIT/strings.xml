@@ -33,4 +33,7 @@
     <string name="continueSignUp">Procedi</string>
     <string name="signUpSubTitle2">Inserisci le ultime informazioni con le quali potrai accedere a GymFit</string>
     <string name="signUpTitle2">Ci sei quasi!</string>
+    <string name="skip">Salta</string>
+    <string name="signUpSubTitle3">Hai completato la registrazione. Adesso non ti resta che caricare una foto del profilo</string>
+    <string name="congratulations_signUp">Complimenti!</string>
 </resources>

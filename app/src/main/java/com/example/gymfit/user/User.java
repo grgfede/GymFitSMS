@@ -1,5 +1,16 @@
 package com.example.gymfit.user;
 
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class User {
 
     private String name;
@@ -7,6 +18,9 @@ public class User {
     private String phone;
     private String email;
     private String uid;
+    private String urlImage;
+    private FirebaseFirestore db;
+
     /*
      * PER IL GENDER VIENE UTILIZATO UN FLAG BOOLEAN
      * Uomo = 0
@@ -62,6 +76,8 @@ public class User {
         return uid;
     }
 
+    public String getUrlImage(){ return urlImage;}
+
     //METODI SET
 
     public void setName(String name) {
@@ -87,6 +103,8 @@ public class User {
     public void setUid(String uid){
         this.uid = uid;
     }
+
+    public void setUrlImage(String urlImage){ this.urlImage = urlImage;}
 
 
 

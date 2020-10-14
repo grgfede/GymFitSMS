@@ -75,7 +75,7 @@ public class SignUp extends AppCompatActivity {
         actionBar.setDisplayShowTitleEnabled(false);
 
         //Setto l'icona della freccia nell'action bar
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_arrow_back);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
