@@ -1,43 +1,39 @@
 package com.example.gymfit.gym.profile;
 
-import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gymfit.R;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class GymProfile extends AppCompatActivity {
+public class GymProfile extends AppCompatActivity implements OnMapReadyCallback {
     private static final String FIRE_LOG = "fire_log";
 
-    // Get and set Firebase DB/Storage
-    private static final StorageReference _FIREBASE_STORAGE_REF = FirebaseStorage.getInstance().getReference();
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Animation rotateOpen;
@@ -50,38 +46,23 @@ public class GymProfile extends AppCompatActivity {
     private FloatingActionButton fabRound;
 
     private String userUid = null;
-    private Gym gym;
+    private Gym gym = null;
+    private GoogleMap map = null;
     private boolean clicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
-        setUserUid();
-        setGymInterface(new GymDBCallback() {
-            @Override
-            public void onCallback(Gym gymTmp) {
-                gym = gymTmp;
-            }
-        });
 
-        _FIREBASE_STORAGE_REF.child("img/gyms/dota2.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Log.d(FIRE_LOG, "INFO: " + uri.getPath());
-                //ImageView imageView = findViewById(R.id.gymImageField);
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-                    //imageView.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(FIRE_LOG, "ERROR: " + e.getMessage());
-            }
+        setUserUid();
+        setGymInterface(gymTmp -> {
+            gym = gymTmp;
+
+            SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.gymMapField);
+            assert mapFragment != null;
+            mapFragment.getMapAsync(this);
+
         });
 
         this.fab = findViewById(R.id.fab_add);
@@ -93,32 +74,27 @@ public class GymProfile extends AppCompatActivity {
         this.fromButton = AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim);
         this.toButton = AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim);
 
-        this.fab.setOnClickListener(new View.OnClickListener() {
+        this.fab.setOnClickListener(view -> onAddButtons());
 
-            @Override
-            public void onClick(View view) {
-                onAddButtons();
-            }
+        this.fabSubscription.setOnClickListener(view -> {
+            //TODO: Open GymSubscription activity
+            Toast.makeText(GymProfile.this, "Subscription Opt", Toast.LENGTH_SHORT).show();
         });
 
-        this.fabSubscription.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                //TODO: Open GymSubscription activity
-                Toast.makeText(GymProfile.this, "Subscription Opt", Toast.LENGTH_SHORT).show();
-            }
+        this.fabRound.setOnClickListener(view -> {
+            //TODO: Open GymRound activity
+            Toast.makeText(GymProfile.this, "Round Opt", Toast.LENGTH_SHORT).show();
         });
 
-        this.fabRound.setOnClickListener(new View.OnClickListener() {
+    }
 
-            @Override
-            public void onClick(View view) {
-                //TODO: Open GymRound activity
-                Toast.makeText(GymProfile.this, "Round Opt", Toast.LENGTH_SHORT).show();
-            }
-        });
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
 
+        LatLng latLngUser = new LatLng(Double.parseDouble(Objects.requireNonNull(gym.getAddress().get("latitude"))), Double.parseDouble(Objects.requireNonNull(gym.getAddress().get("longitude"))));
+        this.map.addMarker(new MarkerOptions().position(latLngUser)).setTitle(gym.getName());
+        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngUser, 15));
     }
 
     private void onAddButtons() {
@@ -166,44 +142,53 @@ public class GymProfile extends AppCompatActivity {
 
     private void setGymInterface(final GymDBCallback gymDBCallback) {
 
-        this.db.collection("gyms").document(userUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        this.db.collection("gyms").document(userUid).get().addOnCompleteListener(task -> {
 
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            if(task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                assert documentSnapshot != null;
 
-                if(task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    assert documentSnapshot != null;
+                TextView gymNameField = findViewById(R.id.gymNameField);
+                String name = documentSnapshot.getString("name");
+                gymNameField.setText(name);
 
-                    TextView gymNameField = findViewById(R.id.gymNameField);
-                    String name = documentSnapshot.getString("name");
-                    gymNameField.setText(name);
+                TextView gymEmailField = findViewById(R.id.gymEmailField);
+                String email = documentSnapshot.getString("email");
+                gymEmailField.setText(email);
 
-                    TextView gymEmailField = findViewById(R.id.gymEmailField);
-                    String email = documentSnapshot.getString("email");
-                    gymEmailField.setText(email);
+                TextView gymPhoneField = findViewById(R.id.gymPhoneField);
+                String phone = Objects.requireNonNull(documentSnapshot.get("phone")).toString();
+                gymPhoneField.setText(phone);
 
-                    TextView gymPhoneField = findViewById(R.id.gymPhoneField);
-                    String phone = Objects.requireNonNull(documentSnapshot.get("phone")).toString();
-                    gymPhoneField.setText(phone);
+                TextView gymAddressField = findViewById(R.id.gymAddressField);
+                HashMap<String, String> addressFields = new HashMap<>();
+                addressFields.put("city", documentSnapshot.getString("address.city"));
+                addressFields.put("country", documentSnapshot.getString("address.country"));
+                addressFields.put("numberStreet", Objects.requireNonNull(documentSnapshot.get("address.numberStreet")).toString());
+                addressFields.put("street", documentSnapshot.getString("address.street"));
+                addressFields.put("zipCode", Objects.requireNonNull(documentSnapshot.get("address.zipCode")).toString());
+                addressFields.put("latitude", Objects.requireNonNull(documentSnapshot.get("address.latitude")).toString());
+                addressFields.put("longitude", Objects.requireNonNull(documentSnapshot.get("address.longitude")).toString());
+                String address = addressFields.get("street") + " " + addressFields.get("numberStreet") + ", " +
+                                addressFields.get("city");
+                gymAddressField.setText(address);
 
-                    TextView gymAddressField = findViewById(R.id.gymAddressField);
-                    HashMap<String, Object> addressFields = new HashMap<>();
-                    addressFields.put("city", documentSnapshot.getString("address.city"));
-                    addressFields.put("country", documentSnapshot.getString("address.country"));
-                    addressFields.put("numberStreet", Objects.requireNonNull(documentSnapshot.get("address.numberStreet")).toString());
-                    addressFields.put("street", documentSnapshot.getString("address.street"));
-                    addressFields.put("zipCode", Objects.requireNonNull(documentSnapshot.get("address.zipCode")).toString());
-                    String address = addressFields.get("street") + " " + addressFields.get("numberStreet") + ", " +
-                                    addressFields.get("city");
-                    gymAddressField.setText(address);
+                final ImageView gymImgField = findViewById(R.id.gymImgField);
+                //String imageRef = documentSnapshot.getString("img");
+                //assert imageRef != null;
+                StorageReference imageRef = storage.getReference().child("img/gyms/dota2.jpg");
+                long MAXBYTES = 1024 * 1024;
 
-                    Gym gymTmp = new Gym(userUid, email, phone, name, addressFields);
-                    gymDBCallback.onCallback(gymTmp);
+                imageRef.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    gymImgField.setImageBitmap(bitmap);
+                }).addOnFailureListener(e -> Log.d(FIRE_LOG, "ERROR: " + e.getMessage()));
 
-                } else {
-                    Log.d(FIRE_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
-                }
+                Gym gymTmp = new Gym(userUid, email, phone, name, addressFields);
+                gymDBCallback.onCallback(gymTmp);
+
+            } else {
+                Log.d(FIRE_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
             }
         });
     }
