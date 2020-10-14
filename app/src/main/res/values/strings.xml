@@ -45,4 +45,7 @@
     <string name="skip">Salta</string>
     <string name="congratulations_signUp">Complimenti!</string>
     <string name="signUpSubTitle3">Hai completato la registrazione. Adesso non ti resta che caricare una foto del profilo</string>
+    <string name="seepic">Visualizza Immagine</string>
+    <string name="changepic">Modifica immagine</string>
+
 </resources>
