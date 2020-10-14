@@ -81,7 +81,7 @@ public class SignUpFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         btnContinue = view.findViewById(R.id.btnContinue);
@@ -136,8 +136,10 @@ public class SignUpFragment extends Fragment {
                 String name, surname, phone;
                 int gender;
                 boolean error_fields = false;
-                name = nameSignUp.getText().toString();
-                surname = surnameSignUp.getText().toString();
+                String strname = nameSignUp.getText().toString();
+                name = strname.substring(0, 1).toUpperCase() + strname.substring(1);
+                String strsurname = surnameSignUp.getText().toString();
+                surname = strsurname.substring(0, 1).toUpperCase() + strsurname.substring(1);
                 phone = phoneSignUp.getText().toString();
                 gender = genderSignUp.getSelectedItemPosition();
                 if (name.isEmpty()) {

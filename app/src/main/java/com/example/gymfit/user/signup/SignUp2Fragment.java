@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.gymfit.R;
 import com.example.gymfit.system.MainActivity;
@@ -196,32 +197,51 @@ public class SignUp2Fragment extends Fragment {
                 });
     }
 
-    private void writeDb(User user, String uid) {
+    private void writeDb(final User user, String uid) {
         db = FirebaseFirestore.getInstance();
         Map<String, String> newUser = new HashMap<>();
-        newUser.put("name", user.getName());
-        newUser.put("username", user.getSurname());
-        newUser.put("phoneNumber", user.getPhone());
-        newUser.put("email", user.getEmail());
-        newUser.put("uid", user.getUid());
+        newUser.put("name", name);
+        newUser.put("username", surname);
+        newUser.put("phoneNumber", phone);
+        newUser.put("email", email);
+        newUser.put("uid", uid);
         db.collection("users").document(uid).set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        //TODO: Far apparire il fragment di avvenuta registrazione
+                        Fragment finalSignUp = new SignUpProfilePicFragment();
+                        Bundle args = new Bundle();
+                        saveData(args, finalSignUp, user);
+                        FragmentManager fragManager = myContext.getSupportFragmentManager();
+                        changeFragment(fragManager, finalSignUp);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast errorToast = Toast.makeText(getContext(), "Errore durante la registrazione. Riprovare più tardi", Toast.LENGTH_LONG);
-                        errorToast.show();
-                        getActivity().onBackPressed();
+                        //AGGIUNGERE ERRORE IN CASO DI ERRORE NELLA REGISTRAZIONE
                     }
                 });
-
-
     }
+
+    private void saveData(Bundle args, Fragment fragment2, User user) {
+        args.putString("uid", user.getUid());
+        fragment2.setArguments(args);
+    }
+
+    private void changeFragment(FragmentManager fragManager, Fragment fragment2){
+        fragManager.beginTransaction().setCustomAnimations(
+                R.anim.enter,  // enter
+                R.anim.exit,  // exit
+                R.anim.pop_enter,   // popEnter
+                R.anim.pop_exit  // popExit
+        )
+                .replace(R.id.viewPager, fragment2)
+                .addToBackStack("frags")
+                .commit();
+    }
+
+
 
     private boolean controlPasswords(String password, String repassword) {
         boolean error = false;
