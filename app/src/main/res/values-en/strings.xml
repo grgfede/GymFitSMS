@@ -36,4 +36,6 @@
     <string name="skip">Skip</string>
     <string name="signUpSubTitle3">You have completed the registration. Now you just have to upload a profile photo</string>
     <string name="congratulations_signUp">Congratulations!</string>
+    <string name="seepic">See profile  pic</string>
+    <string name="changepic">Change profile pic</string>
 </resources>
