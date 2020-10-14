@@ -95,24 +95,24 @@
             android:text="modifica"
             android:textColor="@android:color/white" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginBottom="10dp"
-            android:layout_above="@id/swipeLeft"
-            android:layout_centerHorizontal="true"
-            app:srcCompat="@drawable/ic_arrow_left" />
-
-        <TextView
-            android:id="@+id/swipeLeft"
+        <Button
+            android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="150dp"
+            android:background="@color/transparent"
+            android:drawableLeft="@drawable/ic_arrow_left"
             android:fontFamily="@font/avenirltstdlight"
-            android:text="Swipe per tornare al profilo"
-            android:textSize="15sp" />
+            android:text="torna al profilo"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
 
     </RelativeLayout>
 
