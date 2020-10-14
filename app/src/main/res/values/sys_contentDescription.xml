@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="edit_button" translatable="false">edit button</string>
+    <string name="save_button" translatable="false">save button</string>
+    <string name="delete_button" translatable="false">delete button</string>
+
+    <string name="mail_img" translatable="false">mail button</string>
+    <string name="key_img" translatable="false">key button</string>
+    <string name="location_img" translatable="false">location button</string>
+    <string name="phone_img" translatable="false">phone button</string>
+
+    <string name="gym_img_profile" translatable="false">gym image profile</string>
+    <string name="recovery_password_img" translatable="false">password recovery image</string>
+
+</resources>
