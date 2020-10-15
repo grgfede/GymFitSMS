@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PasswordRecovery"
+        <activity android:name=".system.PasswordRecovery"
             android:parentActivityName=".user.signin.Login"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Profile" />

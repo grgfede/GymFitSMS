@@ -44,4 +44,15 @@
     <string name="password_recovery_title">Recupera Password</string>
     <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
     <string name="passwrd_recover_button_send">Invia</string>
+    <string name="prompt_send">Invia</string>
+    <string name="prompt_abort">Annulla</string>
+    <string name="prompt_phone">Numero di telefono</string>
+    <string name="helper_phone_hover">Inserisci un nuovo numero di telefono</string>
+    <string name="helper_phone_error">Numero di telefono non valido.</string>
+    <string name="update_phone_success">Numero di telefono aggiornato.</string>
+    <string name="update_phone_error">Numero di telefono non aggiornato.</string>
+    <string name="helper_address_hover">Inserisci un nuovo indirizzo</string>
+    <string name="helper_address_error">L\'indirizzo non è valido.</string>
+    <string name="update_address_success">Il nuovo indirizzo è stato aggiornato.</string>
+    <string name="update_address_error">Il nuovo indirizzo non è stato aggiornato.</string>
 </resources>

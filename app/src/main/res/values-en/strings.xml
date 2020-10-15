@@ -36,12 +36,23 @@
     <string name="helper_email_hover">Enter your email.</string>
     <string name="helper_email_error">Enter a valid email.</string>
     <string name="update_email_success">Email has been updated.</string>
-    <string name="update_email_error">Email has been not updated.</string>
+    <string name="update_email_error">Email has not been updated.</string>
     <string name="helper_psw_hover">Enter your new password.</string>
     <string name="helper_psw_error">Enter a valid password.</string>
     <string name="update_password_success">Password has been updated.</string>
-    <string name="update_password_error">Password has been not updated</string>
+    <string name="update_password_error">Password has not been updated</string>
     <string name="password_recovery_title">Recovery Password</string>
     <string name="password_recovery_subtitle">Enter your registered email below to receive password reset istructions</string>
     <string name="passwrd_recover_button_send">Send</string>
+    <string name="prompt_send">Send</string>
+    <string name="prompt_abort">Cancel</string>
+    <string name="prompt_phone">Phone</string>
+    <string name="helper_phone_hover">Enter a new phone number.</string>
+    <string name="helper_phone_error">Phone number is not valid.</string>
+    <string name="update_phone_success">Phone number has been updated.</string>
+    <string name="update_phone_error">Phone number has not been updated.</string>
+    <string name="helper_address_hover">Enter your new address.</string>
+    <string name="helper_address_error">Address is non valid.</string>
+    <string name="update_address_success">Your new address has been updated.</string>
+    <string name="update_address_error">Your new address has not been updated.</string>
 </resources>
