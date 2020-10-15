@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".gym.profile.GymProfile">
+        tools:context=".gym.profile.GymProfile"
+        android:backgroundTint="@color/design_default_color_background">
 
         <!-- Circle menu -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,7 +22,7 @@
             app:backgroundTint="@color/design_default_color_primary"
             app:layout_constraintBottom_toTopOf="@+id/infoBlock"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/contentBlock"
+            app:layout_constraintTop_toBottomOf="@id/imageBlock"
             app:rippleColor="@color/design_default_color_background"
             app:srcCompat="@drawable/ic_add" />
 
@@ -51,12 +52,11 @@
             app:rippleColor="@color/stringColor"
             app:srcCompat="@drawable/ic_round" />
 
-        <!-- Content Block -->
+        <!-- Image Block -->
         <LinearLayout
-            android:id="@+id/contentBlock"
+            android:id="@+id/imageBlock"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/colorPrimary"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,70 +64,17 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <!-- Image -->
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/gymImgField"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:clickable="true"
                 android:contentDescription="@string/gym_img_profile"
-                android:focusable="true">
+                android:focusable="true"
+                android:scaleType="fitXY"
+                app:srcCompat="@mipmap/ic_launcher">
 
-            </de.hdodenhof.circleimageview.CircleImageView>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/fab_margin"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/gymNameField"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingStart="28dp"
-                    android:paddingEnd="0dp"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold">
-
-                </com.google.android.material.textview.MaterialTextView>
-
-                <ImageView
-                    android:id="@+id/abortTitleGymButton"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="top"
-                    android:layout_marginHorizontal="2dp"
-                    android:adjustViewBounds="true"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:contentDescription="@string/delete_button"
-                    android:scaleType="centerInside"
-                    android:visibility="invisible"
-                    app:srcCompat="@drawable/ic_delete"
-                    app:tint="@color/white">
-
-                </ImageView>
-
-                <ImageView
-                    android:id="@+id/editTitleGymButton"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_gravity="top"
-                    android:layout_marginHorizontal="2dp"
-                    android:adjustViewBounds="true"
-                    android:clickable="true"
-                    android:contentDescription="@string/edit_button"
-                    android:focusable="true"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_edit"
-                    app:tint="@color/design_default_color_on_primary">
-
-                </ImageView>
-
-            </LinearLayout>
+            </ImageView>
 
         </LinearLayout>
 
@@ -136,496 +83,569 @@
             android:id="@+id/infoBlock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp"
+            android:paddingTop="25dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/contentBlock"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@id/imageBlock">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/gymImgName"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="top"
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/gym_img_profile" />
+
+            <!-- Info Field -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!-- Frame -->
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <!-- Input Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gymBoxName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="30dp"
-                    android:orientation="vertical">
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
 
-                    <!-- Email -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp"
+                    app:endIconContentDescription="@string/edit_button"
+                    app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconMode="custom"
+
+                    app:endIconTint="@color/material_on_background_emphasis_medium"
+                    app:helperText="@string/helper_name_always"
+                    app:helperTextEnabled="true"
+                    app:hintEnabled="false">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gymTxtName"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="2dp"
-                        android:baselineAligned="false"
-                        android:weightSum="2"
-                        android:orientation="vertical">
+                        android:inputType="text"
+                        android:selectAllOnFocus="false"
+                        android:singleLine="true"
+                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-                        <!-- Input Field -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/gymBoxEmail"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:enabled="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
+                </com.google.android.material.textfield.TextInputLayout>
 
-                            app:hintEnabled="true"
-                            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:hint="@string/prompt_email"
-                            android:textColorHint="@color/material_on_background_disabled"
+                <!-- Buttons Field -->
+                <LinearLayout
+                    android:id="@+id/gymNameButtonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="start"
+                    android:orientation="horizontal">
 
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="2dp"
-
-                            app:endIconContentDescription="@string/edit_button"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_edit"
-                            app:endIconTint="@color/colorPrimary"
-
-                            app:startIconContentDescription="@string/mail_img"
-                            app:startIconDrawable="@drawable/ic_mail"
-                            app:startIconTint="@color/colorPrimary">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/gymTxtEmail"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="text|textEmailAddress|textEmailSubject"
-                                android:selectAllOnFocus="false"
-                                android:singleLine="true"
-                                android:textColor="@color/material_on_background_emphasis_medium"
-                                android:textStyle="bold" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- Buttons Field -->
-                        <LinearLayout
-                            android:id="@+id/gymEmailButtonRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:gravity="end"
-                            android:layout_weight="0"
-                            android:orientation="horizontal"
-                            android:translationX="0dp">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymAbortMail"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/delete_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_abort"
-                                android:textColor="@color/design_default_color_error"
-                                android:textSize="12sp"
-
-                                app:icon="@drawable/ic_delete"
-                                app:iconTint="@color/design_default_color_error"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymSaveMail"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/save_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_send"
-                                android:textSize="12sp"
-                                app:icon="@drawable/ic_save"
-
-                                app:iconTint="@color/colorPrimary"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Key -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymAbortName"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="2dp"
-                        android:baselineAligned="false"
-                        android:weightSum="2"
-                        android:orientation="vertical">
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/delete_button"
 
-                        <!-- Input Field -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/gymBoxKey"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:enabled="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
+                        android:focusable="true"
 
-                            app:hintEnabled="true"
-                            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:hint="@string/prompt_password"
-                            android:textColorHint="@color/material_on_background_disabled"
+                        android:text="@string/prompt_abort"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="12sp"
 
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="2dp"
+                        app:icon="@drawable/ic_delete"
+                        app:iconTint="@color/design_default_color_error"
+                        app:rippleColor="@color/material_on_background_disabled" />
 
-                            app:endIconContentDescription="@string/edit_button"
-                            app:endIconMode="password_toggle"
-                            app:endIconTint="@color/colorPrimary"
-
-                            app:startIconContentDescription="@string/key_img"
-                            app:startIconDrawable="@drawable/ic_psw"
-                            app:startIconTint="@color/colorPrimary">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/gymTextKey"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textPassword"
-                                android:selectAllOnFocus="false"
-                                android:singleLine="true"
-                                android:text="@string/password_hide"
-                                android:textColor="@color/material_on_background_emphasis_medium"
-                                android:textStyle="bold" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- Buttons Field -->
-                        <LinearLayout
-                            android:id="@+id/gymKeyButtonRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:gravity="end"
-                            android:layout_weight="0"
-                            android:orientation="horizontal"
-                            android:translationX="0dp">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymAbortKey"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/delete_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_abort"
-                                android:textColor="@color/design_default_color_error"
-                                android:textSize="12sp"
-
-                                app:icon="@drawable/ic_delete"
-                                app:iconTint="@color/design_default_color_error"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymSaveKey"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/save_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_send"
-                                android:textSize="12sp"
-                                app:icon="@drawable/ic_save"
-
-                                app:iconTint="@color/colorPrimary"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Divisor -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginVertical="10dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
-                    <!-- Phone -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymSaveName"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="10dp"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="2dp"
-                        android:baselineAligned="false"
-                        android:weightSum="2"
-                        android:orientation="vertical">
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/save_button"
 
-                        <!-- Input Field -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/gymBoxPhone"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:enabled="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
+                        android:focusable="true"
 
-                            app:hintEnabled="true"
-                            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:hint="@string/prompt_phone"
-                            android:textColorHint="@color/material_on_background_disabled"
+                        android:text="@string/prompt_send"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_save"
 
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="2dp"
-
-                            app:counterEnabled="true"
-                            app:counterMaxLength="15"
-                            app:errorEnabled="true"
-
-                            app:endIconContentDescription="@string/edit_button"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_edit"
-                            app:endIconTint="@color/colorPrimary"
-
-                            app:startIconContentDescription="@string/phone_img"
-                            app:startIconDrawable="@drawable/ic_phone"
-                            app:startIconTint="@color/colorPrimary">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/gymTextPhone"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="number|text|phone"
-                                android:selectAllOnFocus="false"
-                                android:singleLine="true"
-                                android:textColor="@color/material_on_background_emphasis_medium"
-                                android:textStyle="bold" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- Buttons Field -->
-                        <LinearLayout
-                            android:id="@+id/gymPhoneButtonRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:gravity="end"
-                            android:layout_weight="0"
-                            android:orientation="horizontal"
-                            android:translationX="0dp">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymAbortPhone"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/delete_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_abort"
-                                android:textColor="@color/design_default_color_error"
-                                android:textSize="12sp"
-
-                                app:icon="@drawable/ic_delete"
-                                app:iconTint="@color/design_default_color_error"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymSavePhone"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/save_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_send"
-                                android:textSize="12sp"
-                                app:icon="@drawable/ic_save"
-
-                                app:iconTint="@color/colorPrimary"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Address -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="10dp"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="2dp"
-                        android:baselineAligned="false"
-                        android:weightSum="2"
-                        android:orientation="vertical">
-
-                        <!-- Input Field -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/gymBoxAddress"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:enabled="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-
-                            app:hintEnabled="true"
-                            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:hint="@string/prompt_address"
-                            android:textColorHint="@color/material_on_background_disabled"
-
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="2dp"
-
-                            app:endIconContentDescription="@string/edit_button"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_edit"
-                            app:endIconTint="@color/colorPrimary"
-
-                            app:startIconContentDescription="@string/location_img"
-                            app:startIconDrawable="@drawable/ic_location"
-                            app:startIconTint="@color/colorPrimary">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/gymTextAddress"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textAutoCorrect"
-                                android:selectAllOnFocus="false"
-                                android:singleLine="true"
-                                android:textColor="@color/material_on_background_emphasis_medium"
-                                android:textStyle="bold" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- Buttons Field -->
-                        <LinearLayout
-                            android:id="@+id/gymAddressButtonRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:gravity="end"
-                            android:layout_weight="0"
-                            android:orientation="horizontal"
-                            android:translationX="0dp">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymAbortAddress"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/delete_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_abort"
-                                android:textColor="@color/design_default_color_error"
-                                android:textSize="12sp"
-
-                                app:icon="@drawable/ic_delete"
-                                app:iconTint="@color/design_default_color_error"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/gymSaveAddress"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/save_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_send"
-                                android:textSize="12sp"
-                                app:icon="@drawable/ic_save"
-
-                                app:iconTint="@color/colorPrimary"
-                                app:rippleColor="@color/material_on_background_disabled" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Divisor -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="10dp"
-                        android:background="?android:attr/listDivider"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:iconTint="@color/colorPrimary"
+                        app:rippleColor="@color/material_on_background_disabled" />
 
                 </LinearLayout>
+            </LinearLayout>
 
-                <LinearLayout
+        </LinearLayout>
+
+        <!-- Content Block -->
+        <LinearLayout
+            android:id="@+id/contentBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/infoBlock"
+            app:layout_constraintVertical_bias="0.0"
+            android:orientation="vertical">
+
+            <!-- Email -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:layout_marginVertical="5dp"
+                android:baselineAligned="false"
+                android:weightSum="2"
+                android:orientation="vertical">
+
+                <!-- Input Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gymBoxEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="20dp"
-                    android:orientation="vertical">
+                    android:layout_weight="2"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
 
-                    <androidx.cardview.widget.CardView
+                    app:hintEnabled="true"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:hint="@string/prompt_email"
+                    android:textColorHint="@color/material_on_background_disabled"
+
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="2dp"
+
+                    app:endIconContentDescription="@string/edit_button"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconTint="@color/material_on_background_emphasis_medium"
+
+                    app:startIconContentDescription="@string/mail_img"
+                    app:startIconDrawable="@drawable/ic_mail"
+                    app:startIconTint="@color/material_on_background_emphasis_medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gymTxtEmail"
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_marginHorizontal="25dp"
-                        android:layout_marginVertical="5dp"
-                        app:cardElevation="4dp">
+                        android:layout_height="wrap_content"
+                        android:inputType="text|textEmailAddress|textEmailSubject"
+                        android:selectAllOnFocus="false"
+                        android:singleLine="true"
+                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textStyle="bold" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Buttons Field -->
+                <LinearLayout
+                    android:id="@+id/gymEmailButtonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="end"
+                    android:layout_weight="0"
+                    android:orientation="horizontal"
+                    android:translationX="0dp">
 
-                            <androidx.fragment.app.FragmentContainerView
-                                android:id="@+id/gymMapField"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:name="com.google.android.gms.maps.SupportMapFragment" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymAbortMail"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/delete_button"
 
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                        android:focusable="true"
+
+                        android:text="@string/prompt_abort"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="12sp"
+
+                        app:icon="@drawable/ic_delete"
+                        app:iconTint="@color/design_default_color_error"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymSaveMail"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/save_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_send"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_save"
+
+                        app:iconTint="@color/colorPrimary"
+                        app:rippleColor="@color/material_on_background_disabled" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <!-- Key -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:layout_marginVertical="5dp"
+                android:baselineAligned="false"
+                android:weightSum="2"
+                android:orientation="vertical">
+
+                <!-- Input Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gymBoxKey"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+
+                    app:hintEnabled="true"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:hint="@string/prompt_password"
+                    android:textColorHint="@color/material_on_background_disabled"
+
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="2dp"
+
+                    app:endIconContentDescription="@string/edit_button"
+                    app:endIconMode="password_toggle"
+                    app:endIconTint="@color/material_on_background_emphasis_medium"
+
+                    app:startIconContentDescription="@string/key_img"
+                    app:startIconDrawable="@drawable/ic_psw"
+                    app:startIconTint="@color/material_on_background_emphasis_medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gymTextKey"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"
+                        android:selectAllOnFocus="false"
+                        android:singleLine="true"
+                        android:text="@string/password_hide"
+                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Buttons Field -->
+                <LinearLayout
+                    android:id="@+id/gymKeyButtonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="end"
+                    android:layout_weight="0"
+                    android:orientation="horizontal"
+                    android:translationX="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymAbortKey"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/delete_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_abort"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="12sp"
+
+                        app:icon="@drawable/ic_delete"
+                        app:iconTint="@color/design_default_color_error"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymSaveKey"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/save_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_send"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_save"
+
+                        app:iconTint="@color/colorPrimary"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Divisor -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="?android:attr/listDivider"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <!-- Phone -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:layout_marginVertical="5dp"
+                android:baselineAligned="false"
+                android:weightSum="2"
+                android:orientation="vertical">
+
+                <!-- Input Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gymBoxPhone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+
+                    app:hintEnabled="true"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:hint="@string/prompt_phone"
+                    android:textColorHint="@color/material_on_background_disabled"
+
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="2dp"
+
+                    app:counterEnabled="true"
+                    app:counterMaxLength="15"
+                    app:errorEnabled="true"
+
+                    app:endIconContentDescription="@string/edit_button"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconTint="@color/material_on_background_emphasis_medium"
+
+                    app:startIconContentDescription="@string/phone_img"
+                    app:startIconDrawable="@drawable/ic_phone"
+                    app:startIconTint="@color/material_on_background_emphasis_medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gymTextPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number|text|phone"
+                        android:selectAllOnFocus="false"
+                        android:singleLine="true"
+                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Buttons Field -->
+                <LinearLayout
+                    android:id="@+id/gymPhoneButtonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="end"
+                    android:layout_weight="0"
+                    android:orientation="horizontal"
+                    android:translationX="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymAbortPhone"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/delete_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_abort"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="12sp"
+
+                        app:icon="@drawable/ic_delete"
+                        app:iconTint="@color/design_default_color_error"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymSavePhone"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/save_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_send"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_save"
+
+                        app:iconTint="@color/colorPrimary"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Address -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:layout_marginVertical="5dp"
+                android:baselineAligned="false"
+                android:orientation="vertical">
+
+                <!-- Input Field -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/gymBoxAddress"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+
+                    app:hintEnabled="true"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:hint="@string/prompt_address"
+                    android:textColorHint="@color/material_on_background_disabled"
+
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="2dp"
+
+                    app:endIconContentDescription="@string/edit_button"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconTint="@color/material_on_background_emphasis_medium"
+
+                    app:startIconContentDescription="@string/location_img"
+                    app:startIconDrawable="@drawable/ic_location"
+                    app:startIconTint="@color/material_on_background_emphasis_medium">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/gymTextAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:shadowColor="#FFFFFF"
+                        android:textColor="@color/material_on_surface_emphasis_high_type"
+                        android:textStyle="bold" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- Buttons Field -->
+                <LinearLayout
+                    android:id="@+id/gymAddressButtonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:translationX="0dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymAbortAddress"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/delete_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_abort"
+                        android:textColor="@color/design_default_color_error"
+                        android:textSize="12sp"
+
+                        app:icon="@drawable/ic_delete"
+                        app:iconTint="@color/design_default_color_error"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/gymSaveAddress"
+                        style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="1dp"
+                        android:clickable="true"
+                        android:contentDescription="@string/save_button"
+
+                        android:focusable="true"
+
+                        android:text="@string/prompt_send"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_save"
+
+                        app:iconTint="@color/colorPrimary"
+                        app:rippleColor="@color/material_on_background_disabled" />
+
+                </LinearLayout>
+
+                <!-- Map -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginVertical="15dp"
+                    app:cardBackgroundColor="@color/design_default_color_background"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardMaxElevation="4dp"
+                    app:contentPadding="0dp">
+
+                    <androidx.fragment.app.FragmentContainerView
+                        android:id="@+id/gymMapField"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

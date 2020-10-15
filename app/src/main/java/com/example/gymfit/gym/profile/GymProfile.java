@@ -6,6 +6,8 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.text.Editable;
@@ -41,6 +43,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,11 +52,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GymProfile extends AppCompatActivity implements OnMapReadyCallback {
     private static final String FIRE_LOG = "fire_log";
@@ -77,12 +87,14 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
     private MaterialButton saveKeyBtn = null;
     private MaterialButton savePhoneBtn = null;
     private MaterialButton saveAddressBtn = null;
+    private MaterialButton saveNameBtn = null;
 
     // Delete buttons
     private MaterialButton deleteMailBtn = null;
     private MaterialButton deleteKeyBtn = null;
     private MaterialButton deletePhoneBtn = null;
     private MaterialButton deleteAddressBtn = null;
+    private MaterialButton deleteNameBtn = null;
 
     // Edit text field
     private TextInputLayout mailTextBox = null;
@@ -96,7 +108,11 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
     private String localPhone = null;
     private TextInputLayout addressTextBox = null;
     private TextInputEditText addressTextField = null;
-    private LatLng localAddress = null;
+    private String localAddress = null;
+    private LatLng localPosition = null;
+    private TextInputLayout nameTextBox = null;
+    private TextInputEditText nameTextField = null;
+    private String localName = null;
 
     private String userUid = null;
     private Gym gym = null;
@@ -130,12 +146,14 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         this.saveKeyBtn = findViewById(R.id.gymSaveKey);
         this.savePhoneBtn = findViewById(R.id.gymSavePhone);
         this.saveAddressBtn = findViewById(R.id.gymSaveAddress);
+        this.saveNameBtn = findViewById(R.id.gymSaveName);
 
         // set delete btn attr
         this.deleteMailBtn = findViewById(R.id.gymAbortMail);
         this.deleteKeyBtn = findViewById(R.id.gymAbortKey);
         this.deletePhoneBtn = findViewById(R.id.gymAbortPhone);
         this.deleteAddressBtn = findViewById(R.id.gymAbortAddress);
+        this.deleteNameBtn = findViewById(R.id.gymAbortName);
 
         // set text box
         this.mailTextBox = findViewById(R.id.gymBoxEmail);
@@ -146,6 +164,8 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         this.phoneTextField = findViewById(R.id.gymTextPhone);
         this.addressTextBox = findViewById(R.id.gymBoxAddress);
         this.addressTextField = findViewById(R.id.gymTextAddress);
+        this.nameTextBox = findViewById(R.id.gymBoxName);
+        this.nameTextField = findViewById(R.id.gymTxtName);
 
         // set animation
         this.rotateOpen = AnimationUtils.loadAnimation(this, R.anim.rotate_open_anim);
@@ -170,7 +190,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         /* Email comp event */
 
         this.deleteMailBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), findViewById(R.id.gymEmailButtonRight));
+            inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, findViewById(R.id.gymEmailButtonRight));
         });
 
         this.saveMailBtn.setOnClickListener(v -> this.user.updateEmail(Objects.requireNonNull(this.localEmail))
@@ -179,34 +199,34 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                         "email", this.localEmail
                 );
                 this.gym.setEmail(this.localEmail);
-                inputFieldDispatch(this.mailTextBox, this.mailTextField, this.localEmail, findViewById(R.id.gymEmailButtonRight));
+                inputFieldDispatch(this.mailTextBox, this.mailTextField, this.localEmail, false, findViewById(R.id.gymEmailButtonRight));
                 Toast.makeText(GymProfile.this, getResources().getString(R.string.update_email_success), Toast.LENGTH_SHORT).show();
             }).addOnFailureListener(e -> {
-                inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), findViewById(R.id.gymEmailButtonRight));
+                inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, findViewById(R.id.gymEmailButtonRight));
                 Toast.makeText(GymProfile.this, getResources().getString(R.string.update_email_error), Toast.LENGTH_SHORT).show();
             }));
 
         this.mailTextBox.setOnClickListener(v -> {
-            inputFieldFocused(this.mailTextBox, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
+            inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
             this.mailTextField.setText("");
         });
 
         this.mailTextBox.setEndIconOnClickListener(v -> {
-            inputFieldFocused(this.mailTextBox, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
+            inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
             this.mailTextField.setText("");
         });
 
         this.mailTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.mailTextBox, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
+            inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
         });
 
         this.mailTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
             if(hasFocus) {
-                inputFieldFocused(this.mailTextBox, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
+                inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), findViewById(R.id.gymEmailButtonRight));
                 this.mailTextField.setText("");
             } else {
-                inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), findViewById(R.id.gymEmailButtonRight));
+                inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, findViewById(R.id.gymEmailButtonRight));
                 this.mailTextBox.clearFocus();
                 this.mailTextField.clearFocus();
             }
@@ -235,41 +255,41 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         /* Password comp event */
 
         this.deleteKeyBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), findViewById(R.id.gymKeyButtonRight));
+            inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), false, findViewById(R.id.gymKeyButtonRight));
         });
 
         this.saveKeyBtn.setOnClickListener(v -> {
             this.user.updatePassword(this.localKey)
                 .addOnSuccessListener(aVoid -> {
-                    inputFieldDispatch(this.keyTextBox, this.keyTextField, this.localKey, findViewById(R.id.gymKeyButtonRight));
+                    inputFieldDispatch(this.keyTextBox, this.keyTextField, this.localKey, false, findViewById(R.id.gymKeyButtonRight));
                     Toast.makeText(GymProfile.this, getResources().getString(R.string.update_password_success), Toast.LENGTH_LONG).show();
                 }).addOnFailureListener(e -> {
-                    inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), findViewById(R.id.gymKeyButtonRight));
+                    inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), false, findViewById(R.id.gymKeyButtonRight));
                     Toast.makeText(GymProfile.this, getResources().getString(R.string.update_password_error), Toast.LENGTH_LONG).show();
                 });
         });
 
         this.keyTextBox.setOnClickListener(v -> {
-            inputFieldFocused(this.keyTextBox, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
+            inputFieldFocused(this.keyTextBox, this.keyTextField, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
             this.keyTextField.setText("");
         });
 
         this.keyTextBox.setEndIconOnClickListener(v -> {
-            inputFieldFocused(this.keyTextBox, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
+            inputFieldFocused(this.keyTextBox, this.keyTextField, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
             this.keyTextField.setText("");
         });
 
         this.keyTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.keyTextBox, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
+            inputFieldFocused(this.keyTextBox, this.keyTextField, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
         });
 
         this.keyTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
             if(hasFocus) {
-                inputFieldFocused(this.keyTextBox, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
+                inputFieldFocused(this.keyTextBox, this.keyTextField, getResources().getString(R.string.helper_psw_hover), findViewById(R.id.gymKeyButtonRight));
                 this.keyTextField.setText("");
             } else {
-                inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), findViewById(R.id.gymKeyButtonRight));
+                inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), false, findViewById(R.id.gymKeyButtonRight));
                 this.keyTextBox.clearFocus();
                 this.keyTextField.clearFocus();
             }
@@ -298,7 +318,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         /* Phone comp event */
 
         this.deletePhoneBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), findViewById(R.id.gymPhoneButtonRight));
+            inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), false, findViewById(R.id.gymPhoneButtonRight));
         });
 
         this.savePhoneBtn.setOnClickListener(v -> {
@@ -307,35 +327,35 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                         "phone", this.localPhone
                 );
                 this.gym.setPhone(this.localPhone);
-                inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.localPhone, findViewById(R.id.gymPhoneButtonRight));
+                inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.localPhone, false, findViewById(R.id.gymPhoneButtonRight));
                 Toast.makeText(GymProfile.this, getResources().getString(R.string.update_phone_success), Toast.LENGTH_SHORT).show();
             } else {
-                inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), findViewById(R.id.gymPhoneButtonRight));
+                inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), false, findViewById(R.id.gymPhoneButtonRight));
                 Toast.makeText(GymProfile.this, getResources().getString(R.string.update_phone_error), Toast.LENGTH_LONG).show();
             }
         });
 
         this.phoneTextBox.setOnClickListener(v -> {
-            inputFieldFocused(this.phoneTextBox, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
+            inputFieldFocused(this.phoneTextBox, this.phoneTextField, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
             this.phoneTextField.setText("");
         });
 
         this.phoneTextBox.setEndIconOnClickListener(v -> {
-            inputFieldFocused(this.phoneTextBox, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
+            inputFieldFocused(this.phoneTextBox, this.phoneTextField, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
             this.phoneTextField.setText("");
         });
 
         this.phoneTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.phoneTextBox, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
+            inputFieldFocused(this.phoneTextBox, this.phoneTextField, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
         });
 
         this.phoneTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
             if(hasFocus) {
-                inputFieldFocused(this.phoneTextBox, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
+                inputFieldFocused(this.phoneTextBox, this.phoneTextField, getResources().getString(R.string.helper_phone_hover), findViewById(R.id.gymPhoneButtonRight));
                 this.phoneTextField.setText("");
             } else {
-                inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), findViewById(R.id.gymPhoneButtonRight));
+                inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), false, findViewById(R.id.gymPhoneButtonRight));
                 this.phoneTextBox.clearFocus();
                 this.phoneTextField.clearFocus();
             }
@@ -370,43 +390,89 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         /* Address comp event */
 
         this.deleteAddressBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddressToString(), findViewById(R.id.gymAddressButtonRight));
+            inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddress(), false, findViewById(R.id.gymAddressButtonRight));
         });
 
         this.saveAddressBtn.setOnClickListener(v -> {
-            Toast.makeText(GymProfile.this, this.localAddress.toString(), Toast.LENGTH_SHORT).show();
+            this.db.collection("gyms").document(userUid).update(
+                    "address", this.localAddress
+            );
+            this.gym.setAddress(this.localAddress);
+            inputFieldDispatch(this.addressTextBox, this.addressTextField, this.localAddress, false, findViewById(R.id.gymAddressButtonRight));
+            Toast.makeText(GymProfile.this, getResources().getString(R.string.update_address_success), Toast.LENGTH_SHORT).show();
+
+            this.map.addMarker(new MarkerOptions().position(this.localPosition)).setTitle(gym.getName());
+            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(this.localPosition, 15));
         });
 
         this.addressTextBox.setOnClickListener(v -> {
-            inputFieldFocused(this.addressTextBox, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
+            inputFieldFocused(this.addressTextBox, this.addressTextField, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
             this.addressTextField.setText("");
         });
 
         this.addressTextBox.setEndIconOnClickListener(v -> {
-            inputFieldFocused(this.addressTextBox, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
+            inputFieldFocused(this.addressTextBox, this.addressTextField, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
             this.addressTextField.setText("");
         });
 
         this.addressTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.addressTextBox, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
+            inputFieldFocused(this.addressTextBox, this.addressTextField, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
         });
 
         this.addressTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
             if(hasFocus) {
-                inputFieldFocused(this.addressTextBox, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
+                inputFieldFocused(this.addressTextBox, this.addressTextField, getResources().getString(R.string.helper_address_hover), findViewById(R.id.gymAddressButtonRight));
                 this.addressTextField.setText("");
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(GymProfile.this);
                 startActivityForResult(intent, 100);
             } else {
-                inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddressToString(), findViewById(R.id.gymAddressButtonRight));
+                inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddress(), false, findViewById(R.id.gymAddressButtonRight));
                 this.addressTextBox.clearFocus();
                 this.addressTextField.clearFocus();
             }
         });
 
-        this.addressTextField.addTextChangedListener(new TextWatcher() {
+        /* Name comp event */
+
+        this.deleteNameBtn.setOnClickListener(v -> {
+            inputFieldDispatch(this.nameTextBox, this.nameTextField, this.gym.getName(), true, findViewById(R.id.gymNameButtonRight));
+        });
+
+        this.saveNameBtn.setOnClickListener(v -> {
+            this.db.collection("gyms").document(userUid).update(
+                    "name", this.localName
+            );
+            this.gym.setAddress(this.localName);
+            inputFieldDispatch(this.nameTextBox, this.nameTextField, this.localName, true, findViewById(R.id.gymNameButtonRight));
+            Toast.makeText(GymProfile.this, getResources().getString(R.string.update_name_success), Toast.LENGTH_SHORT).show();
+        });
+
+        this.nameTextBox.setOnClickListener(v -> {
+            inputFieldFocused(this.nameTextBox, this.nameTextField, findViewById(R.id.gymNameButtonRight));
+        });
+
+        this.nameTextBox.setEndIconOnClickListener(v -> {
+            inputFieldFocused(this.nameTextBox, this.nameTextField, findViewById(R.id.gymNameButtonRight));
+        });
+
+        this.nameTextField.setOnClickListener(v -> {
+            inputFieldFocused(this.nameTextBox, this.nameTextField, findViewById(R.id.gymNameButtonRight));
+        });
+
+        this.nameTextField.setOnFocusChangeListener((v, hasFocus) -> {
+
+            if(hasFocus) {
+                inputFieldFocused(this.nameTextBox, this.nameTextField, findViewById(R.id.gymNameButtonRight));
+            } else {
+                inputFieldDispatch(this.nameTextBox, this.nameTextField, this.gym.getName(), true, findViewById(R.id.gymNameButtonRight));
+                this.nameTextBox.clearFocus();
+                this.nameTextField.clearFocus();
+            }
+        });
+
+        this.nameTextField.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -415,7 +481,9 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if(!s.toString().isEmpty() && !(s.toString().equals(gym.getName()))) {
+                    localName = s.toString();
+                }
             }
 
             @Override
@@ -423,6 +491,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
 
             }
         });
+
     }
 
     @Override
@@ -435,7 +504,8 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
             assert data != null;
             Place place = Autocomplete.getPlaceFromIntent(data);
             this.addressTextField.setText(place.getAddress());
-            this.localAddress = place.getLatLng();
+            this.localAddress = place.getAddress();
+            this.localPosition = place.getLatLng();
         } else if(resultCode == AutocompleteActivity.RESULT_ERROR) {
             //When error
             //Initialize status
@@ -522,7 +592,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                 DocumentSnapshot documentSnapshot = task.getResult();
                 assert documentSnapshot != null;
 
-                TextView gymNameField = findViewById(R.id.gymNameField);
+                TextInputEditText gymNameField = findViewById(R.id.gymTxtName);
                 String name = documentSnapshot.getString("name");
 
                 TextInputEditText gymEmailField = findViewById(R.id.gymTxtEmail);
@@ -532,34 +602,18 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                 String phone = documentSnapshot.getString("phone");
 
                 TextView gymAddressField = findViewById(R.id.gymTextAddress);
-                HashMap<String, String> addressFields = new HashMap<>();
-                addressFields.put("city", documentSnapshot.getString("address.city"));
-                addressFields.put("country", documentSnapshot.getString("address.country"));
-                addressFields.put("numberStreet", Objects.requireNonNull(documentSnapshot.get("address.numberStreet")).toString());
-                addressFields.put("street", documentSnapshot.getString("address.street"));
-                addressFields.put("zipCode", Objects.requireNonNull(documentSnapshot.get("address.zipCode")).toString());
-                String address =
-                        addressFields.get("street") + ", " +
-                        addressFields.get("numberStreet") + ", " +
-                        addressFields.get("zipCode") + " " + addressFields.get("city") + ", " +
-                        addressFields.get("country");
-
+                String address = documentSnapshot.getString("address");
                 LatLng gymPosition = new LatLng(
                         Objects.requireNonNull(documentSnapshot.getGeoPoint("position")).getLatitude(),
                         Objects.requireNonNull(documentSnapshot.getGeoPoint("position")).getLongitude());
 
                 final ImageView gymImgField = findViewById(R.id.gymImgField);
-                //String imageRef = documentSnapshot.getString("img");
-                //assert imageRef != null;
-                StorageReference imageRef = storage.getReference().child("img/gyms/dota2.jpg");
-                long MAXBYTES = 1024 * 1024;
+                final CircleImageView gymImgNameField = findViewById(R.id.gymImgName);
+                String imageRef = documentSnapshot.getString("img");
+                Picasso.get().load(imageRef).into(gymImgField);
+                Picasso.get().load(imageRef).into(gymImgNameField);
 
-                imageRef.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    gymImgField.setImageBitmap(bitmap);
-                }).addOnFailureListener(e -> Log.d(FIRE_LOG, "ERROR: " + e.getMessage()));
-
-                Gym gymTmp = new Gym(userUid, email, phone, name, addressFields, gymPosition);
+                Gym gymTmp = new Gym(userUid, email, phone, name, address, gymPosition, imageRef);
                 gymDBCallback.onCallback(gymTmp);
 
                 gymNameField.setText(name);
@@ -573,7 +627,8 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         });
     }
 
-    private void inputFieldFocused(TextInputLayout box, String helperText, LinearLayout container) {
+    private void inputFieldFocused(TextInputLayout box, TextInputEditText text, String helperText, LinearLayout container) {
+        text.requestFocus();
         box.setEndIconDrawable(R.drawable.ic_clear);
         box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, getTheme())));
 
@@ -584,13 +639,21 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
 
-    private void inputFieldDispatch(TextInputLayout box, TextInputEditText textField, String originText, LinearLayout container) {
+    private void inputFieldFocused(TextInputLayout box, TextInputEditText text, LinearLayout container) {
+        text.requestFocus();
+        box.setEndIconDrawable(R.drawable.ic_clear);
+        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, getTheme())));
+
+        container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+    }
+
+    private void inputFieldDispatch(TextInputLayout box, TextInputEditText textField, String originText, boolean helperEnable, LinearLayout container) {
         textField.setText(originText);
-        textField.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, getTheme())));
+        textField.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_high_type, getTheme())));
 
         box.setEndIconDrawable(R.drawable.ic_edit);
-        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, getTheme())));
-        box.setHelperTextEnabled(false);
+        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, getTheme())));
+        box.setHelperTextEnabled(helperEnable);
 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0));
     }
@@ -603,7 +666,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         5. \\d{4} is mandatory group of last 4 digits
         6. $ end of expression
      */
-    public boolean isValidPhoneNumber(String number) {
+    private boolean isValidPhoneNumber(String number) {
         String allCountryRegex = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$";
         if(number.matches(allCountryRegex)) {
             return number.length() <= this.phoneTextBox.getCounterMaxLength();

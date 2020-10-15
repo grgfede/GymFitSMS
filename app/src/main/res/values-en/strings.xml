@@ -55,4 +55,7 @@
     <string name="helper_address_error">Address is non valid.</string>
     <string name="update_address_success">Your new address has been updated.</string>
     <string name="update_address_error">Your new address has not been updated.</string>
+    <string name="helper_name_always">Palestra</string>
+    <string name="update_name_success">Your new name has been updated.</string>
+    <string name="update_name_error">Your new name has not been updated.</string>
 </resources>

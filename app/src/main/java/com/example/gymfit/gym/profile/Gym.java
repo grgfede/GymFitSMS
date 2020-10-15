@@ -3,23 +3,25 @@ package com.example.gymfit.gym.profile;
 import com.example.gymfit.system.GenericUser;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Gym extends GenericUser {
-    private Map<String, String> address;
+    private String address;
     private String name;
-
+    private String image;
     private LatLng position;
 
-    public Gym(String uid, String email, String phone, String name, HashMap<String, String> address, LatLng position) {
+    public Gym(String uid, String email, String phone, String name, String address, LatLng position, String image) {
         super(uid, email, phone);
         this.name = name;
         this.address = address;
         this.position = position;
+        this.image = image;
     }
 
-    public Map<String, String> getAddress() {
+    public String getImage() {
+        return image;
+    }
+
+    public String getAddress() {
         return address;
     }
 
@@ -27,18 +29,11 @@ public class Gym extends GenericUser {
         return position;
     }
 
-    public String getAddressToString() {
-        return  this.address.get("street") + ", " +
-                this.address.get("numberStreet") + ", " +
-                this.address.get("zipCode") + " " + this.address.get("city") + ", " +
-                this.address.get("country");
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setAddress(Map<String, String> address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
@@ -49,5 +44,10 @@ public class Gym extends GenericUser {
     public void setPosition(LatLng position) {
         this.position = position;
     }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
 
 }
