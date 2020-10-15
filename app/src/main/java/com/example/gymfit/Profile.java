@@ -72,7 +72,14 @@ public class Profile extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        Button button = (Button) findViewById(R.id.Editprofile);
+        Button edit = (Button) findViewById(R.id.Editprofile);
+        edit.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        startActivity(new Intent(Profile.this, EditProfile.class));
+                    }
+                }
+        );
 
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,13 +134,6 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        button.setOnClickListener(
-                new Button.OnClickListener() {
-                    public void onClick(View v) {
-                        startActivity(new Intent(Profile.this, EditProfile.class));
-                    }
-                }
-        );
 
 
     }
@@ -161,6 +161,7 @@ public class Profile extends AppCompatActivity {
 
         Toast.makeText(Profile.this, "Torna a trovarci, a presto!", Toast.LENGTH_SHORT).show();
     }
+
 
 }
 
