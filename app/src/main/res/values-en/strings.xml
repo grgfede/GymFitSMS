@@ -58,4 +58,13 @@
     <string name="helper_name_always">Palestra</string>
     <string name="update_name_success">Your new name has been updated.</string>
     <string name="update_name_error">Your new name has not been updated.</string>
+    <string name="prompt_cancel">Cancel</string>
+    <string name="dialog_title_pickimage">Choose an action</string>
+    <string name="dialog_item_pickiamge_camera">Camera</string>
+    <string name="dialog_item_pickiamge_gallery">Gallery</string>
+    <string name="permission_camera_success">Camera permission authorized.</string>
+    <string name="permission_camera_error">Camera permission denied.</string>
+    <string name="update_image_success">Your image has been updated.</string>
+    <string name="update_image_error">Your image has not been updated.</string>
+    <string name="intent_result_code_denied">Error:</string>
 </resources>

@@ -45,6 +45,8 @@
     <string name="prompt_address">Indirizzo</string>
     <string name="prompt_abort">Annulla</string>
     <string name="prompt_send">Invia</string>
+    <string name="prompt_cancel">Annulla</string>
+    <string name="prompt_confirm" translatable="false">OK</string>
 
     <string name="helper_email_hover">Inserisci una email</string>
     <string name="helper_email_error">"Inserisci una email valida. "</string>
@@ -56,20 +58,13 @@
     <string name="helper_address_error">"L'indirizzo non è valido."</string>
     <string name="helper_name_always">Gym</string>
 
-    <string name="update_email_success">Email aggiornata.</string>
-    <string name="update_email_error">Email non aggiornata.</string>
-    <string name="update_password_success">Password aggiornata.</string>
-    <string name="update_password_error">Password non aggiornata.</string>
-    <string name="update_phone_success">Numero di telefono aggiornato.</string>
-    <string name="update_phone_error">Numero di telefono non aggiornato.</string>
-    <string name="update_address_success">Il nuovo indirizzo è stato aggiornato.</string>
-    <string name="update_address_error">Il nuovo indirizzo non è stato aggiornato.</string>
-    <string name="update_name_success">Il nuovo nome è stato aggiornato.</string>
-    <string name="update_name_error">Il nuovo nome non è stato aggiornato.</string>
-
     <string name="password_recovery_title">Recupera Password</string>
     <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
     <string name="passwrd_recover_button_send">Invia</string>
+
+    <string name="dialog_title_pickimage">Scegli una azione</string>
+    <string name="dialog_item_pickiamge_camera">Fotocamera</string>
+    <string name="dialog_item_pickiamge_gallery">Galleria</string>
 
     <string name="congratulations_signUp" translatable="false">todo</string>
     <string name="signUpSubTitle3" translatable="false">todo</string>

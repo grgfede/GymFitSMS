@@ -1,12 +1,13 @@
 package com.example.gymfit.gym.profile;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -21,8 +22,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,11 +40,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,11 +55,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -67,6 +64,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GymProfile extends AppCompatActivity implements OnMapReadyCallback {
     private static final String FIRE_LOG = "fire_log";
+    private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11;
+    private static final int MY_CAMERA_PERMISSION_CODE = 9;
+
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -77,10 +77,15 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
     private Animation fromButton = null;
     private Animation toButton = null;
 
+    // Image
+    private ImageView gymImg = null;
+    private CircleImageView gymImgName = null;
+
     // Circle menu attr
     private FloatingActionButton fab = null;
     private FloatingActionButton fabSubscription = null;
     private FloatingActionButton fabRound = null;
+    private FloatingActionButton editImage = null;
 
     // Save buttons
     private MaterialButton saveMailBtn = null;
@@ -115,6 +120,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
     private String localName = null;
 
     private String userUid = null;
+    private View activityView = null;
     private Gym gym = null;
     private GoogleMap map = null;
     private boolean circleBtnClicked = false;
@@ -136,10 +142,17 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
 
         });
 
+        this.activityView = findViewById(R.id.constraintLayout);
+
+        // set image
+        this.gymImg = findViewById(R.id.gymImgField);
+        this.gymImgName = findViewById(R.id.gymImgName);
+
         // set circle menu
         this.fab = findViewById(R.id.fab_add);
         this.fabSubscription = findViewById(R.id.fab_subscription);
         this.fabRound = findViewById(R.id.fab_round);
+        this.editImage = findViewById(R.id.gymEditImg);
 
         // set save btn attr
         this.saveMailBtn = findViewById(R.id.gymSaveMail);
@@ -179,12 +192,12 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
 
         this.fabSubscription.setOnClickListener(view -> {
             //TODO: Open GymSubscription activity
-            Toast.makeText(GymProfile.this, "Subscription Opt", Toast.LENGTH_SHORT).show();
+            Snackbar.make(activityView, "Subscription Opt", Snackbar.LENGTH_SHORT).show();
         });
 
         this.fabRound.setOnClickListener(view -> {
             //TODO: Open GymRound activity
-            Toast.makeText(GymProfile.this, "Round Opt", Toast.LENGTH_SHORT).show();
+            Snackbar.make(activityView, "Turn Opt", Snackbar.LENGTH_SHORT).show();;
         });
 
         /* Email comp event */
@@ -200,10 +213,10 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                 );
                 this.gym.setEmail(this.localEmail);
                 inputFieldDispatch(this.mailTextBox, this.mailTextField, this.localEmail, false, findViewById(R.id.gymEmailButtonRight));
-                Toast.makeText(GymProfile.this, getResources().getString(R.string.update_email_success), Toast.LENGTH_SHORT).show();
+                Snackbar.make(activityView, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
             }).addOnFailureListener(e -> {
                 inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, findViewById(R.id.gymEmailButtonRight));
-                Toast.makeText(GymProfile.this, getResources().getString(R.string.update_email_error), Toast.LENGTH_SHORT).show();
+                Snackbar.make(activityView, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
             }));
 
         this.mailTextBox.setOnClickListener(v -> {
@@ -262,10 +275,10 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
             this.user.updatePassword(this.localKey)
                 .addOnSuccessListener(aVoid -> {
                     inputFieldDispatch(this.keyTextBox, this.keyTextField, this.localKey, false, findViewById(R.id.gymKeyButtonRight));
-                    Toast.makeText(GymProfile.this, getResources().getString(R.string.update_password_success), Toast.LENGTH_LONG).show();
+                    Snackbar.make(activityView, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
                     inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), false, findViewById(R.id.gymKeyButtonRight));
-                    Toast.makeText(GymProfile.this, getResources().getString(R.string.update_password_error), Toast.LENGTH_LONG).show();
+                    Snackbar.make(activityView, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
                 });
         });
 
@@ -328,10 +341,10 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                 );
                 this.gym.setPhone(this.localPhone);
                 inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.localPhone, false, findViewById(R.id.gymPhoneButtonRight));
-                Toast.makeText(GymProfile.this, getResources().getString(R.string.update_phone_success), Toast.LENGTH_SHORT).show();
+                Snackbar.make(activityView, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
             } else {
                 inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), false, findViewById(R.id.gymPhoneButtonRight));
-                Toast.makeText(GymProfile.this, getResources().getString(R.string.update_phone_error), Toast.LENGTH_LONG).show();
+                Snackbar.make(activityView, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
             }
         });
 
@@ -399,7 +412,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
             );
             this.gym.setAddress(this.localAddress);
             inputFieldDispatch(this.addressTextBox, this.addressTextField, this.localAddress, false, findViewById(R.id.gymAddressButtonRight));
-            Toast.makeText(GymProfile.this, getResources().getString(R.string.update_address_success), Toast.LENGTH_SHORT).show();
+            Snackbar.make(activityView, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
 
             this.map.addMarker(new MarkerOptions().position(this.localPosition)).setTitle(gym.getName());
             this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(this.localPosition, 15));
@@ -426,7 +439,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
                 this.addressTextField.setText("");
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(GymProfile.this);
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent, MY_ADDRESS_REQUEST_CODE);
             } else {
                 inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddress(), false, findViewById(R.id.gymAddressButtonRight));
                 this.addressTextBox.clearFocus();
@@ -446,7 +459,7 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
             );
             this.gym.setAddress(this.localName);
             inputFieldDispatch(this.nameTextBox, this.nameTextField, this.localName, true, findViewById(R.id.gymNameButtonRight));
-            Toast.makeText(GymProfile.this, getResources().getString(R.string.update_name_success), Toast.LENGTH_SHORT).show();
+            Snackbar.make(activityView, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
         });
 
         this.nameTextBox.setOnClickListener(v -> {
@@ -492,27 +505,67 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
             }
         });
 
+        /* Image comp event */
+
+        this.editImage.setOnClickListener(v -> {
+            setPickImageDialog();
+        });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == MY_CAMERA_PERMISSION_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Snackbar.make(activityView, getResources().getString(R.string.permission_camera_success), Snackbar.LENGTH_SHORT).show();
+
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, MY_CAMERA_REQUEST_CODE);
+            } else {
+                Snackbar.make(activityView, getResources().getString(R.string.permission_camera_error), Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            //When success
-            //Initialize places
-            assert data != null;
-            Place place = Autocomplete.getPlaceFromIntent(data);
-            this.addressTextField.setText(place.getAddress());
-            this.localAddress = place.getAddress();
-            this.localPosition = place.getLatLng();
-        } else if(resultCode == AutocompleteActivity.RESULT_ERROR) {
-            //When error
-            //Initialize status
-            assert data != null;
-            Status status = Autocomplete.getStatusFromIntent(data);
-            Toast.makeText(GymProfile.this, status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+        if (requestCode == MY_ADDRESS_REQUEST_CODE && !(data == null)) {
+            //TODO: eliminare i precedenti markup dell'indirizzo se già esistenti o evitare di ricrearli
+            if(resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                this.addressTextField.setText(place.getAddress());
+                this.localAddress = place.getAddress();
+                this.localPosition = place.getLatLng();
+            } else {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                assert status.getStatusMessage() != null;
+                Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == MY_GALLERY_REQUEST_CODE && !(data == null)) {
+            if(resultCode == RESULT_OK){
+                setAndUploadNewImage(data.getData());
+            } else {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                assert status.getStatusMessage() != null;
+                Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == MY_CAMERA_REQUEST_CODE && !(data == null)) {
+            if(resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                assert extras != null;
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                setAndUploadNewImage(imageBitmap);
+            } else {
+                Status status = Autocomplete.getStatusFromIntent(data);
+                assert status.getStatusMessage() != null;
+                Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+            }
         }
+
     }
 
     @Override
@@ -627,6 +680,74 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         });
     }
 
+    private void setPickImageDialog() {
+        final String [] items = new String[] {
+                getResources().getString(R.string.dialog_item_pickiamge_gallery),
+                getResources().getString(R.string.dialog_item_pickiamge_camera)
+        };
+
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(GymProfile.this, R.style.ThemeOverlay_MaterialComponents_Dialog_Alert);
+        dialogBuilder.setTitle(getResources().getString(R.string.dialog_title_pickimage));
+        dialogBuilder.setItems(items, (dialog, which) -> {
+            if (which == 0) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent , MY_GALLERY_REQUEST_CODE);
+            } else {
+                if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[] {Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                } else {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, MY_CAMERA_REQUEST_CODE);
+                }
+            }
+        });
+        dialogBuilder.setNegativeButton(getResources().getString(R.string.prompt_cancel), (dialog, which) -> {});
+        dialogBuilder.show();
+    }
+
+    private void setAndUploadNewImage(Uri data) {
+        Picasso.get().load(data).into(this.gymImgName);
+        Picasso.get().load(data).into(this.gymImg);
+
+        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.userUid + "/profilePic");
+        storageReference.putFile(data)
+                .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                    String uriString = uri.toString();
+                    this.gym.setImage(data.toString());
+                    this.db.collection("gyms").document(this.userUid).update("img", uriString)
+                            .addOnSuccessListener(aVoid -> Snackbar.make(activityView, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
+                }))
+                .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
+
+    }
+
+    private void setAndUploadNewImage(Bitmap data) {
+        this.gymImgName.setImageBitmap(data);
+        this.gymImg.setImageBitmap(data);
+
+        gymImgName.setDrawingCacheEnabled(true);
+        gymImgName.buildDrawingCache();
+        Bitmap bitmap = gymImgName.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+
+        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.userUid + "/profilePic");
+        storageReference.putBytes(bytes)
+                .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+
+                    String uriString = uri.toString();
+                    this.gym.setImage(uriString);
+                    this.db.collection("gyms").document(this.userUid).update("img", uriString)
+                            .addOnSuccessListener(aVoid -> Snackbar.make(activityView, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
+                }))
+                .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
+
+        //Snackbar.make(activityView, bytes.length, Snackbar.LENGTH_SHORT).show();
+    }
+
     private void inputFieldFocused(TextInputLayout box, TextInputEditText text, String helperText, LinearLayout container) {
         text.requestFocus();
         box.setEndIconDrawable(R.drawable.ic_clear);
@@ -658,15 +779,15 @@ public class GymProfile extends AppCompatActivity implements OnMapReadyCallback 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0));
     }
 
-    /*
-        1. ^ start of expression
-        2. (\\+\\d{1,3}( )?)? is optional match of country code between 1 to 3 digits prefixed with '+' symbol, followed by space or no space.
-        3. ((\\(\\d{1,3}\\))|\\d{1,3} is mandatory group of 1 to 3 digits with or without parenthesis followed by hyphen, space or no space.
-        4. \\d{3,4}[- .]? is mandatory group of 3 or 4 digits followed by hyphen, space or no space
-        5. \\d{4} is mandatory group of last 4 digits
-        6. $ end of expression
-     */
     private boolean isValidPhoneNumber(String number) {
+        /*
+            1. ^ start of expression
+            2. (\\+\\d{1,3}( )?)? is optional match of country code between 1 to 3 digits prefixed with '+' symbol, followed by space or no space.
+            3. ((\\(\\d{1,3}\\))|\\d{1,3} is mandatory group of 1 to 3 digits with or without parenthesis followed by hyphen, space or no space.
+            4. \\d{3,4}[- .]? is mandatory group of 3 or 4 digits followed by hyphen, space or no space
+            5. \\d{4} is mandatory group of last 4 digits
+            6. $ end of expression
+        */
         String allCountryRegex = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$";
         if(number.matches(allCountryRegex)) {
             return number.length() <= this.phoneTextBox.getCounterMaxLength();
