@@ -67,4 +67,17 @@
     <string name="update_image_success">Your image has been updated.</string>
     <string name="update_image_error">Your image has not been updated.</string>
     <string name="intent_result_code_denied">Error:</string>
+    <string name="title_subcription">Subscription</string>
+    <string name="monthly_subscription">Monthly</string>
+    <string name="quarterly_subscription">Quarterly</string>
+    <string name="six_month_subscription">Half yearly</string>
+    <string name="annual_subscription">Yearly</string>
+    <string name="title_session">Weekly session</string>
+    <string name="morning_session">Morning sessions</string>
+    <string name="afternoon_session">Afternoon sessions</string>
+    <string name="evening_session">Evening sessions</string>
+    <string name="monthly_subscription_description">It ends at the end of the month</string>
+    <string name="quarterly_subscription_description">It ends at the end of the three months</string>
+    <string name="six_month_subscription_description">It starts at the 1st of January to the ends of May</string>
+    <string name="annual_subscription_description">It starts at the 1st of January to the ends of December</string>
 </resources>

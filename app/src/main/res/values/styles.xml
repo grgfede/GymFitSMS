@@ -16,4 +16,9 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="MyAnimation.Window" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/enter_slide_up</item>
+        <item name="android:windowExitAnimation">@anim/exit_slide_down</item>
+    </style>
+
 </resources>

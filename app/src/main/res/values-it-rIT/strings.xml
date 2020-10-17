@@ -67,4 +67,18 @@
     <string name="update_image_success">La nuova immagine è stata aggiornata.</string>
     <string name="update_image_error">La nuova immagine non è stata aggiornata.</string>
     <string name="intent_result_code_denied">"Errore: "</string>
+    <string name="title_subcription">Abbonamento</string>
+    <string name="monthly_subscription">Mensile</string>
+    <string name="quarterly_subscription">Trimestrale</string>
+    <string name="six_month_subscription">Semestrale</string>
+    <string name="annual_subscription">Annuale</string>
+    <string name="title_session">Turno settimanale</string>
+    <string name="morning_session">Turni mattutini</string>
+    <string name="afternoon_session">Turni pomeridiani</string>
+    <string name="evening_session">Turni serali</string>
+    <string name="monthly_subscription_description">Si conclude alla fine del mese</string>
+    <string name="quarterly_subscription_description">Si conclude alla fine dei tre mesi</string>
+    <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
+    <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
+    <string name="third_evening_session" translatable="false">"annual "</string>
 </resources>

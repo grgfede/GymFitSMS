@@ -72,4 +72,28 @@
     <string name="seepic" translatable="false">todo</string>
     <string name="changepic" translatable="false">todo</string>
 
+    <string name="title_subcription">Abbonamento</string>
+    <string name="monthly_subscription_description">Si conclude alla fine del mese</string>
+    <string name="quarterly_subscription_description">Si conclude alla fine dei tre mesi</string>
+    <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
+    <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
+    <string name="monthly_subscription">Mensile</string>
+    <string name="quarterly_subscription">Trimestrale</string>
+    <string name="six_month_subscription">Semestrale</string>
+    <string name="annual_subscription">Annuale</string>
+
+    <string name="title_session">Turno settimanale</string>
+    <string name="morning_session">Turni mattutini</string>
+    <string name="first_morning_session" translatable="false">09:00:00 – 10:00:00</string>
+    <string name="second_morning_session" translatable="false">10:00:00 – 11:00:00</string>
+    <string name="third_morning_session" translatable="false">11:00:00 – 12:00:00</string>
+    <string name="afternoon_session">Turni pomeridiani</string>
+    <string name="first_afternoon_session" translatable="false">:14:00 – 15:00:00</string>
+    <string name="second_afternoon_session" translatable="false">15:00:00 – 16:00:00</string>
+    <string name="third_afternoon_session" translatable="false">16:00:00 – 17:00:00</string>
+    <string name="evening_session">Turni serali</string>
+    <string name="first_evening_session" translatable="false">17:00:00 – 18:00:00</string>
+    <string name="second_evening_session" translatable="false">18:00:00 – 19:00:00</string>
+    <string name="third_evening_session" translatable="false">19:00:00 – 20:00:00</string>
+
 </resources>
