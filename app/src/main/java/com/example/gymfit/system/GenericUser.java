@@ -22,4 +22,17 @@ public abstract class GenericUser {
     public String getPhone() {
         return phone;
     }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 }

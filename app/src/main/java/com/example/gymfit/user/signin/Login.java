@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.gymfit.R;
 import com.example.gymfit.user.signup.SignUp;
-import com.example.gymfit.gym.profile.GymProfile;
+import com.example.gymfit.gym.profile.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -102,7 +102,7 @@ public class Login extends AppCompatActivity {
 
     private void signInIntent(String uid) {
         if(uid.endsWith("2")) {
-            Intent intent = new Intent(Login.this, GymProfile.class);
+            Intent intent = new Intent(Login.this, ActivityGymProfile.class);
             intent.putExtra("userUid", uid);
             startActivity(intent);
         } else {

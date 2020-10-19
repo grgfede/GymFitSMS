@@ -19,14 +19,14 @@ public class EditProfile extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-       /* Button button = (Button)findViewById(R.id.Backtoprofile);
+       Button back = (Button)findViewById(R.id.btnBack);
 
-        button.setOnClickListener(
+        back.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         startActivity(new Intent(EditProfile.this, Profile.class));
                     }
                 }
-        );*/
+        );
     }
 }

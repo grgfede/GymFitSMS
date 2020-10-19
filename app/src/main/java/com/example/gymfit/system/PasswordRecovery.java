@@ -1,8 +1,10 @@
-package com.example.gymfit;
+package com.example.gymfit.system;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.gymfit.R;
 
 public class PasswordRecovery extends AppCompatActivity {
 
