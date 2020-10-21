@@ -80,6 +80,14 @@
     <string name="quarterly_subscription_description">Si conclude alla fine dei tre mesi</string>
     <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
     <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
+    <string name="third_evening_session" translatable="false">"annual "</string>
+    <string name="birthDay">Data di nascita</string>
+    <string name="location">Località</string>
+    <string name="congratulations_signUp" translatable="false">Il look è importante!</string>
+    <string name="signUpSubTitle3">Imposta una tua foto del profilo per farti riconoscere in modo semplice</string>
+    <string name="skip">Salta</string>
+    <string name="signUpCompleteTitle">Complimenti!</string>
+    <string name="signUpCompleteSubTitle">La registrazione è andata a buon fine, ora puoi effettuare il login</string>
     <string name="monthly_subscription_disabled">Abbonamenti mensili disattivati.</string>
     <string name="monthly_subscription_enabled">Abbonamenti mensili attivati.</string>
     <string name="quarterly_subscription_enabled">Abbonamenti trimestrali attivati.</string>

@@ -1,106 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".user.signup.SignUp2Fragment"
-    android:orientation="vertical">
+    android:layout_marginStart="25dp"
+    android:layout_marginEnd="25dp"
+    android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    tools:context=".user.signup.SignUpFragment">
+
 
     <TextView
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/avenirheavy"
-        android:textColor="@color/colorPrimary"
         android:text="@string/signUpTitle2"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="8dp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
         android:fontFamily="@font/avenirltstdlight"
         android:text="@string/signUpSubTitle2"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_logo" />
 
+    <!--EMAIL-->
 
-
-    <EditText
-        android:id="@+id/txtEmailSignUp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtEmailSignUpLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/et_custom"
-        android:fontFamily="@font/avenirltstdlight"
+        android:layout_height="60dp"
+        android:layout_marginTop="80dp"
         android:hint="@string/prompt_email"
-        android:textColorHint="@color/stringColor"
-        android:inputType="textEmailAddress"
-        android:padding="15dp"
-        android:textSize="18sp" />
-    <EditText
-        android:id="@+id/txtPasswordSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/et_custom"
-        android:textColorHint="@color/stringColor"
-        android:fontFamily="@font/avenirltstdlight"
-        android:hint="@string/prompt_password"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/stringColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle">
 
-    <EditText
-        android:id="@+id/txtRepeatPasswordSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/et_custom"
-        android:textColorHint="@color/stringColor"
-        android:fontFamily="@font/avenirltstdlight"
-        android:hint="@string/repeat_password"
-        android:inputType="textPassword"
-        android:padding="15dp"
-        android:textSize="18sp" />
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <Button
-            android:id="@+id/btn_register"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtEmailSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/radiousbuttonlightblue"
             android:fontFamily="@font/avenirltstdlight"
-            android:text="Registrati"
-            android:textColor="@android:color/white" />
+            android:inputType="text"
+            android:textColor="@color/quantum_black_100" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--PASSWORD-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtPasswordSignUpLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/prompt_password"
+        android:textSize="18sp"
+        app:errorEnabled="true"
+        app:endIconMode="password_toggle"
+        app:hintTextColor="@color/stringColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmailSignUpLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtPasswordSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenirltstdlight"
+            android:inputType="textPassword"
+            android:textColor="@color/quantum_black_100" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--REPEAT PASSWORD-->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtRepeatPasswordSignUpLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/repeat_password"
+        app:endIconMode="password_toggle"
+        android:textSize="18sp"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/stringColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPasswordSignUpLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtRepeatPasswordSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/avenirltstdlight"
+            android:inputType="textPassword"
+            android:textColor="@color/quantum_black_100" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!--BUTTON-->
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="128dp"
+        android:background="@drawable/radiousbuttonlightblue"
+        android:fontFamily="@font/avenirltstdlight"
+        android:foregroundGravity="top"
+        android:text="Registrati"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 
-    </RelativeLayout>
-
+    <!--PROGRESSBAR-->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="83dp"
@@ -110,9 +150,12 @@
         android:layout_alignEnd="@+id/btn_register"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center|bottom"
-        android:layout_marginStart="171dp"
-        android:layout_marginTop="69dp"
-        android:layout_marginEnd="171dp"
-        android:layout_marginBottom="93dp"
-        android:visibility="gone" />
-</LinearLayout>
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_register" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

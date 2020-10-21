@@ -66,9 +66,8 @@
     <string name="dialog_item_pickiamge_camera">Fotocamera</string>
     <string name="dialog_item_pickiamge_gallery">Galleria</string>
 
-    <string name="congratulations_signUp" translatable="false">todo</string>
-    <string name="signUpSubTitle3" translatable="false">todo</string>
-    <string name="skip" translatable="false">todo</string>
+    <string name="congratulations_signUp">Il look è importante!</string>
+    <string name="skip">Salta</string>
     <string name="seepic" translatable="false">todo</string>
     <string name="changepic" translatable="false">todo</string>
 
@@ -95,6 +94,11 @@
     <string name="first_evening_session" translatable="false">17:00:00 – 18:00:00</string>
     <string name="second_evening_session" translatable="false">18:00:00 – 19:00:00</string>
     <string name="third_evening_session" translatable="false">19:00:00 – 20:00:00</string>
+    <string name="birthDay">Data di nascita</string>
+    <string name="location">Località</string>
+    <string name="signUpSubTitle3">Imposta una tua foto del profilo per farti riconoscere in modo semplice</string>
+    <string name="signUpCompleteTitle">Complimenti!</string>
+    <string name="signUpCompleteSubTitle">La registrazione è andata a buon fine, ora puoi effettuare il login</string>
 
     <string name="title_users_list">Iscritti</string>
 

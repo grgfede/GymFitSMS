@@ -80,6 +80,13 @@
     <string name="quarterly_subscription_description">It ends at the end of the three months</string>
     <string name="six_month_subscription_description">It starts at the 1st of January to the ends of May</string>
     <string name="annual_subscription_description">It starts at the 1st of January to the ends of December</string>
+    <string name="birthDay">Date of birth</string>
+    <string name="location">Location</string>
+    <string name="congratulations_signUp" translatable="false">Look is important!</string>
+    <string name="signUpSubTitle3">Set up a profile picture of yourself for easy recognition</string>
+    <string name="skip">Skip</string>
+    <string name="signUpCompleteTitle">Congratulations!</string>
+    <string name="signUpCompleteSubTitle">The registration was successful, you can now login</string>
     <string name="monthly_subscription_disabled">Monthly subscription disabled.</string>
     <string name="monthly_subscription_enabled">Monthly subscription enabled.</string>
     <string name="quarterly_subscription_enabled">Quarterly subscription enabled.</string>
