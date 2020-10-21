@@ -1,7 +1,6 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.Bridge">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -12,13 +11,15 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="LabelStyle" parent="@android:style/TextAppearance">
-        <item name="android:textSize">12sp</item>
+    <!-- Custom theme of User CardView -->
+    <style name="CustomTheme" parent="Theme.MaterialComponents.Light.Bridge">
+        <item name="cardViewStyle">@style/CustomTheme.CardViewStyle</item>
     </style>
 
-    <style name="MyAnimation.Window" parent="@android:style/Animation.Activity">
-        <item name="android:windowEnterAnimation">@anim/enter_slide_up</item>
-        <item name="android:windowExitAnimation">@anim/exit_slide_down</item>
+    <style name="CustomTheme.CardViewStyle" parent="CardView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">@color/quantum_grey50</item>
     </style>
 
 </resources>

@@ -21,7 +21,7 @@
 
         <activity android:name=".system.PasswordRecovery" android:parentActivityName=".user.signin.Login" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Profile" />
-        <activity android:name=".gym.profile.ActivityGymProfile" android:parentActivityName=".user.signin.Login" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".gym.main.ActivityGymProfile" android:parentActivityName=".user.signin.Login" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".user.signup.SignUp" />
         <activity android:name=".user.signin.Login" />
         <activity android:name=".user.EditProfile" />

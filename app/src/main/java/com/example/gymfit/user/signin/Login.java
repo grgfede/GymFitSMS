@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.gymfit.R;
 import com.example.gymfit.user.signup.SignUp;
-import com.example.gymfit.gym.profile.ActivityGymProfile;
+import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".gym.profile.FragmentGymProfile">
+    tools:context=".gym.main.FragmentGymProfile">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/design_default_color_background">
+        android:backgroundTint="@color/quantum_grey50">
 
         <!-- Circle menu -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:tint="@color/design_default_color_background"
+            android:tint="@color/quantum_grey100"
             app:backgroundTint="@color/design_default_color_primary"
             app:layout_constraintBottom_toTopOf="@+id/infoBlock"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,12 +28,13 @@
             app:srcCompat="@drawable/ic_add" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_subscription"
+            android:id="@+id/fab_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
+            android:tint="@color/quantum_grey100"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fab_add"
@@ -41,17 +42,18 @@
             app:srcCompat="@drawable/ic_subscription" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_round"
+            android:id="@+id/fab_subs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
+            android:tint="@color/quantum_grey100"
             android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fab_subscription"
+            app:layout_constraintTop_toBottomOf="@+id/fab_setting"
             app:rippleColor="@color/stringColor"
-            app:srcCompat="@drawable/ic_round" />
+            app:srcCompat="@drawable/ic_group" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/gymEditImg"
@@ -61,7 +63,7 @@
             android:contentDescription="@string/edit_button"
             android:elevation="4dp"
             android:src="@drawable/ic_edit"
-            android:tint="@color/material_on_background_emphasis_high_type"
+            android:tint="@color/quantum_grey600"
             app:backgroundTint="@color/white"
             app:fabSize="mini"
             app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +148,8 @@
                         android:id="@+id/gymTxtName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:autoText="false"
+                        android:inputType="textNoSuggestions|textFilter"
                         android:selectAllOnFocus="false"
                         android:singleLine="true"
                         android:textColor="@color/material_on_background_emphasis_high_type"
@@ -263,7 +266,7 @@
                         android:id="@+id/gymTxtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text|textEmailAddress|textEmailSubject"
+                        android:inputType="textEmailAddress"
                         android:selectAllOnFocus="false"
                         android:singleLine="true"
                         android:textColor="@color/material_on_background_emphasis_high_type"
@@ -666,5 +669,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView >
 

@@ -1,54 +1,36 @@
 package com.example.gymfit.user;
 
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-
+// TODO: extends and replace methods/attrs with GenericUser!
 public class User {
 
+    // TODO: merge name + surname with username
     private String name;
     private String surname;
     private String phone;
     private String email;
     private String uid;
     private String urlImage;
-    private FirebaseFirestore db;
+    private String subscription;
+    private String[] turns;
+    private boolean gender; // 0 for Man and 1 form Female
 
-    /*
-     * PER IL GENDER VIENE UTILIZATO UN FLAG BOOLEAN
-     * Uomo = 0
-     * Donna = 1
-     * (Nessun membro del team è maschilista e/o femminista)
-     */
-    private boolean gender;
-    //COSTRUTTORE DI DEFAULT
-    public User() {
+    public User (String name, String surname, String phone, String email, String uid){
+        this.name = name;
+        this.surname = surname;
+        this.phone = phone;
+        this.email = email;
+        this.uid = uid;
     }
 
     public User (String name, String surname, String phone, String email, boolean gender, String uid){
-
-        this.name = name;
-        this.surname = surname;
-        this.phone = phone;
-        this.email = email;
+        this(name, surname, phone, email, uid);
         this.gender = gender;
-        this.uid = uid;
     }
 
-    public User (String name, String surname, String phone, String email, String uid){
-
-        this.name = name;
-        this.surname = surname;
-        this.phone = phone;
-        this.email = email;
-        this.uid = uid;
+    public User (String name, String surname, String phone, String email, boolean gender, String uid, String subscription, String[] turns) {
+        this(name, surname, phone, email, gender, uid);
+        this.subscription = subscription;
+        this.turns = turns;
     }
 
     //METODI GET
@@ -78,8 +60,15 @@ public class User {
 
     public String getUrlImage(){ return urlImage;}
 
-    //METODI SET
+    public String getSubscription() {
+        return subscription;
+    }
 
+    public String[] getTurns() {
+        return turns;
+    }
+
+    //METODI SET
     public void setName(String name) {
         this.name = name;
     }
@@ -106,7 +95,12 @@ public class User {
 
     public void setUrlImage(String urlImage){ this.urlImage = urlImage;}
 
+    public void setSubscription(String subscription) {
+        this.subscription = subscription;
+    }
 
-
+    public void setTurns(String[] turns) {
+        this.turns = turns;
+    }
 
 }

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".gym.profile.FragmentGymSettings">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".gym.main.FragmentGymSettings">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/design_default_color_background">
+        android:backgroundTint="@color/quantum_grey50">
 
         <!-- Abbonamenti -->
         <LinearLayout
@@ -49,17 +50,12 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/monthly_subscription_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:checked="true"
                         android:text="@string/monthly_subscription"
-
-                        android:textColor="@color/quantum_grey900"
-                        android:textSize="16sp"
-                        app:thumbTint="@color/quantum_deeppurpleA700"
-                        app:trackTint="@color/quantum_deeppurple100"
-                        app:useMaterialThemeColors="false" />
+                        android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
@@ -79,17 +75,12 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/quarterly_subscription_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:checked="true"
                         android:text="@string/quarterly_subscription"
-
-                        android:textColor="@color/quantum_grey900"
-                        android:textSize="16sp"
-                        app:thumbTint="@color/quantum_deeppurpleA700"
-                        app:trackTint="@color/quantum_deeppurple100"
-                        app:useMaterialThemeColors="false" />
+                        android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
@@ -109,17 +100,12 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/six_month_subscription_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:checked="true"
                         android:text="@string/six_month_subscription"
-
-                        android:textColor="@color/quantum_grey900"
-                        android:textSize="16sp"
-                        app:thumbTint="@color/quantum_deeppurpleA700"
-                        app:trackTint="@color/quantum_deeppurple100"
-                        app:useMaterialThemeColors="false" />
+                        android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
@@ -139,17 +125,12 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/annual_subscription_switch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:checked="true"
                         android:text="@string/annual_subscription"
-
-                        android:textColor="@color/quantum_grey900"
-                        android:textSize="16sp"
-                        app:thumbTint="@color/quantum_deeppurpleA700"
-                        app:trackTint="@color/quantum_deeppurple100"
-                        app:useMaterialThemeColors="false" />
+                        android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:layout_width="wrap_content"
@@ -194,7 +175,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
 
                 android:lineSpacingExtra="24sp"
                 android:text="@string/title_session"
@@ -210,7 +191,6 @@
 
                 <!-- Turni mattutini -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/gymCardMorningTurn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/quantum_grey50"
@@ -229,27 +209,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp"
-                            android:weightSum="2">
+                            android:paddingVertical="8dp">
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
-                                android:contentDescription="@string/morning_list_turn"
+                                android:contentDescription="@string/morning_list_img"
                                 android:src="@drawable/ic_weather_sun" />
 
-                            <com.google.android.material.checkbox.MaterialCheckBox
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:checked="true"
+                                android:gravity="end">
 
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:layoutDirection="rtl"
+                                <com.google.android.material.checkbox.MaterialCheckBox
+                                    android:id="@+id/morning_turn_checkbox"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700" />
+                                    android:checked="false"
+
+                                    android:clickable="true"
+                                    android:focusable="true" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <!-- Divider -->
@@ -259,62 +244,84 @@
                             android:background="?android:attr/dividerVertical" />
 
                         <!-- Title, secondary and supporting text -->
-                        <com.google.android.material.textview.MaterialTextView
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/morning_turn_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="16dp"
-                            android:layout_marginTop="4dp"
+                            android:paddingHorizontal="8dp"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
 
-                            android:text="@string/morning_session"
-                            android:textColor="@color/quantum_grey900"
-                            android:textSize="16sp"
+                            app:hintEnabled="false"
+                            app:helperTextEnabled="false"
+                            app:errorEnabled="false"
+                            app:counterEnabled="false"
 
-                            android:drawableEnd="@drawable/ic_arrow_down"
-                            android:drawableTint="@color/quantum_grey900"/>
+                            app:boxStrokeWidth="0dp"
+                            app:boxStrokeWidthFocused="0dp"
+
+                            app:endIconMode="custom"
+                            app:endIconContentDescription="@string/morning_list_img"
+                            app:endIconDrawable="@drawable/ic_arrow_down"
+                            app:endIconTint="@color/quantum_grey600">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+
+                                android:inputType="none"
+
+                                android:text="@string/morning_session"
+                                android:textColor="@color/quantum_grey900"
+                                android:textSize="16sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <!-- List checkbox -->
                         <LinearLayout
+                            android:id="@+id/morning_turn_list"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:orientation="vertical"
                             android:padding="16dp">
 
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/morning_turn_first_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
-
-                                app:buttonTint="@color/quantum_deeppurpleA700"
 
                                 android:text="@string/first_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
+
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/morning_turn_second_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
-
-                                app:buttonTint="@color/quantum_deeppurpleA700"
 
                                 android:text="@string/second_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
+
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/morning_turn_third_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
-
-                                app:buttonTint="@color/quantum_deeppurpleA700"
 
                                 android:text="@string/third_morning_session"
                                 android:textDirection="ltr"
@@ -328,7 +335,6 @@
 
                 <!-- Turni pomeridiani -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/gymCardAfternoonTurn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/quantum_grey50"
@@ -347,27 +353,31 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp"
-                            android:weightSum="2">
+                            android:paddingVertical="8dp">
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
-                                android:contentDescription="@string/afternoon_list_turn"
+                                android:contentDescription="@string/evening_list_img"
                                 android:src="@drawable/ic_weather_afternoon" />
 
-                            <com.google.android.material.checkbox.MaterialCheckBox
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:checked="true"
+                                android:gravity="end">
 
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:layoutDirection="rtl"
+                                <com.google.android.material.checkbox.MaterialCheckBox
+                                    android:id="@+id/afternoon_turn_checkbox"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700" />
+                                    android:checked="false"
+                                    android:clickable="true"
+                                    android:focusable="true" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <!-- Divider -->
@@ -377,64 +387,84 @@
                             android:background="?android:attr/dividerVertical" />
 
                         <!-- Title, secondary and supporting text -->
-                        <com.google.android.material.textview.MaterialTextView
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/afternoon_turn_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="16dp"
-                            android:layout_marginTop="4dp"
+                            android:paddingHorizontal="8dp"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
 
-                            android:text="@string/afternoon_session"
-                            android:textColor="@color/quantum_grey900"
-                            android:textSize="16sp"
+                            app:hintEnabled="false"
+                            app:helperTextEnabled="false"
+                            app:errorEnabled="false"
+                            app:counterEnabled="false"
 
-                            android:drawableEnd="@drawable/ic_arrow_down"
-                            android:drawableTint="@color/quantum_grey900"/>
+                            app:boxStrokeWidth="0dp"
+                            app:boxStrokeWidthFocused="0dp"
+
+                            app:endIconMode="custom"
+                            app:endIconContentDescription="@string/afternoon_list_img"
+                            app:endIconDrawable="@drawable/ic_arrow_down">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+
+                                android:enabled="false"
+
+                                android:text="@string/afternoon_session"
+                                android:textColor="@color/quantum_grey900"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <!-- List checkbox -->
                         <LinearLayout
+                            android:id="@+id/afternoon_turn_list"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:orientation="vertical"
                             android:padding="16dp">
 
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/afternoon_turn_first_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700"
-
-                                android:text="@string/first_afternoon_session"
+                                android:text="@string/first_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
+
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/afternoon_turn_second_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700"
-
-                                android:text="@string/second_afternoon_session"
+                                android:text="@string/second_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
+
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/afternoon_turn_third_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700"
-
-                                android:text="@string/third_afternoon_session"
+                                android:text="@string/third_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -446,7 +476,6 @@
 
                 <!-- Turni pomeridiani -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/gymCardEveningTurn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/quantum_grey50"
@@ -465,27 +494,31 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp"
-                            android:weightSum="2">
+                            android:paddingVertical="8dp">
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
-                                android:contentDescription="@string/evening_list_turn"
+                                android:contentDescription="@string/evening_list_img"
                                 android:src="@drawable/ic_weather_night" />
 
-                            <com.google.android.material.checkbox.MaterialCheckBox
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:checked="true"
+                                android:gravity="end">
 
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:layoutDirection="rtl"
+                                <com.google.android.material.checkbox.MaterialCheckBox
+                                    android:id="@+id/evening_turn_checkbox"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="end"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700" />
+                                    android:checked="false"
+                                    android:clickable="true"
+                                    android:focusable="true" />
+                            </LinearLayout>
+
                         </LinearLayout>
 
                         <!-- Divider -->
@@ -495,64 +528,84 @@
                             android:background="?android:attr/dividerVertical" />
 
                         <!-- Title, secondary and supporting text -->
-                        <com.google.android.material.textview.MaterialTextView
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/evening_turn_text"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:padding="16dp"
-                            android:layout_marginTop="4dp"
+                            android:paddingHorizontal="8dp"
+                            android:enabled="true"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
 
-                            android:text="@string/evening_session"
-                            android:textColor="@color/quantum_grey900"
-                            android:textSize="16sp"
+                            app:hintEnabled="false"
+                            app:helperTextEnabled="false"
+                            app:errorEnabled="false"
+                            app:counterEnabled="false"
 
-                            android:drawableEnd="@drawable/ic_arrow_down"
-                            android:drawableTint="@color/quantum_grey900"/>
+                            app:boxStrokeWidth="0dp"
+                            app:boxStrokeWidthFocused="0dp"
+
+                            app:endIconMode="custom"
+                            app:endIconContentDescription="@string/evening_list_img"
+                            app:endIconDrawable="@drawable/ic_arrow_down">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="none"
+
+                                android:enabled="false"
+
+                                android:text="@string/evening_session"
+                                android:textColor="@color/quantum_grey900"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
                         <!-- List checkbox -->
                         <LinearLayout
+                            android:id="@+id/evening_turn_list"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:orientation="vertical"
                             android:padding="16dp">
 
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/evening_turn_first_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700"
-
-                                android:text="@string/first_evening_session"
+                                android:text="@string/first_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
+
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/evening_turn_second_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700"
-
-                                android:text="@string/second_evening_session"
+                                android:text="@string/second_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
+
                             <com.google.android.material.checkbox.MaterialCheckBox
+                                android:id="@+id/evening_turn_third_checkbox"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
 
-                                android:checked="true"
+                                android:checked="false"
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                app:buttonTint="@color/quantum_deeppurpleA700"
-
-                                android:text="@string/third_evening_session"
+                                android:text="@string/third_morning_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -566,7 +619,6 @@
 
         </LinearLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView >
