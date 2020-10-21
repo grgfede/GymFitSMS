@@ -1,4 +1,4 @@
-package com.example.gymfit.gym.profile;
+package com.example.gymfit.gym.main;
 
 import android.Manifest;
 import android.content.Intent;
@@ -26,6 +26,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
+import com.example.gymfit.gym.conf.Gym;
+import com.example.gymfit.gym.conf.GymDBCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,8 +81,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
     // Circle menu attr
     private FloatingActionButton fab = null;
-    private FloatingActionButton fabSubscription = null;
-    private FloatingActionButton fabRound = null;
+    private FloatingActionButton fabSetting = null;
+    private FloatingActionButton fabSub = null;
     private FloatingActionButton editImage = null;
 
     // Save buttons
@@ -151,8 +153,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         // set circle menu
         this.fab = view.findViewById(R.id.fab_add);
-        this.fabSubscription = view.findViewById(R.id.fab_subscription);
-        this.fabRound = view.findViewById(R.id.fab_round);
+        this.fabSetting = view.findViewById(R.id.fab_setting);
+        this.fabSub = view.findViewById(R.id.fab_subs);
         this.editImage = view.findViewById(R.id.gymEditImg);
 
         // set save btn attr
@@ -191,33 +193,41 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         this.fab.setOnClickListener(v -> onAddButtons());
 
-        this.fabSubscription.setOnClickListener(v -> { ;
-            openFragment();
+        this.fabSetting.setOnClickListener(v -> {
+            setVisibility(false);
+            setAnimation(false);
+            setCircleBtnClickable(false);
+            circleBtnClicked = false;
+            openFragment(FragmentGymSettings.newInstance(this.gym));
         });
 
-        this.fabRound.setOnClickListener(v -> {
-            //TODO: Open GymRound activity
-            Snackbar.make(activityView, "Turn Opt", Snackbar.LENGTH_SHORT).show();;
+        this.fabSub.setOnClickListener(v -> {
+            setVisibility(false);
+            setAnimation(false);
+            setCircleBtnClickable(false);
+            circleBtnClicked = false;
+            openFragment(FragmentGymSubs.newInstance(this.gym));
         });
 
         /* Email comp event */
 
-        this.deleteMailBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, view.findViewById(R.id.gymEmailButtonRight));
-        });
+        this.deleteMailBtn.setOnClickListener(v -> inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, view.findViewById(R.id.gymEmailButtonRight)));
 
-        this.saveMailBtn.setOnClickListener(v -> this.user.updateEmail(Objects.requireNonNull(this.localEmail))
-                .addOnSuccessListener(aVoid -> {
-                    this.db.collection("gyms").document(userUid).update(
-                            "email", this.localEmail
-                    );
-                    this.gym.setEmail(this.localEmail);
-                    inputFieldDispatch(this.mailTextBox, this.mailTextField, this.localEmail, false, view.findViewById(R.id.gymEmailButtonRight));
-                    Snackbar.make(activityView, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
-                }).addOnFailureListener(e -> {
-                    inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, view.findViewById(R.id.gymEmailButtonRight));
-                    Snackbar.make(activityView, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
-                }));
+        this.saveMailBtn.setOnClickListener(v -> {
+            assert this.user != null;
+            this.user.updateEmail(Objects.requireNonNull(this.localEmail))
+                    .addOnSuccessListener(aVoid -> {
+                        this.db.collection("gyms").document(userUid).update(
+                                "email", this.localEmail
+                        );
+                        this.gym.setEmail(this.localEmail);
+                        inputFieldDispatch(this.mailTextBox, this.mailTextField, this.localEmail, false, view.findViewById(R.id.gymEmailButtonRight));
+                        Snackbar.make(activityView, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
+                    }).addOnFailureListener(e -> {
+                        inputFieldDispatch(this.mailTextBox, this.mailTextField, this.gym.getEmail(), false, view.findViewById(R.id.gymEmailButtonRight));
+                        Snackbar.make(activityView, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
+                    });
+        });
 
         this.mailTextBox.setOnClickListener(v -> {
             inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), view.findViewById(R.id.gymEmailButtonRight));
@@ -229,9 +239,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             this.mailTextField.setText("");
         });
 
-        this.mailTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), view.findViewById(R.id.gymEmailButtonRight));
-        });
+        this.mailTextField.setOnClickListener(v -> inputFieldFocused(this.mailTextBox, this.mailTextField, getResources().getString(R.string.helper_email_hover), view.findViewById(R.id.gymEmailButtonRight)));
 
         this.mailTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
@@ -267,11 +275,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         /* Password comp event */
 
-        this.deleteKeyBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), false, view.findViewById(R.id.gymKeyButtonRight));
-        });
+        this.deleteKeyBtn.setOnClickListener(v -> inputFieldDispatch(this.keyTextBox, this.keyTextField, getResources().getString(R.string.password_hide), false, view.findViewById(R.id.gymKeyButtonRight)));
 
         this.saveKeyBtn.setOnClickListener(v -> {
+            assert this.user != null;
             this.user.updatePassword(this.localKey)
                     .addOnSuccessListener(aVoid -> {
                         inputFieldDispatch(this.keyTextBox, this.keyTextField, this.localKey, false, view.findViewById(R.id.gymKeyButtonRight));
@@ -292,9 +299,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             this.keyTextField.setText("");
         });
 
-        this.keyTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.keyTextBox, this.keyTextField, getResources().getString(R.string.helper_psw_hover), view.findViewById(R.id.gymKeyButtonRight));
-        });
+        this.keyTextField.setOnClickListener(v -> inputFieldFocused(this.keyTextBox, this.keyTextField, getResources().getString(R.string.helper_psw_hover), view.findViewById(R.id.gymKeyButtonRight)));
 
         this.keyTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
@@ -330,9 +335,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         /* Phone comp event */
 
-        this.deletePhoneBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), false, view.findViewById(R.id.gymPhoneButtonRight));
-        });
+        this.deletePhoneBtn.setOnClickListener(v -> inputFieldDispatch(this.phoneTextBox, this.phoneTextField, this.gym.getPhone(), false, view.findViewById(R.id.gymPhoneButtonRight)));
 
         this.savePhoneBtn.setOnClickListener(v -> {
             if(isValidPhoneNumber(this.localPhone)) {
@@ -358,9 +361,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             this.phoneTextField.setText("");
         });
 
-        this.phoneTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.phoneTextBox, this.phoneTextField, getResources().getString(R.string.helper_phone_hover), view.findViewById(R.id.gymPhoneButtonRight));
-        });
+        this.phoneTextField.setOnClickListener(v -> inputFieldFocused(this.phoneTextBox, this.phoneTextField, getResources().getString(R.string.helper_phone_hover), view.findViewById(R.id.gymPhoneButtonRight)));
 
         this.phoneTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
@@ -402,9 +403,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         /* Address comp event */
 
-        this.deleteAddressBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddress(), false, view.findViewById(R.id.gymAddressButtonRight));
-        });
+        this.deleteAddressBtn.setOnClickListener(v -> inputFieldDispatch(this.addressTextBox, this.addressTextField, this.gym.getAddress(), false, view.findViewById(R.id.gymAddressButtonRight)));
 
         this.saveAddressBtn.setOnClickListener(v -> {
             this.db.collection("gyms").document(userUid).update(
@@ -428,9 +427,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             this.addressTextField.setText("");
         });
 
-        this.addressTextField.setOnClickListener(v -> {
-            inputFieldFocused(this.addressTextBox, this.addressTextField, getResources().getString(R.string.helper_address_hover), view.findViewById(R.id.gymAddressButtonRight));
-        });
+        this.addressTextField.setOnClickListener(v -> inputFieldFocused(this.addressTextBox, this.addressTextField, getResources().getString(R.string.helper_address_hover), view.findViewById(R.id.gymAddressButtonRight)));
 
         this.addressTextField.setOnFocusChangeListener((v, hasFocus) -> {
 
@@ -449,9 +446,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         /* Name comp event */
 
-        this.deleteNameBtn.setOnClickListener(v -> {
-            inputFieldDispatch(this.nameTextBox, this.nameTextField, this.gym.getName(), true, view.findViewById(R.id.gymNameButtonRight));
-        });
+        this.deleteNameBtn.setOnClickListener(v -> inputFieldDispatch(this.nameTextBox, this.nameTextField, this.gym.getName(), true, view.findViewById(R.id.gymNameButtonRight)));
 
         this.saveNameBtn.setOnClickListener(v -> {
             this.db.collection("gyms").document(userUid).update(
@@ -462,9 +457,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             Snackbar.make(activityView, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
         });
 
-        this.nameTextBox.setOnClickListener(v -> {
-            inputFieldFocused(this.nameTextBox, this.nameTextField, view.findViewById(R.id.gymNameButtonRight));
-        });
+        this.nameTextBox.setOnClickListener(v -> inputFieldFocused(this.nameTextBox, this.nameTextField, view.findViewById(R.id.gymNameButtonRight)));
 
         this.nameTextBox.setEndIconOnClickListener(v -> {
             inputFieldFocused(this.nameTextBox, this.nameTextField, view.findViewById(R.id.gymNameButtonRight));
@@ -507,9 +500,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         /* Image comp event */
 
-        this.editImage.setOnClickListener(v -> {
-            setPickImageDialog();
-        });
+        this.editImage.setOnClickListener(v -> setPickImageDialog());
 
     }
 
@@ -585,33 +576,33 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
     private void setAnimation(boolean clicked) {
         if(!clicked) {
-            this.fabSubscription.setVisibility(View.VISIBLE);
-            this.fabRound.setVisibility(View.VISIBLE);
+            this.fabSetting.setVisibility(View.VISIBLE);
+            this.fabSub.setVisibility(View.VISIBLE);
         } else {
-            this.fabSubscription.setVisibility(View.INVISIBLE);
-            this.fabRound.setVisibility(View.INVISIBLE);
+            this.fabSetting.setVisibility(View.INVISIBLE);
+            this.fabSub.setVisibility(View.INVISIBLE);
         }
     }
 
     private void setVisibility(boolean clicked) {
         if(!clicked) {
-            this.fabSubscription.startAnimation(this.fromButton);
-            this.fabRound.startAnimation(this.fromButton);
+            this.fabSetting.startAnimation(this.fromButton);
+            this.fabSub.startAnimation(this.fromButton);
             this.fab.startAnimation(this.rotateOpen);
         } else {
-            this.fabSubscription.startAnimation(this.toButton);
-            this.fabRound.startAnimation(this.toButton);
+            this.fabSetting.startAnimation(this.toButton);
+            this.fabSub.startAnimation(this.toButton);
             this.fab.startAnimation(this.rotateClose);
         }
     }
 
     private void setCircleBtnClickable(boolean circleBtnClicked) {
         if(!circleBtnClicked) {
-            this.fabSubscription.setClickable(true);
-            this.fabRound.setClickable(true);
+            this.fabSetting.setClickable(true);
+            this.fabSub.setClickable(true);
         } else {
-            this.fabSubscription.setClickable(false);
-            this.fabRound.setClickable(false);
+            this.fabSetting.setClickable(false);
+            this.fabSub.setClickable(false);
         }
     }
 
@@ -778,8 +769,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void openFragment() {
-        FragmentGymSettings fragment = new FragmentGymSettings();
+    private void openFragment(Fragment fragment) {
         FragmentManager manager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.setCustomAnimations(R.anim.enter_slide_up, R.anim.exit_slide_down, R.anim.enter_slide_up, R.anim.exit_slide_down);

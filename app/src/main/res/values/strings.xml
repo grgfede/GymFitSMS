@@ -96,4 +96,6 @@
     <string name="second_evening_session" translatable="false">18:00:00 – 19:00:00</string>
     <string name="third_evening_session" translatable="false">19:00:00 – 20:00:00</string>
 
+    <string name="title_users_list">Iscritti</string>
+
 </resources>

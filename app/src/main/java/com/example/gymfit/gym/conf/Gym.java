@@ -1,13 +1,19 @@
-package com.example.gymfit.gym.profile;
+package com.example.gymfit.gym.conf;
 
 import com.example.gymfit.system.GenericUser;
 import com.google.android.gms.maps.model.LatLng;
 
-public class Gym extends GenericUser {
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Gym extends GenericUser implements Serializable {
     private String address;
     private String name;
     private String image;
     private LatLng position;
+
+    private Map<String, Boolean> subscription;
 
     public Gym(String uid, String email, String phone, String name, String address, LatLng position, String image) {
         super(uid, email, phone);
@@ -15,6 +21,19 @@ public class Gym extends GenericUser {
         this.address = address;
         this.position = position;
         this.image = image;
+        this.subscription = new HashMap<String, Boolean>() {
+            {
+                put("monthly", true);
+                put("quarterly", true);
+                put("sixMonth", true);
+                put("annual", true);
+            }
+        };
+    }
+
+    // GET METHODS
+    public Map<String, Boolean> getSubscription() {
+        return subscription;
     }
 
     public String getImage() {
@@ -33,6 +52,7 @@ public class Gym extends GenericUser {
         return name;
     }
 
+    // SET METHODS
     public void setAddress(String address) {
         this.address = address;
     }
@@ -49,5 +69,8 @@ public class Gym extends GenericUser {
         this.image = image;
     }
 
-
+    public void setSubscription(String key, Boolean value) {
+        this.subscription.remove(key);
+        this.subscription.put(key, value);
+    }
 }

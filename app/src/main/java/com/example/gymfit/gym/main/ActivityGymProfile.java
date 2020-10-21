@@ -1,4 +1,4 @@
-package com.example.gymfit.gym.profile;
+package com.example.gymfit.gym.main;
 
 import android.content.Context;
 import android.graphics.Rect;

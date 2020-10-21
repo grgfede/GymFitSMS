@@ -5,6 +5,6 @@
     android:id="@+id/fragment_container_view_tag"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".gym.profile.ActivityGymProfile">
+    tools:context=".gym.main.ActivityGymProfile">
 
 </FrameLayout>
