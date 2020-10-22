@@ -102,4 +102,10 @@
     <string name="afternoon_turn_disabled">Afternoon sessions disabled.</string>
     <string name="evening_turn_disabled">Evening sessions disabled.</string>
     <string name="title_users_list">Subscribers</string>
+    <string name="gym_profile_toolbar_title">Gym</string>
+    <string name="gym_settings_toolbar_title">Settings</string>
+    <string name="gym_subs_toolbar_title">Registered List</string>
+    <string name="system_toolbar_search">Search</string>
+    <string name="system_toolbar_logout">Logout</string>
+    <string name="system_toolbar_help">Help</string>
 </resources>

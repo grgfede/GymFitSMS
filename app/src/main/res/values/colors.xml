@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#359DF1</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <!-- Main color. All rest of color gradations will be taken from @quantum property -->
+    <color name="colorPrimary">@color/quantum_deeppurpleA700</color>
+    <color name="colorPrimaryDark">@color/quantum_deeppurple900</color>
+    <color name="colorAccent">@color/quantum_tealA400</color>
+
+    <!-- TODO: change and delete all these. -->
+    <!-- Use @quantum_keyNum for all component theme color style -->
+    <!-- Use @place_text for all text component theme color style -->
     <color name="Profile">#0A000000</color>
-    <color name="colorAccent">#03DAC5</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="stringColor">#808080</color>

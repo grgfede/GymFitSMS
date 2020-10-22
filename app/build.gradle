@@ -54,6 +54,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'org.apache.commons:commons-text:1.6'
 
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.1.0'

@@ -53,7 +53,12 @@ public class FragmentGymSettings extends Fragment {
         this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gym_settings, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gym_settings, container, false);
+
+        // Change toolbar title
+        requireActivity().setTitle(getResources().getString(R.string.gym_settings_toolbar_title));
+
+        return rootView;
     }
 
     @Override

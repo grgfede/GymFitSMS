@@ -19,13 +19,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:tint="@color/quantum_grey100"
-            app:backgroundTint="@color/design_default_color_primary"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:backgroundTint="@color/colorPrimary"
+            app:tint="@color/places_ui_default_primary"
+            app:rippleColor="@color/quantum_deeppurpleA100"
+            app:srcCompat="@drawable/ic_add"
+
             app:layout_constraintBottom_toTopOf="@+id/infoBlock"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageBlock"
-            app:rippleColor="@color/design_default_color_background"
-            app:srcCompat="@drawable/ic_add" />
+            app:layout_constraintTop_toBottomOf="@id/imageBlock"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_setting"
@@ -34,12 +38,16 @@
             android:layout_marginEnd="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
-            android:tint="@color/quantum_grey100"
             android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:tint="@color/places_ui_default_primary"
+            app:rippleColor="@color/quantum_tealA400"
+            app:srcCompat="@drawable/ic_subscription"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fab_add"
-            app:rippleColor="@color/stringColor"
-            app:srcCompat="@drawable/ic_subscription" />
+            app:layout_constraintTop_toBottomOf="@+id/fab_add"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_subs"
@@ -48,12 +56,16 @@
             android:layout_marginEnd="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
-            android:tint="@color/quantum_grey100"
             android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:tint="@color/places_ui_default_primary"
+            app:rippleColor="@color/quantum_tealA400"
+            app:srcCompat="@drawable/ic_group"
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fab_setting"
-            app:rippleColor="@color/stringColor"
-            app:srcCompat="@drawable/ic_group" />
+            app:layout_constraintTop_toBottomOf="@+id/fab_setting"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/gymEditImg"

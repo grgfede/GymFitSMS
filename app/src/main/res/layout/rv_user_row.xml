@@ -7,67 +7,93 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="72dp"
+        app:cardUseCompatPadding="true"
         app:cardCornerRadius="4dp"
-        app:cardElevation="2dp"
-        app:cardUseCompatPadding="true">
+        app:cardElevation="2dp">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <!-- Start icon -->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/start_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Title, subtitle -->
+            <!-- Inner content main -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignWithParentIfMissing="true"
-                android:layout_centerVertical="true"
-                android:layout_marginHorizontal="16dp"
-                android:layout_toStartOf="@+id/end_icon"
-                android:layout_toEndOf="@+id/start_icon"
-                android:orientation="vertical"
-                android:paddingVertical="16dp">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
-                <TextView
-                    android:id="@+id/user_name"
-                    style="@style/TextAppearance.AppCompat.Body2"
+                <!-- Start icon -->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/start_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="0"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="16dp" />
+
+                <!-- Title, subtitle -->
+                <LinearLayout
+                    android:id="@+id/content_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingVertical="16dp">
+
+                    <TextView
+                        android:id="@+id/user_name"
+                        style="@style/TextAppearance.AppCompat.Body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/user_details"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- End icon -->
+                <ImageView
+                    android:id="@+id/end_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp" />
+                    android:layout_weight="0"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="16dp"
+                    android:contentDescription="@string/menu_button"
+                    app:srcCompat="@drawable/ic_arrow_down"
+                    app:tint="@color/quantum_grey600" />
+
+            </LinearLayout>
+
+            <!-- Inner content toggle -->
+            <LinearLayout
+                android:id="@+id/content_toggle_container"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:paddingBottom="16dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp">
 
                 <TextView
-                    android:id="@+id/user_details"
                     style="@style/TextAppearance.AppCompat.Body1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp" />
+                    android:text="@string/title_session"
+                    android:textSize="14sp"/>
+
             </LinearLayout>
 
-            <!-- End icon -->
-            <ImageView
-                android:id="@+id/end_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="16dp"
-                android:contentDescription="@string/menu_button" />
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

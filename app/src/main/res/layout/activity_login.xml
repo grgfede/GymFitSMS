@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    tools:context=".user.signin.Login"
+    tools:context=".user.main.signin.Login"
     android:focusable="true">
 
     <TextView

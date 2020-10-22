@@ -1,4 +1,4 @@
-package com.example.gymfit.system;
+package com.example.gymfit.system.conf;
 
 public abstract class GenericUser {
     private String uid;

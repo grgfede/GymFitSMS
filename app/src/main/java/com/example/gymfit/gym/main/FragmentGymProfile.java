@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -126,7 +127,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gym_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gym_profile, container, false);
+
+        // Change toolbar title
+        requireActivity().setTitle(getResources().getString(R.string.gym_profile_toolbar_title));
+
+        return rootView;
     }
 
     @Override
@@ -539,17 +545,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 this.addressTextField.setText(place.getAddress());
                 this.localAddress = place.getAddress();
                 this.localPosition = place.getLatLng();
-            } else {
-                Status status = Autocomplete.getStatusFromIntent(data);
-                assert status.getStatusMessage() != null;
-                Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         } else if (requestCode == MY_GALLERY_REQUEST_CODE && !(data == null)) {
             if(resultCode == ActivityGymProfile.RESULT_OK){
                 setAndUploadNewImage(data.getData());
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                assert status.getStatusMessage() != null;
                 Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         } else if (requestCode == MY_CAMERA_REQUEST_CODE && !(data == null)) {
@@ -560,7 +561,6 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 setAndUploadNewImage(imageBitmap);
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                assert status.getStatusMessage() != null;
                 Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         }

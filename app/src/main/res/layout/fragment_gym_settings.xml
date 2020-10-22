@@ -195,8 +195,7 @@
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/quantum_grey50"
                     app:cardCornerRadius="4dp"
-                    app:cardElevation="4dp"
-                    app:cardMaxElevation="4dp"
+                    app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
@@ -339,8 +338,7 @@
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/quantum_grey50"
                     app:cardCornerRadius="4dp"
-                    app:cardElevation="4dp"
-                    app:cardMaxElevation="4dp"
+                    app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
@@ -438,7 +436,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                android:text="@string/first_morning_session"
+                                android:text="@string/first_afternoon_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -451,7 +449,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                android:text="@string/second_morning_session"
+                                android:text="@string/second_afternoon_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -464,7 +462,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                android:text="@string/third_morning_session"
+                                android:text="@string/third_afternoon_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -480,8 +478,7 @@
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/quantum_grey50"
                     app:cardCornerRadius="4dp"
-                    app:cardElevation="4dp"
-                    app:cardMaxElevation="4dp"
+                    app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
@@ -579,7 +576,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                android:text="@string/first_morning_session"
+                                android:text="@string/first_evening_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -592,7 +589,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                android:text="@string/second_morning_session"
+                                android:text="@string/second_evening_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 
@@ -605,7 +602,7 @@
                                 android:clickable="true"
                                 android:focusable="true"
 
-                                android:text="@string/third_morning_session"
+                                android:text="@string/third_evening_session"
                                 android:textDirection="ltr"
                                 android:layoutDirection="rtl" />
 

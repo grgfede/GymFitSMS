@@ -72,7 +72,7 @@
     <string name="quarterly_subscription">Trimestrale</string>
     <string name="six_month_subscription">Semestrale</string>
     <string name="annual_subscription">Annuale</string>
-    <string name="title_session">Turno settimanale</string>
+    <string name="title_session">Turni settimanali</string>
     <string name="morning_session">Turni mattutini</string>
     <string name="afternoon_session">Turni pomeridiani</string>
     <string name="evening_session">Turni serali</string>
@@ -80,7 +80,6 @@
     <string name="quarterly_subscription_description">Si conclude alla fine dei tre mesi</string>
     <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
     <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
-    <string name="third_evening_session" translatable="false">"annual "</string>
     <string name="birthDay">Data di nascita</string>
     <string name="location">Località</string>
     <string name="congratulations_signUp" translatable="false">Il look è importante!</string>
@@ -103,4 +102,10 @@
     <string name="afternoon_turn_disabled">Turni pomeridiani disattivati.</string>
     <string name="evening_turn_disabled">Turni serali disattivati.</string>
     <string name="title_users_list">Iscritti</string>
+    <string name="gym_profile_toolbar_title">Palestra</string>
+    <string name="gym_settings_toolbar_title">Impostazioni</string>
+    <string name="gym_subs_toolbar_title">Elenco iscritti</string>
+    <string name="system_toolbar_search">Cerca</string>
+    <string name="system_toolbar_logout">Esci</string>
+    <string name="system_toolbar_help">Aiuto</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.example.gymfit.user;
+package com.example.gymfit.user.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.gymfit.Profile;
 import com.example.gymfit.R;
 
 public class EditProfile extends AppCompatActivity {
@@ -16,8 +15,6 @@ public class EditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-
-        getSupportActionBar().hide();
 
        Button back = (Button)findViewById(R.id.btnBack);
 

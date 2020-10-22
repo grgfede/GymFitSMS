@@ -1,4 +1,4 @@
-package com.example.gymfit.user.signup;
+package com.example.gymfit.user.main.signup;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.gymfit.R;
-import com.example.gymfit.user.signin.Login;
+import com.example.gymfit.user.main.signin.Login;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;

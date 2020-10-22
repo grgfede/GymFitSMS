@@ -8,7 +8,7 @@
     android:layout_marginEnd="25dp"
     android:orientation="vertical"
     android:focusableInTouchMode="true"
-    tools:context=".user.signup.SignUpFragment">
+    tools:context=".user.main.signup.SignUpFragment">
 
 
     <TextView

@@ -19,14 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".system.PasswordRecovery" android:parentActivityName=".user.signin.Login" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Profile" />
-        <activity android:name=".gym.main.ActivityGymProfile" android:parentActivityName=".user.signin.Login" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".user.signup.SignUp" />
-        <activity android:name=".user.signin.Login" />
-        <activity android:name=".user.EditProfile" />
-        <activity android:name=".system.onboard.FirstOnboardActivity" />
-        <activity android:name=".system.MainActivity">
+        <activity android:name=".system.main.PasswordRecovery" android:parentActivityName=".user.main.signin.Login"/>
+        <activity android:name=".user.main.Profile" />
+        <activity android:name=".gym.main.ActivityGymProfile" android:parentActivityName=".user.main.signin.Login" />
+        <activity android:name=".user.main.signup.SignUp" />
+        <activity android:name=".user.main.signin.Login" />
+        <activity android:name=".user.main.EditProfile" />
+        <activity android:name=".system.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

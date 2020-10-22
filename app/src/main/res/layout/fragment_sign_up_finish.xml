@@ -7,7 +7,7 @@
     android:layout_marginStart="25dp"
     android:layout_marginEnd="25dp"
     android:orientation="vertical"
-    tools:context=".user.signup.SignUpFinish">
+    tools:context=".user.main.signup.SignUpFinish">
 
 
     <TextView

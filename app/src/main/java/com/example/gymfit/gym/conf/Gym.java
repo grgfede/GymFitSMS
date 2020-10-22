@@ -1,6 +1,6 @@
 package com.example.gymfit.gym.conf;
 
-import com.example.gymfit.system.GenericUser;
+import com.example.gymfit.system.conf.GenericUser;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
