@@ -8,10 +8,35 @@
     <!-- TODO: change and delete all these. -->
     <!-- Use @quantum_keyNum for all component theme color style -->
     <!-- Use @place_text for all text component theme color style -->
-    <color name="Profile">#0A000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="stringColor">#808080</color>
     <color name="stringColorTitle">#DE000000</color>
     <color name="stringColorParagraph">#99000000</color>
+
+    <!-- TODO: use these color for text, icon tint and background -->
+    <!-- Background -->
+    <color name="background_ui_default">@color/places_ui_default_primary</color>
+    <color name="background_ui_cardview">@color/quantum_grey50</color>
+
+    <!-- Text -->
+    <color name="tint_title">@color/quantum_deeppurpleA700</color>
+    <color name="tint_first_line_light">@color/places_text_black_alpha_87</color>
+    <color name="tint_first_line_dark">@color/places_text_white_alpha_87</color>
+    <color name="tint_second_line_light">@color/places_text_black_alpha_26</color>
+    <color name="tint_second_line_dark">@color/places_text_white_alpha_26</color>
+    <color name="tint_third_line">@color/quantum_grey300</color>
+
+    <color name="tint_hint_no_focused">@color/quantum_grey500</color>
+    <color name="tint_hint_focuses">@color/quantum_deeppurpleA700</color>
+    <color name="tint_helper_text_no_focused">@color/quantum_grey300</color>
+    <color name="tint_helper_text_focused">@color/quantum_deeppurpleA700</color>
+    <color name="tint_error_text">@color/quantum_error_light</color>
+    <color name="tint_input_text">@color/places_text_black_alpha_87</color>
+
+    <!-- Icon -->
+    <color name="tint_input_icon_light">@color/quantum_grey500</color>
+    <color name="tint_input_icon_dark">@color/places_text_white_alpha_87</color>
+
+
 </resources>

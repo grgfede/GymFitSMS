@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,6 +73,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         holder.details.setText(subscription);
 
         List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
+
+        // Order for date all entry of turn
+        Collections.sort(turnMap, (map1, map2) -> {
+            Date date1 = ((Timestamp) Objects.requireNonNull(map1.get("date"))).toDate();
+            Date date2 = ((Timestamp) Objects.requireNonNull(map2.get("date"))).toDate();
+            return date1.compareTo(date2);
+        });
+
         for (int i=0; i<holder.textViews.size(); i++) {
             String type = getTurn(Objects.requireNonNull(turnMap.get(i).get("type")).toString());
 

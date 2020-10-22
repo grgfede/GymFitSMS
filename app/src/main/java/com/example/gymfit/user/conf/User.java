@@ -5,7 +5,7 @@ import java.util.Map;
 
 // TODO: extends and replace methods/attrs with GenericUser!
 public class User {
-    private String username; // Just for search filter
+    private final String username; // Just for search filter
     private String name;
     private String surname;
     private String phone;
