@@ -12,7 +12,7 @@
     <string name="morning_list_img" translatable="false">morning turn</string>
     <string name="afternoon_list_img" translatable="false">afternoon turn</string>
     <string name="evening_list_img" translatable="false">evening turn</string>
-    <style name="user_img" translatable="false">user</style>
+    <string name="user_img" translatable="false">user</string>
 
     <string name="gym_img_profile" translatable="false">gym image profile</string>
 

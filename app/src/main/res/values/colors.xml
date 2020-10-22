@@ -18,6 +18,14 @@
     <!-- Background -->
     <color name="background_ui_default">@color/places_ui_default_primary</color>
     <color name="background_ui_cardview">@color/quantum_grey50</color>
+    <color name="background_button_default">@color/quantum_deeppurpleA700</color>
+    <color name="background_button_second">@color/quantum_tealA400</color>
+    <color name="background_button_icon">@color/quantum_grey50</color>
+    <color name="background_button_error">@color/quantum_error_light</color>
+    <color name="background_ripple_default">@color/quantum_deeppurpleA100</color>
+    <color name="background_ripple_second">@color/quantum_tealA200</color>
+    <color name="background_ripple_icon">@color/places_ui_default_primary</color>
+    <color name="background_ripple_error">@color/quantum_error_dark</color>
 
     <!-- Text -->
     <color name="tint_title">@color/quantum_deeppurpleA700</color>
@@ -35,8 +43,7 @@
     <color name="tint_input_text">@color/places_text_black_alpha_87</color>
 
     <!-- Icon -->
-    <color name="tint_input_icon_light">@color/quantum_grey500</color>
-    <color name="tint_input_icon_dark">@color/places_text_white_alpha_87</color>
-
+    <color name="tint_image_icon_light">@color/quantum_grey600</color>
+    <color name="tint_image_icon_dark">@color/places_ui_default_primary</color>
 
 </resources>
