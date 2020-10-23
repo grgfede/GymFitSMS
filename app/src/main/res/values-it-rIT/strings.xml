@@ -81,4 +81,6 @@
     <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
     <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
     <string name="third_evening_session" translatable="false">"annual "</string>
+    <string name="seepic">Visualizza immagine</string>
+    <string name="changepic">Modifica immagine</string>
 </resources>

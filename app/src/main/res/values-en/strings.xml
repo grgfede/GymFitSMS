@@ -80,4 +80,6 @@
     <string name="quarterly_subscription_description">It ends at the end of the three months</string>
     <string name="six_month_subscription_description">It starts at the 1st of January to the ends of May</string>
     <string name="annual_subscription_description">It starts at the 1st of January to the ends of December</string>
+    <string name="seepic" translatable="false">Open picture</string>
+    <string name="changepic">Change picture</string>
 </resources>

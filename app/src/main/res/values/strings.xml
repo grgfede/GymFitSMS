@@ -69,8 +69,8 @@
     <string name="congratulations_signUp" translatable="false">todo</string>
     <string name="signUpSubTitle3" translatable="false">todo</string>
     <string name="skip" translatable="false">todo</string>
-    <string name="seepic" translatable="false">todo</string>
-    <string name="changepic" translatable="false">todo</string>
+    <string name="seepic">Visualizza immagine</string>
+    <string name="changepic">Modifica immagine</string>
 
     <string name="title_subcription">Abbonamento</string>
     <string name="monthly_subscription_description">Si conclude alla fine del mese</string>
