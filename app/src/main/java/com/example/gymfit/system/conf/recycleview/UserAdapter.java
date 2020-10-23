@@ -11,6 +11,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -37,18 +39,58 @@ import java.util.TimeZone;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> implements Filterable {
-
-    private List<User> users;
-    private List<User> usersFull;
-    private Context context;
-    private int rowCount;
+    private final List<User> users;
+    private final List<User> usersFull;
+    private final Context context;
     private int rowPosition;
 
     public UserAdapter(Context ct, List<User> users) {
         this.context = ct;
         this.users = users;
         this.usersFull = new ArrayList<>(this.users);
-        this.rowCount = this.users.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        private final LinearLayout toggleContainer;
+        private final CircleImageView startIcon;
+        private final ImageView endIcon;
+        private final TextView username;
+        private final TextView details;
+        private Boolean isVisible = false;
+        private final List<TextView> textViews = new ArrayList<>();
+
+        public MyViewHolder(@NotNull View itemView) {
+            super(itemView);
+
+            startIcon = itemView.findViewById(R.id.start_icon);
+            endIcon = itemView.findViewById(R.id.end_icon);
+            username = itemView.findViewById(R.id.user_name);
+            details = itemView.findViewById(R.id.user_details);
+            toggleContainer = itemView.findViewById(R.id.content_toggle_container);
+
+            setTurnView(getTurnCount(rowPosition), toggleContainer);
+
+            endIcon.setOnClickListener(v -> {
+                setListVisibility(toggleContainer, endIcon, isVisible);
+                isVisible = !isVisible;
+            });
+        }
+
+        private void setTurnView(int rowCount, ViewGroup viewGroup) {
+
+            for (int i=0; i<rowCount; i++) {
+                TextView textView = new TextView(context);
+                textView.setTextAppearance(R.style.AppTheme_UserTurnSessionText);
+                textViews.add(textView);
+
+                viewGroup.addView(textView);
+            }
+        }
+
+        private int getTurnCount(int position) {
+            return users.get(position).getTurns().size();
+        }
     }
 
     @NonNull
@@ -68,8 +110,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         String username = this.users.get(position).getName() + " " + this.users.get(position).getSurname();
         holder.username.setText(username);
 
-        String subscription = this.context.getResources().getString(R.string.title_subcription);
-        getSubscription(this.users.get(position).getSubscription());
+        String subscription = getSubscription(this.users.get(position).getSubscription());
         holder.details.setText(subscription);
 
         List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
@@ -108,7 +149,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         return this.filter;
     }
 
-    private Filter filter = new Filter() {
+    public Filter getFilterSub() {
+        return this.filterSub;
+    }
+
+    public Filter getSort() {
+        return this.filterSort;
+    }
+
+    private final Filter filter = new Filter() {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -121,15 +170,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             } else {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase().trim();
-
-                for (User user : usersFull) {
-                    if (user.getUsername().toLowerCase().trim().contains(filterPattern)) {
-                        filteredList.add(user);
-                    }
-                }
+                filteredList = filterCompare(filteredList, filterPattern, "username");
             }
-
-            Log.i("INFO 1: ", Integer.toString(filteredList.size()));
 
             FilterResults filterResults = new FilterResults();
             filterResults.values = filteredList;
@@ -138,74 +180,138 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
+            @SuppressWarnings("unchecked")
             List<User> listTmp = (List<User>) results.values;
-
             users.clear();
             users.addAll(listTmp);
             notifyDataSetChanged();
         }
     };
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    private final Filter filterSub = new Filter() {
 
-        private LinearLayout toggleContainer;
-        private CircleImageView startIcon;
-        private ImageView endIcon;
-        private TextView username;
-        private TextView details;
-        private Boolean isVisible = false;
-        private List<TextView> textViews = new ArrayList<>();
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<User> filteredList = new ArrayList<>();
+            users.clear();
 
-        public MyViewHolder(@NotNull View itemView) {
-            super(itemView);
-
-            startIcon = itemView.findViewById(R.id.start_icon);
-            endIcon = itemView.findViewById(R.id.end_icon);
-            username = itemView.findViewById(R.id.user_name);
-            details = itemView.findViewById(R.id.user_details);
-            toggleContainer = itemView.findViewById(R.id.content_toggle_container);
-
-            setTurnView(getTurnCount(rowPosition), toggleContainer);
-
-            endIcon.setOnClickListener(v -> {
-                setListVisibility(toggleContainer, endIcon, isVisible);
-                isVisible = !isVisible;
-            });
-        }
-
-        private void setTurnView(int rowCount, ViewGroup viewGroup) {
-
-            for (int i=0; i<rowCount; i++) {
-                TextView textView = new TextView(context);
-                textView.setTextAppearance(R.style.AppTheme_UserTurnSessionText);
-                textViews.add(textView);
-
-                viewGroup.addView(textView);
+            if (constraint.equals(context.getResources().getString(R.string.prompt_monthly))) {
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+            } else if (constraint.equals(context.getResources().getString(R.string.prompt_quarterly))) {
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+            } else if (constraint.equals(context.getResources().getString(R.string.prompt_six_month))) {
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+            } else if (constraint.equals(context.getResources().getString(R.string.prompt_annual))) {
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "subscription");
             }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
         }
 
-        private int getTurnCount(int position) {
-            return users.get(position).getTurns().size();
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            @SuppressWarnings("unchecked")
+            List<User> listTmp = (List<User>) results.values;
+            users.clear();
+            users.addAll(listTmp);
+            notifyDataSetChanged();
         }
+    };
+
+    private final Filter filterSort = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<User> filteredList = new ArrayList<>();
+
+            if (constraint.equals(context.getResources().getString(R.string.prompt_name))) {
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "sort");
+            } else if (constraint.equals(context.getResources().getString(R.string.prompt_surname))) {
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "sort");
+            } else if (constraint.equals(context.getResources().getString(R.string.prompt_default))){
+                filteredList.clear();
+                String filterPattern = constraint.toString().toLowerCase();
+                filteredList = filterCompare(filteredList, filterPattern, "sort");
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredList;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            @SuppressWarnings("unchecked")
+            List<User> listTmp = (List<User>) results.values;
+            users.clear();
+            users.addAll(listTmp);
+            notifyDataSetChanged();
+        }
+    };
+
+    private List<User> filterCompare(List<User> filteredList, String constraint, String rule) {
+        filteredList.clear();
+
+        if (rule.equals("sort") && (constraint.equals(context.getString(R.string.prompt_name).toLowerCase()) || constraint.equals("default"))) {
+            filteredList.addAll(usersFull);
+            filteredList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+        } else if (rule.equals("sort") && constraint.equals(context.getString(R.string.prompt_surname).toLowerCase())) {
+            filteredList.addAll(usersFull);
+            filteredList.sort((o1, o2) -> o1.getSurname().compareTo(o2.getSurname()));
+        } else if (rule.equals("username")) {
+            usersFull.forEach(user -> {
+                if (user.getUsername().toLowerCase().trim().contains(constraint)) {
+                    filteredList.add(user);
+                }
+            });
+            filteredList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+        } else if (rule.equals("subscription")) {
+            usersFull.forEach(user -> {
+                if (user.getSubscription().toLowerCase().trim().equals(constraint)) {
+                    filteredList.add(user);
+                }
+            });
+            filteredList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+        }
+
+        return filteredList;
     }
 
 
     // Other methods
-    private void getSubscription(String subscription) {
+
+    private String getSubscription(String subscription) {
+        String titleSubscription = this.context.getResources().getString(R.string.title_subcription);
+
         switch (subscription) {
             case "annual":
-                subscription += ": " + this.context.getResources().getString(R.string.annual_subscription);
+                subscription = ": " + this.context.getResources().getString(R.string.annual_subscription);
                 break;
             case "monthly":
-                subscription += ": " + this.context.getResources().getString(R.string.monthly_subscription);
+                subscription = ": " + this.context.getResources().getString(R.string.monthly_subscription);
                 break;
             case "quarterly":
-                subscription += ": " + this.context.getResources().getString(R.string.quarterly_subscription);
+                subscription = ": " + this.context.getResources().getString(R.string.quarterly_subscription);
                 break;
             case "sixMonth":
-                subscription += ": " + this.context.getResources().getString(R.string.six_month_subscription);
+                subscription = ": " + this.context.getResources().getString(R.string.six_month_subscription);
                 break;
         }
+
+        return titleSubscription + subscription;
     }
 
     private String getTurn(String turn) {

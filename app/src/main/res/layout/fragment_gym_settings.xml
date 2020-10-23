@@ -11,7 +11,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/quantum_grey50">
+        android:backgroundTint="@color/background_ui_default">
 
         <!-- Abbonamenti -->
         <LinearLayout
@@ -32,7 +32,7 @@
 
                 android:lineSpacingExtra="24sp"
                 android:text="@string/title_subcription"
-                android:textColor="@color/quantum_grey600"
+                android:textColor="@color/tint_second_line_light"
                 android:textSize="14sp" />
 
             <!-- Switch container -->
@@ -55,6 +55,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/monthly_subscription"
+                        android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -62,7 +63,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/monthly_subscription_description"
-                        android:textColor="@color/quantum_grey600"
+                        android:textColor="@color/tint_second_line_light"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -80,6 +81,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/quarterly_subscription"
+                        android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -87,7 +89,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/quarterly_subscription_description"
-                        android:textColor="@color/quantum_grey600"
+                        android:textColor="@color/tint_second_line_light"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -105,6 +107,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/six_month_subscription"
+                        android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -112,7 +115,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/six_month_subscription_description"
-                        android:textColor="@color/quantum_grey600"
+                        android:textColor="@color/tint_second_line_light"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -130,6 +133,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/annual_subscription"
+                        android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -137,7 +141,7 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/annual_subscription_description"
-                        android:textColor="@color/quantum_grey600"
+                        android:textColor="@color/tint_second_line_light"
                         android:textSize="14sp"/>
 
                 </LinearLayout>
@@ -179,7 +183,7 @@
 
                 android:lineSpacingExtra="24sp"
                 android:text="@string/title_session"
-                android:textColor="@color/quantum_grey600"
+                android:textColor="@color/tint_second_line_light"
                 android:textSize="14sp" />
 
             <!-- Check container -->
@@ -193,7 +197,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/quantum_grey50"
+                    app:cardBackgroundColor="@color/cardview_light_background"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -207,6 +211,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:weightSum="2"
                             android:paddingHorizontal="16dp"
                             android:paddingVertical="8dp">
 
@@ -214,22 +219,21 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0"
                                 android:contentDescription="@string/morning_list_img"
                                 android:src="@drawable/ic_weather_sun" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:gravity="end">
 
                                 <com.google.android.material.checkbox.MaterialCheckBox
                                     android:id="@+id/morning_turn_checkbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
-
                                     android:checked="false"
-
                                     android:clickable="true"
                                     android:focusable="true" />
                             </LinearLayout>
@@ -264,17 +268,15 @@
                             app:endIconMode="custom"
                             app:endIconContentDescription="@string/morning_list_img"
                             app:endIconDrawable="@drawable/ic_arrow_down"
-                            app:endIconTint="@color/quantum_grey600">
+                            app:endIconTint="@color/tint_image_icon_light">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:enabled="false"
-
                                 android:inputType="none"
-
                                 android:text="@string/morning_session"
-                                android:textColor="@color/quantum_grey900"
+                                android:textColor="@color/tint_first_line_light"
                                 android:textSize="16sp" />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -336,7 +338,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/quantum_grey50"
+                    app:cardBackgroundColor="@color/cardview_light_background"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -350,6 +352,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:weightSum="2"
                             android:paddingHorizontal="16dp"
                             android:paddingVertical="8dp">
 
@@ -357,19 +360,20 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0"
                                 android:contentDescription="@string/evening_list_img"
                                 android:src="@drawable/ic_weather_afternoon" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="end">
+                                android:gravity="end"
+                                android:layout_weight="1">
 
                                 <com.google.android.material.checkbox.MaterialCheckBox
                                     android:id="@+id/afternoon_turn_checkbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
 
                                     android:checked="false"
                                     android:clickable="true"
@@ -405,7 +409,8 @@
 
                             app:endIconMode="custom"
                             app:endIconContentDescription="@string/afternoon_list_img"
-                            app:endIconDrawable="@drawable/ic_arrow_down">
+                            app:endIconDrawable="@drawable/ic_arrow_down"
+                            app:endIconTint="@color/tint_image_icon_light">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -415,7 +420,7 @@
                                 android:enabled="false"
 
                                 android:text="@string/afternoon_session"
-                                android:textColor="@color/quantum_grey900"
+                                android:textColor="@color/tint_first_line_light"
                                 android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -476,7 +481,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/quantum_grey50"
+                    app:cardBackgroundColor="@color/cardview_light_background"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="2dp"
                     app:cardUseCompatPadding="true">
@@ -490,6 +495,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:weightSum="2"
                             android:paddingHorizontal="16dp"
                             android:paddingVertical="8dp">
 
@@ -497,19 +503,20 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
+                                android:layout_weight="0"
                                 android:contentDescription="@string/evening_list_img"
                                 android:src="@drawable/ic_weather_night" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:gravity="end">
+                                android:gravity="end"
+                                android:layout_weight="1">
 
                                 <com.google.android.material.checkbox.MaterialCheckBox
                                     android:id="@+id/evening_turn_checkbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="end"
 
                                     android:checked="false"
                                     android:clickable="true"
@@ -545,7 +552,8 @@
 
                             app:endIconMode="custom"
                             app:endIconContentDescription="@string/evening_list_img"
-                            app:endIconDrawable="@drawable/ic_arrow_down">
+                            app:endIconDrawable="@drawable/ic_arrow_down"
+                            app:endIconTint="@color/tint_image_icon_light">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -555,7 +563,7 @@
                                 android:enabled="false"
 
                                 android:text="@string/evening_session"
-                                android:textColor="@color/quantum_grey900"
+                                android:textColor="@color/tint_first_line_light"
                                 android:textSize="16sp" />
                         </com.google.android.material.textfield.TextInputLayout>
 

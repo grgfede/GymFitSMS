@@ -46,17 +46,28 @@
     <string name="gym_settings_toolbar_title">Impostazioni</string>
     <string name="gym_subs_toolbar_title">Elenco iscritti</string>
     <string name="system_toolbar_search">Cerca</string>
+    <string name="system_toolbar_filter">Filtra</string>
     <string name="system_toolbar_logout">Esci</string>
     <string name="system_toolbar_help">Aiuto</string>
 
     <string name="prompt_email" translatable="false">Email</string>
     <string name="prompt_password" translatable="false">Password</string>
+    <string name="prompt_name">Nome</string>
+    <string name="prompt_surname">Cognome</string>
     <string name="prompt_phone">Numero di telefono</string>
     <string name="prompt_address">Indirizzo</string>
     <string name="prompt_abort">Annulla</string>
     <string name="prompt_send">Invia</string>
     <string name="prompt_cancel">Annulla</string>
-    <string name="prompt_confirm" translatable="false">OK</string>
+    <string name="prompt_confirm" translatable="false">APPLY</string>
+    <string name="prompt_monthly" translatable="false">monthly</string>
+    <string name="prompt_quarterly" translatable="false">quarterly</string>
+    <string name="prompt_six_month" translatable="false">six_month</string>
+    <string name="prompt_annual" translatable="false">annual</string>
+    <string name="prompt_morning" translatable="false">morning</string>
+    <string name="prompt_afternoon" translatable="false">afternoon</string>
+    <string name="prompt_evening" translatable="false">evening</string>
+    <string name="prompt_default" translatable="false">default</string>
 
     <!-- TODO: rename with "prompt_key" when they are system string -->
     <string name="birthDay">Data di nascita</string>
@@ -114,5 +125,8 @@
     <string name="signUpCompleteSubTitle">La registrazione è andata a buon fine, ora puoi effettuare il login</string>
 
     <string name="title_users_list">Iscritti</string>
+
+    <string name="subscription_filter">Filtra per abbonamento</string>
+    <string name="user_sort">Ordina per</string>
 
 </resources>

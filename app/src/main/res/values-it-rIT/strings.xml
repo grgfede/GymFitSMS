@@ -108,4 +108,9 @@
     <string name="system_toolbar_search">Cerca</string>
     <string name="system_toolbar_logout">Esci</string>
     <string name="system_toolbar_help">Aiuto</string>
+    <string name="system_toolbar_filter">Filtra</string>
+    <string name="subscription_filter">Filtra per abbonamento</string>
+    <string name="user_sort">Ordina per</string>
+    <string name="prompt_name">Nome</string>
+    <string name="prompt_surname">Cognome</string>
 </resources>

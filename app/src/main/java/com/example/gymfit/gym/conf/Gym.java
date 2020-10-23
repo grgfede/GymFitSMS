@@ -13,7 +13,7 @@ public class Gym extends GenericUser implements Serializable {
     private String image;
     private LatLng position;
 
-    private Map<String, Boolean> subscription;
+    private final Map<String, Boolean> subscription;
 
     public Gym(String uid, String email, String phone, String name, String address, LatLng position, String image) {
         super(uid, email, phone);
@@ -73,4 +73,5 @@ public class Gym extends GenericUser implements Serializable {
         this.subscription.remove(key);
         this.subscription.put(key, value);
     }
+
 }

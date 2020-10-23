@@ -37,13 +37,13 @@ public class FragmentGymSettings extends Fragment {
     private Gym gym = null;
 
     // Switch and Checkbox
-    private Map<String, SwitchMaterial> switches = new HashMap<>();
-    private Map<String, MaterialCheckBox> checkboxParent = new HashMap<>();
-    private Map<String, MaterialCheckBox> checkboxChildes = new HashMap<>();
+    private final Map<String, SwitchMaterial> switches = new HashMap<>();
+    private final Map<String, MaterialCheckBox> checkboxParent = new HashMap<>();
+    private final Map<String, MaterialCheckBox> checkboxChildes = new HashMap<>();
 
     // Text and List
-    private Map<String, Object[]> turnList = new HashMap<>();
-    private Map<String, Boolean> isVisibleTurnList = new HashMap<>();
+    private final Map<String, Object[]> turnList = new HashMap<>();
+    private final Map<String, Boolean> isVisibleTurnList = new HashMap<>();
 
     private View activityView = null;
 

@@ -1,11 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search"
+        android:title="@string/system_toolbar_search"
         app:actionViewClass="android.widget.SearchView"
+        app:iconTint="@color/tint_image_icon_dark"
+        app:showAsAction="always|collapseActionView"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/app_bar_filter"
+        android:icon="@drawable/ic_filter"
+        app:iconTint="@color/tint_image_icon_dark"
         app:showAsAction="always"
-        android:title="@string/system_toolbar_search" />
+        android:title="@string/system_toolbar_filter">
+
+        <menu>
+            <group>
+                <item
+                    android:title="@string/subscription_filter"
+                    app:showAsAction="never">
+
+                    <menu>
+                        <group>
+                            <item android:id="@+id/action_filter_monthly"
+                                android:title="@string/monthly_subscription"
+                                app:showAsAction="never" />
+                            <item android:id="@+id/action_filter_quarterly"
+                                android:title="@string/quarterly_subscription"
+                                app:showAsAction="never" />
+                            <item android:id="@+id/action_filter_six_month"
+                                android:title="@string/six_month_subscription"
+                                app:showAsAction="never" />
+                            <item android:id="@+id/action_filter_annual"
+                                android:title="@string/annual_subscription"
+                                app:showAsAction="never" />
+                        </group>
+                    </menu>
+                </item>
+                <item
+                    android:title="@string/user_sort"
+                    app:showAsAction="never">
+
+                    <menu>
+                        <group>
+                            <item android:id="@+id/action_sort_by_name"
+                                android:title="@string/prompt_name"
+                                app:showAsAction="never" />
+                            <item android:id="@+id/action_sort_by_surname"
+                                android:title="@string/prompt_surname"
+                                app:showAsAction="never" />
+                        </group>
+                    </menu>
+                </item>
+            </group>
+        </menu>
+    </item>
+
 </menu>
