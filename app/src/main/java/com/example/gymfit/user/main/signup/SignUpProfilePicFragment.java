@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
+import com.example.gymfit.user.conf.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,7 +43,6 @@ import static android.app.Activity.RESULT_OK;
  */
 public class SignUpProfilePicFragment extends Fragment {
 
-    private String uid;
     private static final int SELECT_PHOTO = 1;
     FirebaseStorage storage;
     StorageReference storageReference;
@@ -49,6 +51,20 @@ public class SignUpProfilePicFragment extends Fragment {
 
     private FragmentActivity myContext;
     Button btnSkip;
+
+    public User user = null;
+
+    public String name;
+    public String surname;
+    public String phone;
+    public String gender;
+    public Date dateOfBirth;
+    public LatLng location;
+    public String address;
+    public String email;
+    private String uid;
+    public String urlImg;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -219,7 +235,16 @@ public class SignUpProfilePicFragment extends Fragment {
 
 
     private void recoverDataFragment2() {
-        uid = getArguments().getString("uid");
+        Bundle bundle = getArguments();
+        user = (User) bundle.getSerializable("user");
+        name = user.getName();
+        surname = user.getSurname();
+        phone = user.getPhone();
+        gender = user.getGender();
+        dateOfBirth = user.getDateOfBirthday();
+        location = user.getLocation();
+        address = user.getAddress();
+        uid = user.getUid();
     }
 
 

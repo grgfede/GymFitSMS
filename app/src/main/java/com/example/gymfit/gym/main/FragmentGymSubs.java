@@ -81,7 +81,7 @@ public class FragmentGymSubs extends Fragment {
                     List<Map<String, Object>> turns = (List<Map<String, Object>>) documentSnapshot.get("turns");
 
                     // TODO: wait for change to User with wrapper class Boolean
-                    this.users.add(new User(name, surname, phone, email, gender.booleanValue(), uid, img, subscription, turns));
+                    //this.users.add(new User(name, surname, phone, email, gender.booleanValue(), uid, img, subscription, turns));
 
                 } else {
                     Log.d(ERROR_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());

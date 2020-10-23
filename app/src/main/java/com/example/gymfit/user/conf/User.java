@@ -1,47 +1,61 @@
 package com.example.gymfit.user.conf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.android.gms.maps.model.LatLng;
+
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 // TODO: extends and replace methods/attrs with GenericUser!
-public class User {
+public class User implements Serializable, Parcelable {
     private final String username; // Just for search filter
     private String name;
     private String surname;
     private String phone;
+    private LatLng location;
+    private String address;
     private String email;
     private String uid;
     private String urlImage;
     private String subscription;
-    private String dateOfBirthday; // TODO: change this field with Date or Calendar
+    private Date dateOfBirthday; // TODO: change this field with Date or Calendar
     private List<Map<String, Object>> turns;
-    private boolean gender; // 0 for Man and 1 form Female
+    private String gender;
 
-    public User (String name, String surname, String phone, String email, String uid){
+
+
+    public User(String name, String surname, String gender, Date dateOfBirthday, LatLng location, String address, String phone){
+        this.username = name + " " + surname;
+        this.name = name;
+        this.surname = surname;
+        this.gender = gender;
+        this.location = location;
+        this.address = address;
+        this.dateOfBirthday = dateOfBirthday;
+        this.phone = phone;
+    }
+
+    public User (String name, String surname, String phone, String email, String gender, String uid){
         this.username = name + " " + surname;
         this.name = name;
         this.surname = surname;
         this.phone = phone;
         this.email = email;
+        this.gender = gender;
         this.uid = uid;
     }
 
-    public User (String name, String surname, String phone, String dateOfBirthday, String email, String uid) {
-        this(name, surname, phone, email, uid);
-        this.dateOfBirthday = dateOfBirthday;
-    }
-
-    public User (String name, String surname, String phone, String email, boolean gender, String uid){
-        this(name, surname, phone, email, uid);
-        this.gender = gender;
-    }
-
-    public User(String name, String surname, String phone, String email, boolean gender, String uid, String img, String subscription, List<Map<String, Object>> turns) {
+    public User(String name, String surname, String phone, String email, String gender, String uid, String img, String subscription, List<Map<String, Object>> turns) {
         this(name, surname, phone, email, gender, uid);
         this.urlImage = img;
         this.subscription = subscription;
         this.turns = turns;
     }
+
 
     // Get methods
 
@@ -65,11 +79,11 @@ public class User {
         return email;
     }
 
-    public boolean getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public String getDateOfBirthday() {
+    public Date getDateOfBirthday() {
         return dateOfBirthday;
     }
 
@@ -78,6 +92,10 @@ public class User {
     }
 
     public String getUrlImage(){ return urlImage;}
+
+    public LatLng getLocation(){return location;}
+
+    public String getAddress(){return address;}
 
     public String getSubscription() {
         return subscription;
@@ -105,11 +123,13 @@ public class User {
         this.email = email;
     }
 
-    public void setGender(boolean gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public void setDateOfBirthday(String dateOfBirthday) {
+    public void setLocation(LatLng location){this.location = location;}
+
+    public void setDateOfBirthday(Date dateOfBirthday) {
         this.dateOfBirthday = dateOfBirthday;
     }
 
@@ -127,5 +147,14 @@ public class User {
         this.turns = turns;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }
 

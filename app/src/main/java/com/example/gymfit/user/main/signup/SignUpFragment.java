@@ -2,8 +2,10 @@ package com.example.gymfit.user.main.signup;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -18,11 +20,20 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.gymfit.R;
+import com.example.gymfit.gym.main.ActivityGymProfile;
+import com.example.gymfit.user.conf.User;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -40,8 +51,12 @@ public class SignUpFragment extends Fragment {
     private TextInputEditText phoneSignUp;
     private AutoCompleteTextView genderSignUp;
     private TextInputEditText birthSignUp;
-    //private TextInputEditText locationSignUp;
+    private TextInputEditText locationSignUp;
 
+
+    private LatLng locationLatLng;
+
+    private static final int MY_ADDRESS_REQUEST_CODE = 100;
     final Calendar myCalendar = Calendar.getInstance();
 
 
@@ -107,6 +122,7 @@ public class SignUpFragment extends Fragment {
         phoneSignUp = (TextInputEditText) view.findViewById(R.id.txtPhoneSignUp);
         birthSignUp = (TextInputEditText) view.findViewById(R.id.txtBirthSignUp);
         genderSignUp = (AutoCompleteTextView) view.findViewById(R.id.txtGenderSignUp);
+        locationSignUp = (TextInputEditText) view.findViewById(R.id.txtLocationSignUp);
 
         //CREO IL CALENDARIO
         DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
@@ -144,12 +160,22 @@ public class SignUpFragment extends Fragment {
                 if (!(errors)) {
                     Fragment fragment2 = new SignUp2Fragment();
                     FragmentManager fragManager = myContext.getSupportFragmentManager();
-                    Bundle args = new Bundle();
                     //SALVO I DATI DA PASSARE AL SECONDO FRAGMENT
-                    saveData(args, fragment2);
+                    saveData(fragment2, fragManager);
                     //FACCIO IL CAMBIO DEL FRAGMENT
                     changeFragment(fragManager, fragment2);
                 }
+            }
+        });
+
+
+
+        locationSignUp.setOnFocusChangeListener((v, hasFocus) -> {
+
+            if(hasFocus) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(requireContext());
+                startActivityForResult(intent, MY_ADDRESS_REQUEST_CODE);
             }
         });
         return view;
@@ -174,13 +200,21 @@ public class SignUpFragment extends Fragment {
                 .commit();
     }
 
-    private void saveData(Bundle args, Fragment fragment2) {
-        args.putString("name", nameSignUp.getText().toString());
-        args.putString("surname", surnameSignUp.getText().toString());
-        args.putString("phone", phoneSignUp.getText().toString());
-        args.putString("gender", genderSignUp.getText().toString());
-        args.putString("birth", birthSignUp.getText().toString());
-        fragment2.setArguments(args);
+    private void saveData(Fragment fragment2, FragmentManager fragmentManager) {
+        String name, surname, phone, gender, position;
+        Date dateOfBirth = null;
+        name = nameSignUp.getText().toString();
+        surname = surnameSignUp.getText().toString();
+        phone = phoneSignUp.getText().toString();
+        gender = genderSignUp.getText().toString();
+        position = locationSignUp.getText().toString();
+
+
+        User newUser = new User(name, surname, gender, dateOfBirth, locationLatLng, position, phone);
+
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("user", newUser);
+        fragment2.setArguments(bundle);
     }
 
 
@@ -217,30 +251,20 @@ public class SignUpFragment extends Fragment {
         return error_fields;
     }
 
-    /*private void placesInitialize(View view) {
-        Places.initialize(view.getContext(), getResources().getString(R.string.map_key));
-        PlacesClient placesClient = Places.createClient(getContext());
 
-        // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+        if (requestCode == MY_ADDRESS_REQUEST_CODE && !(data == null)) {
+            if (resultCode == ActivityGymProfile.RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                locationSignUp.setText(place.getAddress());
+                locationLatLng = place.getLatLng();
             }
-
-            @Override
-            public void onError(Status status) {
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
-    }*/
-
+        }
+    }
 
     //METODO CHE AGGIUNGE I VALORI UOMO/DONNA NEL CAMPO DEL SESSO
     private void setAutoComplete(View view) {

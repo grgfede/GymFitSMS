@@ -21,6 +21,8 @@ import android.widget.EditText;
 
 import com.example.gymfit.R;
 import com.example.gymfit.user.main.signin.Login;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
+        Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
         toolbarSettings();
         SignUpFragment fragmentOne = new SignUpFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.viewPager, fragmentOne).commit();
@@ -84,22 +86,13 @@ public class SignUp extends AppCompatActivity {
         quello del primary color
      */
     private void toolbarSettings() {
-        // Definisco l'oggetto toolbar
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
 
-        // Definisco l'oggetto per il colore
-        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#00000000"));
-
-        // Setto il colore della toolbar con l'oggetto colore creato prima
-        actionBar.setBackgroundDrawable(colorDrawable);
-
-        //Rimuovo il titolo dalla toolbar
-        actionBar.setDisplayShowTitleEnabled(false);
-
+        MaterialToolbar toolbar = findViewById(R.id.menu_SignUpUser_toolbar);
+        setSupportActionBar(toolbar);
         //Setto l'icona della freccia nell'action bar
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     class AuthenticationPagerAdapter extends FragmentPagerAdapter {
