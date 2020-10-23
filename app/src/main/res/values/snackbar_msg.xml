@@ -17,4 +17,20 @@
     <string name="permission_camera_error">Permesso camera negato.</string>
     
     <string name="intent_result_code_denied">Errore: </string>
+
+    <string name="monthly_subscription_enabled">Abbonamenti mensili attivati.</string>
+    <string name="monthly_subscription_disabled">Abbonamenti mensili disattivati.</string>
+    <string name="quarterly_subscription_enabled">Abbonamenti trimestrali attivati.</string>
+    <string name="quarterly_subscription_disabled">Abbonamenti trimestrali disattivati.</string>
+    <string name="sixMonth_subscription_enabled">Abbonamenti semestrali attivati.</string>
+    <string name="sixMonth_subscription_disabled">Abbonamenti semestrali disattivati.</string>
+    <string name="annual_subscription_enabled">Abbonamenti annuali attivati.</string>
+    <string name="annual_subscription_disabled">Abbonamenti annuali disattivati.</string>
+    <string name="morning_turn_enabled">Turni mattutini attivati.</string>
+    <string name="morning_turn_disabled">Turni mattutini disattivati.</string>
+    <string name="afternoon_turn_enabled">Turni pomeridiani attivati.</string>
+    <string name="afternoon_turn_disabled">Turni pomeridiani disattivati.</string>
+    <string name="evening_turn_enabled">Turni serali attivati.</string>
+    <string name="evening_turn_disabled">Turni serali disattivati.</string>
+
 </resources>

@@ -83,4 +83,32 @@
     <string name="third_evening_session" translatable="false">"annual "</string>
     <string name="seepic">Visualizza immagine</string>
     <string name="changepic">Modifica immagine</string>
+    <string name="birthDay">Data di nascita</string>
+    <string name="location">Località</string>
+    <string name="congratulations_signUp" translatable="false">Il look è importante!</string>
+    <string name="signUpSubTitle3">Imposta una tua foto del profilo per farti riconoscere in modo semplice</string>
+    <string name="skip">Salta</string>
+    <string name="signUpCompleteTitle">Complimenti!</string>
+    <string name="signUpCompleteSubTitle">La registrazione è andata a buon fine, ora puoi effettuare il login</string>
+    <string name="monthly_subscription_disabled">Abbonamenti mensili disattivati.</string>
+    <string name="monthly_subscription_enabled">Abbonamenti mensili attivati.</string>
+    <string name="quarterly_subscription_enabled">Abbonamenti trimestrali attivati.</string>
+    <string name="quarterly_subscription_disabled">Abbonamenti trimestrali disattivati.</string>
+    <string name="sixMonth_subscription_enabled">Abbonamenti semestrali attivati.</string>
+    <string name="sixMonth_subscription_disabled">Abbonamenti semestrali disattivati.</string>
+    <string name="annual_subscription_enabled">Abbonamenti annuali attivati.</string>
+    <string name="annual_subscription_disabled">Abbonamenti annuali disattivati.</string>
+    <string name="morning_turn_enabled">Turni mattutini attivati.</string>
+    <string name="afternoon_turn_enabled">Turni pomeridiani attivati.</string>
+    <string name="evening_turn_enabled">Turni serali attivati.</string>
+    <string name="morning_turn_disabled">Turni mattutini disattivati.</string>
+    <string name="afternoon_turn_disabled">Turni pomeridiani disattivati.</string>
+    <string name="evening_turn_disabled">Turni serali disattivati.</string>
+    <string name="title_users_list">Iscritti</string>
+    <string name="gym_profile_toolbar_title">Palestra</string>
+    <string name="gym_settings_toolbar_title">Impostazioni</string>
+    <string name="gym_subs_toolbar_title">Elenco iscritti</string>
+    <string name="system_toolbar_search">Cerca</string>
+    <string name="system_toolbar_logout">Esci</string>
+    <string name="system_toolbar_help">Aiuto</string>
 </resources>

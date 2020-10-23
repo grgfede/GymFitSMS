@@ -1,9 +1,6 @@
-package com.example.gymfit.user.signup;
+package com.example.gymfit.user.main.signup;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,24 +16,16 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.gymfit.R;
-import com.example.gymfit.system.MainActivity;
-import com.example.gymfit.user.User;
+import com.example.gymfit.user.conf.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -58,6 +45,8 @@ public class SignUp2Fragment extends Fragment {
     public static String name;
     public String surname;
     public String phone;
+    public String gender;
+    public String dataBirth;
     public String email;
     public String password;
     public String repeatPassword;
@@ -129,12 +118,13 @@ public class SignUp2Fragment extends Fragment {
         passwordSignUp = view.findViewById(R.id.txtPasswordSignUp);
         repeatPasswordSignUp = view.findViewById(R.id.txtRepeatPasswordSignUp);
         btnFinishSignUp = view.findViewById(R.id.btn_register);
+
         //RECUPERO I VALORI PASSATI DAL FRAGMENT 1
-        recoverDataFragmentOne(name, surname, phone);
+        recoverDataFragmentOne();
+
         btnFinishSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //RECUPERO I DATI INSERITI DALL'UTENTE NEL FRAGMENT 2
                 recoverDataFragmentTwo(email, password, repeatPassword);
             }
@@ -170,9 +160,7 @@ public class SignUp2Fragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+
                         if (!task.isSuccessful()) {
                             try {
                                 throw task.getException();
@@ -190,7 +178,7 @@ public class SignUp2Fragment extends Fragment {
                             }
                         } else {
                             String uid = mFirebaseAuth.getUid();
-                            User user = new User(name, surname, phone, email, uid);
+                            User user = new User(name, surname, phone, dataBirth, email, uid);
                             writeDb(user, uid);
                         }
                     }
@@ -204,6 +192,7 @@ public class SignUp2Fragment extends Fragment {
         newUser.put("username", surname);
         newUser.put("phoneNumber", phone);
         newUser.put("email", email);
+        newUser.put("birthDay", dataBirth);
         newUser.put("uid", uid);
         db.collection("users").document(uid).set(newUser)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -277,9 +266,11 @@ public class SignUp2Fragment extends Fragment {
         return error;
     }
 
-    private void recoverDataFragmentOne(String nameP, String surnameP, String phoneP) {
+    private void recoverDataFragmentOne() {
         name = getArguments().getString("name");
         surname = getArguments().getString("surname");
         phone = getArguments().getString("phone");
+        gender = getArguments().getString("gender");
+        dataBirth = getArguments().getString("birth");
     }
 }

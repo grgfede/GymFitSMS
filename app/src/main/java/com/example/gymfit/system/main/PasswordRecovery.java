@@ -1,4 +1,4 @@
-package com.example.gymfit.system.onboard;
+package com.example.gymfit.system.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.gymfit.R;
 
-public class FirstOnboardActivity extends AppCompatActivity {
+public class PasswordRecovery extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.firstonboard);
+        setContentView(R.layout.activity_password_recovery);
     }
 }

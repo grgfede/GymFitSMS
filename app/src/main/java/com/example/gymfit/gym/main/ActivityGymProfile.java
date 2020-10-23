@@ -1,8 +1,9 @@
-package com.example.gymfit.gym.profile;
+package com.example.gymfit.gym.main;
 
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class ActivityGymProfile extends AppCompatActivity {
@@ -23,8 +25,18 @@ public class ActivityGymProfile extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
-        openFragment();
 
+        MaterialToolbar toolbar = findViewById(R.id.menu_gym_toolbar);
+        setSupportActionBar(toolbar);
+
+        openFragment();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_gym_toolbar, menu);
+        return true;
     }
 
     @Override

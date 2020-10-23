@@ -1,4 +1,4 @@
-package com.example.gymfit.user.signin;
+package com.example.gymfit.user.main.signin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,15 +15,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
-import com.example.gymfit.user.signup.SignUp;
-import com.example.gymfit.gym.profile.ActivityGymProfile;
+import com.example.gymfit.user.main.signup.SignUp;
+import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 
@@ -39,8 +37,6 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        Objects.requireNonNull(getSupportActionBar()).hide(); //NASCONDO LA TITLE BAR
-
 
         mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
         //MI INSTANZIO GLI ELEMENTI

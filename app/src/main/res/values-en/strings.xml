@@ -82,4 +82,32 @@
     <string name="annual_subscription_description">It starts at the 1st of January to the ends of December</string>
     <string name="seepic" translatable="false">Open picture</string>
     <string name="changepic">Change picture</string>
+    <string name="birthDay">Date of birth</string>
+    <string name="location">Location</string>
+    <string name="congratulations_signUp" translatable="false">Look is important!</string>
+    <string name="signUpSubTitle3">Set up a profile picture of yourself for easy recognition</string>
+    <string name="skip">Skip</string>
+    <string name="signUpCompleteTitle">Congratulations!</string>
+    <string name="signUpCompleteSubTitle">The registration was successful, you can now login</string>
+    <string name="monthly_subscription_disabled">Monthly subscription disabled.</string>
+    <string name="monthly_subscription_enabled">Monthly subscription enabled.</string>
+    <string name="quarterly_subscription_enabled">Quarterly subscription enabled.</string>
+    <string name="sixMonth_subscription_enabled">Six-monthly subscription enabled.</string>
+    <string name="annual_subscription_enabled">Annual subscription enabled.</string>
+    <string name="quarterly_subscription_disabled">Quarterly subscription disabled.</string>
+    <string name="sixMonth_subscription_disabled">Six-monthly subscription disabled.</string>
+    <string name="annual_subscription_disabled">Annual subscription disabled.</string>
+    <string name="morning_turn_enabled">Morning sessions enabled.</string>
+    <string name="afternoon_turn_enabled">Afternoon sessions enabled.</string>
+    <string name="evening_turn_enabled">Evening sessions enabled.</string>
+    <string name="morning_turn_disabled">Morning sessions disabled.</string>
+    <string name="afternoon_turn_disabled">Afternoon sessions disabled.</string>
+    <string name="evening_turn_disabled">Evening sessions disabled.</string>
+    <string name="title_users_list">Subscribers</string>
+    <string name="gym_profile_toolbar_title">Gym</string>
+    <string name="gym_settings_toolbar_title">Settings</string>
+    <string name="gym_subs_toolbar_title">Registered List</string>
+    <string name="system_toolbar_search">Search</string>
+    <string name="system_toolbar_logout">Logout</string>
+    <string name="system_toolbar_help">Help</string>
 </resources>

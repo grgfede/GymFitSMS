@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context=".gym.profile.FragmentGymProfile">
+    tools:context=".gym.main.FragmentGymProfile">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/design_default_color_background">
+        android:backgroundTint="@color/background_ui_default">
 
         <!-- Circle menu -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -19,40 +19,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
-            android:tint="@color/design_default_color_background"
-            app:backgroundTint="@color/design_default_color_primary"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_button_default"
+            app:tint="@color/tint_image_icon_dark"
+            app:rippleColor="@color/background_ripple_default"
+            app:srcCompat="@drawable/ic_add"
+
             app:layout_constraintBottom_toTopOf="@+id/infoBlock"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageBlock"
-            app:rippleColor="@color/design_default_color_background"
-            app:srcCompat="@drawable/ic_add" />
+            android:contentDescription="@string/menu_button" />
 
+        <!-- Settings menu -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_subscription"
+            android:id="@+id/fab_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
             android:visibility="invisible"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_button_second"
+            app:tint="@color/tint_image_icon_dark"
+            app:rippleColor="@color/background_ripple_second"
+            app:srcCompat="@drawable/ic_subscription"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fab_add"
-            app:rippleColor="@color/stringColor"
-            app:srcCompat="@drawable/ic_subscription" />
+            android:contentDescription="@string/menu_button" />
 
+        <!-- Subscribers menu -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_round"
+            android:id="@+id/fab_subs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/fab_margin"
             android:clickable="true"
             android:focusable="true"
             android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fab_subscription"
-            app:rippleColor="@color/stringColor"
-            app:srcCompat="@drawable/ic_round" />
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            app:backgroundTint="@color/background_button_second"
+            app:tint="@color/tint_image_icon_dark"
+            app:rippleColor="@color/background_ripple_second"
+            app:srcCompat="@drawable/ic_group"
 
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fab_setting"
+            android:contentDescription="@string/menu_button" />
+
+        <!-- Edit image button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/gymEditImg"
             android:layout_width="wrap_content"
@@ -61,15 +83,15 @@
             android:contentDescription="@string/edit_button"
             android:elevation="4dp"
             android:src="@drawable/ic_edit"
-            android:tint="@color/material_on_background_emphasis_high_type"
-            app:backgroundTint="@color/white"
+            app:tint="@color/tint_image_icon_light"
+            app:backgroundTint="@color/background_button_icon"
             app:fabSize="mini"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:maxImageSize="18dp"
-            app:rippleColor="@color/material_on_background_disabled" />
+            app:rippleColor="@color/background_ripple_icon" />
 
-        <!-- Image Block -->
+        <!-- Image container -->
         <LinearLayout
             android:id="@+id/imageBlock"
             android:layout_width="match_parent"
@@ -88,13 +110,11 @@
                 android:clickable="true"
                 android:contentDescription="@string/gym_img_profile"
                 android:focusable="true"
-                android:scaleType="centerCrop">
-
-            </ImageView>
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
 
-        <!-- Info Block -->
+        <!-- Info Container -->
         <LinearLayout
             android:id="@+id/infoBlock"
             android:layout_width="match_parent"
@@ -133,11 +153,11 @@
 
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
+                    app:endIconMode="custom"
                     app:endIconContentDescription="@string/edit_button"
                     app:endIconDrawable="@drawable/ic_edit"
-                    app:endIconMode="custom"
+                    app:endIconTint="@color/tint_image_icon_light"
 
-                    app:endIconTint="@color/material_on_background_emphasis_medium"
                     app:helperText="@string/helper_name_always"
                     app:helperTextEnabled="true"
                     app:hintEnabled="false">
@@ -146,10 +166,10 @@
                         android:id="@+id/gymTxtName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="textNoSuggestions|textFilter"
                         android:selectAllOnFocus="false"
                         android:singleLine="true"
-                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textColor="@color/tint_input_text"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -175,12 +195,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_abort"
-                        android:textColor="@color/design_default_color_error"
+                        android:textColor="@color/tint_error_text"
                         android:textSize="12sp"
 
                         app:icon="@drawable/ic_delete"
-                        app:iconTint="@color/design_default_color_error"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:iconTint="@color/background_button_error"
+                        app:rippleColor="@color/background_ripple_error" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymSaveName"
@@ -195,12 +215,14 @@
 
                         android:text="@string/prompt_send"
                         android:textSize="12sp"
-                        app:icon="@drawable/ic_save"
+                        android:textColor="@color/colorPrimary"
 
+                        app:icon="@drawable/ic_save"
                         app:iconTint="@color/colorPrimary"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:rippleColor="@color/background_ripple_default" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -245,7 +267,7 @@
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:hint="@string/prompt_email"
-                    android:textColorHint="@color/material_on_background_disabled"
+                    android:textColorHint="@color/tint_hint_no_focused"
 
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="2dp"
@@ -253,20 +275,20 @@
                     app:endIconContentDescription="@string/edit_button"
                     app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_edit"
-                    app:endIconTint="@color/material_on_background_emphasis_medium"
+                    app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/mail_img"
                     app:startIconDrawable="@drawable/ic_mail"
-                    app:startIconTint="@color/material_on_background_emphasis_medium">
+                    app:startIconTint="@color/tint_image_icon_light">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gymTxtEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text|textEmailAddress|textEmailSubject"
+                        android:inputType="textEmailAddress"
                         android:selectAllOnFocus="false"
                         android:singleLine="true"
-                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textColor="@color/tint_input_text"
                         android:textStyle="bold" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -293,12 +315,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_abort"
-                        android:textColor="@color/design_default_color_error"
+                        android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
                         app:icon="@drawable/ic_delete"
-                        app:iconTint="@color/design_default_color_error"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:iconTint="@color/tint_error_text"
+                        app:rippleColor="@color/background_ripple_error" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymSaveMail"
@@ -312,11 +334,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_send"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="12sp"
                         app:icon="@drawable/ic_save"
 
                         app:iconTint="@color/colorPrimary"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:rippleColor="@color/background_ripple_default" />
 
                 </LinearLayout>
 
@@ -349,18 +372,18 @@
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:hint="@string/prompt_password"
-                    android:textColorHint="@color/material_on_background_disabled"
+                    android:textColorHint="@color/tint_hint_no_focused"
 
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="2dp"
 
                     app:endIconContentDescription="@string/edit_button"
                     app:endIconMode="password_toggle"
-                    app:endIconTint="@color/material_on_background_emphasis_medium"
+                    app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/key_img"
                     app:startIconDrawable="@drawable/ic_psw"
-                    app:startIconTint="@color/material_on_background_emphasis_medium">
+                    app:startIconTint="@color/tint_image_icon_light">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gymTextKey"
@@ -370,7 +393,7 @@
                         android:selectAllOnFocus="false"
                         android:singleLine="true"
                         android:text="@string/password_hide"
-                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textColor="@color/tint_input_text"
                         android:textStyle="bold" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -397,11 +420,11 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_abort"
-                        android:textColor="@color/design_default_color_error"
+                        android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
                         app:icon="@drawable/ic_delete"
-                        app:iconTint="@color/design_default_color_error"
+                        app:iconTint="@color/tint_error_text"
                         app:rippleColor="@color/material_on_background_disabled" />
 
                     <com.google.android.material.button.MaterialButton
@@ -416,11 +439,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_send"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="12sp"
                         app:icon="@drawable/ic_save"
 
                         app:iconTint="@color/colorPrimary"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:rippleColor="@color/background_ripple_default" />
 
                 </LinearLayout>
 
@@ -464,7 +488,7 @@
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:hint="@string/prompt_phone"
-                    android:textColorHint="@color/material_on_background_disabled"
+                    android:textColorHint="@color/tint_hint_no_focused"
 
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="2dp"
@@ -476,11 +500,11 @@
                     app:endIconContentDescription="@string/edit_button"
                     app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_edit"
-                    app:endIconTint="@color/material_on_background_emphasis_medium"
+                    app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/phone_img"
                     app:startIconDrawable="@drawable/ic_phone"
-                    app:startIconTint="@color/material_on_background_emphasis_medium">
+                    app:startIconTint="@color/tint_image_icon_light">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gymTextPhone"
@@ -489,7 +513,7 @@
                         android:inputType="number|text|phone"
                         android:selectAllOnFocus="false"
                         android:singleLine="true"
-                        android:textColor="@color/material_on_background_emphasis_high_type"
+                        android:textColor="@color/tint_input_text"
                         android:textStyle="bold" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -516,12 +540,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_abort"
-                        android:textColor="@color/design_default_color_error"
+                        android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
                         app:icon="@drawable/ic_delete"
-                        app:iconTint="@color/design_default_color_error"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:iconTint="@color/tint_error_text"
+                        app:rippleColor="@color/background_ripple_error" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymSavePhone"
@@ -535,11 +559,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_send"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="12sp"
                         app:icon="@drawable/ic_save"
 
                         app:iconTint="@color/colorPrimary"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:rippleColor="@color/background_ripple_default" />
 
                 </LinearLayout>
 
@@ -570,7 +595,7 @@
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:hint="@string/prompt_address"
-                    android:textColorHint="@color/material_on_background_disabled"
+                    android:textColorHint="@color/tint_hint_no_focused"
 
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="2dp"
@@ -578,18 +603,18 @@
                     app:endIconContentDescription="@string/edit_button"
                     app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_edit"
-                    app:endIconTint="@color/material_on_background_emphasis_medium"
+                    app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/location_img"
                     app:startIconDrawable="@drawable/ic_location"
-                    app:startIconTint="@color/material_on_background_emphasis_medium">
+                    app:startIconTint="@color/tint_image_icon_light">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gymTextAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:shadowColor="#FFFFFF"
-                        android:textColor="@color/material_on_surface_emphasis_high_type"
+                        android:textColor="@color/tint_input_text"
                         android:textStyle="bold" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -615,12 +640,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_abort"
-                        android:textColor="@color/design_default_color_error"
+                        android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
                         app:icon="@drawable/ic_delete"
-                        app:iconTint="@color/design_default_color_error"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:iconTint="@color/tint_error_text"
+                        app:rippleColor="@color/background_ripple_error" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymSaveAddress"
@@ -634,11 +659,12 @@
                         android:focusable="true"
 
                         android:text="@string/prompt_send"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="12sp"
                         app:icon="@drawable/ic_save"
 
                         app:iconTint="@color/colorPrimary"
-                        app:rippleColor="@color/material_on_background_disabled" />
+                        app:rippleColor="@color/background_ripple_default" />
 
                 </LinearLayout>
 
@@ -647,7 +673,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_marginVertical="15dp"
-                    app:cardBackgroundColor="@color/design_default_color_background"
+                    app:cardBackgroundColor="@color/background_ui_cardview"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
                     app:cardMaxElevation="4dp"
@@ -666,5 +692,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView >
 

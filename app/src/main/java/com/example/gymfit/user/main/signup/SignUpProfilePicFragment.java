@@ -1,5 +1,5 @@
 
-package com.example.gymfit.user.signup;
+package com.example.gymfit.user.main.signup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,36 +10,24 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
-import com.example.gymfit.system.MainActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firestore.v1.Cursor;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -59,6 +47,7 @@ public class SignUpProfilePicFragment extends Fragment {
     private CircleImageView profilePic;
     private FirebaseFirestore db;
 
+    private FragmentActivity myContext;
     Button btnSkip;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -72,6 +61,13 @@ public class SignUpProfilePicFragment extends Fragment {
 
     public SignUpProfilePicFragment() {
         // Required empty public constructor
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        myContext = (FragmentActivity) activity;
+        super.onAttach(activity);
     }
 
     /**
@@ -144,6 +140,7 @@ public class SignUpProfilePicFragment extends Fragment {
     }
 
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
@@ -171,7 +168,6 @@ public class SignUpProfilePicFragment extends Fragment {
                                             Uri download = uri;
                                             //AGGIORNO I DATI DELL'UTENTE SUL DATABASE AGGIUNGENDO L'URL DELL'IMMAGINE CARICATA
                                             uploadInfoImageUser(uri);
-                                            //TODO: Aggiungere schermata completamento registazione
                                         }
                                     });
                                 }
@@ -186,6 +182,19 @@ public class SignUpProfilePicFragment extends Fragment {
         }
     }
 
+
+    private void changeFragment(FragmentManager fragManager, Fragment fragment2) {
+        fragManager.beginTransaction().setCustomAnimations(
+                R.anim.enter,  // enter
+                R.anim.exit,  // exit
+                R.anim.pop_enter,   // popEnter
+                R.anim.pop_exit  // popExit
+        )
+                .replace(R.id.viewPager, fragment2)
+                .addToBackStack("frags")
+                .commit();
+    }
+
     private void uploadInfoImageUser(Uri selectedImage) {
         db = FirebaseFirestore.getInstance();
         String uriString = selectedImage.toString();
@@ -195,9 +204,9 @@ public class SignUpProfilePicFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "Image Uploaded!!", Toast.LENGTH_SHORT).show();
-
-
+                        Fragment finalSignUp = new SignUpFinish();
+                        FragmentManager fragManager = myContext.getSupportFragmentManager();
+                        changeFragment(fragManager, finalSignUp);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -237,18 +246,8 @@ public class SignUpProfilePicFragment extends Fragment {
                             @Override
                             public void onSuccess(Uri uri) {
                                 uploadInfoImageUser(uri);
-                                //TODO: Aggiungere schermata completamento registrazione
                             }
                         });
-                        Toast.makeText(getContext(), "Image default upload!!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        ).addOnFailureListener(
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Image default not upload!!", Toast.LENGTH_SHORT).show();
-
                     }
                 }
         );

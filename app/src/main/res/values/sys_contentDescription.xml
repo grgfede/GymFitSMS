@@ -3,14 +3,16 @@
     <string name="edit_button" translatable="false">edit button</string>
     <string name="save_button" translatable="false">save button</string>
     <string name="delete_button" translatable="false">delete button</string>
+    <string name="menu_button" translatable="false">menu button</string>
 
     <string name="mail_img" translatable="false">mail button</string>
     <string name="key_img" translatable="false">key button</string>
     <string name="location_img" translatable="false">location button</string>
     <string name="phone_img" translatable="false">phone button</string>
-    <string name="morning_list_turn" translatable="false">morning turn</string>
-    <string name="afternoon_list_turn" translatable="false">afternoon turn</string>
-    <string name="evening_list_turn" translatable="false">evening turn</string>
+    <string name="morning_list_img" translatable="false">morning turn</string>
+    <string name="afternoon_list_img" translatable="false">afternoon turn</string>
+    <string name="evening_list_img" translatable="false">evening turn</string>
+    <string name="user_img" translatable="false">user</string>
 
     <string name="gym_img_profile" translatable="false">gym image profile</string>
 

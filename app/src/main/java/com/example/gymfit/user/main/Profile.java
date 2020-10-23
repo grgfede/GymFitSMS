@@ -1,4 +1,4 @@
-package com.example.gymfit;
+package com.example.gymfit.user.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,8 +19,8 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 
-import com.example.gymfit.user.EditProfile;
-import com.example.gymfit.user.signin.Login;
+import com.example.gymfit.R;
+import com.example.gymfit.user.main.signin.Login;
 import com.google.firebase.auth.FirebaseAuth;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -41,8 +41,6 @@ public class Profile extends AppCompatActivity {
 
 
         profilePic = (CircleImageView) findViewById(R.id.profile_image);
-
-        getSupportActionBar().hide();
 
         Button edit = (Button) findViewById(R.id.Editprofile);
         edit.setOnClickListener(
