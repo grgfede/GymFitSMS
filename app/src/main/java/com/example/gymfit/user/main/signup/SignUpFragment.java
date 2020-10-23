@@ -214,6 +214,7 @@ public class SignUpFragment extends Fragment {
 
         Bundle bundle=new Bundle();
         bundle.putSerializable("user", newUser);
+
         fragment2.setArguments(bundle);
     }
 

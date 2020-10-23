@@ -7,6 +7,7 @@
     android:layout_marginStart="25dp"
     android:layout_marginEnd="25dp"
     android:orientation="vertical"
+    android:background="@color/background_ui_default"
     tools:context=".user.main.signup.SignUpFinish">
 
 
@@ -19,7 +20,7 @@
         android:fontFamily="@font/avenirheavy"
         android:text="@string/signUpCompleteTitle"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/tint_title"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -39,6 +40,7 @@
         android:fontFamily="@font/avenirltstdlight"
         android:text="@string/signUpCompleteSubTitle"
         android:textSize="20sp"
+        android:textColor="@color/tint_second_line_light"
         app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.561"
