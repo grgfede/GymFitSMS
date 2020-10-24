@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="@string/system_nav_title_home">
+        <menu>
+            <group>
+                <item android:id="@+id/nav_menu_home"
+                    android:title="@string/gym_profile_toolbar_title"
+                    android:icon="@drawable/ic_account" />
+                <item android:id="@+id/nav_menu_setting"
+                    android:title="@string/gym_settings_toolbar_title"
+                    android:icon="@drawable/ic_setting" />
+                <item android:id="@+id/nav_menu_subs"
+                    android:title="@string/gym_subs_toolbar_title"
+                    android:icon="@drawable/ic_subscription" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="@string/system_nav_title_other">
+        <menu>
+            <group>
+                <item android:id="@+id/nav_menu_help"
+                    android:title="@string/system_toolbar_help"
+                    android:icon="@drawable/ic_setting" />
+                <item android:id="@+id/nav_menu_logout"
+                    android:title="@string/system_toolbar_logout"
+                    android:icon="@drawable/ic_logout" />
+            </group>
+        </menu>
+    </item>
+</menu>

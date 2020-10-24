@@ -1,5 +1,6 @@
 package com.example.gymfit.gym.main;
 
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,16 +18,27 @@ import androidx.fragment.app.Fragment;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
+import com.example.gymfit.gym.conf.GymTurnDBCallback;
+import com.example.gymfit.system.conf.utils.BooleanUtils;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class FragmentGymSettings extends Fragment {
     private static final String DESCRIBABLE_KEY = "describable_key";
@@ -37,26 +49,69 @@ public class FragmentGymSettings extends Fragment {
     private Gym gym = null;
 
     // Switch and Checkbox
-    private final Map<String, SwitchMaterial> switches = new HashMap<>();
-    private final Map<String, MaterialCheckBox> checkboxParent = new HashMap<>();
-    private final Map<String, MaterialCheckBox> checkboxChildes = new HashMap<>();
-
-    // Text and List
-    private final Map<String, Object[]> turnList = new HashMap<>();
-    private final Map<String, Boolean> isVisibleTurnList = new HashMap<>();
+    private final Map<String, SwitchMaterial> switchMap = new HashMap<>();
+    private final Map<String, MaterialButton> checkButtonMap = new HashMap<>();
+    private final Map<String, MaterialTextView> checkTextMap = new HashMap<>();
 
     private View activityView = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_gym_settings, container, false);
         assert getArguments() != null;
         this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
 
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_gym_settings, container, false);
-
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.gym_settings_toolbar_title));
+
+        // View initialization
+        setMessageAnchor(rootView);
+        setSwitchMap(rootView);
+        setCheckButtonMap(rootView);
+        setCheckboxTextMap(rootView);
+
+        // View listener
+        /* Switch listener */
+        this.switchMap.forEach((key, entry) -> {
+            setSwitchStyle(entry);
+            setSwitchFromDatabase(key, entry);
+
+            // OnCheckedChange
+            entry.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchOnDatabase(key, isChecked));
+        });
+
+        /* Button listener */
+        this.checkButtonMap.forEach((key, entry) -> {
+            Map<String, Object> confCheckDialog = new HashMap<>();
+            setCheckboxFromDatabase(key);
+
+            // OnClick
+            entry.setOnClickListener(v -> {
+                switch (key) {
+                    case "morning":
+                        confCheckDialog.put("title", rootView.getResources().getString(R.string.morning_session));
+                        confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_morning));
+                        confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.morning_session_value));
+                        confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("morning"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
+                        break;
+                    case "afternoon":
+                        confCheckDialog.put("title", rootView.getResources().getString(R.string.afternoon_session));
+                        confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_afternoon));
+                        confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.afternoon_session_value));
+                        confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("afternoon"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
+                        break;
+                    case "evening":
+                        confCheckDialog.put("title", rootView.getResources().getString(R.string.evening_session));
+                        confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_evening));
+                        confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.evening_session_value));
+                        confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("evening"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
+                        break;
+                }
+
+                onCreateTurnDialog(rootView, confCheckDialog, (gym, turnKey, which, isChecked) -> setCheckboxOnDatabase(turnKey, which, isChecked));
+            });
+        });
 
         return rootView;
     }
@@ -64,104 +119,6 @@ public class FragmentGymSettings extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        this.activityView = view.findViewById(R.id.constraintLayout);
-
-        // Switch initialization
-        this.switches.put("monthly", view.findViewById(R.id.monthly_subscription_switch));
-        this.switches.put("quarterly", view.findViewById(R.id.quarterly_subscription_switch));
-        this.switches.put("sixMonth", view.findViewById(R.id.six_month_subscription_switch));
-        this.switches.put("annual", view.findViewById(R.id.annual_subscription_switch));
-
-        // Checkbox initialization
-        this.checkboxParent.put("morning", view.findViewById(R.id.morning_turn_checkbox));
-        this.checkboxChildes.put("morningFirst", view.findViewById(R.id.morning_turn_first_checkbox));
-        this.checkboxChildes.put("morningSecond", view.findViewById(R.id.morning_turn_second_checkbox));
-        this.checkboxChildes.put("morningThird", view.findViewById(R.id.morning_turn_third_checkbox));
-        this.checkboxParent.put("afternoon", view.findViewById(R.id.afternoon_turn_checkbox));
-        this.checkboxChildes.put("afternoonFirst", view.findViewById(R.id.afternoon_turn_first_checkbox));
-        this.checkboxChildes.put("afternoonSecond", view.findViewById(R.id.afternoon_turn_second_checkbox));
-        this.checkboxChildes.put("afternoonThird", view.findViewById(R.id.afternoon_turn_third_checkbox));
-        this.checkboxParent.put("evening", view.findViewById(R.id.evening_turn_checkbox));
-        this.checkboxChildes.put("eveningFirst", view.findViewById(R.id.evening_turn_first_checkbox));
-        this.checkboxChildes.put("eveningSecond", view.findViewById(R.id.evening_turn_second_checkbox));
-        this.checkboxChildes.put("eveningThird", view.findViewById(R.id.evening_turn_third_checkbox));
-
-        this.isVisibleTurnList.put("morning", false);
-        this.isVisibleTurnList.put("afternoon", false);
-        this.isVisibleTurnList.put("evening", false);
-
-        this.turnList.put("morning", new Object[] {
-                view.findViewById(R.id.morning_turn_text),
-                view.findViewById(R.id.morning_turn_list)
-        });
-        this.turnList.put("afternoon", new Object[] {
-                view.findViewById(R.id.afternoon_turn_text),
-                view.findViewById(R.id.afternoon_turn_list)
-        });
-        this.turnList.put("evening", new Object[] {
-                view.findViewById(R.id.evening_turn_text),
-                view.findViewById(R.id.evening_turn_list)
-        });
-
-
-        /* Switch comp event */
-        for (Map.Entry<String, SwitchMaterial> entry : this.switches.entrySet()) {
-            setSwitchStyle(entry.getValue());
-            setSwitchFromDatabase(entry.getKey(), entry.getValue());
-
-            // OnCheckedChange
-            entry.getValue().setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchOnDatabase(entry.getKey(), isChecked));
-        }
-
-        /* Checkbox child comp event */
-        for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-            setCheckboxStyle(entry.getValue());
-            setCheckboxFromDatabase(entry.getKey(), entry.getValue());
-
-            // OnCheckedChange
-            entry.getValue().setOnCheckedChangeListener((buttonView, isChecked) -> {
-                setParentIfAllChecked(entry.getKey(), isChecked);
-                setCheckboxOnDatabase(entry.getKey(), isChecked);
-            });
-        }
-
-        /* Checkbox parent comp event */
-        for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxParent.entrySet()) {
-            setCheckboxStyle(entry.getValue());
-            setCheckboxFromDatabase(entry.getKey(), entry.getValue());
-
-            // OnCheckedChange
-            entry.getValue().setOnCheckedChangeListener((buttonView, isChecked) -> setCheckboxOnDatabase(entry.getKey(), isChecked));
-
-            // OnCLick
-            entry.getValue().setOnClickListener(v -> {
-                boolean isVisible = Objects.requireNonNull(this.isVisibleTurnList.get(entry.getKey()));
-                LinearLayout list = (LinearLayout) Objects.requireNonNull(this.turnList.get(entry.getKey()))[1];
-                TextInputLayout text = (TextInputLayout) Objects.requireNonNull(this.turnList.get(entry.getKey()))[0];
-
-                if (!isVisible) {
-                    setListVisibility(list, text, false);
-                    this.isVisibleTurnList.put(entry.getKey(), true);
-                }
-                setCheckboxIfParent(entry.getKey(), entry.getValue().isChecked());
-
-            });
-        }
-
-        /* Turn text event */
-        for (Map.Entry<String, Object[]> entry : this.turnList.entrySet()) {
-            TextInputLayout text = (TextInputLayout) entry.getValue()[0];
-            LinearLayout list = (LinearLayout) entry.getValue()[1];
-
-            // OnEndIconClick
-            text.setEndIconOnClickListener(v -> {
-                boolean isVisible = Objects.requireNonNull(this.isVisibleTurnList.get(entry.getKey()));
-                setListVisibility(list, text, isVisible);
-
-                this.isVisibleTurnList.put(entry.getKey(), !isVisible);
-            });
-        }
     }
 
     public static FragmentGymSettings newInstance(Gym gym) {
@@ -173,8 +130,25 @@ public class FragmentGymSettings extends Fragment {
         return fragment;
     }
 
-    /* Switch methods */
+    // Switch methods
 
+    /**
+     * Set map with Switch views.
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setSwitchMap(View rootView) {
+        this.switchMap.put("monthly", rootView.findViewById(R.id.monthly_subscription_switch));
+        this.switchMap.put("quarterly", rootView.findViewById(R.id.quarterly_subscription_switch));
+        this.switchMap.put("sixMonth", rootView.findViewById(R.id.six_month_subscription_switch));
+        this.switchMap.put("annual", rootView.findViewById(R.id.annual_subscription_switch));
+    }
+
+    /**
+     * Set the color of thumb and track of current switch view.
+     *
+     * @param switchMaterial Switch View that will be set in color thumb and track
+     */
     private void setSwitchStyle(SwitchMaterial switchMaterial) {
         ColorStateList colorListThumb = new ColorStateList(
                 new int[][]{
@@ -203,6 +177,12 @@ public class FragmentGymSettings extends Fragment {
         switchMaterial.setTrackTintList(colorListTrack);
     }
 
+    /**
+     * Set the current Switch view with the content of Database subscription node
+     *
+     * @param key String used for access on the correct node child of database subscription node
+     * @param switchMaterial Switch view set from database subscription node value
+     */
     private void setSwitchFromDatabase(String key, SwitchMaterial switchMaterial) {
         this.db.collection("gyms").document(this.gym.getUid()).get().addOnCompleteListener(task -> {
 
@@ -219,6 +199,12 @@ public class FragmentGymSettings extends Fragment {
         });
     }
 
+    /**
+     * Set the respective Database subscription node with the value of Switch passed
+     *
+     * @param key String used for access on the correct node child of database subscription node
+     * @param isChecked Value used for update the respective Database node
+     */
     private void setSwitchOnDatabase(String key, boolean isChecked) {
         this.db.collection("gyms").document(this.gym.getUid())
                 .update("subscription." + key, isChecked);
@@ -227,132 +213,158 @@ public class FragmentGymSettings extends Fragment {
         showSnackSwitch(key, isChecked);
     }
 
-    /* Checkbox methods */
+    // Checkbox methods
 
-    private void setCheckboxStyle(MaterialCheckBox materialCheckBox) {
-        ColorStateList colorListButton = new ColorStateList(
-                new int[][]{
-                        new int[]{android.R.attr.state_enabled, android.R.attr.state_checked},
-                        new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
-                },
-                new int[] {
-                        getResources().getColor(R.color.quantum_deeppurpleA700, null),
-                        getResources().getColor(R.color.quantum_grey300, null)
-                }
-        );
-
-        materialCheckBox.setUseMaterialThemeColors(false);
-        materialCheckBox.setButtonTintList(colorListButton);
-
+    /**
+     * Set map with Material Button views.
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setCheckButtonMap(View rootView) {
+        this.checkButtonMap.put("morning", rootView.findViewById(R.id.morning_turn_button));
+        this.checkButtonMap.put("afternoon", rootView.findViewById(R.id.afternoon_turn_button));
+        this.checkButtonMap.put("evening", rootView.findViewById(R.id.evening_turn_button));
     }
 
-    private void setCheckboxFromDatabase(String key, MaterialCheckBox materialCheckBox) {
+    /**
+     * Set map with Material TextView views.
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setCheckboxTextMap(View rootView) {
+        this.checkTextMap.put("morning", rootView.findViewById(R.id.morning_turn_result));
+        this.checkTextMap.put("afternoon", rootView.findViewById(R.id.afternoon_turn_result));
+        this.checkTextMap.put("evening", rootView.findViewById(R.id.evening_turn_result));
+    }
+
+    /**
+     * Set Database and Gym object on the respective turn node with current check
+     *
+     * @param turnKey String used for access on the correct node child of database turn node
+     * @param which Integer used for access on the correct node child of database turn sub-node
+     * @param isChecked Boolean used for set the respective turn node
+     */
+    private void setCheckboxOnDatabase(String turnKey, int which, boolean isChecked) {
+        String subNode = null;
+
+        if (turnKey.equals(getString(R.string.prompt_morning))) {
+            subNode = getResources().getStringArray(R.array.morning_session_name)[which];
+        } else if (turnKey.equals(getString(R.string.prompt_afternoon))) {
+            subNode = getResources().getStringArray(R.array.afternoon_session_name)[which];
+        } else if (turnKey.equals(getString(R.string.prompt_evening))) {
+            subNode = getResources().getStringArray(R.array.evening_session_name)[which];
+        }
+
+        this.db.collection("gyms").document(this.gym.getUid())
+                .update("turn." + turnKey + "." + subNode, isChecked);
+        this.gym.setTurn(turnKey, which, isChecked);
+        setCheckboxText(turnKey);
+    }
+
+    /**
+     * Set the current Gym object with the content of Database turns node
+     *
+     * @param key String used for access on the correct node child of database turn node
+     */
+    @SuppressWarnings("unchecked")
+    private void setCheckboxFromDatabase(String key) {
         this.db.collection("gyms").document(this.gym.getUid()).get().addOnCompleteListener(task -> {
 
             if(task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
-                Boolean dbValue;
+                Map<String, Boolean> dbValue = (Map<String, Boolean>) documentSnapshot.get("turn." + key);
+                assert dbValue != null;
+                dbValue.forEach((keyTurn, value) -> {
+                    int position = 0;
 
-                if (key.contains("morning")) {
-                    dbValue = (Boolean) documentSnapshot.get("turn.morning." + key);
-                    assert dbValue != null;
-                    materialCheckBox.setChecked(dbValue);
-                } else if (key.contains("afternoon")) {
-                    dbValue = (Boolean) documentSnapshot.get("turn.afternoon." + key);
-                    assert dbValue != null;
-                    materialCheckBox.setChecked(dbValue);
-                } else if (key.contains("evening")) {
-                    dbValue = (Boolean) documentSnapshot.get("turn.evening." + key);
-                    assert dbValue != null;
-                    materialCheckBox.setChecked(dbValue);
-                }
-
+                    if (key.equals(getString(R.string.prompt_morning))) {
+                        String[] turnsName = getResources().getStringArray(R.array.morning_session_name);
+                        position = Arrays.asList(turnsName).indexOf(keyTurn);
+                    } else if (key.equals(getString(R.string.prompt_afternoon))) {
+                        String[] turnsName = getResources().getStringArray(R.array.afternoon_session_name);
+                        position = Arrays.asList(turnsName).indexOf(keyTurn);
+                    } else if (key.equals(getString(R.string.prompt_evening))) {
+                        String[] turnsName = getResources().getStringArray(R.array.evening_session_name);
+                        position = Arrays.asList(turnsName).indexOf(keyTurn);
+                    }
+                    this.gym.setTurn(key, position, value);
+                    setCheckboxText(key);
+                });
             } else {
                 Log.e(ERROR_LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
             }
         });
     }
 
-    private void setCheckboxIfParent(String key, boolean isChecked) {
+    /**
+     * Create and set a dialog for user to show a multi choice checkbox. After choice, the value of selected checkbox will be storage into Database and Gym using callback method.
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     * @param confDialog Map with all items, checked, title for dialog configuration
+     * @param turnDBCallback callback method used to set Gym and Database
+     */
+    private void onCreateTurnDialog(View rootView, Map<String, Object> confDialog, GymTurnDBCallback turnDBCallback) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(rootView.getContext());
+        builder.setTitle((String) confDialog.get("title"));
+        builder.setMultiChoiceItems((String[]) confDialog.get("items"), (boolean[]) confDialog.get("checkedItems"),
+                (dialog, which, isChecked) -> {
+                    turnDBCallback.onCallback(this.gym, (String) confDialog.get("keyTurn"), which, isChecked);
+                });
+        builder.setPositiveButton(rootView.getResources().getString(R.string.prompt_confirm), (dialog, which) -> {});
+        builder.setNegativeButton(rootView.getResources().getString(R.string.prompt_cancel), (dialog, which) -> {});
+        builder.create();
+        builder.show();
+    }
+
+    /**
+     * Set the Material Text View respective of turn node with the new placeholder. It contains only text of true checkbox
+     *
+     * @param key String used for access on the correct node child of database turn node
+     */
+    private void setCheckboxText(String key) {
+        String[] nameTurnArray = null;
+        List<String> checkedTurnList = new ArrayList<>();
+        Boolean[] checkedTurnArray = this.gym.getTurns().get(key);
+
         switch (key) {
             case "morning":
-                for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-                    if (entry.getKey().contains("morning")) {
-                        entry.getValue().setChecked(isChecked);
-                    }
-                }
+                nameTurnArray = getResources().getStringArray(R.array.morning_session_value);
                 break;
             case "afternoon":
-                for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-                    if (entry.getKey().contains("afternoon")) {
-                        entry.getValue().setChecked(isChecked);
-                    }
-                }
+                nameTurnArray = getResources().getStringArray(R.array.afternoon_session_value);
                 break;
             case "evening":
-                for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-                    if (entry.getKey().contains("evening")) {
-                        entry.getValue().setChecked(isChecked);
-                    }
-                }
+                nameTurnArray = getResources().getStringArray(R.array.evening_session_value);
                 break;
         }
-    }
 
-    private void setParentIfAllChecked(String key, boolean isChecked) {
-        boolean flag = false;
-
-        if (key.contains("morning")) {
-            for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-                if (entry.getKey().contains("morning") && (Boolean.compare(isChecked, entry.getValue().isChecked()) != 0)) {
-                    flag = true;
-                }
-            }
-
-            if (!flag) {
-                Objects.requireNonNull(this.checkboxParent.get("morning")).setChecked(isChecked);
-            }
-        } else if (key.contains("afternoon")) {
-            for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-                if (entry.getKey().contains("afternoon") && (Boolean.compare(isChecked, entry.getValue().isChecked()) != 0)) {
-                    flag = true;
-                }
-            }
-            if (!flag) {
-                Objects.requireNonNull(this.checkboxParent.get("afternoon")).setChecked(isChecked);
-            }
-        } else if (key.contains("evening")) {
-            for (Map.Entry<String, MaterialCheckBox> entry : this.checkboxChildes.entrySet()) {
-                if (entry.getKey().contains("evening") && (Boolean.compare(isChecked, entry.getValue().isChecked()) != 0)) {
-                    flag = true;
-                }
-            }
-            if (!flag) {
-                Objects.requireNonNull(this.checkboxParent.get("evening")).setChecked(isChecked);
+        for (int i = 0; i< Objects.requireNonNull(checkedTurnArray).length; i++) {
+            if (checkedTurnArray[i]) {
+                assert nameTurnArray != null;
+                checkedTurnList.add(nameTurnArray[i]);
             }
         }
-    }
 
-    private void setCheckboxOnDatabase(String key, boolean isChecked) {
-
-        // Parent if node: split on correct DB node
-        // Childes if nodes: in the first case update all childes in DB, alternately update the selected child
-        if (key.contains("morning")) {
-            this.db.collection("gyms").document(this.gym.getUid())
-                .update("turn.morning." + key, isChecked);
-            showSnackCheckbox(key, isChecked);
-        } else if (key.contains("afternoon")) {
-            this.db.collection("gyms").document(this.gym.getUid())
-                .update("turn.afternoon." + key, isChecked);
-            showSnackCheckbox(key, isChecked);
-        } else if (key.contains("evening")) {
-            this.db.collection("gyms").document(this.gym.getUid())
-                .update("turn.evening." + key, isChecked);
-            showSnackCheckbox(key, isChecked);
+        Collections.sort(checkedTurnList);
+        StringJoiner joiner = new StringJoiner(", ");
+        for (String s : checkedTurnList) {
+            joiner.add(s);
         }
+        String placeholder = joiner.toString();
+        Objects.requireNonNull(this.checkTextMap.get(key)).setText(placeholder);
     }
 
-    /* Snackbar methods */
+    // SnackBar methods
+
+    /**
+     * Set the container anchor for Snackbar object and its methods "make"
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setMessageAnchor(View rootView) {
+        // Initialize the container that will be used for Snackbar methods
+        this.activityView = rootView.findViewById(R.id.constraintLayout);
+    }
 
     private void showSnackSwitch(String key, boolean value) {
         switch (key) {
@@ -394,118 +406,6 @@ public class FragmentGymSettings extends Fragment {
                 break;
 
         }
-    }
-
-    private void showSnackCheckbox(String key, boolean value) {
-        if (key.contains("morning")) {
-            if (value) {
-                Snackbar.make(activityView, getResources().getString(R.string.morning_turn_enabled), Snackbar.LENGTH_SHORT).show();
-                Log.i(INFO_LOG, getResources().getString(R.string.morning_turn_enabled));
-            } else {
-                Snackbar.make(activityView, getResources().getString(R.string.morning_turn_disabled), Snackbar.LENGTH_SHORT).show();
-                Log.i(INFO_LOG, getResources().getString(R.string.morning_turn_disabled));
-            }
-        } else if (key.contains("afternoon")) {
-            if (value) {
-                Snackbar.make(activityView, getResources().getString(R.string.afternoon_turn_enabled), Snackbar.LENGTH_SHORT).show();
-                Log.i(INFO_LOG, getResources().getString(R.string.afternoon_turn_enabled));
-            } else {
-                Snackbar.make(activityView, getResources().getString(R.string.afternoon_turn_disabled), Snackbar.LENGTH_SHORT).show();
-                Log.i(INFO_LOG, getResources().getString(R.string.afternoon_turn_disabled));
-            }
-        } else if (key.contains("evening")) {
-            if (value) {
-                Snackbar.make(activityView, getResources().getString(R.string.evening_turn_enabled), Snackbar.LENGTH_SHORT).show();
-                Log.i(INFO_LOG, getResources().getString(R.string.evening_turn_enabled));
-            } else {
-                Snackbar.make(activityView, getResources().getString(R.string.evening_turn_disabled), Snackbar.LENGTH_SHORT).show();
-                Log.i(INFO_LOG, getResources().getString(R.string.evening_turn_disabled));
-            }
-        }
-    }
-
-    /* Other methods */
-
-    private void setArrowTurnStyle(TextInputLayout text) {
-        ColorStateList colorStateList = new ColorStateList(
-                new int[][]{
-                        new int[]{android.R.attr.state_enabled},
-                        new int[]{},
-                },
-                new int[] {
-                        getResources().getColor(R.color.quantum_grey600, null),
-                        getResources().getColor(R.color.quantum_grey600, null)
-                }
-        );
-
-        text.setEndIconTintList(colorStateList);
-    }
-
-    private void setListVisibility(LinearLayout container, TextInputLayout text, boolean isVisible) {
-
-        if (!isVisible) {
-            text.setEndIconDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_up, null));
-            expandCard(container);
-        } else {
-            text.setEndIconDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_down, null));
-            collapseCard(container);
-        }
-
-        setArrowTurnStyle(text);
-    }
-
-    private static void expandCard(final View v) {
-        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
-        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
-        final int targetHeight = v.getMeasuredHeight();
-
-        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-        v.getLayoutParams().height = 1;
-        v.setVisibility(View.VISIBLE);
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targetHeight * interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // Expansion speed of 1dp/ms: (int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)
-        a.setDuration(300);
-        v.startAnimation(a);
-    }
-
-    private static void collapseCard(final View v) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // Expansion speed of 1dp/ms: (int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)
-        a.setDuration(150);
-        v.startAnimation(a);
     }
 
 }

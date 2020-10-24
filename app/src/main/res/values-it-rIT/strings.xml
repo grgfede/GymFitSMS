@@ -43,7 +43,7 @@
     <string name="update_password_success">Password aggiornata.</string>
     <string name="password_recovery_title">Recupera Password</string>
     <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
-    <string name="passwrd_recover_button_send">Invia</string>
+    <string name="password_recover_button_send">Invia</string>
     <string name="prompt_send">Invia</string>
     <string name="prompt_abort">Annulla</string>
     <string name="prompt_phone">Numero di telefono</string>
@@ -60,26 +60,21 @@
     <string name="update_name_error">Il nuovo nome non è stato aggiornato.</string>
     <string name="prompt_cancel">Annulla</string>
     <string name="dialog_title_pickimage">Scegli una azione</string>
-    <string name="dialog_item_pickiamge_camera">Fotocamera</string>
-    <string name="dialog_item_pickiamge_gallery">Galleria</string>
+    <string name="dialog_item_pickimage_camera">Fotocamera</string>
+    <string name="dialog_item_pickimage_gallery">Galleria</string>
     <string name="permission_camera_success">Permesso camera autorizzato.</string>
     <string name="permission_camera_error">Permesso camera negato.</string>
     <string name="update_image_success">La nuova immagine è stata aggiornata.</string>
     <string name="update_image_error">La nuova immagine non è stata aggiornata.</string>
     <string name="intent_result_code_denied">"Errore: "</string>
-    <string name="title_subcription">Abbonamento</string>
+    <string name="title_subscription">Abbonamento</string>
     <string name="monthly_subscription">Mensile</string>
     <string name="quarterly_subscription">Trimestrale</string>
     <string name="six_month_subscription">Semestrale</string>
     <string name="annual_subscription">Annuale</string>
     <string name="title_session">Turni settimanali</string>
-    <string name="morning_session">Turni mattutini</string>
     <string name="afternoon_session">Turni pomeridiani</string>
     <string name="evening_session">Turni serali</string>
-    <string name="monthly_subscription_description">Si conclude alla fine del mese</string>
-    <string name="quarterly_subscription_description">Si conclude alla fine dei tre mesi</string>
-    <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
-    <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
     <string name="birthDay">Data di nascita</string>
     <string name="location">Località</string>
     <string name="congratulations_signUp" translatable="false">Il look è importante!</string>
@@ -113,4 +108,6 @@
     <string name="user_sort">Ordina per</string>
     <string name="prompt_name">Nome</string>
     <string name="prompt_surname">Cognome</string>
+    <string name="morning_session">Turni mattutini</string>
+    <string name="system_nav_title_other">Altro</string>
 </resources>

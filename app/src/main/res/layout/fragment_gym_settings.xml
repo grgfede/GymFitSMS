@@ -26,13 +26,14 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.AppCompat.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
 
                 android:lineSpacingExtra="24sp"
-                android:text="@string/title_subcription"
-                android:textColor="@color/tint_second_line_light"
+                android:text="@string/title_subscription"
+                android:textColor="@color/tint_title"
                 android:textSize="14sp" />
 
             <!-- Switch container -->
@@ -46,7 +47,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -55,16 +55,9 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/monthly_subscription"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:text="@string/monthly_subscription_description"
-                        android:textColor="@color/tint_second_line_light"
-                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -72,7 +65,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -81,16 +73,9 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/quarterly_subscription"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:text="@string/quarterly_subscription_description"
-                        android:textColor="@color/tint_second_line_light"
-                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -98,7 +83,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -107,16 +91,9 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/six_month_subscription"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:text="@string/six_month_subscription_description"
-                        android:textColor="@color/tint_second_line_light"
-                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -124,7 +101,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="10dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.switchmaterial.SwitchMaterial
@@ -133,16 +109,9 @@
                         android:layout_height="wrap_content"
 
                         android:text="@string/annual_subscription"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/tint_first_line_light"
                         android:textSize="16sp" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:text="@string/annual_subscription_description"
-                        android:textColor="@color/tint_second_line_light"
-                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
@@ -168,457 +137,119 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginHorizontal="20dp"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="2dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="25dp"
             app:layout_constraintTop_toBottomOf="@+id/containerDivider"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
+                style="@style/TextAppearance.AppCompat.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
+                android:layout_marginHorizontal="20dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:layout_marginVertical="15dp"
 
                 android:lineSpacingExtra="24sp"
                 android:text="@string/title_session"
-                android:textColor="@color/tint_second_line_light"
+                android:textColor="@color/tint_title"
                 android:textSize="14sp" />
 
-            <!-- Check container -->
+            <!-- Turni mattutini -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp">
+                android:layout_marginHorizontal="10dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:orientation="vertical">
 
-                <!-- Turni mattutini -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/morning_turn_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/cardview_light_background"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:text="@string/morning_session"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-                        <!-- Media -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp">
+                    android:textColor="@color/tint_first_line_light"
+                    android:textSize="16sp"
+                    app:rippleColor="@color/background_ripple_icon" />
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="0"
-                                android:contentDescription="@string/morning_list_img"
-                                android:src="@drawable/ic_weather_sun" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/morning_turn_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:textColor="@color/tint_second_line_light" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:gravity="end">
+            </LinearLayout>
 
-                                <com.google.android.material.checkbox.MaterialCheckBox
-                                    android:id="@+id/morning_turn_checkbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="false"
-                                    android:clickable="true"
-                                    android:focusable="true" />
-                            </LinearLayout>
+            <!-- Turni pomeridiani -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:orientation="vertical">
 
-                        </LinearLayout>
-
-                        <!-- Divider -->
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?android:attr/dividerVertical" />
-
-                        <!-- Title, secondary and supporting text -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/morning_turn_text"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingHorizontal="8dp"
-                            android:enabled="true"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-
-                            app:hintEnabled="false"
-                            app:helperTextEnabled="false"
-                            app:errorEnabled="false"
-                            app:counterEnabled="false"
-
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="0dp"
-
-                            app:endIconMode="custom"
-                            app:endIconContentDescription="@string/morning_list_img"
-                            app:endIconDrawable="@drawable/ic_arrow_down"
-                            app:endIconTint="@color/tint_image_icon_light">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:enabled="false"
-                                android:inputType="none"
-                                android:text="@string/morning_session"
-                                android:textColor="@color/tint_first_line_light"
-                                android:textSize="16sp" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- List checkbox -->
-                        <LinearLayout
-                            android:id="@+id/morning_turn_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/morning_turn_first_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/first_morning_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/morning_turn_second_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/second_morning_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/morning_turn_third_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/third_morning_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Turni pomeridiani -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/afternoon_turn_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/cardview_light_background"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:text="@string/afternoon_session"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-                        <!-- Media -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp">
+                    android:textColor="@color/tint_first_line_light"
+                    android:textSize="16sp"
+                    app:rippleColor="@color/background_ripple_icon" />
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="0"
-                                android:contentDescription="@string/evening_list_img"
-                                android:src="@drawable/ic_weather_afternoon" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/afternoon_turn_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:textColor="@color/tint_second_line_light" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                android:layout_weight="1">
+            </LinearLayout>
 
-                                <com.google.android.material.checkbox.MaterialCheckBox
-                                    android:id="@+id/afternoon_turn_checkbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+            <!-- Turni serali -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:orientation="vertical">
 
-                                    android:checked="false"
-                                    android:clickable="true"
-                                    android:focusable="true" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <!-- Divider -->
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?android:attr/dividerVertical" />
-
-                        <!-- Title, secondary and supporting text -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/afternoon_turn_text"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingHorizontal="8dp"
-                            android:enabled="true"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-
-                            app:hintEnabled="false"
-                            app:helperTextEnabled="false"
-                            app:errorEnabled="false"
-                            app:counterEnabled="false"
-
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="0dp"
-
-                            app:endIconMode="custom"
-                            app:endIconContentDescription="@string/afternoon_list_img"
-                            app:endIconDrawable="@drawable/ic_arrow_down"
-                            app:endIconTint="@color/tint_image_icon_light">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="none"
-
-                                android:enabled="false"
-
-                                android:text="@string/afternoon_session"
-                                android:textColor="@color/tint_first_line_light"
-                                android:textSize="16sp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- List checkbox -->
-                        <LinearLayout
-                            android:id="@+id/afternoon_turn_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/afternoon_turn_first_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/first_afternoon_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/afternoon_turn_second_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/second_afternoon_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/afternoon_turn_third_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/third_afternoon_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Turni pomeridiani -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/evening_turn_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/cardview_light_background"
-                    app:cardCornerRadius="4dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    android:text="@string/evening_session"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-                        <!-- Media -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="2"
-                            android:paddingHorizontal="16dp"
-                            android:paddingVertical="8dp">
+                    android:textColor="@color/tint_first_line_light"
+                    android:textSize="16sp"
+                    app:rippleColor="@color/background_ripple_icon" />
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center_vertical"
-                                android:layout_weight="0"
-                                android:contentDescription="@string/evening_list_img"
-                                android:src="@drawable/ic_weather_night" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="end"
-                                android:layout_weight="1">
-
-                                <com.google.android.material.checkbox.MaterialCheckBox
-                                    android:id="@+id/evening_turn_checkbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-
-                                    android:checked="false"
-                                    android:clickable="true"
-                                    android:focusable="true" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <!-- Divider -->
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?android:attr/dividerVertical" />
-
-                        <!-- Title, secondary and supporting text -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/evening_turn_text"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingHorizontal="8dp"
-                            android:enabled="true"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-
-                            app:hintEnabled="false"
-                            app:helperTextEnabled="false"
-                            app:errorEnabled="false"
-                            app:counterEnabled="false"
-
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="0dp"
-
-                            app:endIconMode="custom"
-                            app:endIconContentDescription="@string/evening_list_img"
-                            app:endIconDrawable="@drawable/ic_arrow_down"
-                            app:endIconTint="@color/tint_image_icon_light">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="none"
-
-                                android:enabled="false"
-
-                                android:text="@string/evening_session"
-                                android:textColor="@color/tint_first_line_light"
-                                android:textSize="16sp" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- List checkbox -->
-                        <LinearLayout
-                            android:id="@+id/evening_turn_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/evening_turn_first_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/first_evening_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/evening_turn_second_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/second_evening_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                            <com.google.android.material.checkbox.MaterialCheckBox
-                                android:id="@+id/evening_turn_third_checkbox"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-
-                                android:checked="false"
-                                android:clickable="true"
-                                android:focusable="true"
-
-                                android:text="@string/third_evening_session"
-                                android:textDirection="ltr"
-                                android:layoutDirection="rtl" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/evening_turn_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:textColor="@color/tint_second_line_light" />
 
             </LinearLayout>
 

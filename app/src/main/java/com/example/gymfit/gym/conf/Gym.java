@@ -14,6 +14,7 @@ public class Gym extends GenericUser implements Serializable {
     private LatLng position;
 
     private final Map<String, Boolean> subscription;
+    private final Map<String, Boolean[]> turns;
 
     public Gym(String uid, String email, String phone, String name, String address, LatLng position, String image) {
         super(uid, email, phone);
@@ -29,9 +30,20 @@ public class Gym extends GenericUser implements Serializable {
                 put("annual", true);
             }
         };
+        this.turns = new HashMap<String, Boolean[]>() {
+            {
+                put("morning", new Boolean[] {true, true, true});
+                put("afternoon", new Boolean[] {true, true, true});
+                put("evening", new Boolean[] {true, true, true});
+            }
+        };
     }
 
     // GET METHODS
+    public Map<String, Boolean[]> getTurns() {
+        return turns;
+    }
+
     public Map<String, Boolean> getSubscription() {
         return subscription;
     }
@@ -70,8 +82,11 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public void setSubscription(String key, Boolean value) {
-        this.subscription.remove(key);
-        this.subscription.put(key, value);
+        this.subscription.replace(key, value);
+    }
+
+    public void setTurn(String key, int position, boolean value) {
+        this.turns.get(key)[position] = value;
     }
 
 }

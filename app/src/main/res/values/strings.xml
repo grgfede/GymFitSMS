@@ -49,6 +49,8 @@
     <string name="system_toolbar_filter">Filtra</string>
     <string name="system_toolbar_logout">Esci</string>
     <string name="system_toolbar_help">Aiuto</string>
+    <string name="system_nav_title_home" translatable="false">Home</string>
+    <string name="system_nav_title_other">Altro</string>
 
     <string name="prompt_email" translatable="false">Email</string>
     <string name="prompt_password" translatable="false">Password</string>
@@ -59,7 +61,7 @@
     <string name="prompt_abort">Annulla</string>
     <string name="prompt_send">Invia</string>
     <string name="prompt_cancel">Annulla</string>
-    <string name="prompt_confirm" translatable="false">APPLY</string>
+    <string name="prompt_confirm" translatable="false">Apply</string>
     <string name="prompt_monthly" translatable="false">monthly</string>
     <string name="prompt_quarterly" translatable="false">quarterly</string>
     <string name="prompt_six_month" translatable="false">six_month</string>
@@ -85,22 +87,13 @@
 
     <string name="password_recovery_title">Recupera Password</string>
     <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
-    <string name="passwrd_recover_button_send">Invia</string>
+    <string name="password_recover_button_send">Invia</string>
 
     <string name="dialog_title_pickimage">Scegli una azione</string>
-    <string name="dialog_item_pickiamge_camera">Fotocamera</string>
-    <string name="dialog_item_pickiamge_gallery">Galleria</string>
+    <string name="dialog_item_pickimage_camera">Fotocamera</string>
+    <string name="dialog_item_pickimage_gallery">Galleria</string>
 
-    <string name="congratulations_signUp">Il look è importante!</string>
-    <string name="skip">Salta</string>
-    <string name="seepic" translatable="false">todo</string>
-    <string name="changepic" translatable="false">todo</string>
-
-    <string name="title_subcription">Abbonamento</string>
-    <string name="monthly_subscription_description">Si conclude alla fine del mese</string>
-    <string name="quarterly_subscription_description">Si conclude alla fine dei tre mesi</string>
-    <string name="six_month_subscription_description">Dal primo di Gennaio alla fine di Maggio</string>
-    <string name="annual_subscription_description">Dal primo di Gennaio alla fine di Dicembre</string>
+    <string name="title_subscription">Abbonamento</string>
     <string name="monthly_subscription">Mensile</string>
     <string name="quarterly_subscription">Trimestrale</string>
     <string name="six_month_subscription">Semestrale</string>
@@ -108,25 +101,52 @@
 
     <string name="title_session">Turno settimanale</string>
     <string name="morning_session">Turni mattutini</string>
-    <string name="first_morning_session" translatable="false">09:00 – 10:00</string>
-    <string name="second_morning_session" translatable="false">10:00 – 11:00</string>
-    <string name="third_morning_session" translatable="false">11:00 – 12:00</string>
+    <string-array name="morning_session_value">
+        <item name="first_morning_session" translatable="false">09:00 – 10:00</item>
+        <item name="second_morning_session" translatable="false">10:00 – 11:00</item>
+        <item name="third_morning_session" translatable="false">11:00 – 12:00</item>
+    </string-array>
+    <string-array name="morning_session_name">
+        <item name="first_morning_session" translatable="false">morningFirst</item>
+        <item name="second_morning_session" translatable="false">morningSecond</item>
+        <item name="third_morning_session" translatable="false">morningThird</item>
+    </string-array>
     <string name="afternoon_session">Turni pomeridiani</string>
-    <string name="first_afternoon_session" translatable="false">:14:00 – 15:00</string>
-    <string name="second_afternoon_session" translatable="false">15:00 – 16:00</string>
-    <string name="third_afternoon_session" translatable="false">16:00 – 17:00</string>
+    <string-array name="afternoon_session_value">
+        <item name="first_afternoon_session" translatable="false">14:00 – 15:00</item>
+        <item name="second_afternoon_session" translatable="false">15:00 – 16:00</item>
+        <item name="third_afternoon_session" translatable="false">16:00 – 17:00</item>
+    </string-array>
+    <string-array name="afternoon_session_name">
+        <item name="first_afternoon_session" translatable="false">afternoonFirst</item>
+        <item name="second_afternoon_session" translatable="false">afternoonSecond</item>
+        <item name="third_afternoon_session" translatable="false">afternoonThird</item>
+    </string-array>
     <string name="evening_session">Turni serali</string>
-    <string name="first_evening_session" translatable="false">17:00 – 18:00</string>
-    <string name="second_evening_session" translatable="false">18:00 – 19:00</string>
-    <string name="third_evening_session" translatable="false">19:00 – 20:00</string>
+    <string-array name="evening_session_value">
+        <item name="first_evening_session" translatable="false">17:00 – 18:00</item>
+        <item name="second_evening_session" translatable="false">18:00 – 19:00</item>
+        <item name="third_evening_session" translatable="false">19:00 – 20:00</item>
+    </string-array>
+    <string-array name="evening_session_name">
+        <item name="first_evening_session" translatable="false">eveningFirst</item>
+        <item name="second_evening_session" translatable="false">eveningSecond</item>
+        <item name="third_evening_session" translatable="false">eveningThird</item>
+    </string-array>
 
     <string name="signUpSubTitle3">Imposta una tua foto del profilo per farti riconoscere in modo semplice</string>
     <string name="signUpCompleteTitle">Complimenti!</string>
     <string name="signUpCompleteSubTitle">La registrazione è andata a buon fine, ora puoi effettuare il login</string>
+    <string name="congratulations_signUp">Il look è importante!</string>
+    <string name="skip">Salta</string>
+    <string name="seepic" translatable="false">todo</string>
+    <string name="changepic" translatable="false">todo</string>
 
     <string name="title_users_list">Iscritti</string>
-
     <string name="subscription_filter">Filtra per abbonamento</string>
     <string name="user_sort">Ordina per</string>
+
+    <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
+    <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>
 
 </resources>

@@ -43,7 +43,7 @@
     <string name="update_password_error">Password has not been updated</string>
     <string name="password_recovery_title">Recovery Password</string>
     <string name="password_recovery_subtitle">Enter your registered email below to receive password reset istructions</string>
-    <string name="passwrd_recover_button_send">Send</string>
+    <string name="password_recover_button_send">Send</string>
     <string name="prompt_send">Send</string>
     <string name="prompt_abort">Cancel</string>
     <string name="prompt_phone">Phone</string>
@@ -60,26 +60,21 @@
     <string name="update_name_error">Your new name has not been updated.</string>
     <string name="prompt_cancel">Cancel</string>
     <string name="dialog_title_pickimage">Choose an action</string>
-    <string name="dialog_item_pickiamge_camera">Camera</string>
-    <string name="dialog_item_pickiamge_gallery">Gallery</string>
+    <string name="dialog_item_pickimage_camera">Camera</string>
+    <string name="dialog_item_pickimage_gallery">Gallery</string>
     <string name="permission_camera_success">Camera permission authorized.</string>
     <string name="permission_camera_error">Camera permission denied.</string>
     <string name="update_image_success">Your image has been updated.</string>
     <string name="update_image_error">Your image has not been updated.</string>
     <string name="intent_result_code_denied">Error:</string>
-    <string name="title_subcription">Subscription</string>
+    <string name="title_subscription">Subscription</string>
     <string name="monthly_subscription">Monthly</string>
     <string name="quarterly_subscription">Quarterly</string>
     <string name="six_month_subscription">Half yearly</string>
     <string name="annual_subscription">Yearly</string>
     <string name="title_session">Weekly session</string>
-    <string name="morning_session">Morning sessions</string>
     <string name="afternoon_session">Afternoon sessions</string>
     <string name="evening_session">Evening sessions</string>
-    <string name="monthly_subscription_description">It ends at the end of the month</string>
-    <string name="quarterly_subscription_description">It ends at the end of the three months</string>
-    <string name="six_month_subscription_description">It starts at the 1st of January to the ends of May</string>
-    <string name="annual_subscription_description">It starts at the 1st of January to the ends of December</string>
     <string name="birthDay">Date of birth</string>
     <string name="location">Location</string>
     <string name="congratulations_signUp" translatable="false">Look is important!</string>
@@ -113,4 +108,6 @@
     <string name="user_sort">Sort by</string>
     <string name="prompt_name">Name</string>
     <string name="prompt_surname">Surname</string>
+    <string name="morning_session">Morning session</string>
+    <string name="system_nav_title_other">Other</string>
 </resources>

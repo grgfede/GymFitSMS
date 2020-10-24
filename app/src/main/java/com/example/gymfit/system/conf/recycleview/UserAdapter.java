@@ -1,7 +1,6 @@
 package com.example.gymfit.system.conf.recycleview;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,8 +25,6 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -116,7 +112,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
 
         // Order for date all entry of turn
-        Collections.sort(turnMap, (map1, map2) -> {
+        turnMap.sort((map1, map2) -> {
             Date date1 = ((Timestamp) Objects.requireNonNull(map1.get("date"))).toDate();
             Date date2 = ((Timestamp) Objects.requireNonNull(map2.get("date"))).toDate();
             return date1.compareTo(date2);
@@ -294,7 +290,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     // Other methods
 
     private String getSubscription(String subscription) {
-        String titleSubscription = this.context.getResources().getString(R.string.title_subcription);
+        String titleSubscription = this.context.getResources().getString(R.string.title_subscription);
 
         switch (subscription) {
             case "annual":
@@ -317,31 +313,31 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     private String getTurn(String turn) {
         switch (turn) {
             case "morningFirst":
-                turn = this.context.getResources().getString(R.string.first_morning_session);
+                turn = this.context.getResources().getStringArray(R.array.morning_session_value)[0];
                 break;
             case "morningSecond":
-                turn = this.context.getResources().getString(R.string.second_morning_session);
+                turn = this.context.getResources().getStringArray(R.array.morning_session_value)[1];
                 break;
             case "morningThird":
-                turn = this.context.getResources().getString(R.string.third_morning_session);
+                turn = this.context.getResources().getStringArray(R.array.morning_session_value)[2];
                 break;
             case "afternoonFirst":
-                turn = this.context.getResources().getString(R.string.first_afternoon_session);
+                turn = this.context.getResources().getStringArray(R.array.afternoon_session_value)[0];
                 break;
             case "afternoonSecond":
-                turn = this.context.getResources().getString(R.string.second_afternoon_session);
+                turn = this.context.getResources().getStringArray(R.array.afternoon_session_value)[1];
                 break;
             case "afternoonThird":
-                turn = this.context.getResources().getString(R.string.third_afternoon_session);
+                turn = this.context.getResources().getStringArray(R.array.afternoon_session_value)[2];
                 break;
             case "eveningFirst":
-                turn = this.context.getResources().getString(R.string.first_evening_session);
+                turn = this.context.getResources().getStringArray(R.array.evening_session_value)[0];
                 break;
             case "eveningSecond":
-                turn = this.context.getResources().getString(R.string.second_evening_session);
+                turn = this.context.getResources().getStringArray(R.array.evening_session_value)[1];
                 break;
             case "eveningThird":
-                turn = this.context.getResources().getString(R.string.third_evening_session);
+                turn = this.context.getResources().getStringArray(R.array.evening_session_value)[2];
                 break;
         }
 
