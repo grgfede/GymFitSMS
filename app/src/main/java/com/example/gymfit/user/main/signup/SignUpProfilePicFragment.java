@@ -13,10 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
@@ -49,6 +51,7 @@ public class SignUpProfilePicFragment extends Fragment {
     private CircleImageView profilePic;
     private FirebaseFirestore db;
 
+    ProgressBar progressBar;
     private FragmentActivity myContext;
     Button btnSkip;
 
@@ -121,6 +124,25 @@ public class SignUpProfilePicFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_up_profile_pic, container, false);
 
+
+        //CODICE CHE EVITA IL RITORNO INDIETRO DEL FRAGMENT
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+
+        progressBar = view.findViewById(R.id.progressBar2);
         //INSTANZIO GLI OGGETTI DI FIRESTORE
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -136,6 +158,7 @@ public class SignUpProfilePicFragment extends Fragment {
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, SELECT_PHOTO);
@@ -147,6 +170,7 @@ public class SignUpProfilePicFragment extends Fragment {
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 uploadDefaultProfilePic(uid);
             }
         });
@@ -215,11 +239,11 @@ public class SignUpProfilePicFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         String uriString = selectedImage.toString();
 
-
         db.collection("users").document(uid).update("img", uriString)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        progressBar.setVisibility(View.GONE);
                         Fragment finalSignUp = new SignUpFinish();
                         FragmentManager fragManager = myContext.getSupportFragmentManager();
                         changeFragment(fragManager, finalSignUp);
@@ -228,7 +252,7 @@ public class SignUpProfilePicFragment extends Fragment {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //AGGIUNGERE ERRORE IN CASO DI ERRORE NELLA REGISTRAZIONE
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
     }

@@ -61,8 +61,8 @@
             android:drawableRight="@drawable/ic_arrow_right"
             android:fontFamily="@font/avenirltstdlight"
             android:text="@string/skip"
-            android:textSize="15sp"
             android:textColor="@color/tint_second_line_light"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -71,5 +71,21 @@
             app:layout_constraintVertical_bias="1.0" />
 
 
+        <!--PROGRESSBAR-->
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            android:layout_width="83dp"
+            android:layout_height="90dp"
+            android:layout_below="@+id/btn_register"
+            android:layout_alignStart="@+id/btn_register"
+            android:layout_alignEnd="@+id/btn_register"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center|bottom"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
