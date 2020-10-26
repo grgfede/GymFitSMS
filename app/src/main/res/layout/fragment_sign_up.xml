@@ -15,7 +15,7 @@
 
     <!--NOME-->
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,6 +58,7 @@
         android:hint="@string/name"
         android:textSize="18sp"
         app:errorEnabled="true"
+        app:endIconMode="clear_text"
         app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -85,6 +86,7 @@
         android:layout_marginTop="8dp"
         android:hint="@string/surname"
         android:textSize="18sp"
+        app:endIconMode="clear_text"
         app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -146,6 +148,7 @@
         android:hint="@string/birthDay"
         android:textSize="18sp"
         app:errorEnabled="true"
+        app:endIconMode="clear_text"
         app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -177,6 +180,7 @@
         android:fontFamily="@font/avenirltstdlight"
         android:hint="@string/prompt_address"
         android:textSize="18sp"
+        app:endIconMode="clear_text"
         app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -206,6 +210,7 @@
         android:hint="@string/phoneNumber"
         android:textSize="18sp"
         app:errorEnabled="true"
+        app:endIconMode="clear_text"
         app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintBottom_toTopOf="@+id/btnContinue"
         app:layout_constraintEnd_toEndOf="parent"

@@ -148,5 +148,6 @@
 
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
     <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>
+    <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
 
 </resources>
