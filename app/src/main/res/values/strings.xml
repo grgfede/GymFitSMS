@@ -47,6 +47,7 @@
     <string name="gym_subs_toolbar_title">Elenco iscritti</string>
     <string name="system_toolbar_search">Cerca</string>
     <string name="system_toolbar_filter">Filtra</string>
+    <string name="system_toolbar_edit">Modifica</string>
     <string name="system_toolbar_logout">Esci</string>
     <string name="system_toolbar_help">Aiuto</string>
     <string name="system_nav_title_home" translatable="false">Home</string>

@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +19,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.gym.conf.GymDBCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -53,8 +49,8 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -69,7 +65,8 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
-    private static final String FIRE_LOG = "FIRE LOG";
+    private static final String DESCRIBABLE_KEY = "describable_key";
+    private static final String INFO_LOG = "info";
     private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -102,9 +99,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        assert getArguments() != null;
+        this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
+
+        // Change toolbar
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_profile, container, false);
-
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.gym_profile_toolbar_title));
 
@@ -114,13 +115,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         // View initialization
         setMessageAnchor(rootView);
         setUserUid();
-        setGymInterface(gymTmp -> {
-            gym = gymTmp;
-
-            SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.gymMapField));
-            assert mapFragment != null;
-            mapFragment.getMapAsync(this);
-        });
+        setInterface(rootView);
 
         setAnimationMap(rootView);
         setFabMap(rootView);
@@ -427,10 +422,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     break;
                 case "address":
                     btn.setOnClickListener(v -> {
+                        LatLng positionTmp = (LatLng) this.tempTextMap.get("position");
                         this.db.collection("gyms").document(userUid).update(
-                                "address", this.tempTextMap.get("address")
+                                "address", this.tempTextMap.get("address"),
+                                "position", new GeoPoint(positionTmp.latitude, positionTmp.longitude)
                         );
                         this.gym.setAddress((String) this.tempTextMap.get("address"));
+                        this.gym.setPosition((LatLng) this.tempTextMap.get("position"));
                         inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), (String) this.tempTextMap.get("address"), false, rootView.findViewById(R.id.gymAddressButtonRight));
                         Snackbar.make(activityView, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
 
@@ -490,6 +488,37 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_gym_profile_toolbar, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.app_bar_edit) {
+            if (item.isChecked()) {
+                // Restore icon
+                item.setIcon(R.drawable.ic_edit);
+
+                setEditIconVisibility(false);
+                setLayoutTextEnable(false);
+
+                item.setChecked(false);
+            } else {
+                // Change icon
+                item.setIcon(R.drawable.ic_clear);
+
+                setEditIconVisibility(true);
+                setLayoutTextEnable(true);
+
+                item.setChecked(true);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
@@ -508,9 +537,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
+        this.map.clear();
 
         LatLng latLngUser = this.gym.getPosition();
-        this.map.addMarker(new MarkerOptions().position(latLngUser)).setTitle(gym.getName());
+        this.map.addMarker(new MarkerOptions().position(latLngUser)).setTitle(this.gym.getName());
         this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngUser, 15));
     }
 
@@ -544,6 +574,15 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             }
         }
 
+    }
+
+    public static FragmentGymProfile newInstance(Gym gym) {
+        FragmentGymProfile fragment = new FragmentGymProfile();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(DESCRIBABLE_KEY, gym);
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
     private void onAddButtons() {
@@ -766,6 +805,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         this.layoutTextMap.put("phone", rootView.findViewById(R.id.gymBoxPhone));
         this.layoutTextMap.put("address", rootView.findViewById(R.id.gymBoxAddress));
         this.layoutTextMap.put("name", rootView.findViewById(R.id.gymBoxName));
+
+        setEditIconVisibility(false);
     }
 
     /**
@@ -785,12 +826,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set map with temporal edit text views.
      */
     private void setTempTextMap() {
-        this.tempTextMap.put("mail", null);
-        this.tempTextMap.put("key", null);
-        this.tempTextMap.put("phone", null);
-        this.tempTextMap.put("address", null);
-        this.tempTextMap.put("name", null);
-        this.tempTextMap.put("position", null);
+        this.tempTextMap.put("mail", "");
+        this.tempTextMap.put("key", "");
+        this.tempTextMap.put("phone", "");
+        this.tempTextMap.put("address", "");
+        this.tempTextMap.put("name", "");
+        this.tempTextMap.put("position", new LatLng(0, 0));
     }
 
     // Other methods
@@ -799,61 +840,41 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set the current user auth for next uses with Database and Storage
      */
     private void setUserUid() {
-        this.userUid = requireActivity().getIntent().getStringExtra("userUid");
+        this.userUid = this.user.getUid();
     }
 
     /**
-     * Take from Database all fields that will be add into layout XML file fields
+     * Take from Gym all fields that will be add into layout XML file fields
      *
-     * @param gymDBCallback callBack method that save all field (Gym temp object) definitely into instance Gym of class
+     * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void setGymInterface(final GymDBCallback gymDBCallback) {
+    private void setInterface(View rootView) {
+        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
 
-        this.db.collection("gyms").document(userUid).get().addOnCompleteListener(task -> {
+        MaterialTextView menuNameField = navigationView.getHeaderView(0).findViewById(R.id.header_gym_name);
+        TextInputEditText nameField = rootView.findViewById(R.id.gymTxtName);
+        TextInputEditText emailField = rootView.findViewById(R.id.gymTxtEmail);
+        TextInputEditText phoneField = rootView.findViewById(R.id.gymTextPhone);
+        TextInputEditText addressField = rootView.findViewById(R.id.gymTextAddress);
 
-            if(task.isSuccessful()) {
-                NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
-                DocumentSnapshot documentSnapshot = task.getResult();
-                assert documentSnapshot != null;
+        CircleImageView imageMenu = navigationView.getHeaderView(0).findViewById(R.id.header_gym_image);
+        ImageView imageHeader = rootView.findViewById(R.id.gymImgField);
+        CircleImageView imageField = rootView.findViewById(R.id.gymImgName);
 
-                MaterialTextView menuName = navigationView.getHeaderView(0).findViewById(R.id.header_gym_name);
-                TextInputEditText gymNameField = requireView().findViewById(R.id.gymTxtName);
-                String name = documentSnapshot.getString("name");
+        Picasso.get().load(this.gym.getImage()).into(imageMenu);
+        Picasso.get().load(this.gym.getImage()).into(imageHeader);
+        Picasso.get().load(this.gym.getImage()).into(imageField);
 
-                TextInputEditText gymEmailField = requireView().findViewById(R.id.gymTxtEmail);
-                String email = documentSnapshot.getString("email");
+        menuNameField.setText(this.gym.getName());
+        nameField.setText(this.gym.getName());
+        emailField.setText(this.gym.getEmail());
+        phoneField.setText(this.gym.getPhone());
+        addressField.setText(this.gym.getAddress());
 
-                TextInputEditText gymPhoneField = requireView().findViewById(R.id.gymTextPhone);
-                String phone = documentSnapshot.getString("phone");
+        SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.gymMapField));
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
 
-                TextView gymAddressField = requireView().findViewById(R.id.gymTextAddress);
-                String address = documentSnapshot.getString("address");
-                LatLng gymPosition = new LatLng(
-                        Objects.requireNonNull(documentSnapshot.getGeoPoint("position")).getLatitude(),
-                        Objects.requireNonNull(documentSnapshot.getGeoPoint("position")).getLongitude());
-
-
-                final CircleImageView gymImgMenu = navigationView.getHeaderView(0).findViewById(R.id.header_gym_image);
-                final ImageView gymImgField = requireView().findViewById(R.id.gymImgField);
-                final CircleImageView gymImgNameField = requireView().findViewById(R.id.gymImgName);
-                String imageRef = documentSnapshot.getString("img");
-                Picasso.get().load(imageRef).into(gymImgMenu);
-                Picasso.get().load(imageRef).into(gymImgField);
-                Picasso.get().load(imageRef).into(gymImgNameField);
-
-                Gym gymTmp = new Gym(userUid, email, phone, name, address, gymPosition, imageRef);
-                gymDBCallback.onCallback(gymTmp);
-
-                menuName.setText(name);
-                gymNameField.setText(name);
-                gymEmailField.setText(email);
-                gymPhoneField.setText(phone);
-                gymAddressField.setText(address);
-
-            } else {
-                Log.d(FIRE_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
-            }
-        });
     }
 
     /**
@@ -864,6 +885,54 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private void setMessageAnchor(View rootView) {
         // Initialize the container that will be used for Snackbar methods
         this.activityView = rootView.findViewById(R.id.constraintLayout);
+    }
+
+    /**
+     * Add at all field TextLayout the end icon when the flag is true, alternately it will be removed
+     *
+     * @param isVisible truth flag for button visibility
+     */
+    private void setEditIconVisibility(boolean isVisible) {
+        if (isVisible) {
+            this.fabMap.get("editImage").setVisibility(View.VISIBLE);
+            this.layoutTextMap.forEach((key, field) -> {
+                field.setEndIconVisible(true);
+
+                if (key.equals("phone")) {
+                    field.setCounterEnabled(true);
+                }
+            });
+        } else {
+            this.fabMap.get("editImage").setVisibility(View.INVISIBLE);
+            this.layoutTextMap.forEach((key, field) -> {
+                field.setEndIconVisible(false);
+
+                if (key.equals("phone")) {
+                    field.setCounterEnabled(false);
+                }
+            });
+        }
+    }
+
+    /**
+     * Set all TextLayout editable if flag is true, alternately not editable
+     *
+     * @param isEnable truth flag for field enable
+     */
+    private void setLayoutTextEnable(boolean isEnable) {
+        if (isEnable) {
+            this.layoutTextMap.forEach((key, field) -> {
+                field.setEnabled(true);
+                field.setFocusable(true);
+                field.setFocusableInTouchMode(true);
+            });
+        } else {
+            this.layoutTextMap.forEach((key, field) -> {
+                field.setEnabled(false);
+                field.setFocusable(false);
+                field.setFocusableInTouchMode(false);
+            });
+        }
     }
 
     private void inputFieldFocused(TextInputLayout box, TextInputEditText text, String helperText, LinearLayout container) {
@@ -917,7 +986,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private void openFragment(Fragment fragment) {
         FragmentManager manager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_slide_up, R.anim.exit_slide_down, R.anim.enter_slide_up, R.anim.exit_slide_down);
+        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container_view_tag, fragment).commit();
     }

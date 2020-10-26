@@ -1,19 +1,13 @@
 package com.example.gymfit.gym.main;
 
-import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-
-import android.view.animation.Transformation;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.gymfit.R;
@@ -21,11 +15,9 @@ import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.gym.conf.GymTurnDBCallback;
 import com.example.gymfit.system.conf.utils.BooleanUtils;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,12 +30,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 public class FragmentGymSettings extends Fragment {
     private static final String DESCRIBABLE_KEY = "describable_key";
-    private static final String INFO_LOG = "INFO: ";
-    private static final String ERROR_LOG = "INFO: ";
+    private static final String INFO_LOG = "info";
+    private static final String ERROR_LOG = "error";
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Gym gym = null;

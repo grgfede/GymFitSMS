@@ -35,12 +35,13 @@ import java.util.Objects;
 
 public class FragmentGymSubs extends Fragment {
     private static final String DESCRIBABLE_KEY = "describable_key";
-    private static final String INFO_LOG = "INFO: ";
-    private static final String ERROR_LOG = "ERROR: ";
+    private static final String INFO_LOG = "info";
+    private static final String ERROR_LOG = "error";
 
     private UserAdapter userAdapter;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private View activityView = null;
     private Gym gym = null;
     private final List<User> users = new ArrayList<>();
 
@@ -54,11 +55,12 @@ public class FragmentGymSubs extends Fragment {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_subs, container, false);
-        View activityView = rootView.findViewById(R.id.constraintLayout);
 
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.gym_subs_toolbar_title));
 
+        // View initialization
+        setMessageAnchor(rootView);
         setSubs(subID -> this.db.collection("users").document(subID).get().addOnCompleteListener(task -> {
 
             if (task.isSuccessful()) {
@@ -187,6 +189,16 @@ public class FragmentGymSubs extends Fragment {
         str = str.substring(1, str.length()-1);
         str = StringUtils.deleteWhitespace(str);
         return str.split(",");
+    }
+
+    /**
+     * Set the container anchor for Snackbar object and its methods "make"
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setMessageAnchor(View rootView) {
+        // Initialize the container that will be used for Snackbar methods
+        this.activityView = rootView.findViewById(R.id.constraintLayout);
     }
 
 }

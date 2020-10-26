@@ -1,5 +1,5 @@
 package com.example.gymfit.gym.conf;
 
-public interface GymDBCallback {
+public interface GymConfDBCallback {
     void onCallback(Gym gym);
 }

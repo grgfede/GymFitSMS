@@ -1,6 +1,8 @@
 package com.example.gymfit.system.conf;
 
-public abstract class GenericUser {
+import java.io.Serializable;
+
+public abstract class GenericUser implements Serializable {
     private String uid;
     private String email;
     private String phone;
