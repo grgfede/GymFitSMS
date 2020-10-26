@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.gymfit.R;
 import com.example.gymfit.user.conf.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,11 +44,13 @@ public class SignUp2Fragment extends Fragment {
 
     private FragmentActivity myContext;
 
-    public static String name;
+    public String name;
     public String surname;
     public String phone;
     public String gender;
-    public String dataBirth;
+    public Date dateOfBirth;
+    public LatLng location;
+    public String address;
     public String email;
     public String password;
     public String repeatPassword;
@@ -61,6 +65,8 @@ public class SignUp2Fragment extends Fragment {
 
     FirebaseAuth mFirebaseAuth;
     private FirebaseFirestore db;
+
+    public User user = null;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -178,29 +184,23 @@ public class SignUp2Fragment extends Fragment {
                             }
                         } else {
                             String uid = mFirebaseAuth.getUid();
-                            User user = new User(name, surname, phone, dataBirth, email, uid);
-                            writeDb(user, uid);
+                            user.setUid(uid);
+                            user.setEmail(email);
+                            writeDb(uid);
                         }
                     }
                 });
     }
 
-    private void writeDb(final User user, String uid) {
+    private void writeDb(String uid) {
         db = FirebaseFirestore.getInstance();
-        Map<String, String> newUser = new HashMap<>();
-        newUser.put("name", name);
-        newUser.put("username", surname);
-        newUser.put("phoneNumber", phone);
-        newUser.put("email", email);
-        newUser.put("birthDay", dataBirth);
-        newUser.put("uid", uid);
-        db.collection("users").document(uid).set(newUser)
+        db.collection("users").document(uid).set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Fragment finalSignUp = new SignUpProfilePicFragment();
                         Bundle args = new Bundle();
-                        saveData(args, finalSignUp, user);
+                        saveData(finalSignUp);
                         FragmentManager fragManager = myContext.getSupportFragmentManager();
                         changeFragment(fragManager, finalSignUp);
                     }
@@ -213,9 +213,11 @@ public class SignUp2Fragment extends Fragment {
                 });
     }
 
-    private void saveData(Bundle args, Fragment fragment2, User user) {
-        args.putString("uid", user.getUid());
-        fragment2.setArguments(args);
+    private void saveData(Fragment fragment2) {
+        User newUser = user;
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("user", newUser);
+        fragment2.setArguments(bundle);
     }
 
     private void changeFragment(FragmentManager fragManager, Fragment fragment2){
@@ -267,10 +269,14 @@ public class SignUp2Fragment extends Fragment {
     }
 
     private void recoverDataFragmentOne() {
-        name = getArguments().getString("name");
-        surname = getArguments().getString("surname");
-        phone = getArguments().getString("phone");
-        gender = getArguments().getString("gender");
-        dataBirth = getArguments().getString("birth");
+        Bundle bundle = getArguments();
+        user = (User) bundle.getSerializable("user");
+        name = user.getName();
+        surname = user.getSurname();
+        phone = user.getPhone();
+        gender = user.getGender();
+        dateOfBirth = user.getDateOfBirthday();
+        location = user.getLocation();
+        address = user.getAddress();
     }
 }

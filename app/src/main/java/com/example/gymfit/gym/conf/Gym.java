@@ -11,15 +11,15 @@ public class Gym extends GenericUser implements Serializable {
     private String address;
     private String name;
     private String image;
-    private LatLng position;
-
-    private Map<String, Boolean> subscription;
+    private final Double[] positionArray;
+    private final Map<String, Boolean> subscription;
+    private final Map<String, Boolean[]> turns;
 
     public Gym(String uid, String email, String phone, String name, String address, LatLng position, String image) {
         super(uid, email, phone);
         this.name = name;
         this.address = address;
-        this.position = position;
+        this.positionArray = new Double[]{position.latitude, position.longitude};
         this.image = image;
         this.subscription = new HashMap<String, Boolean>() {
             {
@@ -29,9 +29,21 @@ public class Gym extends GenericUser implements Serializable {
                 put("annual", true);
             }
         };
+        this.turns = new HashMap<String, Boolean[]>() {
+            {
+                put("morning", new Boolean[] {true, true, true});
+                put("afternoon", new Boolean[] {true, true, true});
+                put("evening", new Boolean[] {true, true, true});
+            }
+        };
     }
 
-    // GET METHODS
+    // Get methods
+
+    public Map<String, Boolean[]> getTurns() {
+        return turns;
+    }
+
     public Map<String, Boolean> getSubscription() {
         return subscription;
     }
@@ -45,14 +57,15 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public LatLng getPosition() {
-        return position;
+        return new LatLng(this.positionArray[0], this.positionArray[1]);
     }
 
     public String getName() {
         return name;
     }
 
-    // SET METHODS
+    // Set methods
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -62,7 +75,8 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public void setPosition(LatLng position) {
-        this.position = position;
+        this.positionArray[0] = position.latitude;
+        this.positionArray[1] = position.longitude;
     }
 
     public void setImage(String image) {
@@ -70,7 +84,11 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public void setSubscription(String key, Boolean value) {
-        this.subscription.remove(key);
-        this.subscription.put(key, value);
+        this.subscription.replace(key, value);
     }
+
+    public void setTurn(String key, int position, boolean value) {
+        this.turns.get(key)[position] = value;
+    }
+
 }

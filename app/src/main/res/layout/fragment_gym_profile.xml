@@ -89,7 +89,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:maxImageSize="18dp"
-            app:rippleColor="@color/background_ripple_icon" />
+            app:rippleColor="@color/background_ripple_icon"
+
+            android:visibility="invisible"/>
 
         <!-- Image container -->
         <LinearLayout
@@ -119,20 +121,20 @@
             android:id="@+id/infoBlock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
             android:orientation="horizontal"
+            android:layout_marginHorizontal="20dp"
             android:paddingHorizontal="5dp"
-            android:paddingTop="25dp"
+            android:paddingTop="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageBlock">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/gymImgName"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:layout_gravity="top"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="8dp"
                 android:contentDescription="@string/gym_img_profile" />
 
             <!-- Info Field -->
@@ -145,17 +147,17 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/gymBoxName"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
 
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
-                    app:endIconMode="custom"
                     app:endIconContentDescription="@string/edit_button"
                     app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconMode="custom"
                     app:endIconTint="@color/tint_image_icon_light"
 
                     app:helperText="@string/helper_name_always"
@@ -164,7 +166,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/gymTxtName"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textNoSuggestions|textFilter"
                         android:selectAllOnFocus="false"
@@ -180,7 +182,6 @@
                     android:id="@+id/gymNameButtonRight"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:gravity="start"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
@@ -260,22 +261,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:enabled="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
 
-                    app:hintEnabled="true"
-                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:hint="@string/prompt_email"
                     android:textColorHint="@color/tint_hint_no_focused"
-
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="2dp"
 
                     app:endIconContentDescription="@string/edit_button"
-                    app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_edit"
+
+                    app:endIconMode="custom"
                     app:endIconTint="@color/tint_image_icon_light"
+                    app:hintEnabled="true"
+                    app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
 
                     app:startIconContentDescription="@string/mail_img"
                     app:startIconDrawable="@drawable/ic_mail"
@@ -298,10 +299,8 @@
                     android:id="@+id/gymEmailButtonRight"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:gravity="end"
                     android:layout_weight="0"
-                    android:orientation="horizontal"
-                    android:translationX="0dp">
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymAbortMail"
@@ -365,9 +364,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:enabled="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
 
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -378,7 +377,8 @@
                     app:boxStrokeWidthFocused="2dp"
 
                     app:endIconContentDescription="@string/edit_button"
-                    app:endIconMode="password_toggle"
+                    app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconMode="custom"
                     app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/key_img"
@@ -403,10 +403,8 @@
                     android:id="@+id/gymKeyButtonRight"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:gravity="end"
                     android:layout_weight="0"
-                    android:orientation="horizontal"
-                    android:translationX="0dp">
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymAbortKey"
@@ -450,17 +448,6 @@
 
             </LinearLayout>
 
-            <!-- Divisor -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="20dp"
-                android:background="?android:attr/listDivider"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="15dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <!-- Phone -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -481,9 +468,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:enabled="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
 
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -493,13 +480,13 @@
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="2dp"
 
-                    app:counterEnabled="true"
+                    app:counterEnabled="false"
                     app:counterMaxLength="15"
                     app:errorEnabled="true"
 
                     app:endIconContentDescription="@string/edit_button"
-                    app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconMode="custom"
                     app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/phone_img"
@@ -523,10 +510,8 @@
                     android:id="@+id/gymPhoneButtonRight"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:gravity="end"
                     android:layout_weight="0"
-                    android:orientation="horizontal"
-                    android:translationX="0dp">
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymAbortPhone"
@@ -588,9 +573,9 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
 
                     app:hintEnabled="true"
                     app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -601,8 +586,8 @@
                     app:boxStrokeWidthFocused="2dp"
 
                     app:endIconContentDescription="@string/edit_button"
-                    app:endIconMode="custom"
                     app:endIconDrawable="@drawable/ic_edit"
+                    app:endIconMode="custom"
                     app:endIconTint="@color/tint_image_icon_light"
 
                     app:startIconContentDescription="@string/location_img"
@@ -624,9 +609,7 @@
                     android:id="@+id/gymAddressButtonRight"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:gravity="end"
-                    android:orientation="horizontal"
-                    android:translationX="0dp">
+                    android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gymAbortAddress"

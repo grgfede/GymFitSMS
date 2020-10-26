@@ -28,12 +28,12 @@
     <color name="background_ripple_error">@color/quantum_error_dark</color>
 
     <!-- Text -->
-    <color name="tint_title">@color/quantum_deeppurpleA700</color>
+    <color name="tint_title">@color/quantum_deeppurple900</color>
     <color name="tint_first_line_light">@color/places_text_black_alpha_87</color>
-    <color name="tint_first_line_dark">@color/places_text_white_alpha_87</color>
-    <color name="tint_second_line_light">@color/places_text_black_alpha_26</color>
-    <color name="tint_second_line_dark">@color/places_text_white_alpha_26</color>
-    <color name="tint_third_line">@color/quantum_grey300</color>
+    <color name="tint_first_line_dark">@color/quantum_white_text</color>
+    <color name="tint_second_line_light">@color/quantum_grey700</color>
+    <color name="tint_second_line_dark">@color/quantum_white_secondary_text</color>
+    <color name="tint_third_line">@color/quantum_grey500</color>
 
     <color name="tint_hint_no_focused">@color/quantum_grey500</color>
     <color name="tint_hint_focuses">@color/quantum_deeppurpleA700</color>
@@ -44,6 +44,6 @@
 
     <!-- Icon -->
     <color name="tint_image_icon_light">@color/quantum_grey600</color>
-    <color name="tint_image_icon_dark">@color/places_ui_default_primary</color>
+    <color name="tint_image_icon_dark">@color/quantum_greywhite1000</color>
 
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,26 +9,26 @@
     android:layout_marginEnd="25dp"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
+    android:background="@color/background_ui_default"
     tools:context=".user.main.signup.SignUpFragment">
 
+
+    <!--NOME-->
 
     <TextView
         android:id="@+id/tv_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="64dp"
         android:fontFamily="@font/avenirheavy"
         android:text="@string/signUpTitle"
         android:textAlignment="viewStart"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/tint_title"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <!--NOME-->
 
     <TextView
         android:id="@+id/tv_subtitle"
@@ -40,8 +41,9 @@
         android:autoSizeTextType="uniform"
         android:fontFamily="@font/avenirltstdlight"
         android:text="@string/signUpSubTitle"
-        android:textColor="@color/stringColor"
+        android:textColor="@color/tint_second_line_light"
         android:textSize="20sp"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +58,7 @@
         android:hint="@string/name"
         android:textSize="18sp"
         app:errorEnabled="true"
-        app:hintTextColor="@color/stringColor"
+        app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +70,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/avenirltstdlight"
             android:inputType="text"
-            android:textColor="@color/quantum_black_100" />
+            android:textColor="@color/tint_hint_focuses" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -83,7 +85,7 @@
         android:layout_marginTop="8dp"
         android:hint="@string/surname"
         android:textSize="18sp"
-        app:hintTextColor="@color/stringColor"
+        app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -97,7 +99,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/avenirltstdlight"
             android:inputType="text"
-            android:textColor="@color/quantum_black_100" />
+            android:textColor="@color/tint_hint_focuses" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,13 +109,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtGenderSignUpLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="151dp"
+        android:layout_height="59dp"
         android:layout_gravity="start"
         android:layout_marginTop="8dp"
         android:hint="@string/select_gender"
         android:textSize="18sp"
-        app:hintTextColor="@color/stringColor"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +129,7 @@
             android:fontFamily="@font/avenirltstdlight"
             android:gravity="center"
             android:inputType="none"
-            android:textColor="@color/quantum_black_100" />
+            android:textColor="@color/tint_hint_focuses" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -136,13 +139,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtBirthSignUpLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="148dp"
+        android:layout_height="59dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:hint="@string/birthDay"
         android:textSize="18sp"
-        app:hintTextColor="@color/stringColor"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/txtGenderSignUpLayout"
@@ -152,14 +156,41 @@
             android:id="@+id/txtBirthSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/avenirltstdlight"
             android:clickable="true"
+            android:fontFamily="@font/avenirltstdlight"
             android:inputType="none"
-            android:textColor="@color/quantum_black_100" />
+            android:textColor="@color/tint_hint_focuses" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
 
+
+
+    <!--LOCATION-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLocationSignUpLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/avenirltstdlight"
+        android:hint="@string/prompt_address"
+        android:textSize="18sp"
+        app:hintTextColor="@color/tint_hint_no_focused"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtBirthSignUpLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtLocationSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:hintTextColor="@color/tint_hint_focuses"
+            android:fontFamily="@font/avenirltstdlight" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
 
@@ -171,15 +202,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="68dp"
         android:hint="@string/phoneNumber"
         android:textSize="18sp"
-        app:hintTextColor="@color/stringColor"
+        app:errorEnabled="true"
+        app:hintTextColor="@color/tint_hint_no_focused"
         app:layout_constraintBottom_toTopOf="@+id/btnContinue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtGenderSignUpLayout"
+        app:layout_constraintTop_toBottomOf="@+id/txtLocationSignUpLayout"
         app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -188,7 +220,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/avenirltstdlight"
             android:inputType="number"
-            android:textColor="@color/quantum_black_100" />
+            android:textColor="@color/tint_hint_focuses" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,6 +234,7 @@
         android:drawableRight="@drawable/ic_arrow_right"
         android:fontFamily="@font/avenirltstdlight"
         android:text="@string/continueSignUp"
+        app:hintTextColor="@color/tint_second_line_light"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

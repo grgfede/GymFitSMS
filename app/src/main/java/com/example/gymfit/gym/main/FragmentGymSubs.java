@@ -1,5 +1,6 @@
 package com.example.gymfit.gym.main;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +26,6 @@ import com.example.gymfit.user.conf.User;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -35,17 +35,15 @@ import java.util.Objects;
 
 public class FragmentGymSubs extends Fragment {
     private static final String DESCRIBABLE_KEY = "describable_key";
-    private static final String INFO_LOG = "INFO: ";
-    private static final String ERROR_LOG = "ERROR: ";
+    private static final String INFO_LOG = "info";
+    private static final String ERROR_LOG = "error";
 
-    private RecyclerView recyclerView;
     private UserAdapter userAdapter;
-    private boolean adapterSet = false;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Gym gym = null;
-    private List<User> users = new ArrayList<>();
     private View activityView = null;
+    private Gym gym = null;
+    private final List<User> users = new ArrayList<>();
 
     @Nullable
     @Override
@@ -53,46 +51,43 @@ public class FragmentGymSubs extends Fragment {
         assert getArguments() != null;
         this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
 
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_gym_subs, container, false);
-        this.activityView = rootView.findViewById(R.id.constraintLayout);
-
         // Change toolbar
         setHasOptionsMenu(true);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_gym_subs, container, false);
+
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.gym_subs_toolbar_title));
 
-        setSubs(subID -> {
-            this.db.collection("users").document(subID).get().addOnCompleteListener(task -> {
+        // View initialization
+        setMessageAnchor(rootView);
+        setSubs(subID -> this.db.collection("users").document(subID).get().addOnCompleteListener(task -> {
 
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    assert documentSnapshot != null;
+            if (task.isSuccessful()) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                assert documentSnapshot != null;
 
-                    String uid = documentSnapshot.getString("uid");
-                    String name = documentSnapshot.getString("name");
-                    String surname = documentSnapshot.getString("surname");
-                    String phone = documentSnapshot.getString("phone");
-                    String img = documentSnapshot.getString("img");
-                    String email = documentSnapshot.getString("email");
-                    String subscription = documentSnapshot.getString("subscription");
-                    Boolean gender = documentSnapshot.getBoolean("gender");
-                    @SuppressWarnings("unchecked")
-                    List<Map<String, Object>> turns = (List<Map<String, Object>>) documentSnapshot.get("turns");
+                String uid = documentSnapshot.getString("uid");
+                String name = documentSnapshot.getString("name");
+                String surname = documentSnapshot.getString("surname");
+                String phone = documentSnapshot.getString("phone");
+                String img = documentSnapshot.getString("img");
+                String email = documentSnapshot.getString("email");
+                String subscription = documentSnapshot.getString("subscription");
+                String gender = documentSnapshot.getString("gender");
+                @SuppressWarnings("unchecked")
+                List<Map<String, Object>> turns = (List<Map<String, Object>>) documentSnapshot.get("turns");
 
-                    // TODO: wait for change to User with wrapper class Boolean
-                    this.users.add(new User(name, surname, phone, email, gender.booleanValue(), uid, img, subscription, turns));
+                this.users.add(new User(name, surname, phone, email, gender, uid, img, subscription, turns));
 
-                } else {
-                    Log.d(ERROR_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
-                }
+            } else {
+                Log.d(ERROR_LOG, "ERROR: " + Objects.requireNonNull(task.getException()).getMessage());
+            }
 
-                if (task.isComplete()) {
-                    adapterSet = true;
-                    setUpRecycleView();
-                }
-            });
-        });
+            if (task.isComplete()) {
+                setUpRecycleView();
+            }
+        }));
 
         return rootView;
     }
@@ -100,27 +95,55 @@ public class FragmentGymSubs extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_gym_subs_toolbar, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-
-        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (adapterSet) {
-                    userAdapter.getFilter().filter(newText);
-                }
-                return false;
-            }
-        });
-
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.app_bar_search:
+                SearchView searchView = (SearchView) item.getActionView();
+                searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        userAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
+                break;
+            case R.id.app_bar_filter:
+                userAdapter.getSort().filter(getResources().getString(R.string.prompt_default));
+                break;
+            case R.id.action_filter_monthly:
+                userAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_monthly));
+                break;
+            case R.id.action_filter_quarterly:
+                userAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_quarterly));
+                break;
+            case R.id.action_filter_six_month:
+                userAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_six_month));
+                break;
+            case R.id.action_filter_annual:
+                userAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_annual));
+                break;
+            case R.id.action_sort_by_name:
+                userAdapter.getSort().filter(getResources().getString(R.string.prompt_name));
+                break;
+            case R.id.action_sort_by_surname:
+                userAdapter.getSort().filter(getResources().getString(R.string.prompt_surname));
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public static FragmentGymSubs newInstance(Gym gym) {
@@ -133,12 +156,12 @@ public class FragmentGymSubs extends Fragment {
     }
 
     private void setUpRecycleView() {
-        this.recyclerView = requireView().getRootView().findViewById(R.id.rv_users);
-        this.recyclerView.setHasFixedSize(true);
+        RecyclerView recyclerView = requireView().getRootView().findViewById(R.id.rv_users);
+        recyclerView.setHasFixedSize(true);
 
         this.userAdapter = new UserAdapter(requireActivity(), this.users);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        this.recyclerView.setAdapter(userAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setAdapter(userAdapter);
     }
 
     private void setSubs(UserConfCallback callback) {
@@ -166,6 +189,16 @@ public class FragmentGymSubs extends Fragment {
         str = str.substring(1, str.length()-1);
         str = StringUtils.deleteWhitespace(str);
         return str.split(",");
+    }
+
+    /**
+     * Set the container anchor for Snackbar object and its methods "make"
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setMessageAnchor(View rootView) {
+        // Initialize the container that will be used for Snackbar methods
+        this.activityView = rootView.findViewById(R.id.constraintLayout);
     }
 
 }
