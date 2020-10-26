@@ -11,8 +11,7 @@ public class Gym extends GenericUser implements Serializable {
     private String address;
     private String name;
     private String image;
-    private LatLng position;
-
+    private final Double[] positionArray;
     private final Map<String, Boolean> subscription;
     private final Map<String, Boolean[]> turns;
 
@@ -20,7 +19,7 @@ public class Gym extends GenericUser implements Serializable {
         super(uid, email, phone);
         this.name = name;
         this.address = address;
-        this.position = position;
+        this.positionArray = new Double[]{position.latitude, position.longitude};
         this.image = image;
         this.subscription = new HashMap<String, Boolean>() {
             {
@@ -39,7 +38,8 @@ public class Gym extends GenericUser implements Serializable {
         };
     }
 
-    // GET METHODS
+    // Get methods
+
     public Map<String, Boolean[]> getTurns() {
         return turns;
     }
@@ -57,14 +57,15 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public LatLng getPosition() {
-        return position;
+        return new LatLng(this.positionArray[0], this.positionArray[1]);
     }
 
     public String getName() {
         return name;
     }
 
-    // SET METHODS
+    // Set methods
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -74,7 +75,8 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public void setPosition(LatLng position) {
-        this.position = position;
+        this.positionArray[0] = position.latitude;
+        this.positionArray[1] = position.longitude;
     }
 
     public void setImage(String image) {
