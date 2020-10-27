@@ -2,7 +2,9 @@ package com.example.gymfit.gym.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -118,9 +121,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     }
 
     @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
+    public void onPointerCaptureChanged(boolean hasCapture) {}
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -141,6 +142,22 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
 
         this.drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            try {
+                View navigationHeader =  this.navigationView.inflateHeaderView(R.layout.layout_header_nav_gym);
+                this.navigationView.removeHeaderView(this.navigationView.getHeaderView(0));
+                this.navigationView.addHeaderView(navigationHeader);
+            } catch (Exception e) {
+                Log.e(ERROR_LOG, Objects.requireNonNull(e.getMessage()));
+                closeFragment();
+            }
+        }
     }
 
     /**
@@ -189,6 +206,10 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
             transaction.addToBackStack(null);
         }
         transaction.replace(R.id.fragment_container_view_tag, fragment).commit();
+    }
+
+    private void closeFragment() {
+        getFragmentManager().popBackStack();
     }
 
 }

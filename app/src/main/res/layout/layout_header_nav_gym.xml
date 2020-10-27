@@ -24,6 +24,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:textColor="@color/tint_first_line_dark"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_gym_image" />
 
@@ -34,9 +35,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/helper_name_always"
         android:textColor="@color/tint_second_line_dark"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header_gym_name" />
