@@ -233,19 +233,19 @@ public class SignUpFragment extends Fragment {
         String phone = phoneSignUp.getText().toString();
         String gender = genderSignUp.getText().toString();
         if (strname.isEmpty()) {
-            nameL.setError("Attenzione! Inserisci nome");
+            nameL.setError(getResources().getString(R.string.helper_name_hover));
             nameL.requestFocus();
             error_fields = true;
         } else if (strsurname.isEmpty()) {
-            surnameSignUp.setError("Attenzione! Inserisci cognome");
+            surnameSignUp.setError(getResources().getString(R.string.helper_surname_hover));
             surnameL.requestFocus();
             error_fields = true;
         } else if (phone.isEmpty()) {
-            phoneSignUp.setError("Attenzione! Inserisci telefono");
+            phoneSignUp.setError(getResources().getString(R.string.helper_phone_error));
             phoneL.requestFocus();
             error_fields = true;
         } else if (gender.isEmpty()) {
-            genderSignUp.setError("Attenzione! Inserisci sesso");
+            genderSignUp.setError(getResources().getString(R.string.helper_gender_hover));
             genderL.requestFocus();
             error_fields = true;
         }

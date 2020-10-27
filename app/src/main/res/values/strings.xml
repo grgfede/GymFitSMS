@@ -78,7 +78,7 @@
 
     <string name="helper_email_hover">Inserisci una email</string>
     <string name="helper_email_error">"Inserisci una email valida. "</string>
-    <string name="helper_psw_hover">Inserisci una nuova password.</string>
+    <string name="helper_psw_hover">Inserisci una password.</string>
     <string name="helper_psw_error">Inserisci una password valida.</string>
     <string name="helper_phone_hover">Inserisci un nuovo numero di telefono</string>
     <string name="helper_phone_error">"Numero di telefono non valido."</string>
@@ -150,5 +150,11 @@
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
     <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>
     <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
+    <string name="helper_name_hover">Inserisci nome</string>
+    <string name="helper_surname_hover">Inserisci cognome</string>
+    <string name="helper_gender_hover">Inserisci gender</string>
+    <string name="helper_address_hover_signUp">Inserisci indirizzo</string>
+    <string name="helper_phone_hover_signUp">Inserisci telefono</string>
+    <string name="helper_birth_hover">Inserisci data di nascita</string>
 
 </resources>

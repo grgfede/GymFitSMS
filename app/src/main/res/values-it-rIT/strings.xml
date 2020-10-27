@@ -37,7 +37,7 @@
     <string name="helper_email_error">"Inserisci una email valida. "</string>
     <string name="update_email_success">Email aggiornata.</string>
     <string name="update_email_error">Email non aggiornata.</string>
-    <string name="helper_psw_hover">Inserisci una nuova password.</string>
+    <string name="helper_psw_hover">Inserisci una password.</string>
     <string name="helper_psw_error">Inserisci una password valida.</string>
     <string name="update_password_error">Password non aggiornata.</string>
     <string name="update_password_success">Password aggiornata.</string>
@@ -112,4 +112,10 @@
     <string name="system_nav_title_other">Altro</string>
     <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
     <string name="system_toolbar_edit">Modifica</string>
+    <string name="helper_name_hover">Inserisci nome</string>
+    <string name="helper_surname_hover">Inserisci cognome</string>
+    <string name="helper_gender_hover">Inserisci gender</string>
+    <string name="helper_address_hover_signUp">Inserisci indirizzo</string>
+    <string name="helper_phone_hover_signUp">Inserisci telefono</string>
+    <string name="helper_birth_hover">Inserisci data di nascita</string>
 </resources>

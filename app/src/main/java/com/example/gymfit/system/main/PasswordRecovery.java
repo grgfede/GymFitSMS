@@ -61,7 +61,7 @@ public class PasswordRecovery extends AppCompatActivity {
         emailRecovery = txtEmailRecovery.getText().toString();
         boolean error = false;
         if (emailRecovery.isEmpty()) {
-            emailL.setError("Attenzione! Inserire email valida");
+            emailL.setError(getResources().getString(R.string.helper_email_error));
             emailL.requestFocus();
             progressBarRecoery.setVisibility(View.INVISIBLE);
             error = true;
