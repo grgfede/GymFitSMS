@@ -110,5 +110,6 @@
     <string name="prompt_surname">Cognome</string>
     <string name="morning_session">Turni mattutini</string>
     <string name="system_nav_title_other">Altro</string>
+    <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
     <string name="system_toolbar_edit">Modifica</string>
 </resources>

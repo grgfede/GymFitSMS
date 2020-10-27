@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
+import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.user.main.signup.SignUp;
 import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +28,7 @@ public class Login extends AppCompatActivity {
 
     EditText emailId, password;
     TextView signUp;
+    TextView forgotPsw;
     Button btnLogin;
     FirebaseAuth mFirebaseAuth;
 
@@ -42,9 +44,19 @@ public class Login extends AppCompatActivity {
         //MI INSTANZIO GLI ELEMENTI
         emailId = findViewById(R.id.txtEmail);
         password = findViewById(R.id.txtPassword);
+        forgotPsw = findViewById(R.id.txtForgotPsw);
         signUp = findViewById(R.id.textCreate);
         btnLogin = findViewById(R.id.btnLogin);
 
+
+
+        forgotPsw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, PasswordRecovery.class);
+                startActivity(intent);
+            }
+        });
         //CREO UN LISTENER CHE E' SEMPRE IN ASCOLTO SUL CLICK DEL BOTTONE DI LOGIN
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
