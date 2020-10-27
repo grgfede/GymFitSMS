@@ -4,11 +4,14 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -67,6 +70,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private static final String DESCRIBABLE_KEY = "describable_key";
     private static final String INFO_LOG = "info";
+    private static final String ERROR_LOG = "error";
     private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -91,8 +95,11 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private final Map<String, TextInputEditText> editTextMap = new HashMap<>();
     private final Map<String, Object> tempTextMap = new HashMap<>();
 
+    // Screen orientation
+    private int orientation;
+
     private String userUid = null;
-    private View activityView = null;
+    private View messageAnchor = null;
     private Gym gym = null;
     private GoogleMap map = null;
     private boolean circleBtnClicked = false;
@@ -102,10 +109,11 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         assert getArguments() != null;
         this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
 
-        // Change toolbar
-        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_profile, container, false);
+
+        // Change toolbar
+        setHasOptionsMenu(true);
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.gym_profile_toolbar_title));
 
@@ -113,18 +121,19 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         Places.initialize(rootView.getContext(), getResources().getString(R.string.map_key));
 
         // View initialization
+        setScreenOrientation(rootView);
         setMessageAnchor(rootView);
         setUserUid();
-        setInterface(rootView);
 
+        setInterface(rootView, orientation);
+        setImageMap(rootView, orientation);
         setAnimationMap(rootView);
         setFabMap(rootView);
-        setImageMap(rootView);
         setEditTextMap(rootView);
         setLayoutTextMap(rootView);
-        setTempTextMap();
         setSaveButtonMap(rootView);
         setDeleteButtonMap(rootView);
+        setTempTextMap();
 
         // View listener
         /* Floating Action Buttons listener */
@@ -389,20 +398,20 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                             this.gym.setEmail((String) this.tempTextMap.get("mail"));
 
                             inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), (String) this.tempTextMap.get("mail"), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                            Snackbar.make(activityView, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
                         }).addOnFailureListener(e -> {
                             inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                            Snackbar.make(activityView, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
                     }));
                     break;
                 case "key":
                     btn.setOnClickListener(v -> this.user.updatePassword((String) this.tempTextMap.get("key"))
                         .addOnSuccessListener(aVoid -> {
                             inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), (String) this.tempTextMap.get("key"), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                            Snackbar.make(activityView, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
                         }).addOnFailureListener(e -> {
                             inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                            Snackbar.make(activityView, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
                     }));
                     break;
                 case "phone":
@@ -413,10 +422,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                             );
                             this.gym.setPhone((String) this.tempTextMap.get("phone"));
                             inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), (String) this.tempTextMap.get("phone"), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                            Snackbar.make(activityView, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
                         } else {
                             inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                            Snackbar.make(activityView, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
                         }
                     });
                     break;
@@ -430,7 +439,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                         this.gym.setAddress((String) this.tempTextMap.get("address"));
                         this.gym.setPosition((LatLng) this.tempTextMap.get("position"));
                         inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), (String) this.tempTextMap.get("address"), false, rootView.findViewById(R.id.gymAddressButtonRight));
-                        Snackbar.make(activityView, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(messageAnchor, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
 
                         this.map.clear();
                         this.map.addMarker(new MarkerOptions().position((LatLng) this.tempTextMap.get("position"))).setTitle(gym.getName());
@@ -444,7 +453,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                         );
                         this.gym.setName((String) this.tempTextMap.get("name"));
                         inputFieldDispatch(this.layoutTextMap.get("name"), this.editTextMap.get("name"), (String) this.tempTextMap.get("name"), true, rootView.findViewById(R.id.gymNameButtonRight));
-                        Snackbar.make(activityView, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(messageAnchor, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
 
                         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
                         ((MaterialTextView) navigationView.getHeaderView(0).findViewById(R.id.header_gym_name)).setText((String) this.tempTextMap.get("name"));
@@ -524,12 +533,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Snackbar.make(activityView, getResources().getString(R.string.permission_camera_success), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(messageAnchor, getResources().getString(R.string.permission_camera_success), Snackbar.LENGTH_SHORT).show();
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, MY_CAMERA_REQUEST_CODE);
             } else {
-                Snackbar.make(activityView, getResources().getString(R.string.permission_camera_error), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(messageAnchor, getResources().getString(R.string.permission_camera_error), Snackbar.LENGTH_SHORT).show();
             }
         }
     }
@@ -557,23 +566,59 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             }
         } else if (requestCode == MY_GALLERY_REQUEST_CODE && !(data == null)) {
             if(resultCode == ActivityGymProfile.RESULT_OK){
-                setAndUploadNewImage(data.getData());
+                setAndUploadNewImage(data.getData(), this.orientation);
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         } else if (requestCode == MY_CAMERA_REQUEST_CODE && !(data == null)) {
             if(resultCode == ActivityGymProfile.RESULT_OK) {
                 Bundle extras = data.getExtras();
                 assert extras != null;
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                setAndUploadNewImage(imageBitmap);
+                setAndUploadNewImage(imageBitmap, this.orientation);
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         }
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        this.orientation = getResources().getConfiguration().orientation;
+
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            try {
+                FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false);
+                }
+                ft.detach(this).attach(this).commit();
+
+                if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    setInterface(requireView(), newConfig.orientation);
+                }
+
+            } catch (Exception e) {
+                Log.e(ERROR_LOG, Objects.requireNonNull(e.getMessage()));
+                setMessage("Error: " + e.toString());
+
+                closeFragment();
+            }
+        }
+    }
+
+    private void onAddButtons() {
+        setVisibility(circleBtnClicked);
+        setAnimation(circleBtnClicked);
+        setCircleBtnClickable(circleBtnClicked);
+        circleBtnClicked = !circleBtnClicked;
     }
 
     public static FragmentGymProfile newInstance(Gym gym) {
@@ -583,13 +628,6 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         fragment.setArguments(bundle);
 
         return fragment;
-    }
-
-    private void onAddButtons() {
-        setVisibility(circleBtnClicked);
-        setAnimation(circleBtnClicked);
-        setCircleBtnClickable(circleBtnClicked);
-        circleBtnClicked = !circleBtnClicked;
     }
 
     // Animation methods
@@ -671,12 +709,16 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set map with ImageView and CircleImageView views.
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
+     * @param orientation Orientation value to separate the setting of map
      */
-    private void setImageMap(View rootView) {
+    private void setImageMap(View rootView, int orientation) {
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
         View viewHeader = navigationView.getHeaderView(0);
 
-        this.imageMap.put("imageMain", rootView.findViewById(R.id.gymImgField));
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            this.imageMap.put("imageMain", rootView.findViewById(R.id.gymImgField));
+        }
+
         this.imageMap.put("imageIcon", rootView.findViewById(R.id.gymImgName));
         this.imageMap.put("imageMenu", viewHeader.findViewById(R.id.header_gym_image));
     }
@@ -715,9 +757,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set views with Uri image and upload it into Database and Storage
      *
      * @param data Uri of image taken from Gallery that will be used to store image into ImageViews, Database and Storage
+     * @param orientation Orientation value to separate the setting of image
      */
-    private void setAndUploadNewImage(Uri data) {
-        Picasso.get().load(data).into((ImageView) this.imageMap.get("imageMain"));
+    private void setAndUploadNewImage(Uri data, int orientation) {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Picasso.get().load(data).into((ImageView) this.imageMap.get("imageMain"));
+        }
+
         Picasso.get().load(data).into((CircleImageView) this.imageMap.get("imageIcon"));
         Picasso.get().load(data).into((CircleImageView) this.imageMap.get("imageMenu"));
 
@@ -727,10 +773,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     String uriString = uri.toString();
                     this.gym.setImage(data.toString());
                     this.db.collection("gyms").document(this.userUid).update("img", uriString)
-                            .addOnSuccessListener(aVoid -> Snackbar.make(activityView, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
                 }))
-                .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
 
     }
 
@@ -738,15 +784,19 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set views with Bitmap image and upload it into Database and Storage
      *
      * @param data Bitmap of image taken from Camera that will be used to store image into ImageViews, Database and Storage
+     * @param orientation Orientation value to separate the setting of image
      */
-    private void setAndUploadNewImage(Bitmap data) {
-        ((ImageView) this.imageMap.get("imageMain")).setImageBitmap(data);
-        ((CircleImageView) this.imageMap.get("imageMenu")).setImageBitmap(data);
-        ((CircleImageView) this.imageMap.get("imageIcon")).setImageBitmap(data);
+    private void setAndUploadNewImage(Bitmap data, int orientation) {
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ((ImageView) Objects.requireNonNull(this.imageMap.get("imageMain"))).setImageBitmap(data);
+        }
 
-        this.imageMap.get("imageIcon").setDrawingCacheEnabled(true);
-        this.imageMap.get("imageIcon").buildDrawingCache();
-        Bitmap bitmap = this.imageMap.get("imageIcon").getDrawingCache();
+        ((CircleImageView) Objects.requireNonNull(this.imageMap.get("imageMenu"))).setImageBitmap(data);
+        ((CircleImageView) Objects.requireNonNull(this.imageMap.get("imageIcon"))).setImageBitmap(data);
+
+        Objects.requireNonNull(this.imageMap.get("imageIcon")).setDrawingCacheEnabled(true);
+        Objects.requireNonNull(this.imageMap.get("imageIcon")).buildDrawingCache();
+        Bitmap bitmap = Objects.requireNonNull(this.imageMap.get("imageIcon")).getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] bytes = baos.toByteArray();
@@ -758,10 +808,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     String uriString = uri.toString();
                     this.gym.setImage(uriString);
                     this.db.collection("gyms").document(this.userUid).update("img", uriString)
-                            .addOnSuccessListener(aVoid -> Snackbar.make(activityView, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
                 }))
-                .addOnFailureListener(e -> Snackbar.make(activityView, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
     }
 
     // Buttons
@@ -840,6 +890,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set the current user auth for next uses with Database and Storage
      */
     private void setUserUid() {
+        assert this.user != null;
         this.userUid = this.user.getUid();
     }
 
@@ -847,22 +898,31 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Take from Gym all fields that will be add into layout XML file fields
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
+     * @param orientation Orientation value to separate the setting of layout XML field
      */
-    private void setInterface(View rootView) {
+    private void setInterface(View rootView, int orientation) {
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
 
+        // Get view object
         MaterialTextView menuNameField = navigationView.getHeaderView(0).findViewById(R.id.header_gym_name);
         TextInputEditText nameField = rootView.findViewById(R.id.gymTxtName);
         TextInputEditText emailField = rootView.findViewById(R.id.gymTxtEmail);
         TextInputEditText phoneField = rootView.findViewById(R.id.gymTextPhone);
         TextInputEditText addressField = rootView.findViewById(R.id.gymTextAddress);
 
-        CircleImageView imageMenu = navigationView.getHeaderView(0).findViewById(R.id.header_gym_image);
-        ImageView imageHeader = rootView.findViewById(R.id.gymImgField);
         CircleImageView imageField = rootView.findViewById(R.id.gymImgName);
+        CircleImageView imageMenu = navigationView.getHeaderView(0).findViewById(R.id.header_gym_image);
 
+        SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.gymMapField));
+        assert mapFragment != null;
+        mapFragment.getMapAsync(this);
+
+        // Set view object
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ImageView imageHeader = rootView.findViewById(R.id.gymImgField);
+            Picasso.get().load(this.gym.getImage()).into(imageHeader);
+        }
         Picasso.get().load(this.gym.getImage()).into(imageMenu);
-        Picasso.get().load(this.gym.getImage()).into(imageHeader);
         Picasso.get().load(this.gym.getImage()).into(imageField);
 
         menuNameField.setText(this.gym.getName());
@@ -871,10 +931,15 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         phoneField.setText(this.gym.getPhone());
         addressField.setText(this.gym.getAddress());
 
-        SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.gymMapField));
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+    }
 
+    /**
+     * Set first screen orientation
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void setScreenOrientation(View rootView) {
+        this.orientation = rootView.getResources().getConfiguration().orientation;
     }
 
     /**
@@ -884,7 +949,16 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      */
     private void setMessageAnchor(View rootView) {
         // Initialize the container that will be used for Snackbar methods
-        this.activityView = rootView.findViewById(R.id.constraintLayout);
+        this.messageAnchor = rootView.findViewById(R.id.constraintLayout);
+    }
+
+    /**
+     * Show a message on the screen
+     *
+     * @param text string to show in SnackBar method
+     */
+    private void setMessage(String text) {
+        Snackbar.make(this.messageAnchor, text, Snackbar.LENGTH_SHORT).show();
     }
 
     /**
@@ -989,6 +1063,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
         transaction.addToBackStack(null);
         transaction.replace(R.id.fragment_container_view_tag, fragment).commit();
+    }
+
+    private void closeFragment() {
+        getChildFragmentManager().popBackStack();
     }
 
 }

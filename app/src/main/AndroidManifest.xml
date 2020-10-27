@@ -13,6 +13,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -21,10 +22,11 @@
 
         <activity android:name=".system.main.PasswordRecovery" android:parentActivityName=".user.main.signin.Login"/>
         <activity android:name=".user.main.Profile" />
-        <activity android:name=".gym.main.ActivityGymProfile" android:parentActivityName=".user.main.signin.Login" />
+        <activity android:name=".gym.main.ActivityGymProfile" android:parentActivityName=".user.main.signin.Login" android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"/>
         <activity android:name=".user.main.signup.SignUp" />
         <activity android:name=".user.main.signin.Login" />
         <activity android:name=".user.main.EditProfile" />
+        <activity android:name=".user.Subscription"></activity>
         <activity android:name=".system.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
