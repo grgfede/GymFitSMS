@@ -1,147 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:background="@drawable/sfondo_app">
+    android:layout_width="match_parent"
+    android:id="@+id/drawer_profile"
+    tools:context=".user.main.Profile"
+    tools:openDrawer="start">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="391dp"
-        android:layout_height="377dp"
-        android:background="@drawable/radiousframe"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="50dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="40dp"
-            app:srcCompat="@drawable/icons8_document_100" />
-
-        <ImageView
-            android:id="@+id/imageView8"
-            android:layout_width="50dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="110dp"
-            app:srcCompat="@drawable/icons8_calendar_100" />
-
-        <ImageView
-            android:id="@+id/imageView12"
-            android:layout_width="50dp"
-            android:layout_height="55dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="190dp"
-            app:srcCompat="@drawable/icons8_exit_100" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
-            android:layout_marginTop="125dp"
-            android:fontFamily="@font/avenirltstdlight"
-            android:text="prenotazioni in corso"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
-            android:layout_marginTop="55dp"
-            android:fontFamily="@font/avenirltstdlight"
-            android:text="mostra abbonamento"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="125dp"
-            android:layout_marginTop="210dp"
-            android:fontFamily="@font/avenirltstdlight"
-            android:onClick="logoutIntent"
-            android:text="logout"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/imageView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="320dp"
-            android:layout_marginTop="60dp"
-            app:srcCompat="@drawable/icons8_right_16" />
-
-        <ImageView
-            android:id="@+id/imageView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="320dp"
-            android:layout_marginTop="130dp"
-            app:srcCompat="@drawable/icons8_right_16" />
-
-        <View
-            android:id="@+id/divider"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="180dp"
-            android:background="?android:attr/listDivider" />
+            android:layout_height="wrap_content">
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/tollbar_profile"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            </com.google.android.material.appbar.MaterialToolbar>
 
-    </FrameLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/textView"
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:id="@+id/frame_profile">
+
+        </FrameLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_user"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="208dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="Nickname"
-        android:textColor="@color/stringColor"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/nav_user"
+        app:headerLayout="@layout/layout_header_nav_user">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
-        android:layout_width="139dp"
-        android:layout_height="149dp"
-        android:src="@drawable/default_user"
-        app:civ_border_color="#E8F3FF"
-        app:civ_border_width="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="MissingConstraints" />
+    </com.google.android.material.navigation.NavigationView>
 
-    <Button
-        android:id="@+id/Editprofile"
-        android:layout_width="91dp"
-        android:layout_height="32dp"
-        android:background="@drawable/edit"
-        android:fontFamily="sans-serif-medium"
-        android:text="Edit"
-        android:textAlignment="center"
-        android:textColor="@color/stringColor"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.028"
-        tools:ignore="MissingConstraints" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
