@@ -135,18 +135,7 @@ public class SignUpFragment extends Fragment {
             }
         };
 
-        //CREO EVENTO PER FAR COMPARIRE IL CALENDARIO
-        birthSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(getContext(), date, myCalendar
-                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
 
-        //INIZIALIZZO LA STRINGA PER IL LUOGO
-        //placesInitialize(view);
         //INIZIALIZZO IL CAMPO DEL GENDER
         setAutoComplete(view);
 
@@ -168,6 +157,17 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+
+
+        //CREO EVENTO PER FAR COMPARIRE IL CALENDARIO
+        birthSignUp.setOnFocusChangeListener((v, hasFocus) -> {
+
+            if(hasFocus) {
+                new DatePickerDialog(getContext(), date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
 
         locationSignUp.setOnFocusChangeListener((v, hasFocus) -> {

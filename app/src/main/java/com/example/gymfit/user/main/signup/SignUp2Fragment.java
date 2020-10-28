@@ -237,8 +237,8 @@ public class SignUp2Fragment extends Fragment {
     private boolean controlPasswords(String password, String repassword) {
         boolean error = false;
         if (!(password.equals(repassword))) {
-            passwordSignUp.setError("Attenzione! Le due password non coincidono");
-            repeatPasswordSignUp.setError("Attenzione! Le due password non coincidono");
+            passwordSignUp.setError(getResources().getString(R.string.helper_psw_not_equal_error));
+            repeatPasswordSignUp.setError(getResources().getString(R.string.helper_psw_not_equal_error));
             passwordSignUp.requestFocus();
             error = true;
         }
@@ -253,15 +253,15 @@ public class SignUp2Fragment extends Fragment {
 
         boolean error = false;
         if (email.isEmpty()) {
-            emailSignUp.setError("Attenzione! Inserisci email");
+            emailSignUp.setError(getResources().getString(R.string.helper_email_error));
             emailSignUp.requestFocus();
             error = true;
         } else if (password.isEmpty()) {
-            passwordSignUp.setError("Attenzione! Inserisci password");
+            passwordSignUp.setError(getResources().getString(R.string.helper_psw_error));
             passwordSignUp.requestFocus();
             error = true;
         } else if (repeatPassword.isEmpty()) {
-            repeatPasswordSignUp.setError("Attenzione! Inserisci password");
+            repeatPasswordSignUp.setError(getResources().getString(R.string.helper_psw_error));
             repeatPasswordSignUp.requestFocus();
             error = true;
         }

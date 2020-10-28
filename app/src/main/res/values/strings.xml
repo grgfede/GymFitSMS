@@ -34,9 +34,9 @@
     <string name="signin">Accedi</string>
     <string name="password_hide" translatable="false">******</string>
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="error_weak_password">Attenzione! La password deve contenere minimo 6 caratteri</string>
-    <string name="error_invalid_email">Attenzione! La email inserita non è valida</string>
-    <string name="error_user_exists">Attenzione! Email già utilizzata per un altro utente</string>
+    <string name="error_weak_password">La password deve contenere minimo 6 caratteri</string>
+    <string name="error_invalid_email">La email inserita non è valida</string>
+    <string name="error_user_exists">Email già utilizzata per un altro utente</string>
     <string name="continueSignUp">Procedi</string>
     <string name="signUpSubTitle2">Inserisci le ultime informazioni con le quali potrai accedere a GymFit</string>
     <string name="signUpTitle2">Ci sei quasi!</string>
@@ -156,5 +156,6 @@
     <string name="helper_address_hover_signUp">Inserisci indirizzo</string>
     <string name="helper_phone_hover_signUp">Inserisci telefono</string>
     <string name="helper_birth_hover">Inserisci data di nascita</string>
+    <string name="helper_psw_not_equal_error">Le due password non coincidono</string>
 
 </resources>
