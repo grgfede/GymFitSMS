@@ -1,19 +1,19 @@
+
+
 package com.example.gymfit.system.conf.recycleview;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymfit.R;
@@ -34,58 +34,59 @@ import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> implements Filterable {
+public class SubscriberAdapter extends RecyclerView.Adapter<SubscriberAdapter.MyViewHolder> implements Filterable {
+    private static final String INFO_LOG = "info";
+    private static final String ERROR_LOG = "error";
+
     private final List<User> users;
     private final List<User> usersFull;
     private final Context context;
-    private int rowPosition;
 
-    public UserAdapter(Context ct, List<User> users) {
+    private final OnItemClickListener listener;
+
+    public SubscriberAdapter(Context ct, List<User> users, OnItemClickListener listener) {
         this.context = ct;
         this.users = users;
         this.usersFull = new ArrayList<>(this.users);
+        this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final LinearLayout toggleContainer;
+        public final RelativeLayout cardContainer, deleteContainer;
+        private final LinearLayout toggleContainer, turnContainer;
         private final CircleImageView startIcon;
-        private final ImageView endIcon;
-        private final TextView username;
-        private final TextView details;
-        private Boolean isVisible = false;
-        private final List<TextView> textViews = new ArrayList<>();
+        private final ImageView media, endIcon;
+        private final TextView username, details;
+        private final List<TextView> turnList = new ArrayList<>();
 
         public MyViewHolder(@NotNull View itemView) {
             super(itemView);
 
             startIcon = itemView.findViewById(R.id.start_icon);
             endIcon = itemView.findViewById(R.id.end_icon);
+            media = itemView.findViewById(R.id.media);
             username = itemView.findViewById(R.id.user_name);
             details = itemView.findViewById(R.id.user_details);
+
+            cardContainer = itemView.findViewById(R.id.card_container);
+            deleteContainer = itemView.findViewById(R.id.delete_container);
+            turnContainer = itemView.findViewById(R.id.turn_container);
             toggleContainer = itemView.findViewById(R.id.content_toggle_container);
-
-            setTurnView(getTurnCount(rowPosition), toggleContainer);
-
-            endIcon.setOnClickListener(v -> {
-                setListVisibility(toggleContainer, endIcon, isVisible);
-                isVisible = !isVisible;
-            });
         }
 
-        private void setTurnView(int rowCount, ViewGroup viewGroup) {
+        public void bind(final Context context, final User user, final int position, final OnItemClickListener listener) {
+            int turnCount = user.getTurns().size();
+            turnList.clear();
+            turnContainer.removeAllViews();
 
-            for (int i=0; i<rowCount; i++) {
-                TextView textView = new TextView(context);
-                textView.setTextAppearance(R.style.AppTheme_UserTurnSessionText);
-                textViews.add(textView);
-
-                viewGroup.addView(textView);
+            for (int i=0; i<turnCount; i++) {
+                TextView turn = new TextView(context);
+                turn.setTextAppearance(R.style.AppTheme_UserTurnSessionText);
+                turnList.add(turn);
+                turnContainer.addView(turn);
             }
-        }
-
-        private int getTurnCount(int position) {
-            return users.get(position).getTurns().size();
+            cardContainer.setOnClickListener(v -> listener.onItemClick(this, position));
         }
     }
 
@@ -93,14 +94,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.rv_user_row, parent, false);
+        View view = inflater.inflate(R.layout.layout_recycleview_subscriber, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        rowPosition = position;
+    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+        holder.bind(this.context, this.users.get(position), position, listener);
 
+        // load
+        Picasso.get().load(this.users.get(position).getUrlImage()).into(holder.media);
         Picasso.get().load(this.users.get(position).getUrlImage()).into(holder.startIcon);
 
         String username = this.users.get(position).getName() + " " + this.users.get(position).getSurname();
@@ -111,14 +114,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
 
         List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
 
-        // Order for date all entry of turn
         turnMap.sort((map1, map2) -> {
             Date date1 = ((Timestamp) Objects.requireNonNull(map1.get("date"))).toDate();
             Date date2 = ((Timestamp) Objects.requireNonNull(map2.get("date"))).toDate();
             return date1.compareTo(date2);
         });
 
-        for (int i=0; i<holder.textViews.size(); i++) {
+        for (int i=0; i<holder.turnList.size(); i++) {
             String type = getTurn(Objects.requireNonNull(turnMap.get(i).get("type")).toString());
 
             Timestamp timestamp = (Timestamp) Objects.requireNonNull(turnMap.get(i).get("date"));
@@ -130,14 +132,17 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             String dateString = cal.get(Calendar.DAY_OF_MONTH) + " " + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + cal.get(Calendar.YEAR);
 
             String placeHolder = dateString + ": " + type;
-            holder.textViews.get(i).setText(placeHolder);
+            holder.turnList.get(i).setText(placeHolder);
         }
-
     }
 
     @Override
     public int getItemCount() {
-        return this.users == null ? 0 : this.users.size();
+        if (this.users == null) {
+            return 0;
+        } else {
+            return this.users.size();
+        }
     }
 
     @Override
@@ -166,7 +171,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             } else {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase().trim();
-                filteredList = filterCompare(filteredList, filterPattern, "username");
+                filterCompare(filteredList, filterPattern, "username");
             }
 
             FilterResults filterResults = new FilterResults();
@@ -194,19 +199,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             if (constraint.equals(context.getResources().getString(R.string.prompt_monthly))) {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+                filterCompare(filteredList, filterPattern, "subscription");
             } else if (constraint.equals(context.getResources().getString(R.string.prompt_quarterly))) {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+                filterCompare(filteredList, filterPattern, "subscription");
             } else if (constraint.equals(context.getResources().getString(R.string.prompt_six_month))) {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+                filterCompare(filteredList, filterPattern, "subscription");
             } else if (constraint.equals(context.getResources().getString(R.string.prompt_annual))) {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "subscription");
+                filterCompare(filteredList, filterPattern, "subscription");
             }
 
             FilterResults filterResults = new FilterResults();
@@ -232,15 +237,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             if (constraint.equals(context.getResources().getString(R.string.prompt_name))) {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "sort");
+                filterCompare(filteredList, filterPattern, "sort");
             } else if (constraint.equals(context.getResources().getString(R.string.prompt_surname))) {
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "sort");
+                filterCompare(filteredList, filterPattern, "sort");
             } else if (constraint.equals(context.getResources().getString(R.string.prompt_default))){
                 filteredList.clear();
                 String filterPattern = constraint.toString().toLowerCase();
-                filteredList = filterCompare(filteredList, filterPattern, "sort");
+                filterCompare(filteredList, filterPattern, "sort");
             }
 
             FilterResults filterResults = new FilterResults();
@@ -258,7 +263,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         }
     };
 
-    private List<User> filterCompare(List<User> filteredList, String constraint, String rule) {
+    private void filterCompare(List<User> filteredList, String constraint, String rule) {
         filteredList.clear();
 
         if (rule.equals("sort") && (constraint.equals(context.getString(R.string.prompt_name).toLowerCase()) || constraint.equals("default"))) {
@@ -283,9 +288,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
             filteredList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
         }
 
-        return filteredList;
     }
-
 
     // Other methods
 
@@ -344,69 +347,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         return turn;
     }
 
-    private void setListVisibility(LinearLayout container, ImageView arrow, boolean isVisible) {
-
-        if (!isVisible) {
-            arrow.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_arrow_up));
-            expandCard(container);
-        } else {
-            arrow.setImageDrawable(ContextCompat.getDrawable(this.context, R.drawable.ic_arrow_down));
-            collapseCard(container);
-        }
+    public void removeItem(int position) {
+        this.users.remove(position);
+        this.usersFull.remove(position);
+        notifyItemRemoved(position);
     }
 
-    private static void expandCard(final View v) {
-        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
-        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
-        final int targetHeight = v.getMeasuredHeight();
-
-        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
-        v.getLayoutParams().height = 1;
-        v.setVisibility(View.VISIBLE);
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = interpolatedTime == 1
-                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : (int)(targetHeight * interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // Expansion speed of 1dp/ms: (int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)
-        a.setDuration(300);
-        v.startAnimation(a);
-    }
-
-    private static void collapseCard(final View v) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
-                    v.setVisibility(View.GONE);
-                } else {
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // Expansion speed of 1dp/ms: (int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)
-        a.setDuration(150);
-        v.startAnimation(a);
+    public void restoreItem(User item, int position) {
+        this.users.add(position, item);
+        this.usersFull.add(position, item);
+        notifyItemInserted(position);
     }
 
 }

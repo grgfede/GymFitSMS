@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,18 +23,23 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.gym.conf.GymConfDBCallback;
+import com.example.gymfit.gym.conf.InitGymCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class ActivityGymProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -67,7 +71,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         this.navigationView.setNavigationItemSelectedListener(this);
 
         setUserUid();
-        setInterface(gymTmp -> {
+        initInterface(gymTmp -> {
             this.gym = gymTmp;
 
             if (savedInstanceState == null) {
@@ -165,25 +169,38 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
      *
      * gymConfDBCallback Callback method that used for set Gym object in the current class
      */
-    private void setInterface(GymConfDBCallback gymConfDBCallback) {
+    private void initInterface(InitGymCallback initGymCallback) {
 
         this.db.collection("gyms").document(userUid).get().addOnCompleteListener(task -> {
 
             if(task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
-                assert documentSnapshot != null;
 
                 String name = documentSnapshot.getString("name");
                 String email = documentSnapshot.getString("email");
                 String phone = documentSnapshot.getString("phone");
                 String address = documentSnapshot.getString("address");
-                LatLng gymPosition = new LatLng(
-                        Objects.requireNonNull(documentSnapshot.getGeoPoint("position")).getLatitude(),
-                        Objects.requireNonNull(documentSnapshot.getGeoPoint("position")).getLongitude());
                 String imageRef = documentSnapshot.getString("img");
 
-                Gym gym = new Gym(userUid, email, phone, name, address, gymPosition, imageRef);
-                gymConfDBCallback.onCallback(gym);
+                LatLng position;
+                if (documentSnapshot.getGeoPoint("position") != null) {
+                    position = new LatLng(
+                            documentSnapshot.getGeoPoint("position").getLatitude(),
+                            documentSnapshot.getGeoPoint("position").getLongitude());
+                } else {
+                    position = new LatLng(0, 0);
+                }
+
+                List<String> subscribers;
+                if (documentSnapshot.get("subscribers") != null) {
+                    // Arrays.asList return a unmodifiable list
+                    subscribers = new LinkedList<>(Arrays.asList(stringToArray(documentSnapshot.get("subscribers").toString())));
+                } else {
+                    subscribers = new ArrayList<>();
+                }
+
+                Gym gym = new Gym(userUid, email, phone, name, address, subscribers, position, imageRef);
+                initGymCallback.onCallback(gym);
 
             } else {
                 Log.d(ERROR_LOG, Objects.requireNonNull(task.getException()).getMessage());
@@ -196,6 +213,12 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
      */
     private void setUserUid() {
         this.userUid = this.user.getUid();
+    }
+
+    private String[] stringToArray(String str) {
+        str = str.substring(1, str.length()-1);
+        str = StringUtils.deleteWhitespace(str);
+        return str.split(",");
     }
 
     private void openFragment(Fragment fragment, boolean isAddedToStack) {

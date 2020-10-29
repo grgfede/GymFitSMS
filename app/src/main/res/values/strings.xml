@@ -59,9 +59,9 @@
     <string name="prompt_surname">Cognome</string>
     <string name="prompt_phone">Numero di telefono</string>
     <string name="prompt_address">Indirizzo</string>
-    <string name="prompt_abort">Annulla</string>
-    <string name="prompt_send">Invia</string>
     <string name="prompt_cancel">Annulla</string>
+    <string name="prompt_send">Invia</string>
+    <string name="prompt_delete">Cancella</string>
     <string name="prompt_confirm" translatable="false">Apply</string>
     <string name="prompt_monthly" translatable="false">monthly</string>
     <string name="prompt_quarterly" translatable="false">quarterly</string>
@@ -71,6 +71,11 @@
     <string name="prompt_afternoon" translatable="false">afternoon</string>
     <string name="prompt_evening" translatable="false">evening</string>
     <string name="prompt_default" translatable="false">default</string>
+
+    <!-- TODO: this is not a prompt but a message so change this string with "message_yourmsg -->
+    <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
+
+    <string name="message_user_removing">sarà eliminato…</string>
 
     <!-- TODO: rename with "prompt_key" when they are system string -->
     <string name="birthDay">Data di nascita</string>
@@ -85,6 +90,13 @@
     <string name="helper_address_hover">Inserisci un nuovo indirizzo</string>
     <string name="helper_address_error">"L'indirizzo non è valido."</string>
     <string name="helper_name_always">Gym</string>
+    <string name="helper_name_hover">Inserisci nome</string>
+    <string name="helper_surname_hover">Inserisci cognome</string>
+    <string name="helper_gender_hover">Inserisci gender</string>
+    <string name="helper_address_hover_signUp">Inserisci indirizzo</string>
+    <string name="helper_phone_hover_signUp">Inserisci telefono</string>
+    <string name="helper_birth_hover">Inserisci data di nascita</string>
+    <string name="helper_psw_not_equal_error">Le due password non coincidono</string>
 
     <string name="password_recovery_title">Recupera Password</string>
     <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
@@ -149,13 +161,5 @@
 
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
     <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>
-    <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
-    <string name="helper_name_hover">Inserisci nome</string>
-    <string name="helper_surname_hover">Inserisci cognome</string>
-    <string name="helper_gender_hover">Inserisci gender</string>
-    <string name="helper_address_hover_signUp">Inserisci indirizzo</string>
-    <string name="helper_phone_hover_signUp">Inserisci telefono</string>
-    <string name="helper_birth_hover">Inserisci data di nascita</string>
-    <string name="helper_psw_not_equal_error">Le due password non coincidono</string>
 
 </resources>

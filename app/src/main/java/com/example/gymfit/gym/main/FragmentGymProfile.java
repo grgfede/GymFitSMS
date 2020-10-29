@@ -592,7 +592,6 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         // Checks the orientation of the screen
         this.orientation = getResources().getConfiguration().orientation;
 
-
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             try {
                 FragmentTransaction ft = getParentFragmentManager().beginTransaction();
@@ -749,7 +748,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-        dialogBuilder.setNegativeButton(getResources().getString(R.string.prompt_cancel), (dialog, which) -> {});
+        dialogBuilder.setNegativeButton(getResources().getString(R.string.prompt_delete), (dialog, which) -> {});
         dialogBuilder.show();
     }
 

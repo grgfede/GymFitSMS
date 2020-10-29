@@ -45,7 +45,7 @@
     <string name="password_recovery_subtitle">Enter your registered email below to receive password reset istructions</string>
     <string name="password_recover_button_send">Send</string>
     <string name="prompt_send">Send</string>
-    <string name="prompt_abort">Cancel</string>
+    <string name="prompt_cancel">Cancel</string>
     <string name="prompt_phone">Phone</string>
     <string name="helper_phone_hover">Enter a new phone number.</string>
     <string name="helper_phone_error">Phone number is not valid.</string>
@@ -58,7 +58,7 @@
     <string name="helper_name_always">Palestra</string>
     <string name="update_name_success">Your new name has been updated.</string>
     <string name="update_name_error">Your new name has not been updated.</string>
-    <string name="prompt_cancel">Cancel</string>
+    <string name="prompt_delete">Delete</string>
     <string name="dialog_title_pickimage">Choose an action</string>
     <string name="dialog_item_pickimage_camera">Camera</string>
     <string name="dialog_item_pickimage_gallery">Gallery</string>
@@ -119,4 +119,5 @@
     <string name="helper_phone_hover_signUp">Insert phone</string>
     <string name="helper_birth_hover">Insert date of birth</string>
     <string name="helper_psw_not_equal_error">Passwords do not match</string>
+    <string name="message_user_removing">removing…</string>
 </resources>

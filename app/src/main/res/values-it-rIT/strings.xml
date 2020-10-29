@@ -45,7 +45,7 @@
     <string name="password_recovery_subtitle">Inserisci sotto la tua email di registrazione per ricevere le istruzioni di recupero password.</string>
     <string name="password_recover_button_send">Invia</string>
     <string name="prompt_send">Invia</string>
-    <string name="prompt_abort">Annulla</string>
+    <string name="prompt_cancel">Annulla</string>
     <string name="prompt_phone">Numero di telefono</string>
     <string name="helper_phone_hover">Inserisci un nuovo numero di telefono</string>
     <string name="helper_phone_error">Numero di telefono non valido.</string>
@@ -58,7 +58,7 @@
     <string name="helper_name_always">Gym</string>
     <string name="update_name_success">Il nuovo nome è stato aggiornato.</string>
     <string name="update_name_error">Il nuovo nome non è stato aggiornato.</string>
-    <string name="prompt_cancel">Annulla</string>
+    <string name="prompt_delete">Cancella</string>
     <string name="dialog_title_pickimage">Scegli una azione</string>
     <string name="dialog_item_pickimage_camera">Fotocamera</string>
     <string name="dialog_item_pickimage_gallery">Galleria</string>
@@ -112,6 +112,7 @@
     <string name="system_nav_title_other">Altro</string>
     <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
     <string name="system_toolbar_edit">Modifica</string>
+    <string name="message_user_removing">sarà eliminato…</string>
     <string name="helper_name_hover">Inserisci nome</string>
     <string name="helper_surname_hover">Inserisci cognome</string>
     <string name="helper_gender_hover">Inserisci gender</string>

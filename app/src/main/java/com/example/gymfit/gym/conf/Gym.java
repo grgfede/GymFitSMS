@@ -4,7 +4,9 @@ import com.example.gymfit.system.conf.GenericUser;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Gym extends GenericUser implements Serializable {
@@ -12,10 +14,11 @@ public class Gym extends GenericUser implements Serializable {
     private String name;
     private String image;
     private final Double[] positionArray;
+    private final List<String> subscribers;
     private final Map<String, Boolean> subscription;
     private final Map<String, Boolean[]> turns;
 
-    public Gym(String uid, String email, String phone, String name, String address, LatLng position, String image) {
+    public Gym(String uid, String email, String phone, String name, String address, List<String> subscribers, LatLng position, String image) {
         super(uid, email, phone);
         this.name = name;
         this.address = address;
@@ -36,6 +39,8 @@ public class Gym extends GenericUser implements Serializable {
                 put("evening", new Boolean[] {true, true, true});
             }
         };
+        this.subscribers = subscribers;
+
     }
 
     // Get methods
@@ -46,6 +51,10 @@ public class Gym extends GenericUser implements Serializable {
 
     public Map<String, Boolean> getSubscription() {
         return subscription;
+    }
+
+    public List<String> getSubscribers() {
+        return subscribers;
     }
 
     public String getImage() {
@@ -83,12 +92,36 @@ public class Gym extends GenericUser implements Serializable {
         this.image = image;
     }
 
-    public void setSubscription(String key, Boolean value) {
-        this.subscription.replace(key, value);
+    public void setSubscription(Map<String, Boolean> subscription) {
+        this.subscription.clear();
+        this.subscription.putAll(subscription);
     }
 
     public void setTurn(String key, int position, boolean value) {
         this.turns.get(key)[position] = value;
+    }
+
+    public void setSubscribers(List<String> subscribers) {
+        this.subscribers.clear();
+        this.subscribers.addAll(subscribers);
+    }
+
+    // Add methods
+
+    public void addSubscriber(String subscriber) {
+        this.subscribers.add(subscriber);
+    }
+
+    // Remove methods
+
+    public void removeSubscriber(String subscriber) {
+        this.subscribers.remove(subscriber);
+    }
+
+    // Update methods
+
+    public void updateSubscription(String key, Boolean value) {
+        this.subscription.replace(key, value);
     }
 
 }

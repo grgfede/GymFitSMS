@@ -184,7 +184,7 @@
 
                             android:focusable="true"
 
-                            android:text="@string/prompt_abort"
+                            android:text="@string/prompt_cancel"
                             android:textColor="@color/tint_error_text"
                             android:textSize="12sp"
 
@@ -285,7 +285,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
@@ -385,7 +385,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
@@ -488,7 +488,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
@@ -596,7 +596,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 

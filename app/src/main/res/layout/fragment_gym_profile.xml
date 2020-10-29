@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gym.main.FragmentGymProfile">
+    tools:context=".gym.main.FragmentGymProfile"
+    android:id="@+id/anchor"
+    android:backgroundTint="@color/background_ui_default">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/background_ui_default">
+        android:layout_height="wrap_content">
 
         <!-- Circle menu -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -109,9 +110,7 @@
                 android:id="@+id/gymImgField"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clickable="true"
                 android:contentDescription="@string/gym_img_profile"
-                android:focusable="true"
                 android:scaleType="centerCrop" />
 
         </LinearLayout>
@@ -196,7 +195,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/tint_error_text"
                         android:textSize="12sp"
 
@@ -314,7 +313,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
@@ -418,7 +417,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
@@ -525,7 +524,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 
@@ -623,7 +622,7 @@
 
                         android:focusable="true"
 
-                        android:text="@string/prompt_abort"
+                        android:text="@string/prompt_cancel"
                         android:textColor="@color/background_button_error"
                         android:textSize="12sp"
 

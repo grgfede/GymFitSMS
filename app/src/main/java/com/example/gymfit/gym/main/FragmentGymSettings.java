@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.gym.conf.GymTurnDBCallback;
+import com.example.gymfit.gym.conf.InitGymTurnCallback;
 import com.example.gymfit.system.conf.utils.BooleanUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -183,7 +183,7 @@ public class FragmentGymSettings extends Fragment {
 
                 assert dbValue != null;
                 switchMaterial.setChecked(dbValue);
-                this.gym.setSubscription(key, dbValue);
+                this.gym.updateSubscription(key, dbValue);
             } else {
                 Log.e(ERROR_LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
             }
@@ -199,7 +199,7 @@ public class FragmentGymSettings extends Fragment {
     private void setSwitchOnDatabase(String key, boolean isChecked) {
         this.db.collection("gyms").document(this.gym.getUid())
                 .update("subscription." + key, isChecked);
-        this.gym.setSubscription(key, isChecked);
+        this.gym.updateSubscription(key, isChecked);
 
         showSnackSwitch(key, isChecked);
     }
@@ -294,15 +294,13 @@ public class FragmentGymSettings extends Fragment {
      * @param confDialog Map with all items, checked, title for dialog configuration
      * @param turnDBCallback callback method used to set Gym and Database
      */
-    private void onCreateTurnDialog(View rootView, Map<String, Object> confDialog, GymTurnDBCallback turnDBCallback) {
+    private void onCreateTurnDialog(View rootView, Map<String, Object> confDialog, InitGymTurnCallback turnDBCallback) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(rootView.getContext());
         builder.setTitle((String) confDialog.get("title"));
         builder.setMultiChoiceItems((String[]) confDialog.get("items"), (boolean[]) confDialog.get("checkedItems"),
-                (dialog, which, isChecked) -> {
-                    turnDBCallback.onCallback(this.gym, (String) confDialog.get("keyTurn"), which, isChecked);
-                });
+                (dialog, which, isChecked) -> turnDBCallback.onCallback(this.gym, (String) confDialog.get("keyTurn"), which, isChecked));
         builder.setPositiveButton(rootView.getResources().getString(R.string.prompt_confirm), (dialog, which) -> {});
-        builder.setNegativeButton(rootView.getResources().getString(R.string.prompt_cancel), (dialog, which) -> {});
+        builder.setNegativeButton(rootView.getResources().getString(R.string.prompt_delete), (dialog, which) -> {});
         builder.create();
         builder.show();
     }
