@@ -69,7 +69,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private static final String DESCRIBABLE_KEY = "describable_key";
-    private static final String INFO_LOG = "info";
     private static final String ERROR_LOG = "error";
     private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
 
@@ -125,7 +124,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         setMessageAnchor(rootView);
         setUserUid();
 
-        setInterface(rootView, orientation);
+        initInterface(rootView, orientation);
         setImageMap(rootView, orientation);
         setAnimationMap(rootView);
         setFabMap(rootView);
@@ -601,7 +600,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 ft.detach(this).attach(this).commit();
 
                 if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    setInterface(requireView(), newConfig.orientation);
+                    initInterface(requireView(), newConfig.orientation);
                 }
 
             } catch (Exception e) {
@@ -899,7 +898,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * @param rootView Root View object of Fragment. From it can be get the context.
      * @param orientation Orientation value to separate the setting of layout XML field
      */
-    private void setInterface(View rootView, int orientation) {
+    private void initInterface(View rootView, int orientation) {
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
 
         // Get view object

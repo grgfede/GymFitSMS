@@ -1,6 +1,8 @@
 package com.example.gymfit.gym.main;
 
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
@@ -16,11 +19,13 @@ import com.example.gymfit.gym.conf.InitGymTurnCallback;
 import com.example.gymfit.system.conf.utils.BooleanUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,10 +36,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class FragmentGymSettings extends Fragment {
     private static final String DESCRIBABLE_KEY = "describable_key";
-    private static final String INFO_LOG = "info";
-    private static final String ERROR_LOG = "error";
+    private static final String LOG = FragmentGymSettings.class.getSimpleName();
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private Gym gym = null;
@@ -44,7 +50,7 @@ public class FragmentGymSettings extends Fragment {
     private final Map<String, MaterialButton> checkButtonMap = new HashMap<>();
     private final Map<String, MaterialTextView> checkTextMap = new HashMap<>();
 
-    private View activityView = null;
+    private View messageAnchor = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,6 +116,27 @@ public class FragmentGymSettings extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            try {
+                FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false);
+                }
+                ft.detach(this).attach(this).commit();
+
+            } catch (Exception e) {
+                Log.d(LOG, Objects.requireNonNull(e.getMessage()));
+                setMessage("Error: " + e.toString());
+
+                closeFragment();
+            }
+        }
     }
 
     public static FragmentGymSettings newInstance(Gym gym) {
@@ -185,7 +212,7 @@ public class FragmentGymSettings extends Fragment {
                 switchMaterial.setChecked(dbValue);
                 this.gym.updateSubscription(key, dbValue);
             } else {
-                Log.e(ERROR_LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                Log.d(LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
             }
         });
     }
@@ -282,7 +309,7 @@ public class FragmentGymSettings extends Fragment {
                     setCheckboxText(key);
                 });
             } else {
-                Log.e(ERROR_LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
+                Log.d(LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
             }
         });
     }
@@ -352,49 +379,64 @@ public class FragmentGymSettings extends Fragment {
      */
     private void setMessageAnchor(View rootView) {
         // Initialize the container that will be used for Snackbar methods
-        this.activityView = rootView.findViewById(R.id.constraintLayout);
+        this.messageAnchor = rootView.findViewById(R.id.anchor);
+    }
+
+    /**
+     * Show a message on the screen
+     *
+     * @param text string to show in SnackBar method
+     */
+    private void setMessage(String text) {
+        Snackbar.make(this.messageAnchor, text, Snackbar.LENGTH_SHORT).show();
     }
 
     private void showSnackSwitch(String key, boolean value) {
         switch (key) {
             case "monthly":
                 if (value) {
-                    Snackbar.make(activityView, getResources().getString(R.string.monthly_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.monthly_subscription_enabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.monthly_subscription_enabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.monthly_subscription_enabled));
                 } else {
-                    Snackbar.make(activityView, getResources().getString(R.string.monthly_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.monthly_subscription_disabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.monthly_subscription_disabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.monthly_subscription_disabled));
                 }
                 break;
             case "quarterly":
                 if (value) {
-                    Snackbar.make(activityView, getResources().getString(R.string.quarterly_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.quarterly_subscription_enabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.quarterly_subscription_enabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.quarterly_subscription_enabled));
                 } else {
-                    Snackbar.make(activityView, getResources().getString(R.string.quarterly_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.quarterly_subscription_disabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.quarterly_subscription_disabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.quarterly_subscription_disabled));
                 }
                 break;
             case "sixMonth":
                 if (value) {
-                    Snackbar.make(activityView, getResources().getString(R.string.sixMonth_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.sixMonth_subscription_enabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.sixMonth_subscription_enabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.sixMonth_subscription_enabled));
                 } else {
-                    Snackbar.make(activityView, getResources().getString(R.string.sixMonth_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.sixMonth_subscription_disabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.sixMonth_subscription_disabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.sixMonth_subscription_disabled));
                 }
                 break;
             case "annual":
                 if (value) {
-                    Snackbar.make(activityView, getResources().getString(R.string.annual_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.annual_subscription_enabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.annual_subscription_enabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.annual_subscription_enabled));
                 } else {
-                    Snackbar.make(activityView, getResources().getString(R.string.annual_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.i(INFO_LOG, getResources().getString(R.string.annual_subscription_disabled));
+                    Snackbar.make(messageAnchor, getResources().getString(R.string.annual_subscription_disabled), Snackbar.LENGTH_SHORT).show();
+                    Log.d(LOG, getResources().getString(R.string.annual_subscription_disabled));
                 }
                 break;
 
         }
+    }
+
+    // Fragment methods
+
+    private void closeFragment() {
+        getChildFragmentManager().popBackStack();
     }
 
 }

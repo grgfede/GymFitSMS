@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -29,10 +31,12 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -40,10 +44,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityGymProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private static final String ERROR_LOG = "error";
+    private static final String LOG = "KEY_LOG";
+    private static final String DRAWER_INSTANCE = "drawer_instance";
+
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private String userUid;
@@ -148,17 +155,28 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         return true;
     }
 
+    // Not use saveInstance because this activity will be not deleted at change screen rotation. So we need also change the drawer layout
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             try {
-                View navigationHeader =  this.navigationView.inflateHeaderView(R.layout.layout_header_nav_gym);
+                @SuppressLint("InflateParams")
+                View headerView = LayoutInflater.from(this).inflate(R.layout.layout_system_drawer_gym, null);
                 this.navigationView.removeHeaderView(this.navigationView.getHeaderView(0));
-                this.navigationView.addHeaderView(navigationHeader);
+                this.navigationView.addHeaderView(headerView);
+
+                // Get view object
+                MaterialTextView menuNameField = this.navigationView.getHeaderView(0).findViewById(R.id.header_gym_name);
+                CircleImageView imageMenu = this.navigationView.getHeaderView(0).findViewById(R.id.header_gym_image);
+
+                // Set view object
+                menuNameField.setText(this.gym.getName());
+                Picasso.get().load(this.gym.getImage()).into(imageMenu);
+
             } catch (Exception e) {
-                Log.e(ERROR_LOG, Objects.requireNonNull(e.getMessage()));
+                addLog(Thread.currentThread().getStackTrace(), e.getMessage());
                 closeFragment();
             }
         }
@@ -203,7 +221,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
                 initGymCallback.onCallback(gym);
 
             } else {
-                Log.d(ERROR_LOG, Objects.requireNonNull(task.getException()).getMessage());
+                addLog(Thread.currentThread().getStackTrace(), task.getException().getMessage());
             }
         });
     }
@@ -233,6 +251,18 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
 
     private void closeFragment() {
         getFragmentManager().popBackStack();
+    }
+
+    // Log
+
+    private void addLog(StackTraceElement[] stackTrace, String text) {
+        int lineNumber = stackTrace[2].getLineNumber();
+        String methodName = stackTrace[2].getMethodName();
+        String className = stackTrace[2].getClassName();
+        className = className.substring(className.lastIndexOf(".") + 1);
+
+        String message = className + " " + methodName + " " + "[" + lineNumber + "]: " + text;
+        Log.d(LOG, message);
     }
 
 }

@@ -43,6 +43,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:menu="@menu/nav_gym"
-        app:headerLayout="@layout/layout_header_nav_gym" />
+        app:headerLayout="@layout/layout_system_drawer_gym" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
