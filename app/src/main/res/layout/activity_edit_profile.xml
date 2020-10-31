@@ -67,14 +67,14 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         android:background="@drawable/et_custom"
-        android:textColorHint="@color/stringColor"
         android:fontFamily="@font/avenirltstdlight"
         android:hint="@string/phoneNumber"
         android:inputType="textPersonName"
         android:padding="15dp"
+        android:textColorHint="@color/stringColor"
         android:textSize="18sp" />
 
 
