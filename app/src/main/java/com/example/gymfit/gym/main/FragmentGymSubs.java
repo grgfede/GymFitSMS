@@ -1,7 +1,6 @@
 package com.example.gymfit.gym.main;
 
 import android.annotation.SuppressLint;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,24 +31,18 @@ import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
 import com.example.gymfit.system.conf.recycleview.SubscriberAdapter;
 import com.example.gymfit.user.conf.User;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     private static final String DESCRIBABLE_KEY = "describable_key";

@@ -12,6 +12,7 @@
     <uses-feature android:name="android.hardware.camera"/>
 
     <application
+        android:name=".system.main.App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,7 +27,7 @@
         <activity android:name=".user.main.signup.SignUp" />
         <activity android:name=".user.main.signin.Login" />
         <activity android:name=".user.main.EditProfile" />
-        <activity android:name=".user.Subscription"></activity>
+        <activity android:name=".user.Subscription" />
         <activity android:name=".system.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

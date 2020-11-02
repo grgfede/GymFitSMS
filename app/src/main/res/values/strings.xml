@@ -62,7 +62,7 @@
     <string name="prompt_cancel">Annulla</string>
     <string name="prompt_send">Invia</string>
     <string name="prompt_delete">Cancella</string>
-    <string name="prompt_confirm" translatable="false">Apply</string>
+    <string name="prompt_confirm">Conferma</string>
     <string name="prompt_monthly" translatable="false">monthly</string>
     <string name="prompt_quarterly" translatable="false">quarterly</string>
     <string name="prompt_six_month" translatable="false">six_month</string>
@@ -72,9 +72,8 @@
     <string name="prompt_evening" translatable="false">evening</string>
     <string name="prompt_default" translatable="false">default</string>
 
-    <!-- TODO: this is not a prompt but a message so change this string with "message_yourmsg -->
+    <!-- TODO: this is not a prompt but a message so move it into messages.xml without "prompt" -->
     <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
-
     <string name="message_user_removing">sarà eliminato…</string>
 
     <!-- TODO: rename with "prompt_key" when they are system string -->

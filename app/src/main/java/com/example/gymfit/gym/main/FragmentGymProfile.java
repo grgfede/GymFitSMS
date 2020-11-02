@@ -25,12 +25,16 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
+import com.example.gymfit.system.conf.utils.AppUtils;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,7 +42,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -51,7 +54,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
@@ -68,11 +70,12 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
-    private static final String DESCRIBABLE_KEY = "describable_key";
+    private static final String GYM_KEY = "gym_key";
+    private static final String IS_EMPTY_KEY = "is_empty_key";
+
     private static final String ERROR_LOG = "error";
     private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -96,35 +99,40 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
     // Screen orientation
     private int orientation;
-
-    private String userUid = null;
     private View messageAnchor = null;
+    private Menu toolbar = null;
+
+    private String gymUID = null;
     private Gym gym = null;
+
     private GoogleMap map = null;
     private boolean circleBtnClicked = false;
+    private boolean isEmptyData = false;
+
+    public static FragmentGymProfile newInstance(Gym gym, boolean isEmptyData) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentGymProfile created");
+
+        FragmentGymProfile fragment = new FragmentGymProfile();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(GYM_KEY, gym);
+        bundle.putBoolean(IS_EMPTY_KEY, isEmptyData);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         assert getArguments() != null;
-        this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
+        this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
+        this.isEmptyData = getArguments().getBoolean(IS_EMPTY_KEY);
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_profile, container, false);
 
-        // Change toolbar
-        setHasOptionsMenu(true);
-        // Change toolbar title
-        requireActivity().setTitle(getResources().getString(R.string.gym_profile_toolbar_title));
-
-        // Initialize the Google Place API with context and API key
-        Places.initialize(rootView.getContext(), getResources().getString(R.string.map_key));
-
-        // View initialization
-        setScreenOrientation(rootView);
-        setMessageAnchor(rootView);
-        setUserUid();
-
+        initSystemInterface(rootView);
         initInterface(rootView, orientation);
+
         setImageMap(rootView, orientation);
         setAnimationMap(rootView);
         setFabMap(rootView);
@@ -134,370 +142,390 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         setDeleteButtonMap(rootView);
         setTempTextMap();
 
-        // View listener
-        /* Floating Action Buttons listener */
-        this.fabMap.forEach((key, fab) -> fab.setOnClickListener(v -> {
-            if (!key.equals("main") && !key.equals("editImage")) {
-                setVisibility(false);
-                setAnimation(false);
-                setCircleBtnClickable(false);
-                circleBtnClicked = false;
-            }
+        setActionForEmptyData();
 
-            switch (key) {
-                case "settings":
-                    openFragment(FragmentGymSettings.newInstance(this.gym));
-                    break;
-                case "subscribers":
-                    openFragment(FragmentGymSubs.newInstance(this.gym));
-                    break;
-                case "main":
-                    onAddButtons();
-                    break;
-                case "editImage":
-                    setPickImageDialog();
-                    break;
-            }
+        try {
+            // View listener
+            /* Floating Action Buttons listener */
+            this.fabMap.forEach((key, fab) -> fab.setOnClickListener(v -> {
+                if (!key.equals("main") && !key.equals("editImage")) {
+                    setVisibility(false);
+                    setAnimation(false);
+                    setCircleBtnClickable(false);
+                    circleBtnClicked = false;
+                }
 
-        }));
+                switch (key) {
+                    case "settings":
+                        openFragment(FragmentGymSettings.newInstance(this.gym));
+                        break;
+                    case "subscribers":
+                        openFragment(FragmentGymSubs.newInstance(this.gym));
+                        break;
+                    case "main":
+                        onAddButtons();
+                        break;
+                    case "editImage":
+                        setPickImageDialog();
+                        break;
+                }
 
-        /* LayoutText listener */
-        this.layoutTextMap.forEach((key, field) -> {
-            switch (key) {
-                case "mail":
-                    field.setOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("mail"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
-                        this.editTextMap.get("mail").setText("");
-                    });
+            }));
 
-                    field.setEndIconOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("mail"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
-                        this.editTextMap.get("mail").setText("");
-                    });
-                    break;
-                case "key":
-                    field.setOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("key"), getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight));
-                        this.editTextMap.get("key").setText("");
-                    });
+            /* LayoutText listener */
+            this.layoutTextMap.forEach((key, field) -> {
+                switch (key) {
+                    case "mail":
+                        field.setOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("mail"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
+                            this.editTextMap.get("mail").setText("");
+                        });
 
-                    field.setEndIconOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("key"), getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight));
-                        this.editTextMap.get("key").setText("");
-                    });
-                    break;
-                case "phone":
-                    field.setOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("phone"), getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight));
-                        this.editTextMap.get("phone").setText("");
-                    });
+                        field.setEndIconOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("mail"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
+                            this.editTextMap.get("mail").setText("");
+                        });
+                        break;
+                    case "key":
+                        field.setOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("key"), getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight));
+                            this.editTextMap.get("key").setText("");
+                        });
 
-                    field.setEndIconOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("phone"), getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight));
-                        this.editTextMap.get("phone").setText("");
-                    });
-                    break;
-                case "address":
-                    field.setOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("address"), getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight));
-                        this.editTextMap.get("address").setText("");
-                    });
+                        field.setEndIconOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("key"), getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight));
+                            this.editTextMap.get("key").setText("");
+                        });
+                        break;
+                    case "phone":
+                        field.setOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("phone"), getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight));
+                            this.editTextMap.get("phone").setText("");
+                        });
 
-                    field.setEndIconOnClickListener(v -> {
-                        inputFieldFocused(field, this.editTextMap.get("address"), getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight));
-                        this.editTextMap.get("address").setText("");
-                    });
-                    break;
-                case "name":
-                    field.setOnClickListener(v -> inputFieldFocused(field, this.editTextMap.get("name"), rootView.findViewById(R.id.gymNameButtonRight)));
+                        field.setEndIconOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("phone"), getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight));
+                            this.editTextMap.get("phone").setText("");
+                        });
+                        break;
+                    case "address":
+                        field.setOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("address"), getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight));
+                            this.editTextMap.get("address").setText("");
+                        });
 
-                    field.setEndIconOnClickListener(v -> inputFieldFocused(field, this.editTextMap.get("name"), rootView.findViewById(R.id.gymNameButtonRight)));
-                    break;
-            }
-        });
+                        field.setEndIconOnClickListener(v -> {
+                            inputFieldFocused(field, this.editTextMap.get("address"), getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight));
+                            this.editTextMap.get("address").setText("");
+                        });
+                        break;
+                    case "name":
+                        field.setOnClickListener(v -> inputFieldFocused(field, this.editTextMap.get("name"), rootView.findViewById(R.id.gymNameButtonRight)));
 
-        /* EditTest listener */
-        this.editTextMap.forEach((key, field) -> {
-            switch (key) {
-                case "mail":
-                    field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("mail"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight)));
+                        field.setEndIconOnClickListener(v -> inputFieldFocused(field, this.editTextMap.get("name"), rootView.findViewById(R.id.gymNameButtonRight)));
+                        break;
+                }
+            });
 
-                    field.setOnFocusChangeListener((v, hasFocus) -> {
+            /* EditTest listener */
+            this.editTextMap.forEach((key, field) -> {
+                switch (key) {
+                    case "mail":
+                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("mail"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight)));
 
-                        if(hasFocus) {
-                            inputFieldFocused(this.layoutTextMap.get("mail"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
-                            field.setText("");
-                        } else {
-                            inputFieldDispatch(this.layoutTextMap.get("mail"), field, this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                            this.layoutTextMap.get("mail").clearFocus();
-                            field.clearFocus();
-                        }
-                    });
+                        field.setOnFocusChangeListener((v, hasFocus) -> {
 
-                    field.addTextChangedListener(new TextWatcher() {
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if(!s.toString().isEmpty() && !(s.toString().equals(gym.getEmail()))) {
-                                tempTextMap.replace("mail", s.toString());
-                            }
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
-                    break;
-                case "key":
-                    field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("key"), field, getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight)));
-
-                    field.setOnFocusChangeListener((v, hasFocus) -> {
-
-                        if(hasFocus) {
-                            inputFieldFocused(this.layoutTextMap.get("key"), field, getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight));
-                            field.setText("");
-                        } else {
-                            inputFieldDispatch(this.layoutTextMap.get("key"), field, getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                            this.layoutTextMap.get("key").clearFocus();
-                            field.clearFocus();
-                        }
-                    });
-
-                    field.addTextChangedListener(new TextWatcher() {
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if(!s.toString().isEmpty() && !s.toString().equals(getResources().getString(R.string.password_hide))) {
-                                tempTextMap.replace("key", s.toString());
-                            }
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                        }
-                    });
-                    break;
-                case "phone":
-                    field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("phone"), field, getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight)));
-
-                    field.setOnFocusChangeListener((v, hasFocus) -> {
-
-                        if(hasFocus) {
-                            inputFieldFocused(this.layoutTextMap.get("phone"), field, getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight));
-                            field.setText("");
-                        } else {
-                            inputFieldDispatch(this.layoutTextMap.get("phone"), field, this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                            this.layoutTextMap.get("phone").clearFocus();
-                            field.clearFocus();
-                        }
-                    });
-
-                    field.addTextChangedListener(new TextWatcher() {
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if(!s.toString().isEmpty() && !(s.toString().equals(gym.getPhone()))) {
-                                tempTextMap.replace("phone", s.toString());
-                            }
-
-                            if(s.toString().length() > layoutTextMap.get("phone").getCounterMaxLength()) {
-                                layoutTextMap.get("phone").setError(getResources().getString(R.string.helper_phone_error));
+                            if(hasFocus) {
+                                inputFieldFocused(this.layoutTextMap.get("mail"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
+                                field.setText("");
                             } else {
-                                layoutTextMap.get("phone").setError(null);
+                                inputFieldDispatch(this.layoutTextMap.get("mail"), field, this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
+                                this.layoutTextMap.get("mail").clearFocus();
+                                field.clearFocus();
                             }
-                        }
+                        });
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
+                        field.addTextChangedListener(new TextWatcher() {
 
-                        }
-                    });
-                    break;
-                case "address":
-                    field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("address"), field, getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight)));
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    field.setOnFocusChangeListener((v, hasFocus) -> {
-
-                        if(hasFocus) {
-                            inputFieldFocused(this.layoutTextMap.get("address"), field, getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight));
-                            field.setText("");
-                            List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
-                            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(requireContext());
-                            startActivityForResult(intent, MY_ADDRESS_REQUEST_CODE);
-                        } else {
-                            inputFieldDispatch(this.layoutTextMap.get("address"), field, this.gym.getAddress(), false, rootView.findViewById(R.id.gymAddressButtonRight));
-                            this.layoutTextMap.get("address").clearFocus();
-                            field.clearFocus();
-                        }
-                    });
-                    break;
-                case "name":
-                    field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("name"), field, rootView.findViewById(R.id.gymNameButtonRight)));
-
-                    field.setOnFocusChangeListener((v, hasFocus) -> {
-
-                        if(hasFocus) {
-                            inputFieldFocused(this.layoutTextMap.get("name"), field, rootView.findViewById(R.id.gymNameButtonRight));
-                        } else {
-                            inputFieldDispatch(this.layoutTextMap.get("name"), field, this.gym.getName(), true, rootView.findViewById(R.id.gymNameButtonRight));
-                            this.layoutTextMap.get("name").clearFocus();
-                            field.clearFocus();
-                        }
-                    });
-
-                    field.addTextChangedListener(new TextWatcher() {
-
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            if(!s.toString().isEmpty() && !(s.toString().equals(gym.getName()))) {
-                                tempTextMap.replace("name", s.toString());
                             }
-                        }
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                if(!s.toString().isEmpty() && !(s.toString().equals(gym.getEmail()))) {
+                                    tempTextMap.replace("mail", s.toString());
+                                }
+                            }
 
-                        }
-                    });
-                    break;
-            }
-        });
+                            @Override
+                            public void afterTextChanged(Editable s) {
 
-        /* Save Buttons listener */
-        this.saveButtonMap.forEach((key, btn) -> {
-            switch (key) {
-                case "mail":
-                    btn.setOnClickListener(v -> this.user.updateEmail(Objects.requireNonNull((String) this.tempTextMap.get("mail")))
-                        .addOnSuccessListener(aVoid -> {
-                            this.db.collection("gyms").document(userUid).update(
-                                    "email", this.tempTextMap.get("mail")
+                            }
+                        });
+                        break;
+                    case "key":
+                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("key"), field, getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight)));
+
+                        field.setOnFocusChangeListener((v, hasFocus) -> {
+
+                            if(hasFocus) {
+                                inputFieldFocused(this.layoutTextMap.get("key"), field, getResources().getString(R.string.helper_psw_hover), rootView.findViewById(R.id.gymKeyButtonRight));
+                                field.setText("");
+                            } else {
+                                inputFieldDispatch(this.layoutTextMap.get("key"), field, getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight));
+                                this.layoutTextMap.get("key").clearFocus();
+                                field.clearFocus();
+                            }
+                        });
+
+                        field.addTextChangedListener(new TextWatcher() {
+
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                if(!s.toString().isEmpty() && !s.toString().equals(getResources().getString(R.string.password_hide))) {
+                                    tempTextMap.replace("key", s.toString());
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+                        break;
+                    case "phone":
+                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("phone"), field, getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight)));
+
+                        field.setOnFocusChangeListener((v, hasFocus) -> {
+
+                            if(hasFocus) {
+                                inputFieldFocused(this.layoutTextMap.get("phone"), field, getResources().getString(R.string.helper_phone_hover), rootView.findViewById(R.id.gymPhoneButtonRight));
+                                field.setText("");
+                            } else {
+                                inputFieldDispatch(this.layoutTextMap.get("phone"), field, this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight));
+                                this.layoutTextMap.get("phone").clearFocus();
+                                field.clearFocus();
+                            }
+                        });
+
+                        field.addTextChangedListener(new TextWatcher() {
+
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                if(!s.toString().isEmpty() && !(s.toString().equals(gym.getPhone()))) {
+                                    tempTextMap.replace("phone", s.toString());
+                                }
+
+                                if(s.toString().length() > layoutTextMap.get("phone").getCounterMaxLength()) {
+                                    layoutTextMap.get("phone").setError(getResources().getString(R.string.helper_phone_error));
+                                } else {
+                                    layoutTextMap.get("phone").setError(null);
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+                        break;
+                    case "address":
+                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("address"), field, getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight)));
+
+                        field.setOnFocusChangeListener((v, hasFocus) -> {
+
+                            if(hasFocus) {
+                                inputFieldFocused(this.layoutTextMap.get("address"), field, getResources().getString(R.string.helper_address_hover), rootView.findViewById(R.id.gymAddressButtonRight));
+                                field.setText("");
+                                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
+                                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(requireContext());
+                                startActivityForResult(intent, MY_ADDRESS_REQUEST_CODE);
+                            } else {
+                                inputFieldDispatch(this.layoutTextMap.get("address"), field, this.gym.getAddress(), false, rootView.findViewById(R.id.gymAddressButtonRight));
+                                this.layoutTextMap.get("address").clearFocus();
+                                field.clearFocus();
+                            }
+                        });
+                        break;
+                    case "name":
+                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("name"), field, rootView.findViewById(R.id.gymNameButtonRight)));
+
+                        field.setOnFocusChangeListener((v, hasFocus) -> {
+
+                            if(hasFocus) {
+                                inputFieldFocused(this.layoutTextMap.get("name"), field, rootView.findViewById(R.id.gymNameButtonRight));
+                            } else {
+                                inputFieldDispatch(this.layoutTextMap.get("name"), field, this.gym.getName(), true, rootView.findViewById(R.id.gymNameButtonRight));
+                                this.layoutTextMap.get("name").clearFocus();
+                                field.clearFocus();
+                            }
+                        });
+
+                        field.addTextChangedListener(new TextWatcher() {
+
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                if(!s.toString().isEmpty() && !(s.toString().equals(gym.getName()))) {
+                                    tempTextMap.replace("name", s.toString());
+                                }
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                            }
+                        });
+                        break;
+                }
+            });
+
+            /* Save Buttons listener */
+            this.saveButtonMap.forEach((key, btn) -> {
+                switch (key) {
+                    case "mail":
+                        btn.setOnClickListener(v -> FirebaseAuth.getInstance().getCurrentUser().updateEmail(Objects.requireNonNull((String) this.tempTextMap.get("mail")))
+                                .addOnSuccessListener(aVoid -> {
+                                    this.db.collection("gyms").document(gymUID).update(
+                                            "email", this.tempTextMap.get("mail")
+                                    );
+                                    this.gym.setEmail((String) this.tempTextMap.get("mail"));
+
+                                    inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), (String) this.tempTextMap.get("mail"), false, rootView.findViewById(R.id.gymEmailButtonRight));
+                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
+                                }).addOnFailureListener(e -> {
+                                    inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
+                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
+                                }));
+                        break;
+                    case "key":
+                        btn.setOnClickListener(v ->FirebaseAuth.getInstance().getCurrentUser().updatePassword((String) this.tempTextMap.get("key"))
+                                .addOnSuccessListener(aVoid -> {
+                                    inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), (String) this.tempTextMap.get("key"), false, rootView.findViewById(R.id.gymKeyButtonRight));
+                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
+                                }).addOnFailureListener(e -> {
+                                    inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight));
+                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
+                                }));
+                        break;
+                    case "phone":
+                        btn.setOnClickListener(v -> {
+                            if(isValidPhoneNumber((String) this.tempTextMap.get("phone"))) {
+                                this.db.collection("gyms").document(gymUID).update(
+                                        "phone", this.tempTextMap.get("phone")
+                                );
+                                this.gym.setPhone((String) this.tempTextMap.get("phone"));
+                                inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), (String) this.tempTextMap.get("phone"), false, rootView.findViewById(R.id.gymPhoneButtonRight));
+                                Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
+                            } else {
+                                inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight));
+                                Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+                        break;
+                    case "address":
+                        btn.setOnClickListener(v -> {
+                            LatLng positionTmp = (LatLng) this.tempTextMap.get("position");
+                            this.db.collection("gyms").document(gymUID).update(
+                                    "address", this.tempTextMap.get("address"),
+                                    "position", new GeoPoint(positionTmp.latitude, positionTmp.longitude)
                             );
-                            this.gym.setEmail((String) this.tempTextMap.get("mail"));
+                            this.gym.setAddress((String) this.tempTextMap.get("address"));
+                            this.gym.setPosition((LatLng) this.tempTextMap.get("position"));
+                            inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), (String) this.tempTextMap.get("address"), false, rootView.findViewById(R.id.gymAddressButtonRight));
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
 
-                            inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), (String) this.tempTextMap.get("mail"), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
-                        }).addOnFailureListener(e -> {
-                            inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
-                    }));
-                    break;
-                case "key":
-                    btn.setOnClickListener(v -> this.user.updatePassword((String) this.tempTextMap.get("key"))
-                        .addOnSuccessListener(aVoid -> {
-                            inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), (String) this.tempTextMap.get("key"), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
-                        }).addOnFailureListener(e -> {
-                            inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
-                    }));
-                    break;
-                case "phone":
-                    btn.setOnClickListener(v -> {
-                        if(isValidPhoneNumber((String) this.tempTextMap.get("phone"))) {
-                            this.db.collection("gyms").document(userUid).update(
-                                    "phone", this.tempTextMap.get("phone")
+                            this.map.clear();
+                            this.map.addMarker(new MarkerOptions().position((LatLng) this.tempTextMap.get("position"))).setTitle(gym.getName());
+                            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom((LatLng) this.tempTextMap.get("position"), 15));
+                        });
+                        break;
+                    case "name":
+                        btn.setOnClickListener(v -> {
+                            this.db.collection("gyms").document(gymUID).update(
+                                    "name", this.tempTextMap.get("name")
                             );
-                            this.gym.setPhone((String) this.tempTextMap.get("phone"));
-                            inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), (String) this.tempTextMap.get("phone"), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
-                        } else {
-                            inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                    break;
-                case "address":
-                    btn.setOnClickListener(v -> {
-                        LatLng positionTmp = (LatLng) this.tempTextMap.get("position");
-                        this.db.collection("gyms").document(userUid).update(
-                                "address", this.tempTextMap.get("address"),
-                                "position", new GeoPoint(positionTmp.latitude, positionTmp.longitude)
-                        );
-                        this.gym.setAddress((String) this.tempTextMap.get("address"));
-                        this.gym.setPosition((LatLng) this.tempTextMap.get("position"));
-                        inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), (String) this.tempTextMap.get("address"), false, rootView.findViewById(R.id.gymAddressButtonRight));
-                        Snackbar.make(messageAnchor, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
+                            this.gym.setName((String) this.tempTextMap.get("name"));
+                            inputFieldDispatch(this.layoutTextMap.get("name"), this.editTextMap.get("name"), (String) this.tempTextMap.get("name"), true, rootView.findViewById(R.id.gymNameButtonRight));
+                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
 
-                        this.map.clear();
-                        this.map.addMarker(new MarkerOptions().position((LatLng) this.tempTextMap.get("position"))).setTitle(gym.getName());
-                        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom((LatLng) this.tempTextMap.get("position"), 15));
-                    });
-                    break;
-                case "name":
-                    btn.setOnClickListener(v -> {
-                        this.db.collection("gyms").document(userUid).update(
-                                "name", this.tempTextMap.get("name")
-                        );
-                        this.gym.setName((String) this.tempTextMap.get("name"));
-                        inputFieldDispatch(this.layoutTextMap.get("name"), this.editTextMap.get("name"), (String) this.tempTextMap.get("name"), true, rootView.findViewById(R.id.gymNameButtonRight));
-                        Snackbar.make(messageAnchor, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
+                            NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
+                            ((MaterialTextView) navigationView.getHeaderView(0).findViewById(R.id.header_gym_name)).setText((String) this.tempTextMap.get("name"));
+                        });
+                        break;
+                }
+            });
 
-                        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
-                        ((MaterialTextView) navigationView.getHeaderView(0).findViewById(R.id.header_gym_name)).setText((String) this.tempTextMap.get("name"));
-                    });
-                    break;
-            }
-        });
+            /* Delete Buttons listener */
+            this.deleteButtonMap.forEach((key, btn) -> {
+                switch (key) {
+                    case "mail":
+                        btn.setOnClickListener(v ->
+                                inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight)));
+                        break;
+                    case "key":
+                        btn.setOnClickListener(v ->
+                                inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight)));
+                        break;
+                    case "phone":
+                        btn.setOnClickListener(v ->
+                                inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight)));
+                        break;
+                    case "address":
+                        btn.setOnClickListener(v ->
+                                inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), this.gym.getAddress(), false, rootView.findViewById(R.id.gymAddressButtonRight)));
+                        break;
+                    case "name":
+                        btn.setOnClickListener(v ->
+                                inputFieldDispatch(this.layoutTextMap.get("name"), this.editTextMap.get("name"), this.gym.getName(), true, rootView.findViewById(R.id.gymNameButtonRight)));
+                        break;
+                }
+            });
 
-        /* Delete Buttons listener */
-        this.deleteButtonMap.forEach((key, btn) -> {
-            switch (key) {
-                case "mail":
-                    btn.setOnClickListener(v ->
-                            inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight)));
-                    break;
-                case "key":
-                    btn.setOnClickListener(v ->
-                            inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight)));
-                    break;
-                case "phone":
-                    btn.setOnClickListener(v ->
-                            inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight)));
-                    break;
-                case "address":
-                    btn.setOnClickListener(v ->
-                            inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), this.gym.getAddress(), false, rootView.findViewById(R.id.gymAddressButtonRight)));
-                    break;
-                case "name":
-                    btn.setOnClickListener(v ->
-                            inputFieldDispatch(this.layoutTextMap.get("name"), this.editTextMap.get("name"), this.gym.getName(), true, rootView.findViewById(R.id.gymNameButtonRight)));
-                    break;
-            }
-        });
+        } catch (Exception e) {
+            AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
+            AppUtils.restartActivity((AppCompatActivity) requireActivity());
+        }
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "FragmentGymProfile layout XML created");
 
         return rootView;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private void setActionForEmptyData() {
+        if (this.isEmptyData) {
+            Snackbar snackbar = AppUtils.message(this.messageAnchor, getString(R.string.profile_not_completed), Snackbar.LENGTH_INDEFINITE);
+
+            snackbar.setAction(getString(R.string.system_toolbar_edit), v -> {
+                MenuItem editMenuItem = this.toolbar.findItem(R.id.app_bar_edit);
+                editMenuItem.setChecked(true);
+                snackbar.dismiss();
+            })
+            .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null))
+            .show();
+        }
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_gym_profile_toolbar, menu);
+        this.toolbar = menu;
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -505,20 +533,20 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.app_bar_edit) {
             if (item.isChecked()) {
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Gym profile is not more under edit");
+
                 // Restore icon
                 item.setIcon(R.drawable.ic_edit);
-
                 setEditIconVisibility(false);
                 setLayoutTextEnable(false);
-
                 item.setChecked(false);
             } else {
-                // Change icon
-                item.setIcon(R.drawable.ic_clear);
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Gym profile is under edit");
 
+                // Activate edit icons
+                item.setIcon(R.drawable.ic_clear);
                 setEditIconVisibility(true);
                 setLayoutTextEnable(true);
-
                 item.setChecked(true);
             }
         }
@@ -532,11 +560,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Camera permission granted from Gym profile");
                 Snackbar.make(messageAnchor, getResources().getString(R.string.permission_camera_success), Snackbar.LENGTH_SHORT).show();
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, MY_CAMERA_REQUEST_CODE);
             } else {
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Camera permission not authorized from Gym profile");
                 Snackbar.make(messageAnchor, getResources().getString(R.string.permission_camera_error), Snackbar.LENGTH_SHORT).show();
             }
         }
@@ -550,11 +580,14 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         LatLng latLngUser = this.gym.getPosition();
         this.map.addMarker(new MarkerOptions().position(latLngUser)).setTitle(this.gym.getName());
         this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngUser, 15));
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Map is created and positioned at" + " (lat) " + latLngUser.latitude + " (lng) " + latLngUser.longitude);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Activity result: " + requestCode + " " + resultCode);
 
         if (requestCode == MY_ADDRESS_REQUEST_CODE && !(data == null)) {
             if(resultCode == ActivityGymProfile.RESULT_OK) {
@@ -585,11 +618,9 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-
-        // Checks the orientation of the screen
-        this.orientation = getResources().getConfiguration().orientation;
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Orientation changed: " + newConfig.orientation);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             try {
@@ -598,6 +629,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     ft.setReorderingAllowed(false);
                 }
                 ft.detach(this).attach(this).commit();
+
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Orientation changed: replaced interface");
 
                 if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     initInterface(requireView(), newConfig.orientation);
@@ -613,19 +646,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     private void onAddButtons() {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Fab status: " + !circleBtnClicked);
+
         setVisibility(circleBtnClicked);
         setAnimation(circleBtnClicked);
         setCircleBtnClickable(circleBtnClicked);
         circleBtnClicked = !circleBtnClicked;
-    }
-
-    public static FragmentGymProfile newInstance(Gym gym) {
-        FragmentGymProfile fragment = new FragmentGymProfile();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(DESCRIBABLE_KEY, gym);
-        fragment.setArguments(bundle);
-
-        return fragment;
     }
 
     // Animation methods
@@ -765,12 +791,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         Picasso.get().load(data).into((CircleImageView) this.imageMap.get("imageIcon"));
         Picasso.get().load(data).into((CircleImageView) this.imageMap.get("imageMenu"));
 
-        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.userUid + "/profilePic");
+        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gymUID + "/profilePic");
         storageReference.putFile(data)
                 .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                     String uriString = uri.toString();
                     this.gym.setImage(data.toString());
-                    this.db.collection("gyms").document(this.userUid).update("img", uriString)
+                    this.db.collection("gyms").document(this.gymUID).update("img", uriString)
                             .addOnSuccessListener(aVoid -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
                             .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
                 }))
@@ -799,13 +825,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] bytes = baos.toByteArray();
 
-        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.userUid + "/profilePic");
+        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gymUID + "/profilePic");
         storageReference.putBytes(bytes)
                 .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
 
                     String uriString = uri.toString();
                     this.gym.setImage(uriString);
-                    this.db.collection("gyms").document(this.userUid).update("img", uriString)
+                    this.db.collection("gyms").document(this.gymUID).update("img", uriString)
                             .addOnSuccessListener(aVoid -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
                             .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
                 }))
@@ -882,14 +908,27 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         this.tempTextMap.put("position", new LatLng(0, 0));
     }
 
-    // Other methods
+    // Interface methods
 
     /**
-     * Set the current user auth for next uses with Database and Storage
+     * Initialize toolbar option and title, Snackbar anchor, gym ID and default screen orientation
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void setUserUid() {
-        assert this.user != null;
-        this.userUid = this.user.getUid();
+    private void initSystemInterface(View rootView) {
+        // Abilities toolbar item options
+        setHasOptionsMenu(true);
+        // Change toolbar title
+        requireActivity().setTitle(getResources().getString(R.string.gym_profile_toolbar_title));
+
+        // init origin screen orientation
+        this.orientation = rootView.getResources().getConfiguration().orientation;
+
+        // init gym ID from Gym Object
+        this.gymUID = this.gym.getUid();
+
+        // init message Anchor for Snackbar
+        this.messageAnchor = rootView.findViewById(R.id.anchor);
     }
 
     /**
@@ -931,24 +970,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
     }
 
-    /**
-     * Set first screen orientation
-     *
-     * @param rootView Root View object of Fragment. From it can be get the context.
-     */
-    private void setScreenOrientation(View rootView) {
-        this.orientation = rootView.getResources().getConfiguration().orientation;
-    }
-
-    /**
-     * Set the container anchor for Snackbar object and its methods "make"
-     *
-     * @param rootView Root View object of Fragment. From it can be get the context.
-     */
-    private void setMessageAnchor(View rootView) {
-        // Initialize the container that will be used for Snackbar methods
-        this.messageAnchor = rootView.findViewById(R.id.constraintLayout);
-    }
+    // Other methods
 
     /**
      * Show a message on the screen

@@ -120,4 +120,6 @@
     <string name="helper_phone_hover_signUp">Inserisci telefono</string>
     <string name="helper_birth_hover">Inserisci data di nascita</string>
     <string name="helper_psw_not_equal_error">Le due password non coincidono</string>
+    <string name="prompt_confirm">Conferma</string>
+    <string name="profile_not_completed">Profilo non completato.\nCompleta i campi mancanti…</string>
 </resources>

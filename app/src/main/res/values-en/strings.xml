@@ -120,4 +120,6 @@
     <string name="helper_birth_hover">Insert date of birth</string>
     <string name="helper_psw_not_equal_error">Passwords do not match</string>
     <string name="message_user_removing">removing…</string>
+    <string name="prompt_confirm">Apply</string>
+    <string name="profile_not_completed">Profile not completed.\nSet your empty field…</string>
 </resources>

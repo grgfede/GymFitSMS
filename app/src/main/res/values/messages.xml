@@ -15,7 +15,7 @@
 
     <string name="permission_camera_success">Permesso camera autorizzato.</string>
     <string name="permission_camera_error">Permesso camera negato.</string>
-    
+
     <string name="intent_result_code_denied">Errore: </string>
 
     <string name="monthly_subscription_enabled">Abbonamenti mensili attivati.</string>
@@ -32,5 +32,7 @@
     <string name="afternoon_turn_disabled">Turni pomeridiani disattivati.</string>
     <string name="evening_turn_enabled">Turni serali attivati.</string>
     <string name="evening_turn_disabled">Turni serali disattivati.</string>
+
+    <string name="profile_not_completed">Profilo non completato.\nCompleta i campi mancanti…</string>
 
 </resources>
