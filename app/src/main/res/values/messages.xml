@@ -16,8 +16,6 @@
     <string name="permission_camera_success">Permesso camera autorizzato.</string>
     <string name="permission_camera_error">Permesso camera negato.</string>
 
-    <string name="intent_result_code_denied">Errore: </string>
-
     <string name="monthly_subscription_enabled">Abbonamenti mensili attivati.</string>
     <string name="monthly_subscription_disabled">Abbonamenti mensili disattivati.</string>
     <string name="quarterly_subscription_enabled">Abbonamenti trimestrali attivati.</string>

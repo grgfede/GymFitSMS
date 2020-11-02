@@ -66,7 +66,6 @@
     <string name="permission_camera_error">Permesso camera negato.</string>
     <string name="update_image_success">La nuova immagine è stata aggiornata.</string>
     <string name="update_image_error">La nuova immagine non è stata aggiornata.</string>
-    <string name="intent_result_code_denied">"Errore: "</string>
     <string name="title_subscription">Abbonamento</string>
     <string name="monthly_subscription">Mensile</string>
     <string name="quarterly_subscription">Trimestrale</string>

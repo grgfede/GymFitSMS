@@ -1,10 +1,11 @@
 package com.example.gymfit.gym.main;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +19,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
@@ -30,21 +30,28 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,13 +60,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ActivityGymProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private String userUid;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+
+    private String gymUID;
     private Gym gym;
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
     private boolean isEmptyData = false;
+    private final List<String> emptyData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +96,9 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
             initGymID();
             initGymFromDatabase(gymTmp -> {
                 this.gym = gymTmp;
-                AppUtils.startFragment(this, FragmentGymProfile.newInstance(this.gym, this.isEmptyData), false);
+                initDatabaseFromEmpty();
+
+                AppUtils.startFragment(this, FragmentGymProfile.newInstance(this.gym, this.isEmptyData, (ArrayList<String>) this.emptyData), false);
                 navigationView.setCheckedItem(R.id.nav_menu_home);
             });
 
@@ -142,13 +154,13 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_menu_home && !item.isChecked()) {
-            AppUtils.startFragment(this, FragmentGymProfile.newInstance(gym, this.isEmptyData), false);
+            AppUtils.startFragment(this, FragmentGymProfile.newInstance(this.gym, this.isEmptyData, (ArrayList<String>) this.emptyData), false);
         }
         else if (item.getItemId() == R.id.nav_menu_setting && !item.isChecked()) {
-            AppUtils.startFragment(this, FragmentGymSettings.newInstance(gym), true);
+            AppUtils.startFragment(this, FragmentGymSettings.newInstance(this.gym), true);
         }
         else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
-            AppUtils.startFragment(this, FragmentGymSubs.newInstance(gym), true);
+            AppUtils.startFragment(this, FragmentGymSubs.newInstance(this.gym), true);
         }
         else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {
             // TODO: help fragment
@@ -196,7 +208,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     private void initGymFromDatabase(InitGymCallback initGymCallback) {
 
         // Take data from Gym node
-        this.db.collection("gyms").document(this.userUid).get()
+        this.db.collection("gyms").document(this.gymUID).get()
                 // the gym user is correct and there is the data
                 .addOnCompleteListener(task -> {
                     Gym gym;
@@ -231,10 +243,90 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     }
 
     /**
+     * Init Database critical node with default values
+     */
+    private void initDatabaseFromEmpty() {
+        String[] keys = getResources().getStringArray(R.array.gym_field);
+        String[] keysMorning = getResources().getStringArray(R.array.morning_session_name);
+        String[] keysAfternoon = getResources().getStringArray(R.array.afternoon_session_name);
+        String[] keysEvening = getResources().getStringArray(R.array.evening_session_name);
+
+        this.emptyData.forEach(key -> {
+            // If empty value is Image, init Storage and Database with another default
+            if (key.equals(keys[3])) {
+                StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gymUID + "/profilePic");
+                storageReference.putFile(Uri.parse(ResourceUtils.getURIForResource(R.drawable.default_user)))
+                        .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String uriString = uri.toString();
+                            this.db.collection("gyms").document(this.gymUID).update(key, uriString)
+                                    .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is added into Database"))
+                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is not added into Database"));
+
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is added into Storage");
+                        }))
+                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is deleted"));
+            }
+            // If empty value is Position or Address, init Database with another default
+            else if (key.equals(keys[5]) || key.equals(keys[6])) {
+                this.db.collection("gyms").document(this.gymUID).update(keys[6], new GeoPoint(0, 0))
+                        .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Position is added into Database"))
+                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Position is not added into Database"));
+            }
+            // If empty value is Subscription, init Database with another default
+            else if (key.equals(keys[7])) {
+                Map<String, Boolean> subscriptions = new HashMap<String, Boolean>() {
+                    {
+                        put(keys[10], true);
+                        put(keys[11], true);
+                        put(keys[12], true);
+                        put(keys[13], true);
+                    }
+                };
+
+                this.db.collection("gyms").document(this.gymUID).update(key, subscriptions)
+                        .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Subscription is added into Database"))
+                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Subscription is not added into Database"));
+            }
+            // If empty value is Turns, init Database with another default
+            else if (key.equals(keys[9])) {
+                Map<String, Map<String, Boolean>> turns = new HashMap<String, Map<String, Boolean>>(){
+                    {
+                        put(keys[14], new HashMap<String, Boolean>() {
+                            {
+                                put(keysMorning[0], true);
+                                put(keysMorning[1], true);
+                                put(keysMorning[2], true);
+                            }
+                        });
+                        put(keys[15], new HashMap<String, Boolean>() {
+                            {
+                                put(keysAfternoon[0], true);
+                                put(keysAfternoon[1], true);
+                                put(keysAfternoon[2], true);
+                            }
+                        });
+                        put(keys[16], new HashMap<String, Boolean>() {
+                            {
+                                put(keysEvening[0], true);
+                                put(keysEvening[1], true);
+                                put(keysEvening[2], true);
+                            }
+                        });
+                    }
+                };
+
+                this.db.collection("gyms").document(this.gymUID).update(key, turns)
+                        .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Turn is added into Database"))
+                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Turn is not added into Database"));
+            }
+        });
+    }
+
+    /**
      * Set the current user auth for next uses with Database and Storage
      */
     private void initGymID() {
-        this.userUid = this.user.getUid();
+        this.gymUID = this.user.getUid();
     }
 
     /**
@@ -246,7 +338,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     private Gym initGym() {
         Map<String, Object> data = new HashMap<>();
 
-        data.put("userID", this.userUid);
+        data.put("userID", this.gymUID);
         data.put("name", "null");
         data.put("email", "null");
         data.put("phone", "null");
@@ -270,7 +362,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     private Gym initGym(DocumentSnapshot ds) {
         Map<String, Object> data = new HashMap<>();
 
-        data.put("userID", this.userUid);
+        data.put("userID", this.gymUID);
         data.put("name", ds.getString("name"));
         data.put("email", ds.getString("email"));
         data.put("phone", ds.getString("phone"));
@@ -297,7 +389,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     private Gym initGym(DocumentSnapshot ds, List<String> emptyData) {
         Map<String, Object> data = new HashMap<>();
 
-        data.put("userID", this.userUid);
+        data.put("userID", this.gymUID);
         ds.getData().forEach((key, value) -> {
             if (emptyData.contains(key)) {
                 AppUtils.log(Thread.currentThread().getStackTrace(), key + " is missing on Database");
@@ -344,24 +436,29 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
      * Check if the documentSnapshot has any empty field
      *
      * @param data DocumentSnapshot data gained from Database
-     * @throws NullPointerException Exception thrown to alert of Null object
+     * @throws NullDataException Exception thrown to alert of Null object
      */
-    private void isEmptyDataFromDatabase(Map<String, Object> data) throws NullPointerException {
-        List<String> emptyData = new ArrayList<>();
+    private void isEmptyDataFromDatabase(Map<String, Object> data) throws NullDataException {
+        this.emptyData.clear();
         AtomicBoolean flag = new AtomicBoolean(false);
+        String[] keys = getResources().getStringArray(R.array.gym_field);
 
         data.forEach((key, value) -> {
             if (value == null) {
-                emptyData.add(key);
+                this.emptyData.add(key);
                 flag.set(true);
+
+                // (7) subscription, (8) subscribers, (9) turn
+                if (!key.equals(keys[7]) && !key.equals(keys[8]) && !key.equals(keys[9])) {
+                    this.isEmptyData = true;
+                }
             }
         });
 
         // if get boolean return true means that there are empty value into Gym node of Database.
         // So throw Exception and init a message to show at User after layout XML inflate
         if (flag.get()) {
-            this.isEmptyData = true;
-            throw new NullDataException(emptyData);
+            throw new NullDataException(this.emptyData);
         }
     }
 

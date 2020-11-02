@@ -22,9 +22,9 @@ public final class AppUtils {
     // Utils
 
     /**
-     * Start a new Fragment from a current Activity
+     * Start a new Fragment from a current Activity or Fragment.
      *
-     * @param activity Activity object which will contains the new Fragment
+     * @param activity Activity object instance of FragmentActivity which contains Fragment
      * @param fragment Fragment object to commit
      * @param isAddedToStack authorize this transaction to the back stack.
      */
@@ -35,23 +35,8 @@ public final class AppUtils {
         if (isAddedToStack) {
             transaction.addToBackStack(AppCompatActivity.class.getSimpleName());
             transaction.setReorderingAllowed(true);
-        }
-        transaction.replace(R.id.fragment_container_view_tag, fragment).commit();
-    }
-
-    /**
-     * Start a new Fragment from another Fragment
-     *
-     * @param fragment Fragment object to commit
-     * @param isAddedToStack authorize this transaction to the back stack.
-     */
-    public static void startFragment(Fragment fragment, boolean isAddedToStack) {
-        FragmentManager manager = fragment.getChildFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        if (isAddedToStack) {
-            transaction.addToBackStack(AppCompatActivity.class.getSimpleName());
-            transaction.setReorderingAllowed(true);
+        } else {
+            transaction.disallowAddToBackStack();
         }
         transaction.replace(R.id.fragment_container_view_tag, fragment).commit();
     }

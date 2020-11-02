@@ -1,253 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/anchor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gym.main.FragmentGymSettings"
-    android:id="@+id/anchor"
-    android:backgroundTint="@color/background_ui_default">
+    android:backgroundTint="@color/background_ui_default"
+    tools:context=".gym.main.FragmentGymSettings">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <!-- Scroll -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <!-- Abbonamenti -->
-        <LinearLayout
-            android:id="@+id/gymSubscribeContainer"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.AppCompat.Body2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-
-                android:lineSpacingExtra="24sp"
-                android:text="@string/title_subscription"
-                android:textColor="@color/tint_title"
-                android:textSize="14sp" />
-
-            <!-- Switch container -->
+            <!-- Abbonamenti -->
             <LinearLayout
+                android:id="@+id/gymSubscribeContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <!-- Abbonamento mensile -->
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+
+                    android:lineSpacingExtra="24sp"
+                    android:text="@string/title_subscription"
+                    android:textColor="@color/tint_title"
+                    android:textSize="14sp" />
+
+                <!-- Switch container -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
                     android:orientation="vertical">
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/monthly_subscription_switch"
+                    <!-- Abbonamento mensile -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/monthly_subscription"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp" />
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/monthly_subscription_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                </LinearLayout>
+                            android:text="@string/monthly_subscription"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp" />
 
-                <!-- Abbonamento trimestrale -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    </LinearLayout>
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/quarterly_subscription_switch"
+                    <!-- Abbonamento trimestrale -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/quarterly_subscription"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp" />
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/quarterly_subscription_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                </LinearLayout>
+                            android:text="@string/quarterly_subscription"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp" />
 
-                <!-- Abbonamento semestrale -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    </LinearLayout>
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/six_month_subscription_switch"
+                    <!-- Abbonamento semestrale -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/six_month_subscription"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp" />
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/six_month_subscription_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                </LinearLayout>
+                            android:text="@string/six_month_subscription"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp" />
 
-                <!-- Abbonamento annuale -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    </LinearLayout>
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/annual_subscription_switch"
+                    <!-- Abbonamento annuale -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/annual_subscription"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp" />
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/annual_subscription_switch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+
+                            android:text="@string/annual_subscription"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
-
-        <View android:id="@+id/containerDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-
-            android:layout_marginStart="16dp"
-
-            android:background="?android:attr/dividerVertical"
-            app:layout_constraintTop_toBottomOf="@+id/gymSubscribeContainer" />
-
-        <!-- Turni -->
-        <LinearLayout
-            android:id="@+id/gymTurnContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/containerDivider">
-
-            <com.google.android.material.textview.MaterialTextView
-                style="@style/TextAppearance.AppCompat.Body2"
+            <View android:id="@+id/containerDivider"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
-                android:paddingVertical="8dp"
-                android:lineSpacingExtra="24sp"
-                android:text="@string/title_session"
-                android:textColor="@color/tint_title"
-                android:textSize="14sp" />
+                android:layout_height="1dp"
 
-            <!-- Turn container -->
+                android:layout_marginStart="16dp"
+
+                android:background="?android:attr/dividerVertical"
+                app:layout_constraintTop_toBottomOf="@+id/gymSubscribeContainer" />
+
+            <!-- Turni -->
             <LinearLayout
+                android:id="@+id/gymTurnContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/containerDivider">
 
-                <!-- Turni mattutini -->
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.AppCompat.Body2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:lineSpacingExtra="24sp"
+                    android:text="@string/title_session"
+                    android:textColor="@color/tint_title"
+                    android:textSize="14sp" />
+
+                <!-- Turn container -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="8dp"
                     android:orientation="vertical">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/morning_turn_button"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                    <!-- Turni mattutini -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/morning_session"
-                        android:textAlignment="viewStart"
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/morning_turn_button"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp"
-                        app:rippleColor="@color/background_ripple_icon" />
+                            android:text="@string/morning_session"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/morning_turn_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="8dp"
-                        android:textColor="@color/tint_second_line_light" />
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp"
+                            app:rippleColor="@color/background_ripple_icon" />
 
-                </LinearLayout>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/morning_turn_result"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:textColor="@color/tint_second_line_light" />
 
-                <!-- Turni pomeridiani -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/afternoon_turn_button"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                    <!-- Turni pomeridiani -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/afternoon_session"
-                        android:textAlignment="viewStart"
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/afternoon_turn_button"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp"
-                        app:rippleColor="@color/background_ripple_icon" />
+                            android:text="@string/afternoon_session"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/afternoon_turn_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="8dp"
-                        android:textColor="@color/tint_second_line_light" />
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp"
+                            app:rippleColor="@color/background_ripple_icon" />
 
-                </LinearLayout>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/afternoon_turn_result"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:textColor="@color/tint_second_line_light" />
 
-                <!-- Turni serali -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/evening_turn_button"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                    <!-- Turni serali -->
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        android:text="@string/evening_session"
-                        android:textAlignment="viewStart"
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/evening_turn_button"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                        android:textColor="@color/tint_first_line_light"
-                        android:textSize="16sp"
-                        app:rippleColor="@color/background_ripple_icon" />
+                            android:text="@string/evening_session"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/evening_turn_result"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="8dp"
-                        android:textColor="@color/tint_second_line_light" />
+                            android:textColor="@color/tint_first_line_light"
+                            android:textSize="16sp"
+                            app:rippleColor="@color/background_ripple_icon" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/evening_turn_result"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:textColor="@color/tint_second_line_light" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView >
 
-</androidx.core.widget.NestedScrollView >
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

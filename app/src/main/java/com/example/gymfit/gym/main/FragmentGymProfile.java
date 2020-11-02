@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,8 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
@@ -61,6 +58,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -72,8 +70,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private static final String GYM_KEY = "gym_key";
     private static final String IS_EMPTY_KEY = "is_empty_key";
+    private static final String EMPTY_DATA_KEY = "empty_data_key";
 
-    private static final String ERROR_LOG = "error";
     private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
 
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -104,18 +102,21 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
     private String gymUID = null;
     private Gym gym = null;
+    private boolean isEmptyData = false;
+    private List<String> emptyData = new ArrayList<>();
 
     private GoogleMap map = null;
     private boolean circleBtnClicked = false;
-    private boolean isEmptyData = false;
 
-    public static FragmentGymProfile newInstance(Gym gym, boolean isEmptyData) {
+
+    public static FragmentGymProfile newInstance(Gym gym, boolean isEmptyData, ArrayList<String> emptyData) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentGymProfile created");
 
         FragmentGymProfile fragment = new FragmentGymProfile();
         Bundle bundle = new Bundle();
         bundle.putSerializable(GYM_KEY, gym);
         bundle.putBoolean(IS_EMPTY_KEY, isEmptyData);
+        bundle.putStringArrayList(EMPTY_DATA_KEY, emptyData);
         fragment.setArguments(bundle);
 
         return fragment;
@@ -126,6 +127,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         assert getArguments() != null;
         this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
         this.isEmptyData = getArguments().getBoolean(IS_EMPTY_KEY);
+        this.emptyData = getArguments().getStringArrayList(EMPTY_DATA_KEY);
 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_profile, container, false);
@@ -142,10 +144,11 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         setDeleteButtonMap(rootView);
         setTempTextMap();
 
-        setActionForEmptyData();
+        isEmptyData();
 
+        // View listener
         try {
-            // View listener
+
             /* Floating Action Buttons listener */
             this.fabMap.forEach((key, fab) -> fab.setOnClickListener(v -> {
                 if (!key.equals("main") && !key.equals("editImage")) {
@@ -157,10 +160,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
                 switch (key) {
                     case "settings":
-                        openFragment(FragmentGymSettings.newInstance(this.gym));
+                        AppUtils.startFragment((AppCompatActivity) requireActivity(), FragmentGymSettings.newInstance(this.gym), true);
                         break;
                     case "subscribers":
-                        openFragment(FragmentGymSubs.newInstance(this.gym));
+                        AppUtils.startFragment((AppCompatActivity) requireActivity(), FragmentGymSubs.newInstance(this.gym), true);
                         break;
                     case "main":
                         onAddButtons();
@@ -175,15 +178,15 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             /* LayoutText listener */
             this.layoutTextMap.forEach((key, field) -> {
                 switch (key) {
-                    case "mail":
+                    case "email":
                         field.setOnClickListener(v -> {
-                            inputFieldFocused(field, this.editTextMap.get("mail"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
-                            this.editTextMap.get("mail").setText("");
+                            inputFieldFocused(field, this.editTextMap.get("email"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
+                            this.editTextMap.get("email").setText("");
                         });
 
                         field.setEndIconOnClickListener(v -> {
-                            inputFieldFocused(field, this.editTextMap.get("mail"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
-                            this.editTextMap.get("mail").setText("");
+                            inputFieldFocused(field, this.editTextMap.get("email"), getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
+                            this.editTextMap.get("email").setText("");
                         });
                         break;
                     case "key":
@@ -230,17 +233,17 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             /* EditTest listener */
             this.editTextMap.forEach((key, field) -> {
                 switch (key) {
-                    case "mail":
-                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("mail"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight)));
+                    case "email":
+                        field.setOnClickListener(v -> inputFieldFocused(this.layoutTextMap.get("email"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight)));
 
                         field.setOnFocusChangeListener((v, hasFocus) -> {
 
                             if(hasFocus) {
-                                inputFieldFocused(this.layoutTextMap.get("mail"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
+                                inputFieldFocused(this.layoutTextMap.get("email"), field, getResources().getString(R.string.helper_email_hover), rootView.findViewById(R.id.gymEmailButtonRight));
                                 field.setText("");
                             } else {
-                                inputFieldDispatch(this.layoutTextMap.get("mail"), field, this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                                this.layoutTextMap.get("mail").clearFocus();
+                                inputFieldDispatch(this.layoutTextMap.get("email"), field, this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
+                                this.layoutTextMap.get("email").clearFocus();
                                 field.clearFocus();
                             }
                         });
@@ -255,7 +258,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
                                 if(!s.toString().isEmpty() && !(s.toString().equals(gym.getEmail()))) {
-                                    tempTextMap.replace("mail", s.toString());
+                                    tempTextMap.replace("email", s.toString());
                                 }
                             }
 
@@ -399,43 +402,54 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             /* Save Buttons listener */
             this.saveButtonMap.forEach((key, btn) -> {
                 switch (key) {
-                    case "mail":
-                        btn.setOnClickListener(v -> FirebaseAuth.getInstance().getCurrentUser().updateEmail(Objects.requireNonNull((String) this.tempTextMap.get("mail")))
+                    case "email":
+                        btn.setOnClickListener(v -> FirebaseAuth.getInstance().getCurrentUser().updateEmail(Objects.requireNonNull((String) this.tempTextMap.get("email")))
                                 .addOnSuccessListener(aVoid -> {
                                     this.db.collection("gyms").document(gymUID).update(
-                                            "email", this.tempTextMap.get("mail")
+                                            "email", this.tempTextMap.get("email")
                                     );
-                                    this.gym.setEmail((String) this.tempTextMap.get("mail"));
+                                    this.gym.setEmail((String) this.tempTextMap.get("email"));
 
-                                    inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), (String) this.tempTextMap.get("mail"), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
+                                    this.emptyData.remove(key);
+
+                                    inputFieldDispatch(this.layoutTextMap.get("email"), this.editTextMap.get("email"), (String) this.tempTextMap.get("email"), false, rootView.findViewById(R.id.gymEmailButtonRight));
+                                    AppUtils.log(Thread.currentThread().getStackTrace(), "New email is updated on Database and Gym object");
+                                    AppUtils.message(messageAnchor, getResources().getString(R.string.update_email_success), Snackbar.LENGTH_SHORT).show();
                                 }).addOnFailureListener(e -> {
-                                    inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
-                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
+                                    inputFieldDispatch(this.layoutTextMap.get("email"), this.editTextMap.get("email"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight));
+                                    AppUtils.log(Thread.currentThread().getStackTrace(), "New email is deleted");
+                                    AppUtils.message(messageAnchor, getResources().getString(R.string.update_email_error), Snackbar.LENGTH_SHORT).show();
                                 }));
                         break;
                     case "key":
-                        btn.setOnClickListener(v ->FirebaseAuth.getInstance().getCurrentUser().updatePassword((String) this.tempTextMap.get("key"))
+                        btn.setOnClickListener(v ->FirebaseAuth.getInstance().getCurrentUser().updatePassword((String) Objects.requireNonNull(this.tempTextMap.get("key")))
                                 .addOnSuccessListener(aVoid -> {
                                     inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), (String) this.tempTextMap.get("key"), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
+                                    AppUtils.log(Thread.currentThread().getStackTrace(), "New key is updated on Database and Gym object");
+                                    AppUtils.message(messageAnchor, getResources().getString(R.string.update_password_success), Snackbar.LENGTH_SHORT).show();
                                 }).addOnFailureListener(e -> {
                                     inputFieldDispatch(this.layoutTextMap.get("key"), this.editTextMap.get("key"), getResources().getString(R.string.password_hide), false, rootView.findViewById(R.id.gymKeyButtonRight));
-                                    Snackbar.make(messageAnchor, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
+                                    AppUtils.log(Thread.currentThread().getStackTrace(), "New key is deleted");
+                                    AppUtils.message(messageAnchor, getResources().getString(R.string.update_password_error), Snackbar.LENGTH_SHORT).show();
                                 }));
                         break;
                     case "phone":
                         btn.setOnClickListener(v -> {
-                            if(isValidPhoneNumber((String) this.tempTextMap.get("phone"))) {
+                            if(isValidPhoneNumber((String) Objects.requireNonNull(this.tempTextMap.get("phone")))) {
                                 this.db.collection("gyms").document(gymUID).update(
                                         "phone", this.tempTextMap.get("phone")
                                 );
                                 this.gym.setPhone((String) this.tempTextMap.get("phone"));
+
+                                this.emptyData.remove(key);
+
                                 inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), (String) this.tempTextMap.get("phone"), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                                Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "New phone number is updated on Database and Gym object");
+                                AppUtils.message(messageAnchor, getResources().getString(R.string.update_phone_success), Snackbar.LENGTH_SHORT).show();
                             } else {
                                 inputFieldDispatch(this.layoutTextMap.get("phone"), this.editTextMap.get("phone"), this.gym.getPhone(), false, rootView.findViewById(R.id.gymPhoneButtonRight));
-                                Snackbar.make(messageAnchor, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "New phone number is deleted");
+                                AppUtils.message(messageAnchor, getResources().getString(R.string.update_phone_error), Snackbar.LENGTH_SHORT).show();
                             }
                         });
                         break;
@@ -448,8 +462,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                             );
                             this.gym.setAddress((String) this.tempTextMap.get("address"));
                             this.gym.setPosition((LatLng) this.tempTextMap.get("position"));
+
+                            this.emptyData.remove(key);
+
                             inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), (String) this.tempTextMap.get("address"), false, rootView.findViewById(R.id.gymAddressButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "New address is updated on Database and Gym object");
+                            AppUtils.message(messageAnchor, getResources().getString(R.string.update_address_success), Snackbar.LENGTH_SHORT).show();
 
                             this.map.clear();
                             this.map.addMarker(new MarkerOptions().position((LatLng) this.tempTextMap.get("position"))).setTitle(gym.getName());
@@ -462,8 +480,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                                     "name", this.tempTextMap.get("name")
                             );
                             this.gym.setName((String) this.tempTextMap.get("name"));
+
+                            this.emptyData.remove(key);
+
                             inputFieldDispatch(this.layoutTextMap.get("name"), this.editTextMap.get("name"), (String) this.tempTextMap.get("name"), true, rootView.findViewById(R.id.gymNameButtonRight));
-                            Snackbar.make(messageAnchor, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "New name is updated on Database and Gym object");
+                            AppUtils.message(messageAnchor, getResources().getString(R.string.update_name_success), Snackbar.LENGTH_SHORT).show();
 
                             NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
                             ((MaterialTextView) navigationView.getHeaderView(0).findViewById(R.id.header_gym_name)).setText((String) this.tempTextMap.get("name"));
@@ -475,9 +497,9 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             /* Delete Buttons listener */
             this.deleteButtonMap.forEach((key, btn) -> {
                 switch (key) {
-                    case "mail":
+                    case "email":
                         btn.setOnClickListener(v ->
-                                inputFieldDispatch(this.layoutTextMap.get("mail"), this.editTextMap.get("mail"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight)));
+                                inputFieldDispatch(this.layoutTextMap.get("email"), this.editTextMap.get("email"), this.gym.getEmail(), false, rootView.findViewById(R.id.gymEmailButtonRight)));
                         break;
                     case "key":
                         btn.setOnClickListener(v ->
@@ -508,25 +530,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         return rootView;
     }
 
-    private void setActionForEmptyData() {
-        if (this.isEmptyData) {
-            Snackbar snackbar = AppUtils.message(this.messageAnchor, getString(R.string.profile_not_completed), Snackbar.LENGTH_INDEFINITE);
-
-            snackbar.setAction(getString(R.string.system_toolbar_edit), v -> {
-                MenuItem editMenuItem = this.toolbar.findItem(R.id.app_bar_edit);
-                editMenuItem.setChecked(true);
-                snackbar.dismiss();
-            })
-            .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null))
-            .show();
-        }
-    }
-
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.menu_gym_profile_toolbar, menu);
         this.toolbar = menu;
         super.onCreateOptionsMenu(menu, inflater);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Toolbar Gym is inflated");
     }
 
     @Override
@@ -540,6 +550,9 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 setEditIconVisibility(false);
                 setLayoutTextEnable(false);
                 item.setChecked(false);
+
+                // show empty data message
+                isEmptyData();
             } else {
                 AppUtils.log(Thread.currentThread().getStackTrace(), "Gym profile is under edit");
 
@@ -561,13 +574,13 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 AppUtils.log(Thread.currentThread().getStackTrace(), "Camera permission granted from Gym profile");
-                Snackbar.make(messageAnchor, getResources().getString(R.string.permission_camera_success), Snackbar.LENGTH_SHORT).show();
+                AppUtils.message(messageAnchor, getResources().getString(R.string.permission_camera_success), Snackbar.LENGTH_SHORT).show();
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, MY_CAMERA_REQUEST_CODE);
             } else {
                 AppUtils.log(Thread.currentThread().getStackTrace(), "Camera permission not authorized from Gym profile");
-                Snackbar.make(messageAnchor, getResources().getString(R.string.permission_camera_error), Snackbar.LENGTH_SHORT).show();
+                AppUtils.message(messageAnchor, getResources().getString(R.string.permission_camera_error), Snackbar.LENGTH_SHORT).show();
             }
         }
     }
@@ -601,7 +614,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 setAndUploadNewImage(data.getData(), this.orientation);
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+                AppUtils.message(messageAnchor, status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         } else if (requestCode == MY_CAMERA_REQUEST_CODE && !(data == null)) {
             if(resultCode == ActivityGymProfile.RESULT_OK) {
@@ -611,7 +624,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 setAndUploadNewImage(imageBitmap, this.orientation);
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
+                AppUtils.message(messageAnchor, status.getStatusMessage(), Snackbar.LENGTH_SHORT).show();
             }
         }
 
@@ -637,10 +650,9 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 }
 
             } catch (Exception e) {
-                Log.e(ERROR_LOG, Objects.requireNonNull(e.getMessage()));
-                setMessage("Error: " + e.toString());
-
-                closeFragment();
+                AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
+                AppUtils.message(this.messageAnchor, e.toString(), Snackbar.LENGTH_SHORT).show();
+                AppUtils.restartActivity((AppCompatActivity) requireActivity());
             }
         }
     }
@@ -797,10 +809,21 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     String uriString = uri.toString();
                     this.gym.setImage(data.toString());
                     this.db.collection("gyms").document(this.gymUID).update("img", uriString)
-                            .addOnSuccessListener(aVoid -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> {
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "New image is updated into Database");
+                                AppUtils.message(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "New image is not updated into Database");
+                                AppUtils.message(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show();
+                            });
+
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "New image is updated on Storage and Gym object");
                 }))
-                .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "New image is deleted");
+                    AppUtils.message(messageAnchor, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                });
 
     }
 
@@ -832,10 +855,20 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     String uriString = uri.toString();
                     this.gym.setImage(uriString);
                     this.db.collection("gyms").document(this.gymUID).update("img", uriString)
-                            .addOnSuccessListener(aVoid -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show());
-                }))
-                .addOnFailureListener(e -> Snackbar.make(messageAnchor, getResources().getString(R.string.intent_result_code_denied) + e.getMessage(), Snackbar.LENGTH_SHORT).show());
+                            .addOnSuccessListener(aVoid -> {
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "New image is updated into Database");
+                                AppUtils.message(messageAnchor, getResources().getString(R.string.update_image_success), Snackbar.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "New image is not updated into Database");
+                                AppUtils.message(messageAnchor, getResources().getString(R.string.update_image_error), Snackbar.LENGTH_SHORT).show();
+                            });
+
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "New image is updated on Storage and Gym object");
+                })).addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "New image is deleted");
+                    AppUtils.message(messageAnchor, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                });
     }
 
     // Buttons
@@ -846,7 +879,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
     private void setSaveButtonMap(View rootView) {
-        this.saveButtonMap.put("mail", rootView.findViewById(R.id.gymSaveMail));
+        this.saveButtonMap.put("email", rootView.findViewById(R.id.gymSaveMail));
         this.saveButtonMap.put("key", rootView.findViewById(R.id.gymSaveKey));
         this.saveButtonMap.put("phone", rootView.findViewById(R.id.gymSavePhone));
         this.saveButtonMap.put("address", rootView.findViewById(R.id.gymSaveAddress));
@@ -859,7 +892,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
     private void setDeleteButtonMap(View rootView) {
-        this.deleteButtonMap.put("mail", rootView.findViewById(R.id.gymAbortMail));
+        this.deleteButtonMap.put("email", rootView.findViewById(R.id.gymAbortMail));
         this.deleteButtonMap.put("key", rootView.findViewById(R.id.gymAbortKey));
         this.deleteButtonMap.put("phone", rootView.findViewById(R.id.gymAbortPhone));
         this.deleteButtonMap.put("address", rootView.findViewById(R.id.gymAbortAddress));
@@ -874,7 +907,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
     private void setLayoutTextMap(View rootView) {
-        this.layoutTextMap.put("mail", rootView.findViewById(R.id.gymBoxEmail));
+        this.layoutTextMap.put("email", rootView.findViewById(R.id.gymBoxEmail));
         this.layoutTextMap.put("key", rootView.findViewById(R.id.gymBoxKey));
         this.layoutTextMap.put("phone", rootView.findViewById(R.id.gymBoxPhone));
         this.layoutTextMap.put("address", rootView.findViewById(R.id.gymBoxAddress));
@@ -889,7 +922,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
     private void setEditTextMap(View rootView) {
-        this.editTextMap.put("mail", rootView.findViewById(R.id.gymTxtEmail));
+        this.editTextMap.put("email", rootView.findViewById(R.id.gymTxtEmail));
         this.editTextMap.put("key", rootView.findViewById(R.id.gymTextKey));
         this.editTextMap.put("phone", rootView.findViewById(R.id.gymTextPhone));
         this.editTextMap.put("address", rootView.findViewById(R.id.gymTextAddress));
@@ -900,7 +933,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * Set map with temporal edit text views.
      */
     private void setTempTextMap() {
-        this.tempTextMap.put("mail", "");
+        this.tempTextMap.put("email", "");
         this.tempTextMap.put("key", "");
         this.tempTextMap.put("phone", "");
         this.tempTextMap.put("address", "");
@@ -929,6 +962,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         // init message Anchor for Snackbar
         this.messageAnchor = rootView.findViewById(R.id.anchor);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of FragmentGymProfile initialized");
     }
 
     /**
@@ -968,18 +1003,23 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         phoneField.setText(this.gym.getPhone());
         addressField.setText(this.gym.getAddress());
 
+        AppUtils.log(Thread.currentThread().getStackTrace(), "View interface of FragmentGymProfile initialized");
+    }
+
+    /**
+     * Set and show a long message when there are empty value
+     */
+    private void setActionForEmptyData() {
+        if (this.isEmptyData) {
+            Snackbar snackbar = AppUtils.message(this.messageAnchor, getString(R.string.profile_not_completed), Snackbar.LENGTH_INDEFINITE);
+
+            snackbar.setAction(getString(R.string.system_toolbar_edit), v -> onOptionsItemSelected(this.toolbar.findItem(R.id.app_bar_edit)))
+                    .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null))
+                    .show();
+        }
     }
 
     // Other methods
-
-    /**
-     * Show a message on the screen
-     *
-     * @param text string to show in SnackBar method
-     */
-    private void setMessage(String text) {
-        Snackbar.make(this.messageAnchor, text, Snackbar.LENGTH_SHORT).show();
-    }
 
     /**
      * Add at all field TextLayout the end icon when the flag is true, alternately it will be removed
@@ -1030,6 +1070,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     private void inputFieldFocused(TextInputLayout box, TextInputEditText text, String helperText, LinearLayout container) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Field focused: " + box.getId());
+
         text.requestFocus();
         box.setEndIconDrawable(R.drawable.ic_clear);
         box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, requireActivity().getTheme())));
@@ -1042,6 +1084,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     private void inputFieldFocused(TextInputLayout box, TextInputEditText text, LinearLayout container) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Field focused: " + box.getId());
+
         text.requestFocus();
         box.setEndIconDrawable(R.drawable.ic_clear);
         box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, requireActivity().getTheme())));
@@ -1050,6 +1094,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     private void inputFieldDispatch(TextInputLayout box, TextInputEditText textField, String originText, boolean helperEnable, LinearLayout container) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Field dispatched: " + box.getId());
+
         textField.setText(originText);
         textField.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_high_type, requireActivity().getTheme())));
 
@@ -1058,6 +1104,20 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         box.setHelperTextEnabled(helperEnable);
 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0));
+    }
+
+    private void isEmptyData() throws NullPointerException {
+        if (this.emptyData.isEmpty()) {
+            this.isEmptyData = false;
+
+            AppUtils.log(Thread.currentThread().getStackTrace(), "There are not empty data now");
+
+        } else {
+            this.isEmptyData = true;
+            setActionForEmptyData();
+
+            AppUtils.log(Thread.currentThread().getStackTrace(), "There are empty data yet");
+        }
     }
 
     private boolean isValidPhoneNumber(String number) {
@@ -1071,22 +1131,12 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         */
         String allCountryRegex = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$";
         if(number.matches(allCountryRegex)) {
+            AppUtils.log(Thread.currentThread().getStackTrace(), "New phone number is valid");
             return number.length() <= this.layoutTextMap.get("phone").getCounterMaxLength();
         } else {
+            AppUtils.log(Thread.currentThread().getStackTrace(), "New phone number is not valid");
             return false;
         }
-    }
-
-    private void openFragment(Fragment fragment) {
-        FragmentManager manager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
-        transaction.addToBackStack(null);
-        transaction.replace(R.id.fragment_container_view_tag, fragment).commit();
-    }
-
-    private void closeFragment() {
-        getChildFragmentManager().popBackStack();
     }
 
 }

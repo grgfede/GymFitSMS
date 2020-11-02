@@ -29,4 +29,5 @@ public final class ResourceUtils {
     public static String getStringFromID(int resourceId) {
         return App.getResource().getString(resourceId);
     }
+
 }

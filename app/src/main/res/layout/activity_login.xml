@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
 
                 android:fontFamily="@font/avenirltstdlight"
-                android:inputType="text|textEmailAddress|textEmailSubject"
+                android:inputType="textVisiblePassword|textPassword"
                 android:textColor="@color/tint_hint_focuses" />
         </com.google.android.material.textfield.TextInputLayout>
 
