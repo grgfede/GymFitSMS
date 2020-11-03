@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="25dp"
+    android:layout_marginEnd="25dp"
+    android:background="@color/background_ui_default"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".system.main.signup.GymSignUpFragment">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="60dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/default_user"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="24dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/btn_register"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_image"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/btn_register"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_image"
+            app:layout_constraintVertical_bias="0.0">
+
+            <!--NOME-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtNameSignUpGymLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                android:textSize="15sp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_name_hover"
+                app:helperTextEnabled="true"
+                app:hintEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:startIconDrawable="@drawable/ic_person"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtNameSignUpGym"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:inputType="text"
+                    android:textColor="@color/tint_hint_focuses" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--LOCATION-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtLocationSignUpGymLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenirltstdlight"
+                android:hint="@string/prompt_address"
+                android:textSize="15sp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_address_hover_signUp"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:startIconDrawable="@drawable/ic_place"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtLocationSignUpGym"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:textSize="13sp"
+                    app:hintTextColor="@color/tint_hint_focuses" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--PHONE-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtPhoneSignUpGymLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/phoneNumber"
+                android:textSize="15sp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_phone_hover_signUp"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtLocationSignUpLayout"
+                app:layout_constraintVertical_bias="0.0"
+                app:startIconDrawable="@drawable/ic_phone"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtPhoneSignUpGym"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:inputType="number"
+                    android:textColor="@color/tint_hint_focuses" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--EMAIL-->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtEmailSignUpGymLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/prompt_email"
+                android:textSize="15sp"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_email_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
+                app:startIconDrawable="@drawable/ic_mail"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtEmailSignUpGym"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:inputType="text"
+                    android:textColor="@color/tint_hint_focuses" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--PASSWORD-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtPasswordSignUpGymLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/prompt_password"
+                android:textSize="15sp"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_psw_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtEmailSignUpLayout"
+                app:startIconDrawable="@drawable/ic_psw"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtPasswordSignUpGym"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:inputType="textPassword"
+                    android:textColor="@color/tint_hint_no_focused" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--REPEAT PASSWORD-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtRepeatPasswordSignUpGymLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="@string/repeat_password"
+                android:textSize="15sp"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_psw_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPasswordSignUpLayout"
+                app:startIconDrawable="@drawable/ic_psw"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtRepeatPasswordSignUpGym"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:inputType="textPassword"
+                    android:textColor="@color/tint_hint_no_focused" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/avenirltstdlight"
+        android:foregroundGravity="top"
+        android:text="Registrati"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

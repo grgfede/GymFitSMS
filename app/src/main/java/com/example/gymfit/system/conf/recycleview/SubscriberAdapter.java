@@ -103,8 +103,8 @@ public class SubscriberAdapter extends RecyclerView.Adapter<SubscriberAdapter.My
         holder.bind(this.context, this.users.get(position), position, listener);
 
         // load
-        Picasso.get().load(this.users.get(position).getUrlImage()).into(holder.media);
-        Picasso.get().load(this.users.get(position).getUrlImage()).into(holder.startIcon);
+        Picasso.get().load(this.users.get(position).getImg()).into(holder.media);
+        Picasso.get().load(this.users.get(position).getImg()).into(holder.startIcon);
 
         String username = this.users.get(position).getName() + " " + this.users.get(position).getSurname();
         holder.username.setText(username);

@@ -20,7 +20,7 @@ public class User implements Serializable, Parcelable {
     private String address;
     private String email;
     private String uid;
-    private String urlImage;
+    private String img;
     private String subscription;
     private Date dateOfBirthday;
     private List<Map<String, Object>> turns;
@@ -49,7 +49,7 @@ public class User implements Serializable, Parcelable {
 
     public User(String name, String surname, String phone, String email, String gender, String uid, String img, String subscription, List<Map<String, Object>> turns) {
         this(name, surname, phone, email, gender, uid);
-        this.urlImage = img;
+        this.img = img;
         this.subscription = subscription;
         this.turns = turns;
     }
@@ -66,7 +66,7 @@ public class User implements Serializable, Parcelable {
         address = in.readString();
         email = in.readString();
         uid = in.readString();
-        urlImage = in.readString();
+        img = in.readString();
         subscription = in.readString();
         gender = in.readString();
     }
@@ -115,7 +115,7 @@ public class User implements Serializable, Parcelable {
         return uid;
     }
 
-    public String getUrlImage(){ return urlImage;}
+    public String getImg(){ return img;}
 
     public LatLng getLocation(){return location;}
 
@@ -161,7 +161,7 @@ public class User implements Serializable, Parcelable {
         this.uid = uid;
     }
 
-    public void setUrlImage(String urlImage){ this.urlImage = urlImage;}
+    public void setImg(String img){ this.img = img;}
 
     public void setSubscription(String subscription) {
         this.subscription = subscription;
@@ -186,7 +186,7 @@ public class User implements Serializable, Parcelable {
         dest.writeString(address);
         dest.writeString(email);
         dest.writeString(uid);
-        dest.writeString(urlImage);
+        dest.writeString(img);
         dest.writeString(subscription);
         dest.writeString(gender);
     }
