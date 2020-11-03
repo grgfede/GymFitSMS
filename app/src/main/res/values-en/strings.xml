@@ -121,4 +121,6 @@
     <string name="message_user_removing">removing…</string>
     <string name="prompt_confirm">Apply</string>
     <string name="profile_not_completed">Profile not completed.\nSet your empty field…</string>
+    <string name="recycleview_void">No subscribers.</string>
+    <string name="prompt_update">Update</string>
 </resources>

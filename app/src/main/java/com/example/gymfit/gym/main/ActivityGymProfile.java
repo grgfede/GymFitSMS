@@ -320,6 +320,11 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
                         .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Turn is not added into Database"));
             }
         });
+
+        // this.emptyData.remove(keys[6]); position need reset if address or/and position are empty
+        this.emptyData.remove(keys[7]);
+        this.emptyData.remove(keys[8]);
+        this.emptyData.remove(keys[9]);
     }
 
     /**

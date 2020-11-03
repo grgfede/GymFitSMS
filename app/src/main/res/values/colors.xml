@@ -22,11 +22,13 @@
     <color name="background_button_second">@color/quantum_tealA400</color>
     <color name="background_button_icon">@color/quantum_grey50</color>
     <color name="background_button_error">@color/quantum_error_light</color>
+    <color name="background_message">@color/quantum_greyblack1000</color>
 
     <color name="background_ripple_default">@color/quantum_deeppurpleA100</color>
     <color name="background_ripple_second">@color/quantum_tealA200</color>
     <color name="background_ripple_icon">@color/quantum_grey200</color>
     <color name="background_ripple_error">@color/quantum_error_dark</color>
+    <color name="background_ripple_message">@color/quantum_amber100</color>
 
     <!-- Text -->
     <color name="tint_title">@color/quantum_deeppurple900</color>

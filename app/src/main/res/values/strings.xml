@@ -63,6 +63,7 @@
     <string name="prompt_send">Invia</string>
     <string name="prompt_delete">Cancella</string>
     <string name="prompt_confirm">Conferma</string>
+    <string name="prompt_update">Aggiorna</string>
     <!-- TODO: migrate from database strings -->
     <string name="prompt_subscribers" translatable = "false">subscribers</string>
     <string name="prompt_subscription" translatable = "false">subscription</string>
