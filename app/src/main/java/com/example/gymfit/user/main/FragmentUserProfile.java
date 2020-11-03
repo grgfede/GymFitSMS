@@ -1,4 +1,4 @@
-package com.example.gymfit;
+package com.example.gymfit.user.main;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.gymfit.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Fragment_userProfile#newInstance} factory method to
+ * Use the {@link FragmentUserProfile#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Fragment_userProfile extends Fragment {
+public class FragmentUserProfile extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class Fragment_userProfile extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Fragment_userProfile() {
+    public FragmentUserProfile() {
         // Required empty public constructor
     }
 
@@ -37,8 +39,8 @@ public class Fragment_userProfile extends Fragment {
      * @return A new instance of fragment Fragment_userProfile.
      */
     // TODO: Rename and change types and number of parameters
-    public static Fragment_userProfile newInstance(String param1, String param2) {
-        Fragment_userProfile fragment = new Fragment_userProfile();
+    public static FragmentUserProfile newInstance(String param1, String param2) {
+        FragmentUserProfile fragment = new FragmentUserProfile();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

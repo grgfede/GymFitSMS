@@ -164,7 +164,7 @@
                         app:endIconMode="custom"
                         app:endIconTint="@color/tint_image_icon_light"
 
-                        app:helperText="@string/helper_name_always"
+                        app:helperText="@string/helper_name_gym"
                         app:helperTextEnabled="true"
                         app:hintEnabled="false">
 
