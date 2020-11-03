@@ -92,8 +92,8 @@
             app:rippleColor="@color/background_ripple_icon"
             android:visibility="invisible"
 
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <!-- Content container -->
         <LinearLayout
@@ -154,7 +154,7 @@
                             app:endIconMode="custom"
                             app:endIconTint="@color/tint_image_icon_light"
 
-                            app:helperText="@string/helper_name_always"
+                            app:helperText="@string/helper_name_gym"
                             app:helperTextEnabled="true"
                             app:hintEnabled="false">
 

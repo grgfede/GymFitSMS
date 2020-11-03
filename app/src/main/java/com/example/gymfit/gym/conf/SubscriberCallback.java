@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SubscriberCallback {
     void addOnCallback(List<String> usersID);
+    void addOnCallback(boolean isEmpty);
     void addOnSuccessCallback(User user);
-    void addOnCompleteCallback();
     void addOnSuccessListener();
 }

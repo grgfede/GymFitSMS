@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        android:text="@string/helper_name_always"
+        android:text="@string/helper_name_gym"
         android:textColor="@color/tint_second_line_dark"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

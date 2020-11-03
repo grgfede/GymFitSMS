@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,20 +36,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -59,7 +54,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityGymProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private String gymUID;
@@ -77,11 +72,11 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_gym_profile);
 
         try {
-            // Toolbar
+            // Get Toolbar from layout XML and init it
             MaterialToolbar toolbar = findViewById(R.id.menu_gym_toolbar);
             setSupportActionBar(toolbar);
 
-            // Drawer
+            // Get Drawer from layout XML and init it
             this.drawer = findViewById(R.id.drawer_gym);
             this.navigationView = findViewById(R.id.navigation_gym);
             ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, this.drawer, toolbar, R.string.title_open_drawer, R.string.title_close_open_drawer);
@@ -89,10 +84,10 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
             drawerToggle.syncState();
             this.navigationView.setNavigationItemSelectedListener(this);
 
-            // Map Frame
+            // Initialize Google Place API
             Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
 
-            // Gym
+            // Initialize Gym
             initGymID();
             initGymFromDatabase(gymTmp -> {
                 this.gym = gymTmp;
@@ -116,10 +111,10 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         return true;
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.system_toolbar_logout) {
+            FirebaseAuth.getInstance().signOut();
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -155,16 +150,14 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_menu_home && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentGymProfile.newInstance(this.gym, this.isEmptyData, (ArrayList<String>) this.emptyData), false);
-        }
-        else if (item.getItemId() == R.id.nav_menu_setting && !item.isChecked()) {
+        } else if (item.getItemId() == R.id.nav_menu_setting && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentGymSettings.newInstance(this.gym), true);
-        }
-        else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
+        } else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentGymSubs.newInstance(this.gym), true);
-        }
-        else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {
+        } else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {
             // TODO: help fragment
         } else if (item.getItemId() == R.id.nav_menu_logout) {
+            FirebaseAuth.getInstance().signOut();
             finish();
         }
 
@@ -320,13 +313,18 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
                         .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Turn is not added into Database"));
             }
         });
+
+        // this.emptyData.remove(keys[6]); position need reset if address or/and position are empty
+        this.emptyData.remove(keys[7]);
+        this.emptyData.remove(keys[8]);
+        this.emptyData.remove(keys[9]);
     }
 
     /**
      * Set the current user auth for next uses with Database and Storage
      */
     private void initGymID() {
-        this.gymUID = this.user.getUid();
+        this.gymUID = this.currentUser.getUid();
     }
 
     /**

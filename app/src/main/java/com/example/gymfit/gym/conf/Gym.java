@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Gym extends GenericUser implements Serializable {
     private String address;
@@ -97,7 +98,7 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     public void setTurn(String key, int position, boolean value) {
-        this.turns.get(key)[position] = value;
+        Objects.requireNonNull(this.turns.get(key))[position] = value;
     }
 
     public void setSubscribers(List<String> subscribers) {

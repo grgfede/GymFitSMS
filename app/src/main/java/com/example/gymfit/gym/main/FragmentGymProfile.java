@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -464,6 +465,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                             this.gym.setPosition((LatLng) this.tempTextMap.get("position"));
 
                             this.emptyData.remove(key);
+                            this.emptyData.remove("position");
 
                             inputFieldDispatch(this.layoutTextMap.get("address"), this.editTextMap.get("address"), (String) this.tempTextMap.get("address"), false, rootView.findViewById(R.id.gymAddressButtonRight));
                             AppUtils.log(Thread.currentThread().getStackTrace(), "New address is updated on Database and Gym object");
@@ -610,7 +612,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                 this.tempTextMap.replace("position", place.getLatLng());
             }
         } else if (requestCode == MY_GALLERY_REQUEST_CODE && !(data == null)) {
-            if(resultCode == ActivityGymProfile.RESULT_OK){
+            if(resultCode == ActivityGymProfile.RESULT_OK) {
+                this.emptyData.remove("img");
                 setAndUploadNewImage(data.getData(), this.orientation);
             } else {
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -618,6 +621,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
             }
         } else if (requestCode == MY_CAMERA_REQUEST_CODE && !(data == null)) {
             if(resultCode == ActivityGymProfile.RESULT_OK) {
+                this.emptyData.remove("img");
                 Bundle extras = data.getExtras();
                 assert extras != null;
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -949,6 +953,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
     private void initSystemInterface(View rootView) {
+        // init new checked item on navigation Drawer
+        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
+        navigationView.getMenu().findItem(R.id.nav_menu_home).setChecked(true);
+
         // Abilities toolbar item options
         setHasOptionsMenu(true);
         // Change toolbar title
@@ -1109,14 +1117,11 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private void isEmptyData() throws NullPointerException {
         if (this.emptyData.isEmpty()) {
             this.isEmptyData = false;
-
             AppUtils.log(Thread.currentThread().getStackTrace(), "There are not empty data now");
-
         } else {
             this.isEmptyData = true;
             setActionForEmptyData();
-
-            AppUtils.log(Thread.currentThread().getStackTrace(), "There are empty data yet");
+            AppUtils.log(Thread.currentThread().getStackTrace(), "There are empty data yet: " + this.emptyData.toString());
         }
     }
 

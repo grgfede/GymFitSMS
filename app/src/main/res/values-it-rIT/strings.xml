@@ -55,7 +55,7 @@
     <string name="helper_address_error">L\'indirizzo non è valido.</string>
     <string name="update_address_success">Il nuovo indirizzo è stato aggiornato.</string>
     <string name="update_address_error">Il nuovo indirizzo non è stato aggiornato.</string>
-    <string name="helper_name_always">Gym</string>
+    <string name="helper_name_gym">Gym</string>
     <string name="update_name_success">Il nuovo nome è stato aggiornato.</string>
     <string name="update_name_error">Il nuovo nome non è stato aggiornato.</string>
     <string name="prompt_delete">Cancella</string>
@@ -121,4 +121,10 @@
     <string name="helper_psw_not_equal_error">Le due password non coincidono</string>
     <string name="prompt_confirm">Conferma</string>
     <string name="profile_not_completed">Profilo non completato.\nCompleta i campi mancanti…</string>
+    <string name="recycleview_void">Nessun iscritto.</string>
+    <string name="prompt_update">Aggiorna</string>
+    <string name="helper_name_user">User</string>
+    <string name="user_profile_toolbar_title">Utente</string>
+    <string name="user_subs_toolbar_title">Prenotazioni</string>
+    <string name="user_gyms_toolbar_title">Elenco palestre</string>
 </resources>

@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textview.MaterialTextView;
@@ -162,8 +163,10 @@ public class FragmentGymSettings extends Fragment {
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
     private void initSystemInterface(View rootView) {
-        // Abilities toolbar item options
-        setHasOptionsMenu(true);
+        // init new checked item on navigation Drawer
+        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
+        navigationView.getMenu().findItem(R.id.nav_menu_setting).setChecked(true);
+
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.gym_settings_toolbar_title));
 
@@ -172,7 +175,6 @@ public class FragmentGymSettings extends Fragment {
 
         AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of FragmentGymSettings initialized");
     }
-
 
     // Switch methods
 

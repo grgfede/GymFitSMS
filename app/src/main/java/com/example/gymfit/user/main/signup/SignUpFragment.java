@@ -284,7 +284,7 @@ public class SignUpFragment extends Fragment {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
                         getContext(),
-                        R.layout.dropdown_menu_popup_item,
+                        R.layout.layout_system_dropdown,
                         COUNTRIES);
 
         AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.txtGenderSignUp);

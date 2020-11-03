@@ -54,7 +54,6 @@ public class User implements Serializable, Parcelable {
         this.turns = turns;
     }
 
-
     // Get methods
 
     protected User(Parcel in) {
