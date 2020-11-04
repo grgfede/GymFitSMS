@@ -36,6 +36,7 @@
         <!-- [10] --> <item name="subscription" translatable="false">subscription</item>
         <!-- [11] --> <item name="turns" translatable="false">turns</item>
 
-
+        <!-- [12] --> <item name="date" translatable="false">date</item>
+        <!-- [13] --> <item name="type" translatable="false">type</item>
     </string-array>
 </resources>

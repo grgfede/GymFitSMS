@@ -33,6 +33,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.utils.AppUtils;
+import com.example.gymfit.user.main.FragmentUserProfile;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -52,6 +53,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
@@ -68,6 +70,11 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link FragmentGymProfile#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private static final String GYM_KEY = "gym_key";
     private static final String IS_EMPTY_KEY = "is_empty_key";
@@ -109,7 +116,6 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private GoogleMap map = null;
     private boolean circleBtnClicked = false;
 
-
     public static FragmentGymProfile newInstance(Gym gym, boolean isEmptyData, ArrayList<String> emptyData) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentGymProfile created");
 
@@ -124,12 +130,17 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        assert getArguments() != null;
-        this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
-        this.isEmptyData = getArguments().getBoolean(IS_EMPTY_KEY);
-        this.emptyData = getArguments().getStringArrayList(EMPTY_DATA_KEY);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
+            this.isEmptyData = getArguments().getBoolean(IS_EMPTY_KEY);
+            this.emptyData = getArguments().getStringArrayList(EMPTY_DATA_KEY);
+        }
+    }
 
+    @Override
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_profile, container, false);
 

@@ -215,7 +215,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
                             gym = initGym(documentSnapshot);
                         } catch(NullDataException e) {
                             AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
-                            gym = initGym(documentSnapshot, e.getEmptyData());
+                            gym = initGym(documentSnapshot);
                         }
                     } else {
                         AppUtils.log(Thread.currentThread().getStackTrace(), task.getException().getMessage());
@@ -352,7 +352,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     }
 
     /**
-     * Get field from a DocumentSnapshot object and initialize a Gym object with them.
+     * Get field from a DocumentSnapshot object and initialize a Gym object with them. When a field is null (contained into emptyData) set field with default value
      *
      * @param ds documentSnapshot used to get all field for Gym initialization
      * @return Gym object
@@ -362,37 +362,9 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         Map<String, Object> data = new HashMap<>();
 
         data.put("userID", this.gymUID);
-        data.put("name", ds.getString("name"));
-        data.put("email", ds.getString("email"));
-        data.put("phone", ds.getString("phone"));
-        data.put("address", ds.getString("address"));
-        data.put("img", ds.getString("img"));
-        data.put("position", new LatLng(
-                ds.getGeoPoint("position").getLatitude(),
-                ds.getGeoPoint("position").getLongitude()));
-        data.put("subscribers", new LinkedList<>(Arrays.asList(stringToArray(ds.get("subscribers").toString()))));
-
-        return new Gym((String) data.get("userID"), (String) data.get("email"), (String) data.get("phone"),
-                (String) data.get("name"), (String) data.get("address"), (List<String>) data.get("subscribers"),
-                (LatLng) data.get("position"), (String) data.get("img"));
-    }
-
-    /**
-     * Get field from a DocumentSnapshot object and initialize a Gym object with them. When a field is null (contained into emptyData) set field with default value
-     *
-     * @param ds documentSnapshot used to get all field for Gym initialization
-     * @param emptyData list of String that contains field key of Gym with empty into Database
-     * @return Gym object
-     */
-    @SuppressWarnings("unchecked")
-    private Gym initGym(@NotNull DocumentSnapshot ds, List<String> emptyData) {
-        Map<String, Object> data = new HashMap<>();
-
-        data.put("userID", this.gymUID);
         ds.getData().forEach((key, value) -> {
-            if (emptyData.contains(key)) {
+            if (this.emptyData.contains(key)) {
                 AppUtils.log(Thread.currentThread().getStackTrace(), key + " is missing on Database");
-
                 switch (key) {
                     case "position":
                         data.put(key, new LatLng(0, 0));

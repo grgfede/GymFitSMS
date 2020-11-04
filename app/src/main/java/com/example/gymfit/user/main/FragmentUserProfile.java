@@ -2,13 +2,24 @@ package com.example.gymfit.user.main;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.gymfit.R;
+import com.example.gymfit.system.conf.utils.AppUtils;
+import com.example.gymfit.user.conf.User;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,51 +27,63 @@ import com.example.gymfit.R;
  * create an instance of this fragment.
  */
 public class FragmentUserProfile extends Fragment {
+    private static final String USER_KEY = "user_key";
+    private static final String IS_EMPTY_KEY = "is_empty_key";
+    private static final String EMPTY_DATA_KEY = "empty_data_key";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private final FirebaseStorage storage = FirebaseStorage.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public FragmentUserProfile() {
-        // Required empty public constructor
-    }
+    // Screen orientation
+    private int orientation;
+    private View messageAnchor = null;
+    private Menu toolbar = null;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Fragment_userProfile.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentUserProfile newInstance(String param1, String param2) {
+    private String gymUID = null;
+    private User user = null;
+    private boolean isEmptyData = false;
+    private List<String> emptyData = new ArrayList<>();
+
+    public static FragmentUserProfile newInstance(User user, boolean isEmptyData, ArrayList<String> emptyData) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserProfile created");
+
         FragmentUserProfile fragment = new FragmentUserProfile();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER_KEY, user);
+        bundle.putBoolean(IS_EMPTY_KEY, isEmptyData);
+        bundle.putStringArrayList(EMPTY_DATA_KEY, emptyData);
+        fragment.setArguments(bundle);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@NotNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.user = (User) getArguments().getSerializable(USER_KEY);
+            this.isEmptyData = getArguments().getBoolean(IS_EMPTY_KEY);
+            this.emptyData = getArguments().getStringArrayList(EMPTY_DATA_KEY);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        return rootView;
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_user_profile_toolbar, menu);
+        this.toolbar = menu;
+        super.onCreateOptionsMenu(menu, inflater);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Toolbar User is inflated");
+    }
+
 }

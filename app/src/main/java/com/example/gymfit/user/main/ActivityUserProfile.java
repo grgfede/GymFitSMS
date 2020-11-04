@@ -10,8 +10,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,16 +26,19 @@ import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.ResourceUtils;
 import com.example.gymfit.user.conf.InitUserCallback;
 import com.example.gymfit.user.conf.User;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -60,7 +63,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     private NavigationView navigationView;
 
     private boolean isEmptyData = false;
-    private List<String> emptyData = new ArrayList<>();
+    private final List<String> emptyData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +83,23 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
             drawerToggle.syncState();
             this.navigationView.setNavigationItemSelectedListener(this);
 
+            // Initialize Google Place API
+            Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
+
             // Initialize User
             initUserID();
             initUserFromDatabase(userTmp -> {
                 this.user = userTmp;
+                initDatabaseFromEmpty();
+
+                AppUtils.startFragment(this, FragmentUserProfile.newInstance(this.user, this.isEmptyData, (ArrayList<String>) this.emptyData), false);
+                navigationView.setCheckedItem(R.id.nav_menu_home);
             });
 
         } catch (Exception e) {
             AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
             AppUtils.restartActivity(this);
         }
-
-
 
     }
 
@@ -140,7 +148,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_menu_home && !item.isChecked()) {
-            // TODO: Start FragmentUserProfile
+            AppUtils.startFragment(this, FragmentUserProfile.newInstance(this.user, this.isEmptyData, (ArrayList<String>) this.emptyData), false);
         } else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
             // TODO: Start FragmentUserSubscriptions
         } else if (item.getItemId() == R.id.nav_menu_gyms && !item.isChecked()) {
@@ -212,7 +220,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
                             userTmp = initUser(documentSnapshot);
                         } catch(NullDataException e) {
                             AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
-                            userTmp = initUser(documentSnapshot, e.getEmptyData());
+                            userTmp = initUser(documentSnapshot);
                         }
                     } else {
                         AppUtils.log(Thread.currentThread().getStackTrace(), Objects.requireNonNull(task.getException()).getMessage());
@@ -231,6 +239,39 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
                     // init with true to send a message at User after layout XML inflate
                     this.isEmptyData = true;
                 });
+    }
+
+    /**
+     * Init Database critical node with default values
+     */
+    private void initDatabaseFromEmpty() {
+        String[] keys = getResources().getStringArray(R.array.user_field);
+
+        this.emptyData.forEach(key -> {
+            // If empty value is Image, init Storage and Database with another default
+            if (key.equals(keys[8])) {
+                StorageReference storageReference = this.storage.getReference().child("img/users/" + this.userUID + "/profilePic");
+                storageReference.putFile(Uri.parse(ResourceUtils.getURIForResource(R.drawable.default_user)))
+                        .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String uriString = uri.toString();
+                            this.db.collection("users").document(this.userUID).update(key, uriString)
+                                    .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is added into Database"))
+                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is not added into Database"));
+
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is added into Storage");
+                        }))
+                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is deleted"));
+            }
+            // If empty value is Date, init Database with another default
+            else if (key.equals(keys[4])) {
+                this.db.collection("users").document(this.userUID).update(key, new Timestamp(new Date()))
+                        .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Date is added into Database"))
+                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Date is not added into Database"));
+            }
+        });
+
+        this.emptyData.remove(keys[10]);
+        this.emptyData.remove(keys[11]);
     }
 
     /**
@@ -262,7 +303,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     }
 
     /**
-     * Get field from a DocumentSnapshot object and initialize a User object with them.
+     * Get field from a DocumentSnapshot object and initialize a User object with them. When a field is null (contained into emptyData) set field with default value
      *
      * @param ds documentSnapshot used to get all field for User initialization
      * @return User object
@@ -272,41 +313,10 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         Map<String, Object> data = new HashMap<>();
         final String[] userKeys = getResources().getStringArray(R.array.user_field);
 
-        data.put(userKeys[0], this.userUID); //uid
-        data.put(userKeys[1], ds.getString(userKeys[1])); // name
-        data.put(userKeys[2], ds.getString(userKeys[2])); // surname
-        data.put(userKeys[4], (ds.getTimestamp(userKeys[4])).toDate()); // dateOfBirthday
-        data.put(userKeys[5], ds.getString(userKeys[5])); // email
-        data.put(userKeys[6], ds.getString(userKeys[6])); // gender
-        data.put(userKeys[7], ds.getString(userKeys[7])); // phone
-        data.put(userKeys[8], ds.getString(userKeys[8])); // img
-        data.put(userKeys[9], ds.getString(userKeys[9])); // address
-        data.put(userKeys[10], ds.getString(userKeys[10])); // subscription
-        data.put(userKeys[11], new ArrayList<Map<String, Object>>()); // turns
-
-        return new User((String) data.get(userKeys[0]), (String) data.get(userKeys[1]), (String) data.get(userKeys[2]),
-                (String) data.get(userKeys[5]), (Date) data.get(userKeys[4]), (String) data.get(userKeys[9]),
-                (String) data.get(userKeys[6]), (String) data.get(userKeys[8]), (String) data.get(userKeys[7]),
-                (String) data.get(userKeys[10]), (ArrayList<Map<String, Object>>) data.get(userKeys[11]));
-    }
-
-    /**
-     * Get field from a DocumentSnapshot object and initialize a User object with them. When a field is null (contained into emptyData) set field with default value
-     *
-     * @param ds documentSnapshot used to get all field for User initialization
-     * @param emptyData list of String that contains field key of User with empty into Database
-     * @return User object
-     */
-    @SuppressWarnings("unchecked")
-    private User initUser(@NotNull DocumentSnapshot ds, List<String> emptyData) {
-        Map<String, Object> data = new HashMap<>();
-        final String[] userKeys = getResources().getStringArray(R.array.user_field);
-
         data.put(userKeys[0], this.userUID);
         Objects.requireNonNull(ds.getData()).forEach((key, value) -> {
-            if (emptyData.contains(key)) {
+            if (this.emptyData.contains(key)) {
                 AppUtils.log(Thread.currentThread().getStackTrace(), key + " is missing on Database");
-
                 switch (key) {
                     case "dateOfBirthday":
                         data.put(key, new Date());
@@ -330,7 +340,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
                         data.put(userKeys[8], ds.getString(userKeys[8]));
                         break;
                     case "turns":
-                        data.put(key, new ArrayList<Map<String, Object>>());
+                        data.put(key, (ArrayList<Map<String, Object>>) ds.get(userKeys[11]));
                         break;
                     default:
                         data.put(key, value);
