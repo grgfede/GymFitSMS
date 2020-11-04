@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.main.ActivityGymProfile;
@@ -116,7 +115,7 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_signup, container, false);
 
         btnContinue = view.findViewById(R.id.btnContinue);
         nameSignUp = (TextInputEditText) view.findViewById(R.id.txtNameSignUp);

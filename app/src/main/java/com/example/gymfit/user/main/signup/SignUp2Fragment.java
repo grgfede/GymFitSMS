@@ -31,8 +31,6 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -119,7 +117,7 @@ public class SignUp2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sign_up2, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_signup2, container, false);
 
         emailSignUp = view.findViewById(R.id.txtEmailSignUp);
         passwordSignUp = view.findViewById(R.id.txtPasswordSignUp);

@@ -17,8 +17,6 @@ import android.widget.EditText;
 
 import com.example.gymfit.R;
 import com.example.gymfit.user.main.signin.Login;
-import com.example.gymfit.user.main.signup.SignUp;
-import com.example.gymfit.user.main.signup.SignUpFragment;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 
@@ -31,7 +29,7 @@ public class GymSignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gym_sign_up);
+        setContentView(R.layout.activity_gym_signup);
         Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
         toolbarSettings();
         GymSignUpFragment fragmentOne = new GymSignUpFragment();

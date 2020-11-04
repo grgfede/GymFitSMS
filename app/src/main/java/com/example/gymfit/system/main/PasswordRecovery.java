@@ -16,11 +16,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthEmailException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import static android.content.ContentValues.TAG;
 
@@ -39,7 +36,7 @@ public class PasswordRecovery extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password_recovery);
+        setContentView(R.layout.activity_system_passwordrecovery);
 
         emailL = findViewById(R.id.EmailLayoutRecovery);
         txtEmailRecovery = findViewById(R.id.txtEmailRecovery);

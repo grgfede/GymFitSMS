@@ -67,7 +67,7 @@ public class SignUpFinish extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_sign_up_finish, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_signupfinish, container, false);
 
 
         //CODICE CHE EVITA IL RITORNO INDIETRO DEL FRAGMENT

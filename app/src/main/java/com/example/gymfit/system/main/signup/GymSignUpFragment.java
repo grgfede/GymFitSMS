@@ -2,6 +2,8 @@ package com.example.gymfit.system.main.signup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,8 +20,10 @@ import android.widget.Toast;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
+import com.example.gymfit.gym.conf.WriteDbGymCallBack;
 import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.example.gymfit.system.conf.GymCallBack;
+import com.example.gymfit.system.conf.utils.AppUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -41,6 +46,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -87,6 +93,9 @@ public class GymSignUpFragment extends Fragment {
     private String email;
     private String psw1;
     private String psw2;
+
+    private boolean picChoose = false;
+
 
     //Oggetti Layout
     private TextInputLayout nameL;
@@ -155,7 +164,7 @@ public class GymSignUpFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_gym_sign_up, container, false);
+        View view = inflater.inflate(R.layout.fragment_gym_signup, container, false);
 
 
         profilePic = view.findViewById(R.id.profile_image);
@@ -165,7 +174,7 @@ public class GymSignUpFragment extends Fragment {
         btnSignUpGym.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean error = controlfields();
+                boolean error = controlfields(view);
                 if (!error) {
                     //SE NON CI SONO ERRORI NEI CAMPI, CREO UN ACCOUNT SU FIREBASE
                     GymCallBack gymCallBack = null;
@@ -219,8 +228,16 @@ public class GymSignUpFragment extends Fragment {
                     }
                 } else {
                     String uid = mFirebaseAuth.getUid();
-                    writeDb(uid);
-                    uploadPic(uid);
+                    writeDb(uid, new WriteDbGymCallBack() {
+                        @Override
+                        public void isWriteDb(boolean write) {
+                            if (write) {
+                                uploadPic(uid);
+                            } else {
+                                // set the value of variable val or anything
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -233,65 +250,114 @@ public class GymSignUpFragment extends Fragment {
         final StorageReference ref = storageReference.child("img/gyms/" + uid + "/profilePic");
 
         //CARICO L'IMMAGINE SU FIRESTORAGE
-                    ref.putFile(selectedImage).addOnSuccessListener(
-                            new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(
-                                        //SE L'UPLOAD VA A BUON FINE, MI RECUPERO L'URL DELL'IMMAGINE
-                                        UploadTask.TaskSnapshot taskSnapshot) {
-                                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Uri download = uri;
-                                            //AGGIORNO I DATI DELL'UTENTE SUL DATABASE AGGIUNGENDO L'URL DELL'IMMAGINE CARICATA
-                                            uploadInfoImageUser(uri, uid);
-                                        }
-                                    });
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), "Caricamento immagine fallita: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        ref.putFile(selectedImage).addOnSuccessListener(
+                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(
+                            //SE L'UPLOAD VA A BUON FINE, MI RECUPERO L'URL DELL'IMMAGINE
+                            UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Uri download = uri;
+                                //AGGIORNO I DATI DELL'UTENTE SUL DATABASE AGGIUNGENDO L'URL DELL'IMMAGINE CARICATA
+                                uploadInfoImageUser(uri, uid);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Caricamento immagine fallita: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void uploadInfoImageUser(Uri selectedImage, String uid) {
+
         db = FirebaseFirestore.getInstance();
         String uriString = selectedImage.toString();
 
-        db.collection("gyms").document(uid).update("img", uriString)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        gym.setImage(uriString);
+        if (uriString.isEmpty()) {
+            uploadDefaultProfilePic(uid);
+        } else {
+            db.collection("gyms").document(uid).update("img", uriString)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            gym.setImage(uriString);
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), "Caricamento immagine fallita", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), "Caricamento immagine fallita", Toast.LENGTH_SHORT).show();
 
-                    }
-                });
+                        }
+                    });
+        }
+
+
     }
 
-    private void writeDb(String uid) {
+    private void uploadDefaultProfilePic(String uid) {
+        //MI CREO UN BITMAP CONTENENTE L'IMMAGINE DI DEFAULT AVATAR NELLA CARTELLA DRAWABLE
+        Bitmap imageBitMap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_user);
+        //CREO UN ARRAY DI BYTE CHE RAPPRESENTA L'IMMAGINE IN BITMAP
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitMap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        //POPOLO L'ARRAY DI BYTE
+        byte[] data = baos.toByteArray();
+        final StorageReference ref = storageReference.child("img/gyms/" + uid + "/profilePic");
+        //CARICO L'ARRAY DI BYTE
+        ref.putBytes(data).addOnSuccessListener(
+                new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                db.collection("gyms").document(uid).update("img", uri)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                gym.setImage(uri.toString());
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(getContext(), "Caricamento immagine fallita", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                            }
+                        });
+                    }
+                }
+        );
+    }
+
+    private void writeDb(String uid, WriteDbGymCallBack writeDbGymCallBack) {
         String[] keys = getResources().getStringArray(R.array.gym_field);
         String urlImageString = selectedImage.toString();
         Double latitude = locationLatLng.latitude;
         Double longitude = locationLatLng.longitude;
         GeoPoint point = new GeoPoint(latitude, longitude);
+        ArrayList<String> subscribers = new ArrayList<>();
+        subscribers = null;
         //CREO LA MAPPA CHE CARICO SU FIREBASE
         Map<String, Object> data = new HashMap<>();
-        data.put("UserID", uid);
+        data.put("uid", uid);
         data.put("name", name);
         data.put("email", email);
         data.put("phone", phone);
         data.put("img", null);
         data.put("position", point);
-        data.put("subscribers", new ArrayList<>());
+        data.put("address", address);
+        data.put("subscribers", subscribers);
 
 
         //INIZIALIZZO I TURNI
@@ -299,8 +365,8 @@ public class GymSignUpFragment extends Fragment {
         //INIZIALIZZO LE SUBSCRIPTION
         Map<String, Boolean> subscriptions = initializeSubs(keys);
 
-        data.put("turns", turns);
-        data.put("subscriptions", subscriptions);
+        data.put("turn", turns);
+        data.put("subscription", subscriptions);
 
 
         gym = new Gym(uid, email, phone, name, address, null, new LatLng(latitude, longitude), null);
@@ -320,10 +386,15 @@ public class GymSignUpFragment extends Fragment {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        Toast.makeText(getActivity(), "PO",
-                                                                Toast.LENGTH_LONG).show();
+                                                        writeDbGymCallBack.isWriteDb(true);
                                                     }
-                                                });
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                writeDbGymCallBack.isWriteDb(false);
+
+                                            }
+                                        });
                                     }
                                 });
                     }
@@ -393,7 +464,7 @@ public class GymSignUpFragment extends Fragment {
         psw2SignUp = v.findViewById(R.id.txtRepeatPasswordSignUpGym);
     }
 
-    private boolean controlfields() {
+    private boolean controlfields(View v) {
         boolean error = false;
         name = nameSignUp.getText().toString();
         address = addressSignUp.getText().toString();
@@ -401,6 +472,13 @@ public class GymSignUpFragment extends Fragment {
         email = emailSignUp.getText().toString();
         psw1 = psw1SignUp.getText().toString();
         psw2 = psw2SignUp.getText().toString();
+
+        if (!picChoose){
+            AppUtils utils = null;
+            Snackbar snackbar = utils.message(v, "Attenzione, scegliere immagine del profilo",Snackbar.LENGTH_SHORT);
+            snackbar.show();
+            error = true;
+        }
 
         if (name.isEmpty()) {
             nameL.setError("Nome non valido");
@@ -446,6 +524,7 @@ public class GymSignUpFragment extends Fragment {
             if (resultCode == ActivityGymProfile.RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 addressSignUp.setText(place.getAddress());
+                //address = place.getAddress();
                 locationLatLng = place.getLatLng();
             }
         }
@@ -454,6 +533,7 @@ public class GymSignUpFragment extends Fragment {
         switch (requestCode) {
             case 1:
                 if (resultCode == RESULT_OK) {
+                    picChoose = true;
                     selectedImage = data.getData();
                     profilePic.setImageURI(selectedImage);
 
