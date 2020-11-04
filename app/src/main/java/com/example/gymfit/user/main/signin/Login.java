@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.gymfit.R;
 import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.system.main.signup.GymSignUp;
+import com.example.gymfit.user.main.ActivityUserProfile;
 import com.example.gymfit.user.main.signup.SignUp;
 import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -111,12 +112,11 @@ public class Login extends AppCompatActivity {
     }
 
     private void signInIntent(String uid) {
+        // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
         if(uid.endsWith("2")) {
-            Intent intent = new Intent(Login.this, ActivityGymProfile.class);
-            intent.putExtra("userUid", uid);
-            startActivity(intent);
+            startActivity(new Intent(Login.this, ActivityGymProfile.class));
         } else {
-            //TODO: UserProfile (Execution)
+            startActivity(new Intent(Login.this, ActivityUserProfile.class));
         }
     }
 

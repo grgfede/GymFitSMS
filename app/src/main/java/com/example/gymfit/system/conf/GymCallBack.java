@@ -1,4 +1,4 @@
-package com.example.gymfit.user.conf.interfaces;
+package com.example.gymfit.system.conf;
 
 public interface GymCallBack {
     void isGymSuccess(boolean success);

@@ -6,10 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +19,7 @@ import android.widget.Toast;
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.gym.main.ActivityGymProfile;
-import com.example.gymfit.user.conf.interfaces.GymCallBack;
-import com.example.gymfit.user.main.signup.SignUpFinish;
+import com.example.gymfit.system.conf.GymCallBack;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

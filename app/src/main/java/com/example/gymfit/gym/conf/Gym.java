@@ -106,12 +106,6 @@ public class Gym extends GenericUser implements Serializable {
         this.subscribers.addAll(subscribers);
     }
 
-    // Add methods
-
-    public void addSubscriber(String subscriber) {
-        this.subscribers.add(subscriber);
-    }
-
     // Remove methods
 
     public void removeSubscriber(String subscriber) {

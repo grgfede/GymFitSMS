@@ -33,6 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
@@ -357,7 +358,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
      * @return Gym object
      */
     @SuppressWarnings("unchecked")
-    private Gym initGym(DocumentSnapshot ds) {
+    private Gym initGym(@NotNull DocumentSnapshot ds) {
         Map<String, Object> data = new HashMap<>();
 
         data.put("userID", this.gymUID);
@@ -384,7 +385,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
      * @return Gym object
      */
     @SuppressWarnings("unchecked")
-    private Gym initGym(DocumentSnapshot ds, List<String> emptyData) {
+    private Gym initGym(@NotNull DocumentSnapshot ds, List<String> emptyData) {
         Map<String, Object> data = new HashMap<>();
 
         data.put("userID", this.gymUID);

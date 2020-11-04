@@ -201,7 +201,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
     @Override
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int position) {
-        String username = this.users.get(position).getUsername();
+        String username = this.users.get(position).getFullname();
 
         // Backup before delete for undo action
         final User item = this.users.get(position);
@@ -218,10 +218,10 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                     super.onDismissed(transientBottomBar, event);
 
                     if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                        Log.d(LOG, "User " + item.getUsername() + " is removed from UserAdapter");
+                        Log.d(LOG, "User " + item.getFullname() + " is removed from UserAdapter");
                         removeUserFromGym(item.getUid());
                     } else if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                        Log.d(LOG, "User " + item.getUsername() + " is restored into UserAdapter");
+                        Log.d(LOG, "User " + item.getFullname() + " is restored into UserAdapter");
                     }
                 }
             })

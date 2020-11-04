@@ -274,7 +274,7 @@ public class SubscriberAdapter extends RecyclerView.Adapter<SubscriberAdapter.My
             filteredList.sort((o1, o2) -> o1.getSurname().compareTo(o2.getSurname()));
         } else if (rule.equals("username")) {
             usersFull.forEach(user -> {
-                if (user.getUsername().toLowerCase().trim().contains(constraint)) {
+                if (user.getFullname().toLowerCase().trim().contains(constraint)) {
                     filteredList.add(user);
                 }
             });
