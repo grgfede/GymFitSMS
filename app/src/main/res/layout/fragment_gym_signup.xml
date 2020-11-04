@@ -66,14 +66,13 @@
                 app:helperTextEnabled="true"
                 app:hintEnabled="true"
                 app:hintTextColor="@color/tint_hint_no_focused"
-                app:startIconDrawable="@drawable/ic_person"
+                app:startIconDrawable="@drawable/ic_user"
                 app:startIconTint="@color/tint_image_icon_light">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtNameSignUpGym"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:inputType="text"
                     android:textColor="@color/tint_hint_focuses" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -86,7 +85,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/avenirltstdlight"
                 android:hint="@string/prompt_address"
                 android:textSize="15sp"
                 app:endIconMode="clear_text"
@@ -94,14 +92,13 @@
                 app:helperText="@string/helper_address_hover_signUp"
                 app:helperTextEnabled="true"
                 app:hintTextColor="@color/tint_hint_no_focused"
-                app:startIconDrawable="@drawable/ic_place"
+                app:startIconDrawable="@drawable/ic_location"
                 app:startIconTint="@color/tint_image_icon_light">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtLocationSignUpGym"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:textSize="13sp"
                     app:hintTextColor="@color/tint_hint_focuses" />
 
@@ -135,7 +132,6 @@
                     android:id="@+id/txtPhoneSignUpGym"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:inputType="number"
                     android:textColor="@color/tint_hint_focuses" />
 
@@ -166,7 +162,6 @@
                     android:id="@+id/txtEmailSignUpGym"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:inputType="text"
                     android:textColor="@color/tint_hint_focuses" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -196,7 +191,6 @@
                     android:id="@+id/txtPasswordSignUpGym"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:inputType="textPassword"
                     android:textColor="@color/tint_hint_no_focused" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -226,7 +220,6 @@
                     android:id="@+id/txtRepeatPasswordSignUpGym"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:inputType="textPassword"
                     android:textColor="@color/tint_hint_no_focused" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -240,7 +233,6 @@
         android:layout_width="match_parent"
         android:layout_height="53dp"
         android:layout_marginBottom="8dp"
-        android:fontFamily="@font/avenirltstdlight"
         android:foregroundGravity="top"
         android:text="Registrati"
         android:textColor="@android:color/white"

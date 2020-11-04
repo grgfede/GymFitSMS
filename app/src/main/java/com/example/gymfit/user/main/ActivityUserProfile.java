@@ -152,7 +152,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         } else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
             // TODO: Start FragmentUserSubscriptions
         } else if (item.getItemId() == R.id.nav_menu_gyms && !item.isChecked()) {
-            // TODO: Start FragmentUserListGyms
+            AppUtils.startFragment(this, FragmentUserListGyms.newInstance(this.user), true);
         } else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {
             // TODO: help fragment
         } else if (item.getItemId() == R.id.nav_menu_logout) {

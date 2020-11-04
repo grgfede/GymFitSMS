@@ -32,6 +32,7 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
                     android:paddingVertical="8dp"
+                    android:fontFamily="sans-serif"
 
                     android:lineSpacingExtra="24sp"
                     android:text="@string/title_subscription"

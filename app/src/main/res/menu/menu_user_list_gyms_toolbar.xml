@@ -21,22 +21,19 @@
         <menu>
             <group>
                 <item
-                    android:title="@string/subscription_filter"
+                    android:title="@string/gyms_filter"
                     app:showAsAction="never">
 
                     <menu>
                         <group>
-                            <item android:id="@+id/action_filter_monthly"
-                                android:title="@string/monthly_subscription"
+                            <item android:id="@+id/action_filter_10"
+                                android:title="@string/filter_by_distance_10"
                                 app:showAsAction="never" />
-                            <item android:id="@+id/action_filter_quarterly"
-                                android:title="@string/quarterly_subscription"
+                            <item android:id="@+id/action_filter_20"
+                                android:title="@string/filter_by_distance_10"
                                 app:showAsAction="never" />
-                            <item android:id="@+id/action_filter_six_month"
-                                android:title="@string/six_month_subscription"
-                                app:showAsAction="never" />
-                            <item android:id="@+id/action_filter_annual"
-                                android:title="@string/annual_subscription"
+                            <item android:id="@+id/action_filter_50"
+                                android:title="@string/filter_by_distance_10"
                                 app:showAsAction="never" />
                         </group>
                     </menu>
@@ -49,9 +46,6 @@
                         <group>
                             <item android:id="@+id/action_sort_by_name"
                                 android:title="@string/prompt_name"
-                                app:showAsAction="never" />
-                            <item android:id="@+id/action_sort_by_surname"
-                                android:title="@string/prompt_surname"
                                 app:showAsAction="never" />
                         </group>
                     </menu>

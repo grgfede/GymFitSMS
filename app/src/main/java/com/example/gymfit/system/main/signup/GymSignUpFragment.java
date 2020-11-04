@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.gym.conf.WriteDbGymCallBack;
+import com.example.gymfit.gym.conf.IsWritableOnDbCallback;
 import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.example.gymfit.system.conf.GymCallBack;
 import com.example.gymfit.system.conf.utils.AppUtils;
@@ -234,7 +234,7 @@ public class GymSignUpFragment extends Fragment {
                     }
                 } else {
                     String uid = mFirebaseAuth.getUid();
-                    writeDb(uid, new WriteDbGymCallBack() {
+                    writeDb(uid, new IsWritableOnDbCallback() {
                         @Override
                         public void isWriteDb(boolean write) {
                             if (write) {
@@ -346,7 +346,7 @@ public class GymSignUpFragment extends Fragment {
         );
     }
 
-    private void writeDb(String uid, WriteDbGymCallBack writeDbGymCallBack) {
+    private void writeDb(String uid, IsWritableOnDbCallback isWritableOnDbCallback) {
         String[] keys = getResources().getStringArray(R.array.gym_field);
         String urlImageString = selectedImage.toString();
         Double latitude = locationLatLng.latitude;
@@ -392,12 +392,12 @@ public class GymSignUpFragment extends Fragment {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        writeDbGymCallBack.isWriteDb(true);
+                                                        isWritableOnDbCallback.isWriteDb(true);
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                writeDbGymCallBack.isWriteDb(false);
+                                                isWritableOnDbCallback.isWriteDb(false);
 
                                             }
                                         });

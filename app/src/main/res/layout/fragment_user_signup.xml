@@ -17,7 +17,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:fontFamily="@font/avenirheavy"
         android:text="@string/signUpTitle"
         android:textAlignment="viewStart"
         android:textColor="@color/tint_title"
@@ -36,7 +35,6 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:fontFamily="@font/avenirltstdlight"
         android:text="@string/signUpSubTitle"
         android:textColor="@color/tint_second_line_light"
         android:textSize="20sp"
@@ -74,14 +72,13 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
-            app:startIconDrawable="@drawable/ic_person"
+            app:startIconDrawable="@drawable/ic_user"
             app:startIconTint="@color/tint_image_icon_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtNameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/avenirltstdlight"
                 android:inputType="text"
                 android:textColor="@color/tint_hint_focuses" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -107,14 +104,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtNameSignUpLayout"
             app:layout_constraintVertical_bias="0.0"
-            app:startIconDrawable="@drawable/ic_person"
+            app:startIconDrawable="@drawable/ic_user"
             app:startIconTint="@color/tint_image_icon_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtSurnameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/avenirltstdlight"
                 android:inputType="text"
                 android:textColor="@color/tint_hint_focuses" />
 
@@ -150,7 +146,6 @@
                     android:id="@+id/txtGenderSignUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:gravity="center"
                     android:inputType="none"
                     android:textColor="@color/tint_hint_focuses" />
@@ -172,7 +167,7 @@
                 app:helperText="@string/helper_birth_hover"
                 app:helperTextEnabled="true"
                 app:hintTextColor="@color/tint_hint_no_focused"
-                app:startIconDrawable="@drawable/ic_cake"
+                app:startIconDrawable="@drawable/ic_birthday"
                 app:startIconTint="@color/tint_image_icon_light">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -180,7 +175,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:fontFamily="@font/avenirltstdlight"
                     android:inputType="none"
                     android:textColor="@color/tint_hint_focuses" />
 
@@ -197,7 +191,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/avenirltstdlight"
             android:hint="@string/prompt_address"
             android:textSize="18sp"
             app:endIconMode="clear_text"
@@ -209,14 +202,13 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtBirthSignUpLayout"
-            app:startIconDrawable="@drawable/ic_place"
+            app:startIconDrawable="@drawable/ic_location"
             app:startIconTint="@color/tint_image_icon_light">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtLocationSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/avenirltstdlight"
                 app:hintTextColor="@color/tint_hint_focuses" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -250,7 +242,6 @@
                 android:id="@+id/txtPhoneSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/avenirltstdlight"
                 android:inputType="number"
                 android:textColor="@color/tint_hint_focuses" />
 
@@ -267,7 +258,6 @@
         android:layout_marginBottom="8dp"
         android:background="@color/transparent"
         android:drawableRight="@drawable/ic_arrow_right"
-        android:fontFamily="@font/avenirltstdlight"
         android:text="@string/continueSignUp"
         android:textColor="@color/tint_second_line_light"
         android:textSize="15sp"

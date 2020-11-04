@@ -10,11 +10,11 @@
             android:title="@string/user_profile_toolbar_title"/>
         <item
             android:id="@+id/nav_menu_subs"
-            android:icon="@drawable/ic_setting"
+            android:icon="@drawable/ic_subscription"
             android:title="@string/user_subs_toolbar_title"/>
         <item
             android:id="@+id/nav_menu_gyms"
-            android:icon="@drawable/ic_subscription"
+            android:icon="@drawable/ic_gym"
             android:title="@string/user_gyms_toolbar_title"/>
     </group>
     <item android:title="@string/system_nav_title_other">
@@ -23,7 +23,7 @@
                 <item
                     android:id="@+id/nav_menu_help"
                     android:title="@string/system_toolbar_help"
-                    android:icon="@drawable/ic_setting" />
+                    android:icon="@drawable/ic_help" />
                 <item
                     android:id="@+id/nav_menu_logout"
                     android:title="@string/system_toolbar_logout"

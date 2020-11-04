@@ -16,7 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:fontFamily="@font/avenirheavy"
         android:text="@string/login_email"
         android:textAlignment="viewStart"
         android:textColor="@color/colorPrimary"
@@ -39,7 +38,6 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeStepGranularity="2sp"
         android:autoSizeTextType="uniform"
-        android:fontFamily="@font/avenirltstdlight"
         android:text="@string/subtitle_login_page"
         android:textAlignment="viewStart"
         android:textColor="#808080"
@@ -73,8 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:enabled="true"
-
-            android:fontFamily="@font/avenirltstdlight"
             android:hint="@string/prompt_email"
             android:textSize="18sp"
             app:boxStrokeWidth="1dp"
@@ -103,8 +99,6 @@
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:fontFamily="@font/avenirltstdlight"
                 android:inputType="text|textEmailAddress|textEmailSubject"
                 android:textColor="@color/tint_hint_focuses" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -116,8 +110,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="true"
-
-            android:fontFamily="@font/avenirltstdlight"
             android:hint="@string/prompt_password"
             android:textSize="18sp"
             app:boxStrokeWidth="1dp"
@@ -144,8 +136,6 @@
                 android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:fontFamily="@font/avenirltstdlight"
                 android:inputType="textVisiblePassword|textPassword"
                 android:textColor="@color/tint_hint_focuses" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -156,7 +146,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="24dp"
-            android:fontFamily="@font/avenirheavy"
             android:text="@string/forgot_password"
 
             app:layout_constraintBottom_toTopOf="@+id/btnLogin"
@@ -174,7 +163,6 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="24dp"
         android:layout_marginRight="25dp"
-        android:fontFamily="@font/avenirheavy"
         android:text="@string/signin"
         android:textColor="@color/white"
         android:textColorLink="@color/colorPrimary"
@@ -211,7 +199,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginLeft="5dp"
-            android:fontFamily="@font/avenirheavy"
             android:onClick="signUpIntent"
             android:text="@string/create_account" />
     </LinearLayout>
@@ -243,7 +230,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginLeft="5dp"
-            android:fontFamily="@font/avenirheavy"
             android:onClick="signUpGymIntent"
             android:text="@string/create_account" />
     </LinearLayout>

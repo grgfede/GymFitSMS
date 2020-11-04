@@ -33,6 +33,22 @@ public final class ResourceUtils {
         return App.getResource().getString(resourceId);
     }
 
+    /**
+     * This method get from project folder the String Array from resource using respective ID
+     *
+     * @param resourceId origin ID resource file
+     * @return origin ID resource file
+     */
+    public static String[] getStringArrayFromID(int resourceId) {
+        return App.getResource().getStringArray(resourceId);
+    }
+
+    /**
+     * This method get from project folder the Color from resource using respective ID
+     *
+     * @param resourceId origin ID resource file
+     * @return origin ID resource file
+     */
     public static int getColorFromID(int resourceId) {
         return ResourcesCompat.getColor(App.getResource(), resourceId, null);
     }

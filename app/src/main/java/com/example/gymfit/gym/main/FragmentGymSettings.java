@@ -4,7 +4,6 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.gym.conf.InitGymTurnCallback;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.BooleanUtils;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
@@ -41,7 +38,6 @@ import java.util.StringJoiner;
 
 public class FragmentGymSettings extends Fragment {
     private static final String GYM_KEY = "gym_key";
-    private static final String LOG = FragmentGymSettings.class.getSimpleName();
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 

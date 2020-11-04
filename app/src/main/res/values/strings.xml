@@ -68,13 +68,13 @@
     <string name="prompt_confirm">Conferma</string>
     <string name="prompt_update">Aggiorna</string>
     <!-- TODO: migrate from database strings -->
-    <string name="prompt_subscribers" translatable = "false">subscribers</string>
-    <string name="prompt_subscription" translatable = "false">subscription</string>
+    <string name="prompt_subscribers" translatable="false">subscribers</string>
+    <string name="prompt_subscription" translatable="false">subscription</string>
     <string name="prompt_monthly" translatable="false">monthly</string>
     <string name="prompt_quarterly" translatable="false">quarterly</string>
     <string name="prompt_six_month" translatable="false">six_month</string>
     <string name="prompt_annual" translatable="false">annual</string>
-    <string name="prompt_turn" translatable = "false">turn</string>
+    <string name="prompt_turn" translatable="false">turn</string>
     <string name="prompt_morning" translatable="false">morning</string>
     <string name="prompt_afternoon" translatable="false">afternoon</string>
     <string name="prompt_evening" translatable="false">evening</string>
@@ -164,8 +164,13 @@
     <string name="changepic" translatable="false">todo</string>
 
     <string name="title_users_list">Iscritti</string>
+    <string name="title_gyms_list">Palestre</string>
     <string name="subscription_filter">Filtra per abbonamento</string>
+    <string name="gyms_filter">Filtra per distanza</string>
     <string name="user_sort">Ordina per</string>
+    <string name="filter_by_distance_10" translatable="false">10 Km</string>
+    <string name="filter_by_distance_20" translatable="false">20 Km</string>
+    <string name="filter_by_distance_50" translatable="false">50 Km</string>
 
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
     <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>

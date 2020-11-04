@@ -71,7 +71,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         } else {
-            final View foregroundView = ((SubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
+            final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
             getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
         }
     }
@@ -92,7 +92,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         } else {
-            final View foregroundView = ((SubscriberAdapter.MyViewHolder) viewHolder).deleteContainer;
+            final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).deleteContainer;
             getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
         }
     }
@@ -107,8 +107,8 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         //super.clearView(recyclerView, viewHolder);
 
-        final View foregroundView = ((SubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
-        foregroundView.setBackgroundColor(ContextCompat.getColor(((SubscriberAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
+        final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
+        foregroundView.setBackgroundColor(ContextCompat.getColor(((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
         getDefaultUIUtil().clearView(foregroundView);
     }
 

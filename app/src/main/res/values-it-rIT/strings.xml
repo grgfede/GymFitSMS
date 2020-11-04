@@ -121,10 +121,13 @@
     <string name="helper_psw_not_equal_error">Le due password non coincidono</string>
     <string name="prompt_confirm">Conferma</string>
     <string name="profile_not_completed">Profilo non completato.\nCompleta i campi mancanti…</string>
-    <string name="recycleview_void">Nessun iscritto.</string>
+    <string name="recycleview_subs_void">Nessun iscritto.</string>
     <string name="prompt_update">Aggiorna</string>
     <string name="helper_name_user">User</string>
     <string name="user_profile_toolbar_title">Utente</string>
     <string name="user_subs_toolbar_title">Prenotazioni</string>
     <string name="user_gyms_toolbar_title">Elenco palestre</string>
+    <string name="gyms_filter">Filtra per distanza</string>
+    <string name="title_gyms_list">Palestre</string>
+    <string name="recycleview_gyms_void">Nessuna palestra iscritta.</string>
 </resources>

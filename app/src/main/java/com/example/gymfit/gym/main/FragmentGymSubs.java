@@ -2,7 +2,6 @@ package com.example.gymfit.gym.main;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,10 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.gym.conf.SubscriberCallback;
+import com.example.gymfit.system.conf.GenericUser;
+import com.example.gymfit.system.conf.OnUserCallback;
 import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
-import com.example.gymfit.system.conf.recycleview.SubscriberAdapter;
+import com.example.gymfit.system.conf.recycleview.ListSubscriberAdapter;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.user.conf.User;
 import com.google.android.material.navigation.NavigationView;
@@ -51,9 +51,8 @@ import java.util.Objects;
 
 public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     private static final String GYM_KEY = "gym_key";
-    private static final String LOG = "KEY_LOG";
 
-    private SubscriberAdapter subscriberAdapter;
+    private ListSubscriberAdapter listSubscriberAdapter;
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -76,15 +75,20 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        assert getArguments() != null;
-        this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
+        }
+    }
 
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_subs, container, false);
 
         initSystemInterface(rootView);
-        initInterface(new SubscriberCallback() {
+        initInterface(new OnUserCallback() {
             int subscriberCount = 0;
             int subscriberSize = 0;
 
@@ -114,15 +118,15 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                             addOnSuccessCallback(user);
                         }
                     })
-                    .addOnFailureListener(task -> Log.d(LOG, Objects.requireNonNull(task.getMessage()))));
+                    .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(), Objects.requireNonNull(task.getMessage()))));
             }
 
             @Override
             public void addOnCallback(boolean isEmpty) {}
 
             @Override
-            public void addOnSuccessCallback(User user) {
-                users.add(user);
+            public <T extends GenericUser> void addOnSuccessCallback(T user) {
+                users.add((User) user);
                 subscriberCount++;
                 addOnSuccessListener();
             }
@@ -165,31 +169,31 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
                         @Override
                         public boolean onQueryTextChange(String newText) {
-                            subscriberAdapter.getFilter().filter(newText);
+                            listSubscriberAdapter.getFilter().filter(newText);
                             return false;
                         }
                     });
                     break;
                 case R.id.app_bar_filter:
-                    subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_default));
+                    listSubscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_default));
                     break;
                 case R.id.action_filter_monthly:
-                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_monthly));
+                    listSubscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_monthly));
                     break;
                 case R.id.action_filter_quarterly:
-                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_quarterly));
+                    listSubscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_quarterly));
                     break;
                 case R.id.action_filter_six_month:
-                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_six_month));
+                    listSubscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_six_month));
                     break;
                 case R.id.action_filter_annual:
-                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_annual));
+                    listSubscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_annual));
                     break;
                 case R.id.action_sort_by_name:
-                    subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_name));
+                    listSubscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_name));
                     break;
                 case R.id.action_sort_by_surname:
-                    subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_surname));
+                    listSubscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_surname));
                     break;
                 default:
                     break;
@@ -207,9 +211,9 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         final User item = this.users.get(position);
 
         // Remove the item from recycleView
-        this.subscriberAdapter.removeItem(position);
+        this.listSubscriberAdapter.removeItem(position);
         AppUtils.message(this.messageAnchor, username + " " + getResources().getString(R.string.message_user_removing), Snackbar.LENGTH_SHORT)
-            .setAction(getResources().getString(R.string.prompt_cancel), v -> this.subscriberAdapter.restoreItem(item, position))
+            .setAction(getResources().getString(R.string.prompt_cancel), v -> this.listSubscriberAdapter.restoreItem(item, position))
             .setActionTextColor(requireContext().getColor(R.color.tint_message_text))
             .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
@@ -218,10 +222,10 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                     super.onDismissed(transientBottomBar, event);
 
                     if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                        Log.d(LOG, "User " + item.getFullname() + " is removed from UserAdapter");
+                        AppUtils.log(Thread.currentThread().getStackTrace(),"User " + item.getFullname() + " is removed from UserAdapter");
                         removeUserFromGym(item.getUid());
                     } else if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                        Log.d(LOG, "User " + item.getFullname() + " is restored into UserAdapter");
+                        AppUtils.log(Thread.currentThread().getStackTrace(),"User " + item.getFullname() + " is restored into UserAdapter");
                     }
                 }
             })
@@ -255,35 +259,35 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     /**
      * Try to find any subscribers to init Recycle or show a alert message if they aren't for this gym
      *
-     * @param subscriberCallback callback to init recycleView
+     * @param onUserCallback callback to init recycleView
      */
-    private void initInterface(SubscriberCallback subscriberCallback) {
+    private void initInterface(OnUserCallback onUserCallback) {
         this.isEmptyData = false;
 
         if (!this.gym.getSubscribers().isEmpty()) {
-            subscriberCallback.addOnCallback(this.gym.getSubscribers());
+            onUserCallback.addOnCallback(this.gym.getSubscribers());
         } else {
-            getSubscribersFromDatabase(new SubscriberCallback() {
+            getSubsUIDFromDatabase(new OnUserCallback() {
                 @Override
                 public void addOnCallback(boolean isEmpty) {
                     if (!isEmpty) {
-                        subscriberCallback.addOnCallback(gym.getSubscribers());
+                        onUserCallback.addOnCallback(gym.getSubscribers());
                     } else {
                         isEmptyData = true;
                         AppUtils.log(Thread.currentThread().getStackTrace(), "No subscribers for this gym");
 
-                        Snackbar message = AppUtils.message(messageAnchor, getString(R.string.recycleview_void), Snackbar.LENGTH_INDEFINITE)
+                        Snackbar message = AppUtils.message(messageAnchor, getString(R.string.recycleview_subs_void), Snackbar.LENGTH_INDEFINITE)
                                 .setAction(getString(R.string.prompt_update), v -> {})
                                 .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null));
                         Button actionBtn = message.getView().findViewById(com.google.android.material.R.id.snackbar_action);
-                        actionBtn.setOnClickListener(v -> getSubscribersFromDatabase(new SubscriberCallback() {
+                        actionBtn.setOnClickListener(v -> getSubsUIDFromDatabase(new OnUserCallback() {
 
                             @Override
                             public void addOnCallback(boolean isEmpty) {
                                 if (!isEmpty) {
                                     isEmptyData = false;
                                     message.dismiss();
-                                    subscriberCallback.addOnCallback(gym.getSubscribers());
+                                    onUserCallback.addOnCallback(gym.getSubscribers());
                                 }
                             }
 
@@ -291,7 +295,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                             public void addOnCallback(List<String> usersID) {}
 
                             @Override
-                            public void addOnSuccessCallback(User user) {}
+                            public <T extends GenericUser> void addOnSuccessCallback(T user) {}
 
                             @Override
                             public void addOnSuccessListener() {}
@@ -304,7 +308,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                 public void addOnCallback(List<String> usersID) {}
 
                 @Override
-                public void addOnSuccessCallback(User user) {}
+                public <T extends GenericUser> void addOnSuccessCallback(T user) {}
 
                 @Override
                 public void addOnSuccessListener() {}
@@ -315,9 +319,9 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     /**
      * Find any subscribers from Database and return a callback with status of empty
      *
-     * @param subscriberCallback callback to init gym subscribers
+     * @param onUserCallback callback to init gym subscribers
      */
-    private void getSubscribersFromDatabase(SubscriberCallback subscriberCallback) {
+    private void getSubsUIDFromDatabase(OnUserCallback onUserCallback) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Searching new subscribers...");
 
         this.db.collection("gyms").document(this.gym.getUid()).get()
@@ -328,16 +332,16 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                             AppUtils.log(Thread.currentThread().getStackTrace(), "New subscribers found: " + documentSnapshot.get("subscribers").toString());
                             List<String> subscribersUID = new LinkedList<>(Arrays.asList(stringToArray(documentSnapshot.get("subscribers").toString())));
                             this.gym.setSubscribers(subscribersUID);
-                            subscriberCallback.addOnCallback(false);
+                            onUserCallback.addOnCallback(false);
                         } else {
                             AppUtils.log(Thread.currentThread().getStackTrace(), "New subscribers not found");
-                            subscriberCallback.addOnCallback(true);
+                            onUserCallback.addOnCallback(true);
                         }
                     }
                 })
                 .addOnFailureListener(task -> {
                     AppUtils.log(Thread.currentThread().getStackTrace(), "New subscribers not found");
-                    subscriberCallback.addOnCallback(true);
+                    onUserCallback.addOnCallback(true);
                 });
     }
 
@@ -345,14 +349,14 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         RecyclerView recyclerView = requireView().getRootView().findViewById(R.id.rv_users);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
-        this.subscriberAdapter = new SubscriberAdapter(requireActivity(), this.users, (viewHolder, position) -> {
+        this.listSubscriberAdapter = new ListSubscriberAdapter(requireActivity(), this.users, (viewHolder, position) -> {
             isListVisibility(
                     viewHolder.itemView.findViewById(R.id.content_toggle_container),
                     viewHolder.itemView.findViewById(R.id.end_icon),
                     isVisible);
             isVisible = !isVisible;
         });
-        recyclerView.setAdapter(subscriberAdapter);
+        recyclerView.setAdapter(listSubscriberAdapter);
 
         ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(this);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
@@ -360,7 +364,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
     }
 
-    // Interface methods
+    // Other methods
 
     private String[] stringToArray(String str) {
         str = str.substring(1, str.length()-1);
@@ -446,17 +450,17 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
             // remove this user from gym db node
             this.db.collection("gyms").document(this.gym.getUid())
                 .update("subscribers", usersUID)
-                .addOnCompleteListener(v -> Log.d(LOG, "User is removed from Gym node database"))
-                .addOnFailureListener(v -> Log.d(LOG, "User is not removed from Gym node database"));
+                .addOnCompleteListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"User is removed from Gym node database"))
+                .addOnFailureListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"User is not removed from Gym node database"));
 
             // remove gym from user db node and clear all his turns
             this.db.collection("users").document(uid)
                 .update("subscription", null,
                         "turns", null)
-                .addOnCompleteListener(v -> Log.d(LOG, "Gym and all Users' turns are removed from user node database"))
-                .addOnFailureListener(v -> Log.d(LOG, "Gym and all Users' turns are not removed from user node database"));
+                .addOnCompleteListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"Gym and all Users' turns are removed from user node database"))
+                .addOnFailureListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"Gym and all Users' turns are not removed from user node database"));
         } else {
-            Log.d(LOG, "User is removed from gym node database");
+            AppUtils.log(Thread.currentThread().getStackTrace(),"User is removed from gym node database");
         }
     }
 

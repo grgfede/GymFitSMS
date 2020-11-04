@@ -33,6 +33,7 @@
 
     <string name="profile_not_completed">Profilo non completato.\nCompleta i campi mancanti…</string>
 
-    <string name="recycleview_void">Nessun iscritto.</string>
+    <string name="recycleview_subs_void">Nessun iscritto.</string>
+    <string name="recycleview_gyms_void">Nessuna palestra iscritta.</string>
 
 </resources>

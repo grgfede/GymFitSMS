@@ -121,10 +121,13 @@
     <string name="message_user_removing">removing…</string>
     <string name="prompt_confirm">Apply</string>
     <string name="profile_not_completed">Profile not completed.\nSet your empty field…</string>
-    <string name="recycleview_void">No subscribers.</string>
+    <string name="recycleview_subs_void">No subscribers.</string>
     <string name="prompt_update">Update</string>
     <string name="helper_name_user">Utente</string>
     <string name="user_profile_toolbar_title">User</string>
     <string name="user_subs_toolbar_title">Subscriptions</string>
     <string name="user_gyms_toolbar_title">Gym list</string>
+    <string name="gyms_filter">Filter by distance</string>
+    <string name="title_gyms_list">Gyms</string>
+    <string name="recycleview_gyms_void">No gym subscribed.</string>
 </resources>
