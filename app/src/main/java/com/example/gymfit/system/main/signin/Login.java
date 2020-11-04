@@ -1,4 +1,4 @@
-package com.example.gymfit.user.main.signin;
+package com.example.gymfit.system.main.signin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +18,7 @@ import com.example.gymfit.R;
 import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.system.main.signup.GymSignUp;
 import com.example.gymfit.user.main.ActivityUserProfile;
-import com.example.gymfit.user.main.signup.SignUp;
+import com.example.gymfit.system.main.signup.SignUp;
 import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

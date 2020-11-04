@@ -1,4 +1,4 @@
-package com.example.gymfit.user.main.signup;
+package com.example.gymfit.system.main.signup;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -117,7 +117,7 @@ public class SignUp2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_signup2, container, false);
+        View view = inflater.inflate(R.layout.fragment_system_signup2_user, container, false);
 
         emailSignUp = view.findViewById(R.id.txtEmailSignUp);
         passwordSignUp = view.findViewById(R.id.txtPasswordSignUp);

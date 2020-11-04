@@ -1,4 +1,4 @@
-package com.example.gymfit.user.main.signup;
+package com.example.gymfit.system.main.signup;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.gymfit.R;
-import com.example.gymfit.user.main.signin.Login;
+import com.example.gymfit.system.main.signin.Login;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,7 +67,7 @@ public class SignUpFinish extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_signupfinish, container, false);
+        View view = inflater.inflate(R.layout.fragment_system_signupfinish_user, container, false);
 
 
         //CODICE CHE EVITA IL RITORNO INDIETRO DEL FRAGMENT

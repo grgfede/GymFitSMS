@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.example.gymfit.R;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.user.conf.User;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,7 +42,7 @@ public class FragmentUserProfile extends Fragment {
     private View messageAnchor = null;
     private Menu toolbar = null;
 
-    private String gymUID = null;
+    private String userUID = null;
     private User user = null;
     private boolean isEmptyData = false;
     private List<String> emptyData = new ArrayList<>();
@@ -74,6 +75,8 @@ public class FragmentUserProfile extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
+        initSystemInterface(rootView);
+
         return rootView;
     }
 
@@ -84,6 +87,35 @@ public class FragmentUserProfile extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         AppUtils.log(Thread.currentThread().getStackTrace(), "Toolbar User is inflated");
+    }
+
+    // Interface methods
+
+    /**
+     * Initialize toolbar option and title, Snackbar anchor, gym ID and default screen orientation
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void initSystemInterface(View rootView) {
+        // init new checked item on navigation Drawer
+        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
+        navigationView.getMenu().findItem(R.id.nav_menu_home).setChecked(true);
+
+        // Abilities toolbar item options
+        setHasOptionsMenu(true);
+        // Change toolbar title
+        requireActivity().setTitle(getResources().getString(R.string.user_profile_toolbar_title));
+
+        // init origin screen orientation
+        this.orientation = rootView.getResources().getConfiguration().orientation;
+
+        // init gym ID from Gym Object
+        this.userUID = this.user.getUid();
+
+        // init message Anchor for Snackbar
+        this.messageAnchor = rootView.findViewById(R.id.anchor);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of FragmentUserProfile initialized");
     }
 
 }

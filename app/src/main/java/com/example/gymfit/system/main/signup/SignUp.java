@@ -1,4 +1,4 @@
-package com.example.gymfit.user.main.signup;
+package com.example.gymfit.system.main.signup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,7 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.example.gymfit.R;
-import com.example.gymfit.user.main.signin.Login;
+import com.example.gymfit.system.main.signin.Login;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +34,7 @@ public class SignUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_signup);
+        setContentView(R.layout.activity_system_signup_user);
         Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
         toolbarSettings();
         SignUpFragment fragmentOne = new SignUpFragment();

@@ -210,7 +210,7 @@ public class FragmentUserListGyms extends Fragment {
                                         ? new LinkedList<>(Arrays.asList(stringToArray(documentSnapshot.get(keys[8]).toString())))
                                         : new ArrayList<>();
 
-                                //Log.d("KEY_LOG", documentSnapshot.get(keys[8]).getClass().toString());
+                                Log.d("KEY_LOG", documentSnapshot.get(keys[8]).getClass().toString());
 
                                 Gym gym = new Gym(uid, email, phone, name, address, subscribers, position, image);
 

@@ -23,18 +23,18 @@
         <activity android:name=".system.main.signup.GymSignUp"
             android:windowSoftInputMode="adjustPan"
             />
-        <activity android:name=".system.main.PasswordRecovery" android:parentActivityName=".user.main.signin.Login" />
+        <activity android:name=".system.main.PasswordRecovery" android:parentActivityName=".system.main.signin.Login" />
         <activity
             android:name=".gym.main.ActivityGymProfile"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:parentActivityName=".user.main.signin.Login" />
+            android:parentActivityName=".system.main.signin.Login" />
         <activity
             android:name=".user.main.ActivityUserProfile"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:parentActivityName=".user.main.signin.Login" />
-        <activity android:name=".user.main.signup.SignUp"
+            android:parentActivityName=".system.main.signin.Login" />
+        <activity android:name=".system.main.signup.SignUp"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".user.main.signin.Login" />
+        <activity android:name=".system.main.signin.Login" />
         <activity android:name=".system.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

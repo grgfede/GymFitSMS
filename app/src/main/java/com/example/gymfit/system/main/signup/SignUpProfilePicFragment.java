@@ -1,5 +1,5 @@
 
-package com.example.gymfit.user.main.signup;
+package com.example.gymfit.system.main.signup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -122,7 +122,7 @@ public class SignUpProfilePicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_user_signupprofilepic, container, false);
+        View view = inflater.inflate(R.layout.fragment_system_signupprofilepic_user, container, false);
 
 
         //CODICE CHE EVITA IL RITORNO INDIETRO DEL FRAGMENT

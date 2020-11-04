@@ -1,4 +1,4 @@
-package com.example.gymfit.user.main.signup;
+package com.example.gymfit.system.main.signup;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -115,7 +115,7 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.fragment_user_signup, container, false);
+        View view = inflater.inflate(R.layout.fragment_system_signup_user, container, false);
 
         btnContinue = view.findViewById(R.id.btnContinue);
         nameSignUp = (TextInputEditText) view.findViewById(R.id.txtNameSignUp);
