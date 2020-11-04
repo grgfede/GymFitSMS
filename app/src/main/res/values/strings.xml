@@ -45,6 +45,9 @@
     <string name="gym_profile_toolbar_title">Palestra</string>
     <string name="gym_settings_toolbar_title">Impostazioni</string>
     <string name="gym_subs_toolbar_title">Elenco iscritti</string>
+    <string name="user_profile_toolbar_title">Utente</string>
+    <string name="user_subs_toolbar_title">Prenotazioni</string>
+    <string name="user_gyms_toolbar_title">Elenco palestre</string>
     <string name="system_toolbar_search">Cerca</string>
     <string name="system_toolbar_filter">Filtra</string>
     <string name="system_toolbar_edit">Modifica</string>
@@ -62,19 +65,23 @@
     <string name="prompt_cancel">Annulla</string>
     <string name="prompt_send">Invia</string>
     <string name="prompt_delete">Cancella</string>
-    <string name="prompt_confirm" translatable="false">Apply</string>
+    <string name="prompt_confirm">Conferma</string>
+    <string name="prompt_update">Aggiorna</string>
+    <!-- TODO: migrate from database strings -->
+    <string name="prompt_subscribers" translatable = "false">subscribers</string>
+    <string name="prompt_subscription" translatable = "false">subscription</string>
     <string name="prompt_monthly" translatable="false">monthly</string>
     <string name="prompt_quarterly" translatable="false">quarterly</string>
     <string name="prompt_six_month" translatable="false">six_month</string>
     <string name="prompt_annual" translatable="false">annual</string>
+    <string name="prompt_turn" translatable = "false">turn</string>
     <string name="prompt_morning" translatable="false">morning</string>
     <string name="prompt_afternoon" translatable="false">afternoon</string>
     <string name="prompt_evening" translatable="false">evening</string>
     <string name="prompt_default" translatable="false">default</string>
 
-    <!-- TODO: this is not a prompt but a message so change this string with "message_yourmsg -->
+    <!-- TODO: this is not a prompt but a message so move it into messages.xml without "prompt" -->
     <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
-
     <string name="message_user_removing">sarà eliminato…</string>
 
     <!-- TODO: rename with "prompt_key" when they are system string -->
@@ -89,7 +96,8 @@
     <string name="helper_phone_error">"Numero di telefono non valido."</string>
     <string name="helper_address_hover">Inserisci un nuovo indirizzo</string>
     <string name="helper_address_error">"L'indirizzo non è valido."</string>
-    <string name="helper_name_always">Gym</string>
+    <string name="helper_name_gym">Gym</string>
+    <string name="helper_name_user">User</string>
     <string name="helper_name_hover">Inserisci nome</string>
     <string name="helper_surname_hover">Inserisci cognome</string>
     <string name="helper_gender_hover">Inserisci gender</string>
@@ -115,36 +123,36 @@
     <string name="title_session">Turno settimanale</string>
     <string name="morning_session">Turni mattutini</string>
     <string-array name="morning_session_value">
-        <item name="first_morning_session" translatable="false">09:00 – 10:00</item>
-        <item name="second_morning_session" translatable="false">10:00 – 11:00</item>
-        <item name="third_morning_session" translatable="false">11:00 – 12:00</item>
+        <!-- [0] --> <item name="first_morning_session" translatable="false">09:00 – 10:00</item>
+        <!-- [1] --> <item name="second_morning_session" translatable="false">10:00 – 11:00</item>
+        <!-- [2] --> <item name="third_morning_session" translatable="false">11:00 – 12:00</item>
     </string-array>
     <string-array name="morning_session_name">
-        <item name="first_morning_session" translatable="false">morningFirst</item>
-        <item name="second_morning_session" translatable="false">morningSecond</item>
-        <item name="third_morning_session" translatable="false">morningThird</item>
+        <!-- [0] --> <item name="first_morning_session" translatable="false">morningFirst</item>
+        <!-- [1] --> <item name="second_morning_session" translatable="false">morningSecond</item>
+        <!-- [2] --> <item name="third_morning_session" translatable="false">morningThird</item>
     </string-array>
     <string name="afternoon_session">Turni pomeridiani</string>
     <string-array name="afternoon_session_value">
-        <item name="first_afternoon_session" translatable="false">14:00 – 15:00</item>
-        <item name="second_afternoon_session" translatable="false">15:00 – 16:00</item>
-        <item name="third_afternoon_session" translatable="false">16:00 – 17:00</item>
+        <!-- [0] --> <item name="first_afternoon_session" translatable="false">14:00 – 15:00</item>
+        <!-- [1] --> <item name="second_afternoon_session" translatable="false">15:00 – 16:00</item>
+        <!-- [2] --> <item name="third_afternoon_session" translatable="false">16:00 – 17:00</item>
     </string-array>
     <string-array name="afternoon_session_name">
-        <item name="first_afternoon_session" translatable="false">afternoonFirst</item>
-        <item name="second_afternoon_session" translatable="false">afternoonSecond</item>
-        <item name="third_afternoon_session" translatable="false">afternoonThird</item>
+        <!-- [0] --> <item name="first_afternoon_session" translatable="false">afternoonFirst</item>
+        <!-- [1] --> <item name="second_afternoon_session" translatable="false">afternoonSecond</item>
+        <!-- [2] --> <item name="third_afternoon_session" translatable="false">afternoonThird</item>
     </string-array>
     <string name="evening_session">Turni serali</string>
     <string-array name="evening_session_value">
-        <item name="first_evening_session" translatable="false">17:00 – 18:00</item>
-        <item name="second_evening_session" translatable="false">18:00 – 19:00</item>
-        <item name="third_evening_session" translatable="false">19:00 – 20:00</item>
+        <!-- [0] --> <item name="first_evening_session" translatable="false">17:00 – 18:00</item>
+        <!-- [1] --> <item name="second_evening_session" translatable="false">18:00 – 19:00</item>
+        <!-- [2] --> <item name="third_evening_session" translatable="false">19:00 – 20:00</item>
     </string-array>
     <string-array name="evening_session_name">
-        <item name="first_evening_session" translatable="false">eveningFirst</item>
-        <item name="second_evening_session" translatable="false">eveningSecond</item>
-        <item name="third_evening_session" translatable="false">eveningThird</item>
+        <!-- [0] --> <item name="first_evening_session" translatable="false">eveningFirst</item>
+        <!-- [1] --> <item name="second_evening_session" translatable="false">eveningSecond</item>
+        <!-- [2] --> <item name="third_evening_session" translatable="false">eveningThird</item>
     </string-array>
 
     <string name="signUpSubTitle3">Imposta una tua foto del profilo per farti riconoscere in modo semplice</string>

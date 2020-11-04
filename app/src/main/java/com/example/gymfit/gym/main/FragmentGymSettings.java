@@ -10,13 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.gym.conf.InitGymTurnCallback;
+import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.BooleanUtils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
@@ -25,7 +29,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,14 +39,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class FragmentGymSettings extends Fragment {
-    private static final String DESCRIBABLE_KEY = "describable_key";
+    private static final String GYM_KEY = "gym_key";
     private static final String LOG = FragmentGymSettings.class.getSimpleName();
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private Gym gym = null;
+
+    private Gym gym;
 
     // Switch and Checkbox
     private final Map<String, SwitchMaterial> switchMap = new HashMap<>();
@@ -52,75 +54,88 @@ public class FragmentGymSettings extends Fragment {
 
     private View messageAnchor = null;
 
+    public static FragmentGymSettings newInstance(Gym gym) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentGymSettings created");
+
+        FragmentGymSettings fragment = new FragmentGymSettings();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(GYM_KEY, gym);
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        assert getArguments() != null;
+        this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_settings, container, false);
-        assert getArguments() != null;
-        this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
 
-        // Change toolbar title
-        requireActivity().setTitle(getResources().getString(R.string.gym_settings_toolbar_title));
+        initSystemInterface(rootView);
 
         // View initialization
-        setMessageAnchor(rootView);
         setSwitchMap(rootView);
         setCheckButtonMap(rootView);
         setCheckboxTextMap(rootView);
 
         // View listener
-        /* Switch listener */
-        this.switchMap.forEach((key, entry) -> {
-            setSwitchStyle(entry);
-            setSwitchFromDatabase(key, entry);
+        try {
+            /* Switch listener */
+            this.switchMap.forEach((key, entry) -> {
+                setSwitchStyle(entry);
+                setSwitchFromDatabase(key, entry);
 
-            // OnCheckedChange
-            entry.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchOnDatabase(key, isChecked));
-        });
-
-        /* Button listener */
-        this.checkButtonMap.forEach((key, entry) -> {
-            Map<String, Object> confCheckDialog = new HashMap<>();
-            setCheckboxFromDatabase(key);
-
-            // OnClick
-            entry.setOnClickListener(v -> {
-                switch (key) {
-                    case "morning":
-                        confCheckDialog.put("title", rootView.getResources().getString(R.string.morning_session));
-                        confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_morning));
-                        confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.morning_session_value));
-                        confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("morning"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
-                        break;
-                    case "afternoon":
-                        confCheckDialog.put("title", rootView.getResources().getString(R.string.afternoon_session));
-                        confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_afternoon));
-                        confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.afternoon_session_value));
-                        confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("afternoon"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
-                        break;
-                    case "evening":
-                        confCheckDialog.put("title", rootView.getResources().getString(R.string.evening_session));
-                        confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_evening));
-                        confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.evening_session_value));
-                        confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("evening"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
-                        break;
-                }
-
-                onCreateTurnDialog(rootView, confCheckDialog, (gym, turnKey, which, isChecked) -> setCheckboxOnDatabase(turnKey, which, isChecked));
+                // OnCheckedChange
+                entry.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchOnDatabase(key, isChecked));
             });
-        });
+
+            /* Button listener */
+            this.checkButtonMap.forEach((key, entry) -> {
+                Map<String, Object> confCheckDialog = new HashMap<>();
+                setCheckboxFromDatabase(key);
+
+                // OnClick
+                entry.setOnClickListener(v -> {
+                    switch (key) {
+                        case "morning":
+                            confCheckDialog.put("title", rootView.getResources().getString(R.string.morning_session));
+                            confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_morning));
+                            confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.morning_session_value));
+                            confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("morning"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
+                            break;
+                        case "afternoon":
+                            confCheckDialog.put("title", rootView.getResources().getString(R.string.afternoon_session));
+                            confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_afternoon));
+                            confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.afternoon_session_value));
+                            confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("afternoon"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
+                            break;
+                        case "evening":
+                            confCheckDialog.put("title", rootView.getResources().getString(R.string.evening_session));
+                            confCheckDialog.put("keyTurn", rootView.getResources().getString(R.string.prompt_evening));
+                            confCheckDialog.put("items", rootView.getResources().getStringArray(R.array.evening_session_value));
+                            confCheckDialog.put("checkedItems", Arrays.stream(Objects.requireNonNull(this.gym.getTurns().get("evening"))).collect(BooleanUtils.TO_BOOLEAN_ARRAY));
+                            break;
+                    }
+
+                    onCreateTurnDialog(rootView, confCheckDialog, (gym, turnKey, which, isChecked) -> setCheckboxOnDatabase(turnKey, which, isChecked));
+                });
+            });
+        } catch (Exception e) {
+            AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
+            AppUtils.restartActivity((AppCompatActivity) requireActivity());
+        }
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "FragmentGymSettings layout XML created");
 
         return rootView;
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Orientation changed: " + newConfig.orientation);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
             try {
@@ -130,22 +145,35 @@ public class FragmentGymSettings extends Fragment {
                 }
                 ft.detach(this).attach(this).commit();
 
-            } catch (Exception e) {
-                Log.d(LOG, Objects.requireNonNull(e.getMessage()));
-                setMessage("Error: " + e.toString());
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Orientation changed: replaced interface");
 
-                closeFragment();
+            } catch (Exception e) {
+                AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
+                AppUtils.message(this.messageAnchor, e.toString(), Snackbar.LENGTH_SHORT).show();
+                AppUtils.restartActivity((AppCompatActivity) requireActivity());
             }
         }
     }
 
-    public static FragmentGymSettings newInstance(Gym gym) {
-        FragmentGymSettings fragment = new FragmentGymSettings();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(DESCRIBABLE_KEY, gym);
-        fragment.setArguments(bundle);
+    // Interface methods
 
-        return fragment;
+    /**
+     * Initialize toolbar option and title, Snackbar anchor, gym ID and default screen orientation
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void initSystemInterface(View rootView) {
+        // init new checked item on navigation Drawer
+        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
+        navigationView.getMenu().findItem(R.id.nav_menu_setting).setChecked(true);
+
+        // Change toolbar title
+        requireActivity().setTitle(getResources().getString(R.string.gym_settings_toolbar_title));
+
+        // init message Anchor for Snackbar
+        this.messageAnchor = rootView.findViewById(R.id.anchor);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of FragmentGymSettings initialized");
     }
 
     // Switch methods
@@ -202,19 +230,18 @@ public class FragmentGymSettings extends Fragment {
      * @param switchMaterial Switch view set from database subscription node value
      */
     private void setSwitchFromDatabase(String key, SwitchMaterial switchMaterial) {
-        this.db.collection("gyms").document(this.gym.getUid()).get().addOnCompleteListener(task -> {
-
-            if(task.isSuccessful()) {
-                DocumentSnapshot documentSnapshot = task.getResult();
-                Boolean dbValue = (Boolean) documentSnapshot.get("subscription." + key);
-
-                assert dbValue != null;
-                switchMaterial.setChecked(dbValue);
-                this.gym.updateSubscription(key, dbValue);
-            } else {
-                Log.d(LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
-            }
+        this.db.collection("gyms").document(this.gym.getUid()).get()
+            .addOnCompleteListener(task -> {
+                if(task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    Boolean dbValue = documentSnapshot.getBoolean("subscription." + key);
+                    assert dbValue != null;
+                    switchMaterial.setChecked(dbValue);
+                    this.gym.updateSubscription(key, dbValue);
+                }
         });
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscriptions fields updated from Database values");
     }
 
     /**
@@ -224,11 +251,10 @@ public class FragmentGymSettings extends Fragment {
      * @param isChecked Value used for update the respective Database node
      */
     private void setSwitchOnDatabase(String key, boolean isChecked) {
-        this.db.collection("gyms").document(this.gym.getUid())
-                .update("subscription." + key, isChecked);
+        this.db.collection("gyms").document(this.gym.getUid()).update("subscription." + key, isChecked)
+                .addOnCompleteListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(), "Subscription updated on Database with: " + key + " " + isChecked))
+                .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(), "Subscription is not updated on Database"));
         this.gym.updateSubscription(key, isChecked);
-
-        showSnackSwitch(key, isChecked);
     }
 
     // Checkbox methods
@@ -273,8 +299,10 @@ public class FragmentGymSettings extends Fragment {
             subNode = getResources().getStringArray(R.array.evening_session_name)[which];
         }
 
-        this.db.collection("gyms").document(this.gym.getUid())
-                .update("turn." + turnKey + "." + subNode, isChecked);
+        String finalSubNode = subNode;
+        this.db.collection("gyms").document(this.gym.getUid()).update("turn." + turnKey + "." + subNode, isChecked)
+                .addOnCompleteListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(), "Turn updated on Database with: " + turnKey + "." + finalSubNode + " " + isChecked))
+                .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(), "Turn is not updated on Database"));;
         this.gym.setTurn(turnKey, which, isChecked);
         setCheckboxText(turnKey);
     }
@@ -287,7 +315,6 @@ public class FragmentGymSettings extends Fragment {
     @SuppressWarnings("unchecked")
     private void setCheckboxFromDatabase(String key) {
         this.db.collection("gyms").document(this.gym.getUid()).get().addOnCompleteListener(task -> {
-
             if(task.isSuccessful()) {
                 DocumentSnapshot documentSnapshot = task.getResult();
                 Map<String, Boolean> dbValue = (Map<String, Boolean>) documentSnapshot.get("turn." + key);
@@ -308,10 +335,9 @@ public class FragmentGymSettings extends Fragment {
                     this.gym.setTurn(key, position, value);
                     setCheckboxText(key);
                 });
-            } else {
-                Log.d(LOG, Objects.requireNonNull(Objects.requireNonNull(task.getException()).getMessage()));
             }
         });
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Gym turns fields updated from Database values");
     }
 
     /**
@@ -368,75 +394,6 @@ public class FragmentGymSettings extends Fragment {
         }
         String placeholder = joiner.toString();
         Objects.requireNonNull(this.checkTextMap.get(key)).setText(placeholder);
-    }
-
-    // SnackBar methods
-
-    /**
-     * Set the container anchor for Snackbar object and its methods "make"
-     *
-     * @param rootView Root View object of Fragment. From it can be get the context.
-     */
-    private void setMessageAnchor(View rootView) {
-        // Initialize the container that will be used for Snackbar methods
-        this.messageAnchor = rootView.findViewById(R.id.anchor);
-    }
-
-    /**
-     * Show a message on the screen
-     *
-     * @param text string to show in SnackBar method
-     */
-    private void setMessage(String text) {
-        Snackbar.make(this.messageAnchor, text, Snackbar.LENGTH_SHORT).show();
-    }
-
-    private void showSnackSwitch(String key, boolean value) {
-        switch (key) {
-            case "monthly":
-                if (value) {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.monthly_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.monthly_subscription_enabled));
-                } else {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.monthly_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.monthly_subscription_disabled));
-                }
-                break;
-            case "quarterly":
-                if (value) {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.quarterly_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.quarterly_subscription_enabled));
-                } else {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.quarterly_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.quarterly_subscription_disabled));
-                }
-                break;
-            case "sixMonth":
-                if (value) {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.sixMonth_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.sixMonth_subscription_enabled));
-                } else {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.sixMonth_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.sixMonth_subscription_disabled));
-                }
-                break;
-            case "annual":
-                if (value) {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.annual_subscription_enabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.annual_subscription_enabled));
-                } else {
-                    Snackbar.make(messageAnchor, getResources().getString(R.string.annual_subscription_disabled), Snackbar.LENGTH_SHORT).show();
-                    Log.d(LOG, getResources().getString(R.string.annual_subscription_disabled));
-                }
-                break;
-
-        }
-    }
-
-    // Fragment methods
-
-    private void closeFragment() {
-        getChildFragmentManager().popBackStack();
     }
 
 }

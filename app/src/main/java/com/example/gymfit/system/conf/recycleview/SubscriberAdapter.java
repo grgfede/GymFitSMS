@@ -103,8 +103,8 @@ public class SubscriberAdapter extends RecyclerView.Adapter<SubscriberAdapter.My
         holder.bind(this.context, this.users.get(position), position, listener);
 
         // load
-        Picasso.get().load(this.users.get(position).getUrlImage()).into(holder.media);
-        Picasso.get().load(this.users.get(position).getUrlImage()).into(holder.startIcon);
+        Picasso.get().load(this.users.get(position).getImg()).into(holder.media);
+        Picasso.get().load(this.users.get(position).getImg()).into(holder.startIcon);
 
         String username = this.users.get(position).getName() + " " + this.users.get(position).getSurname();
         holder.username.setText(username);
@@ -274,7 +274,7 @@ public class SubscriberAdapter extends RecyclerView.Adapter<SubscriberAdapter.My
             filteredList.sort((o1, o2) -> o1.getSurname().compareTo(o2.getSurname()));
         } else if (rule.equals("username")) {
             usersFull.forEach(user -> {
-                if (user.getUsername().toLowerCase().trim().contains(constraint)) {
+                if (user.getFullname().toLowerCase().trim().contains(constraint)) {
                     filteredList.add(user);
                 }
             });

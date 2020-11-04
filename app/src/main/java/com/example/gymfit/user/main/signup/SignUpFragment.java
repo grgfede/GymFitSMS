@@ -52,6 +52,8 @@ public class SignUpFragment extends Fragment {
     private AutoCompleteTextView genderSignUp;
     private TextInputEditText birthSignUp;
     private TextInputEditText locationSignUp;
+    private Date dateOfBirth;
+
 
 
     private LatLng locationLatLng;
@@ -144,7 +146,7 @@ public class SignUpFragment extends Fragment {
             public void onClick(View v) {
 
                 //FACCIO CONTROLLI SUI CAMPI INSERITI DALL'UTENTE
-                boolean errors = controlFields(nameSignUp, surnameSignUp, phoneSignUp, genderSignUp, view);
+                boolean errors = controlFields(view);
 
                 if (!(errors)) {
                     Fragment fragment2 = new SignUp2Fragment();
@@ -186,6 +188,7 @@ public class SignUpFragment extends Fragment {
         String myFormat = "dd/MM/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         birthSignUp.setText(sdf.format(myCalendar.getTime()));
+        dateOfBirth = myCalendar.getTime();
     }
 
     private void changeFragment(FragmentManager fragManager, Fragment fragment2) {
@@ -202,12 +205,12 @@ public class SignUpFragment extends Fragment {
 
     private void saveData(Fragment fragment2, FragmentManager fragmentManager) {
         String name, surname, phone, gender, position;
-        Date dateOfBirth = null;
         name = nameSignUp.getText().toString();
         surname = surnameSignUp.getText().toString();
         phone = phoneSignUp.getText().toString();
         gender = genderSignUp.getText().toString();
         position = locationSignUp.getText().toString();
+
 
 
         User newUser = new User(name, surname, gender, dateOfBirth, locationLatLng, position, phone);
@@ -219,19 +222,22 @@ public class SignUpFragment extends Fragment {
     }
 
 
-    private boolean controlFields(EditText nameSignUp, EditText surnameSignUp, EditText phoneSignUp, AutoCompleteTextView genderSignUp, View view) {
+    private boolean controlFields(View view) {
         //MI RECUPERO I LAYOUT DI OGNI COMPONENTE
-        TextInputLayout nameL, surnameL, phoneL, genderL;
+        TextInputLayout nameL, surnameL, phoneL, genderL, birthL;
         nameL = view.findViewById(R.id.txtNameSignUpLayout);
         surnameL = view.findViewById(R.id.txtSurnameSignUpLayout);
         phoneL = view.findViewById(R.id.txtPhoneSignUpLayout);
         genderL = view.findViewById(R.id.txtGenderSignUpLayout);
+        birthL = view.findViewById(R.id.txtBirthSignUpLayout);
 
         boolean error_fields = false;
         String strname = nameSignUp.getText().toString();
         String strsurname = surnameSignUp.getText().toString();
         String phone = phoneSignUp.getText().toString();
         String gender = genderSignUp.getText().toString();
+        String dateBirthString = birthSignUp.getText().toString();
+
         if (strname.isEmpty()) {
             nameL.setError(getResources().getString(R.string.helper_name_hover));
             nameL.requestFocus();
@@ -247,6 +253,10 @@ public class SignUpFragment extends Fragment {
         } else if (gender.isEmpty()) {
             genderSignUp.setError(getResources().getString(R.string.helper_gender_hover));
             genderL.requestFocus();
+            error_fields = true;
+        } else if (dateBirthString.isEmpty()){
+            birthL.setError(getResources().getString(R.string.helper_birth_hover));
+            birthL.requestFocus();
             error_fields = true;
         }
         return error_fields;
@@ -274,7 +284,7 @@ public class SignUpFragment extends Fragment {
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
                         getContext(),
-                        R.layout.dropdown_menu_popup_item,
+                        R.layout.layout_system_dropdown,
                         COUNTRIES);
 
         AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.txtGenderSignUp);

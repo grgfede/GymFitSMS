@@ -55,7 +55,7 @@
     <string name="helper_address_error">Address is non valid.</string>
     <string name="update_address_success">Your new address has been updated.</string>
     <string name="update_address_error">Your new address has not been updated.</string>
-    <string name="helper_name_always">Palestra</string>
+    <string name="helper_name_gym">Palestra</string>
     <string name="update_name_success">Your new name has been updated.</string>
     <string name="update_name_error">Your new name has not been updated.</string>
     <string name="prompt_delete">Delete</string>
@@ -66,7 +66,6 @@
     <string name="permission_camera_error">Camera permission denied.</string>
     <string name="update_image_success">Your image has been updated.</string>
     <string name="update_image_error">Your image has not been updated.</string>
-    <string name="intent_result_code_denied">Error:</string>
     <string name="title_subscription">Subscription</string>
     <string name="monthly_subscription">Monthly</string>
     <string name="quarterly_subscription">Quarterly</string>
@@ -120,4 +119,12 @@
     <string name="helper_birth_hover">Insert date of birth</string>
     <string name="helper_psw_not_equal_error">Passwords do not match</string>
     <string name="message_user_removing">removing…</string>
+    <string name="prompt_confirm">Apply</string>
+    <string name="profile_not_completed">Profile not completed.\nSet your empty field…</string>
+    <string name="recycleview_void">No subscribers.</string>
+    <string name="prompt_update">Update</string>
+    <string name="helper_name_user">Utente</string>
+    <string name="user_profile_toolbar_title">User</string>
+    <string name="user_subs_toolbar_title">Subscriptions</string>
+    <string name="user_gyms_toolbar_title">Gym list</string>
 </resources>

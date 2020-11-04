@@ -1,7 +1,6 @@
 package com.example.gymfit.gym.main;
 
 import android.annotation.SuppressLint;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +12,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,30 +32,26 @@ import com.example.gymfit.gym.conf.SubscriberCallback;
 import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
 import com.example.gymfit.system.conf.recycleview.SubscriberAdapter;
+import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.user.conf.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
-    private static final String DESCRIBABLE_KEY = "describable_key";
+    private static final String GYM_KEY = "gym_key";
     private static final String LOG = "KEY_LOG";
-    private static final String DRAWER_INSTANCE = "drawer_instance";
 
     private SubscriberAdapter subscriberAdapter;
 
@@ -62,39 +59,31 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
     private View messageAnchor = null;
     private boolean isVisible;
+    private boolean isEmptyData = false;
 
     private Gym gym = null;
     private final List<User> users = new ArrayList<>();
 
-    private Bundle savedState = null;
-
     public static FragmentGymSubs newInstance(Gym gym) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentGymSubs created");
+
         FragmentGymSubs fragment = new FragmentGymSubs();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(DESCRIBABLE_KEY, gym);
+        bundle.putSerializable(GYM_KEY, gym);
         fragment.setArguments(bundle);
 
         return fragment;
     }
 
-    // Overrated methods
-
     @Override
-    @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         assert getArguments() != null;
-        this.gym = (Gym) getArguments().getSerializable(DESCRIBABLE_KEY);
+        this.gym = (Gym) getArguments().getSerializable(GYM_KEY);
 
-        // Change toolbar
-        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gym_subs, container, false);
 
-        // Change toolbar title
-        requireActivity().setTitle(getResources().getString(R.string.gym_subs_toolbar_title));
-
-        // View initialization
-        setMessageAnchor(rootView);
+        initSystemInterface(rootView);
         initInterface(new SubscriberCallback() {
             int subscriberCount = 0;
             int subscriberSize = 0;
@@ -129,6 +118,9 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
             }
 
             @Override
+            public void addOnCallback(boolean isEmpty) {}
+
+            @Override
             public void addOnSuccessCallback(User user) {
                 users.add(user);
                 subscriberCount++;
@@ -136,18 +128,15 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
             }
 
             @Override
-            public void addOnCompleteCallback() {
-                setUpRecycleView();
-            }
-
-            @Override
             public void addOnSuccessListener() {
                 if (subscriberCount == subscriberSize) {
-                    addOnCompleteCallback();
+                    setUpRecycleView();
                 }
             }
 
         });
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "FragmentGymSubs layout XML created");
 
         return rootView;
     }
@@ -162,60 +151,64 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.app_bar_search:
-                SearchView searchView = (SearchView) item.getActionView();
-                searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
+        // If there are some subscribers enable actions of new menu, otherwise keep them disabled (no effects on recycle)
+        if (!this.isEmptyData) {
+            switch (item.getItemId()) {
+                case R.id.app_bar_search:
+                    SearchView searchView = (SearchView) item.getActionView();
+                    searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
 
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        subscriberAdapter.getFilter().filter(newText);
-                        return false;
-                    }
-                });
-                break;
-            case R.id.app_bar_filter:
-                subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_default));
-                break;
-            case R.id.action_filter_monthly:
-                subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_monthly));
-                break;
-            case R.id.action_filter_quarterly:
-                subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_quarterly));
-                break;
-            case R.id.action_filter_six_month:
-                subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_six_month));
-                break;
-            case R.id.action_filter_annual:
-                subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_annual));
-                break;
-            case R.id.action_sort_by_name:
-                subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_name));
-                break;
-            case R.id.action_sort_by_surname:
-                subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_surname));
-                break;
-            default:
-                break;
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            subscriberAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
+                    break;
+                case R.id.app_bar_filter:
+                    subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_default));
+                    break;
+                case R.id.action_filter_monthly:
+                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_monthly));
+                    break;
+                case R.id.action_filter_quarterly:
+                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_quarterly));
+                    break;
+                case R.id.action_filter_six_month:
+                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_six_month));
+                    break;
+                case R.id.action_filter_annual:
+                    subscriberAdapter.getFilterSub().filter(getResources().getString(R.string.prompt_annual));
+                    break;
+                case R.id.action_sort_by_name:
+                    subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_name));
+                    break;
+                case R.id.action_sort_by_surname:
+                    subscriberAdapter.getSort().filter(getResources().getString(R.string.prompt_surname));
+                    break;
+                default:
+                    break;
+            }
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int position) {
-        String username = this.users.get(position).getUsername();
+        String username = this.users.get(position).getFullname();
 
         // Backup before delete for undo action
         final User item = this.users.get(position);
 
         // Remove the item from recycleView
         this.subscriberAdapter.removeItem(position);
-        setMessage(username + " " + getResources().getString(R.string.message_user_removing))
+        AppUtils.message(this.messageAnchor, username + " " + getResources().getString(R.string.message_user_removing), Snackbar.LENGTH_SHORT)
             .setAction(getResources().getString(R.string.prompt_cancel), v -> this.subscriberAdapter.restoreItem(item, position))
             .setActionTextColor(requireContext().getColor(R.color.tint_message_text))
             .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -225,10 +218,10 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                     super.onDismissed(transientBottomBar, event);
 
                     if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                        Log.d(LOG, "User " + item.getUsername() + " is removed from UserAdapter");
+                        Log.d(LOG, "User " + item.getFullname() + " is removed from UserAdapter");
                         removeUserFromGym(item.getUid());
                     } else if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                        Log.d(LOG, "User " + item.getUsername() + " is restored into UserAdapter");
+                        Log.d(LOG, "User " + item.getFullname() + " is restored into UserAdapter");
                     }
                 }
             })
@@ -236,24 +229,116 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
     }
 
-    // Set methods
+    // Interface methods
 
+    /**
+     * Initialize toolbar option and title, Snackbar anchor, gym ID and default screen orientation
+     *
+     * @param rootView Root View object of Fragment. From it can be get the context.
+     */
+    private void initSystemInterface(View rootView) {
+        // init new checked item on navigation Drawer
+        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_gym);
+        navigationView.getMenu().findItem(R.id.nav_menu_subs).setChecked(true);
+
+        // Abilities toolbar item options
+        setHasOptionsMenu(true);
+        // Change toolbar title
+        requireActivity().setTitle(getResources().getString(R.string.gym_subs_toolbar_title));
+
+        // init message Anchor for Snackbar
+        this.messageAnchor = rootView.findViewById(R.id.anchor);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of FragmentGymSubs initialized");
+    }
+
+    /**
+     * Try to find any subscribers to init Recycle or show a alert message if they aren't for this gym
+     *
+     * @param subscriberCallback callback to init recycleView
+     */
     private void initInterface(SubscriberCallback subscriberCallback) {
+        this.isEmptyData = false;
 
-        // TODO: take Array of Subs from Gym and if it's empty take it from DB
-        this.db.collection("gyms").document(this.gym.getUid()).get()
-            .addOnCompleteListener(task -> {
+        if (!this.gym.getSubscribers().isEmpty()) {
+            subscriberCallback.addOnCallback(this.gym.getSubscribers());
+        } else {
+            getSubscribersFromDatabase(new SubscriberCallback() {
+                @Override
+                public void addOnCallback(boolean isEmpty) {
+                    if (!isEmpty) {
+                        subscriberCallback.addOnCallback(gym.getSubscribers());
+                    } else {
+                        isEmptyData = true;
+                        AppUtils.log(Thread.currentThread().getStackTrace(), "No subscribers for this gym");
 
-                if(task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-                    assert documentSnapshot != null;
+                        Snackbar message = AppUtils.message(messageAnchor, getString(R.string.recycleview_void), Snackbar.LENGTH_INDEFINITE)
+                                .setAction(getString(R.string.prompt_update), v -> {})
+                                .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null));
+                        Button actionBtn = message.getView().findViewById(com.google.android.material.R.id.snackbar_action);
+                        actionBtn.setOnClickListener(v -> getSubscribersFromDatabase(new SubscriberCallback() {
 
-                    String[] subscribersUID = stringToArray(Objects.requireNonNull(documentSnapshot.get("subscribers")).toString());
-                    subscriberCallback.addOnCallback(Arrays.asList(subscribersUID));
+                            @Override
+                            public void addOnCallback(boolean isEmpty) {
+                                if (!isEmpty) {
+                                    isEmptyData = false;
+                                    message.dismiss();
+                                    subscriberCallback.addOnCallback(gym.getSubscribers());
+                                }
+                            }
+
+                            @Override
+                            public void addOnCallback(List<String> usersID) {}
+
+                            @Override
+                            public void addOnSuccessCallback(User user) {}
+
+                            @Override
+                            public void addOnSuccessListener() {}
+                        }));
+                        message.show();
+                    }
                 }
-            })
-            .addOnFailureListener(task -> Log.d(LOG, Objects.requireNonNull(task.getMessage())));
 
+                @Override
+                public void addOnCallback(List<String> usersID) {}
+
+                @Override
+                public void addOnSuccessCallback(User user) {}
+
+                @Override
+                public void addOnSuccessListener() {}
+            });
+        }
+    }
+
+    /**
+     * Find any subscribers from Database and return a callback with status of empty
+     *
+     * @param subscriberCallback callback to init gym subscribers
+     */
+    private void getSubscribersFromDatabase(SubscriberCallback subscriberCallback) {
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Searching new subscribers...");
+
+        this.db.collection("gyms").document(this.gym.getUid()).get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot.get("subscribers") != null) {
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "New subscribers found: " + documentSnapshot.get("subscribers").toString());
+                            List<String> subscribersUID = new LinkedList<>(Arrays.asList(stringToArray(documentSnapshot.get("subscribers").toString())));
+                            this.gym.setSubscribers(subscribersUID);
+                            subscriberCallback.addOnCallback(false);
+                        } else {
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "New subscribers not found");
+                            subscriberCallback.addOnCallback(true);
+                        }
+                    }
+                })
+                .addOnFailureListener(task -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "New subscribers not found");
+                    subscriberCallback.addOnCallback(true);
+                });
     }
 
     private void setUpRecycleView() {
@@ -273,26 +358,6 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
-    }
-
-    /**
-     * Set the container anchor for Snackbar object and its methods "make"
-     *
-     * @param rootView Root View object of Fragment. From it can be get the context.
-     */
-    private void setMessageAnchor(View rootView) {
-        // Initialize the container that will be used for Snackbar methods
-        this.messageAnchor = rootView.findViewById(R.id.anchor);
-    }
-
-    /**
-     * Show a message on the screen
-     *
-     * @param text string to show in SnackBar method
-     * @return SnackBar;
-     */
-    private Snackbar setMessage(String text) {
-        return Snackbar.make(this.messageAnchor, text, Snackbar.LENGTH_SHORT);
     }
 
     // Interface methods
@@ -368,10 +433,6 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         v.startAnimation(a);
     }
 
-    private void closeFragment() {
-        getChildFragmentManager().popBackStack();
-    }
-
     // Database methods
 
     private void removeUserFromGym(String uid) {
@@ -397,18 +458,6 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         } else {
             Log.d(LOG, "User is removed from gym node database");
         }
-    }
-
-    // Log
-
-    private void addLog(StackTraceElement[] stackTrace, String text) {
-        int lineNumber = stackTrace[2].getLineNumber();
-        String methodName = stackTrace[2].getMethodName();
-        String className = stackTrace[2].getClassName();
-        className = className.substring(className.lastIndexOf(".") + 1);
-
-        String message = className + " " + methodName + " " + "[" + lineNumber + "]: " + text;
-        Log.d(LOG, message);
     }
 
 }

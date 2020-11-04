@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.example.gymfit.R;
 import com.example.gymfit.system.main.PasswordRecovery;
+import com.example.gymfit.system.main.signup.GymSignUp;
+import com.example.gymfit.user.main.ActivityUserProfile;
 import com.example.gymfit.user.main.signup.SignUp;
 import com.example.gymfit.gym.main.ActivityGymProfile;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class Login extends AppCompatActivity {
 
     EditText emailId, password;
-    TextView signUp;
+    TextView signUp, signUpGym;
     TextView forgotPsw;
     Button btnLogin;
     FirebaseAuth mFirebaseAuth;
@@ -46,6 +48,7 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.txtPassword);
         forgotPsw = findViewById(R.id.txtForgotPsw);
         signUp = findViewById(R.id.textCreate);
+        signUpGym = findViewById(R.id.textCreate2);
         btnLogin = findViewById(R.id.btnLogin);
 
 
@@ -109,12 +112,11 @@ public class Login extends AppCompatActivity {
     }
 
     private void signInIntent(String uid) {
+        // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
         if(uid.endsWith("2")) {
-            Intent intent = new Intent(Login.this, ActivityGymProfile.class);
-            intent.putExtra("userUid", uid);
-            startActivity(intent);
+            startActivity(new Intent(Login.this, ActivityGymProfile.class));
         } else {
-            //TODO: UserProfile (Execution)
+            startActivity(new Intent(Login.this, ActivityUserProfile.class));
         }
     }
 
@@ -125,6 +127,10 @@ public class Login extends AppCompatActivity {
 
     public void signUpIntent(View v){
         startActivity(new Intent(Login.this, SignUp.class));
+    }
+
+    public void signUpGymIntent(View v){
+        startActivity(new Intent(Login.this, GymSignUp.class));
     }
 
 

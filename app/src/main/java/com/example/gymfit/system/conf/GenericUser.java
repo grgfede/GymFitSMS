@@ -7,6 +7,8 @@ public abstract class GenericUser implements Serializable {
     private String email;
     private String phone;
 
+
+
     public GenericUser(String uid, String email, String phone) {
         this.uid = uid;
         this.email = email;

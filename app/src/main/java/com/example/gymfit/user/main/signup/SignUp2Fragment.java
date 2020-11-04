@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -157,6 +158,11 @@ public class SignUp2Fragment extends Fragment {
     }
 
     private void doSignUp() {
+        TextInputLayout emailL, pswL, repeatPswL;
+        emailL = myContext.findViewById(R.id.txtEmailSignUpLayout);
+        pswL = myContext.findViewById(R.id.txtPasswordSignUpLayout);
+        repeatPswL = myContext.findViewById(R.id.txtRepeatPasswordSignUpLayout);
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         final ProgressBar progressBar = myContext.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -171,14 +177,14 @@ public class SignUp2Fragment extends Fragment {
                             try {
                                 throw task.getException();
                             } catch (FirebaseAuthWeakPasswordException e) {
-                                passwordSignUp.setError(getString(R.string.error_weak_password));
-                                passwordSignUp.requestFocus();
+                                pswL.setError(getString(R.string.error_weak_password));
+                                pswL.requestFocus();
                             } catch (FirebaseAuthInvalidCredentialsException e) {
-                                emailSignUp.setError(getString(R.string.error_invalid_email));
-                                emailSignUp.requestFocus();
+                                emailL.setError(getString(R.string.error_invalid_email));
+                                emailL.requestFocus();
                             } catch (FirebaseAuthUserCollisionException e) {
-                                emailSignUp.setError(getString(R.string.error_user_exists));
-                                emailSignUp.requestFocus();
+                                emailL.setError(getString(R.string.error_user_exists));
+                                emailL.requestFocus();
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
                             }
@@ -235,17 +241,24 @@ public class SignUp2Fragment extends Fragment {
 
 
     private boolean controlPasswords(String password, String repassword) {
+        TextInputLayout pswL, repeatPswL;
+        pswL = myContext.findViewById(R.id.txtPasswordSignUpLayout);
+        repeatPswL = myContext.findViewById(R.id.txtRepeatPasswordSignUpLayout);
         boolean error = false;
         if (!(password.equals(repassword))) {
-            passwordSignUp.setError(getResources().getString(R.string.helper_psw_not_equal_error));
-            repeatPasswordSignUp.setError(getResources().getString(R.string.helper_psw_not_equal_error));
-            passwordSignUp.requestFocus();
+            pswL.setError(getResources().getString(R.string.helper_psw_not_equal_error));
+            pswL.setError(getResources().getString(R.string.helper_psw_not_equal_error));
+            pswL.requestFocus();
             error = true;
         }
         return error;
     }
 
     private boolean controlFields(EditText emailSignUp, EditText passwordSignUp, EditText repeatPasswordSignUp) {
+        TextInputLayout emailL, pswL, repeatPswL;
+        emailL = myContext.findViewById(R.id.txtEmailSignUpLayout);
+        pswL = myContext.findViewById(R.id.txtPasswordSignUpLayout);
+        repeatPswL = myContext.findViewById(R.id.txtRepeatPasswordSignUpLayout);
         //VARIABILI DI CLASSE CHE CONTERRANNO IL TESTO CON LE INFO SCRITTE DALL'UTENTE
         String email = emailSignUp.getText().toString();
         String password = passwordSignUp.getText().toString();
@@ -253,16 +266,16 @@ public class SignUp2Fragment extends Fragment {
 
         boolean error = false;
         if (email.isEmpty()) {
-            emailSignUp.setError(getResources().getString(R.string.helper_email_error));
-            emailSignUp.requestFocus();
+            emailL.setError(getResources().getString(R.string.helper_email_error));
+            emailL.requestFocus();
             error = true;
         } else if (password.isEmpty()) {
-            passwordSignUp.setError(getResources().getString(R.string.helper_psw_error));
-            passwordSignUp.requestFocus();
+            pswL.setError(getResources().getString(R.string.helper_psw_error));
+            pswL.requestFocus();
             error = true;
         } else if (repeatPassword.isEmpty()) {
-            repeatPasswordSignUp.setError(getResources().getString(R.string.helper_psw_error));
-            repeatPasswordSignUp.requestFocus();
+            repeatPswL.setError(getResources().getString(R.string.helper_psw_error));
+            repeatPswL.requestFocus();
             error = true;
         }
         return error;

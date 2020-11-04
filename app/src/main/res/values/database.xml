@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gym_field">
+        <!-- [0] --> <item name="uid" translatable="false">uid</item>
+        <!-- [1] --> <item name="name" translatable="false">name</item>
+        <!-- [2] --> <item name="email" translatable="false">email</item>
+        <!-- [3] --> <item name="img" translatable="false">img</item>
+        <!-- [4] --> <item name="phone" translatable="false">phone</item>
+        <!-- [5] --> <item name="address" translatable="false">address</item>
+        <!-- [6] --> <item name="position" translatable="false">position</item>
+        <!-- [7] --> <item name="subscription" translatable="false">subscription</item>
+        <!-- [8] --> <item name="subscribers" translatable="false">subscribers</item>
+        <!-- [9] --> <item name="turn" translatable="false">turn</item>
+
+        <!-- [10] --> <item name="monthly" translatable="false">monthly</item>
+        <!-- [11] --> <item name="quarterly" translatable="false">quarterly</item>
+        <!-- [12] --> <item name="six_month" translatable="false">sixMonth</item>
+        <!-- [13] --> <item name="annual" translatable="false">annual</item>
+
+        <!-- [14] --> <item name="morning" translatable="false">morning</item>
+        <!-- [15] --> <item name="afternoon" translatable="false">afternoon</item>
+        <!-- [16] --> <item name="evening" translatable="false">evening</item>
+    </string-array>
+
+    <string-array name="user_field">
+        <!-- [0] --> <item name="uid" translatable="false">uid</item>
+        <!-- [1] --> <item name="name" translatable="false">name</item>
+        <!-- [2] --> <item name="surname" translatable="false">surname</item>
+        <!-- [3] --> <item name="fullname" translatable="false">fullname</item>
+        <!-- [4] --> <item name="dateOfBirthday" translatable="false">dateOfBirthday</item>
+        <!-- [5] --> <item name="email" translatable="false">email</item>
+        <!-- [6] --> <item name="gender" translatable="false">gender</item>
+        <!-- [7] --> <item name="phone" translatable="false">phone</item>
+        <!-- [8] --> <item name="img" translatable="false">img</item>
+        <!-- [9] --> <item name="address" translatable="false">address</item>
+        <!-- [10] --> <item name="subscription" translatable="false">subscription</item>
+        <!-- [11] --> <item name="turns" translatable="false">turns</item>
+
+
+    </string-array>
+</resources>
