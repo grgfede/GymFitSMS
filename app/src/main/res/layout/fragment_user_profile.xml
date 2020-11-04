@@ -10,7 +10,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".gym.main.FragmentGymProfile"
+        tools:context=".gym.main.FragmentUserProfile"
         android:id="@+id/anchor"
         android:backgroundTint="@color/background_ui_default">
 
@@ -82,7 +82,7 @@
 
             <!-- Edit image button -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/gymEditImg"
+                android:id="@+id/userEditImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
@@ -112,10 +112,10 @@
 
                 <!-- Image -->
                 <ImageView
-                    android:id="@+id/gymImgField"
+                    android:id="@+id/ImgField"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:contentDescription="@string/gym_img_profile"
+                    android:contentDescription="@string/user_img_profile"
                     android:scaleType="centerCrop" />
 
             </LinearLayout>
@@ -135,12 +135,12 @@
 
                 <!-- Info Media -->
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/gymImgName"
+                    android:id="@+id/userImgName"
                     android:layout_width="56dp"
-                    android:layout_height="56dp"
+                    android:layout_height="62dp"
                     android:layout_gravity="top"
                     android:layout_marginEnd="8dp"
-                    android:contentDescription="@string/gym_img_profile" />
+                    android:contentDescription="@string/user_img_profile" />
 
                 <!-- Info Field -->
                 <LinearLayout
@@ -150,7 +150,7 @@
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/gymBoxName"
+                        android:id="@+id/userBoxName"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                         app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/gymTxtName"
+                            android:id="@+id/userTxtName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textNoSuggestions|textFilter"
@@ -184,13 +184,13 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/gymNameButtonRight"
+                        android:id="@+id/userNameButtonRight"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymAbortName"
+                            android:id="@+id/userAbortName"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -209,7 +209,7 @@
                             app:rippleColor="@color/background_ripple_error" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymSaveName"
+                            android:id="@+id/userSaveName"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -261,7 +261,7 @@
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/gymBoxEmail"
+                        android:id="@+id/userBoxEmail"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -288,7 +288,7 @@
                         app:startIconTint="@color/tint_image_icon_light">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/gymTxtEmail"
+                            android:id="@+id/userTxtEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"
@@ -301,14 +301,14 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/gymEmailButtonRight"
+                        android:id="@+id/userEmailButtonRight"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymAbortMail"
+                            android:id="@+id/userAbortMail"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -327,7 +327,7 @@
                             app:rippleColor="@color/background_ripple_error" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymSaveMail"
+                            android:id="@+id/userSaveMail"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -364,7 +364,7 @@
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/gymBoxKey"
+                        android:id="@+id/userBoxKey"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -391,7 +391,7 @@
                         app:startIconTint="@color/tint_image_icon_light">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/gymTextKey"
+                            android:id="@+id/userTextKey"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPassword"
@@ -405,14 +405,14 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/gymKeyButtonRight"
+                        android:id="@+id/userKeyButtonRight"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymAbortKey"
+                            android:id="@+id/userAbortKey"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -431,7 +431,7 @@
                             app:rippleColor="@color/material_on_background_disabled" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymSaveKey"
+                            android:id="@+id/userSaveKey"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -468,7 +468,7 @@
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/gymBoxPhone"
+                        android:id="@+id/userBoxPhone"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -499,7 +499,7 @@
                         app:startIconTint="@color/tint_image_icon_light">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/gymTextPhone"
+                            android:id="@+id/userTextPhone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number|text|phone"
@@ -512,14 +512,14 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/gymPhoneButtonRight"
+                        android:id="@+id/userPhoneButtonRight"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymAbortPhone"
+                            android:id="@+id/userAbortPhone"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -538,7 +538,7 @@
                             app:rippleColor="@color/background_ripple_error" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gymSavePhone"
+                            android:id="@+id/userSavePhone"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
