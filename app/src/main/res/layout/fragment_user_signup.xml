@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="25dp"
     android:layout_marginEnd="25dp"
+    android:background="@color/background_ui_default"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:background="@color/background_ui_default"
     tools:context=".user.main.signup.SignUpFragment">
 
-
-    <!--NOME-->
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_logo"
@@ -49,211 +46,219 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_logo" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtNameSignUpLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/name"
-        app:startIconDrawable="@drawable/ic_person"
-        app:startIconTint="@color/tint_image_icon_light"
-        app:errorEnabled="true"
-        app:helperText="@string/helper_name_hover"
-        app:helperTextEnabled="true"
-        app:hintEnabled="true"
-        android:textSize="18sp"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/tint_hint_no_focused"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_subtitle">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtNameSignUp"
+
+        <!--NOME-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtNameSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/avenirltstdlight"
-            android:inputType="text"
-            android:textColor="@color/tint_hint_focuses" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:hint="@string/name"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_name_hover"
+            app:helperTextEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
+            app:startIconDrawable="@drawable/ic_person"
+            app:startIconTint="@color/tint_image_icon_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtNameSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenirltstdlight"
+                android:inputType="text"
+                android:textColor="@color/tint_hint_focuses" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <!--COGNOME-->
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtSurnameSignUpLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/surname"
-        app:startIconDrawable="@drawable/ic_person"
-        app:startIconTint="@color/tint_image_icon_light"
-        app:errorEnabled="true"
-        app:helperText="@string/helper_surname_hover"
-        app:helperTextEnabled="true"
-        android:textSize="18sp"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/tint_hint_no_focused"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNameSignUpLayout"
-        app:layout_constraintVertical_bias="0.0">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtSurnameSignUp"
+        <!--COGNOME-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtSurnameSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/avenirltstdlight"
-            android:inputType="text"
-            android:textColor="@color/tint_hint_focuses" />
+            android:layout_marginTop="8dp"
+            android:hint="@string/surname"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_surname_hover"
+            app:helperTextEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNameSignUpLayout"
+            app:layout_constraintVertical_bias="0.0"
+            app:startIconDrawable="@drawable/ic_person"
+            app:startIconTint="@color/tint_image_icon_light">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtSurnameSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenirltstdlight"
+                android:inputType="text"
+                android:textColor="@color/tint_hint_focuses" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <!--GENDER-->
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtGenderSignUpLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="151dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="8dp"
-        android:hint="@string/select_gender"
-        app:errorEnabled="true"
-        app:helperText="@string/helper_gender_hover"
-        app:helperTextEnabled="true"
-        android:textSize="18sp"
-        app:startIconDrawable="@drawable/ic_gender"
-        app:startIconTint="@color/tint_image_icon_light"
-        app:hintTextColor="@color/tint_hint_no_focused"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSurnameSignUpLayout">
-
-        <AutoCompleteTextView
-            android:id="@+id/txtGenderSignUp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/avenirltstdlight"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="center"
-            android:inputType="none"
-            android:textColor="@color/tint_hint_focuses" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="horizontal">
 
 
+            <!--GENDER-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtGenderSignUpLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/select_gender"
+                android:textSize="18sp"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_gender_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:startIconDrawable="@drawable/ic_gender"
+                app:startIconTint="@color/tint_image_icon_light">
 
-    <!--BIRTHDAY-->
+                <AutoCompleteTextView
+                    android:id="@+id/txtGenderSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:textColor="@color/tint_hint_focuses" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtBirthSignUpLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="197dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/birthDay"
-        android:textSize="18sp"
-        app:startIconDrawable="@drawable/ic_cake"
-        app:startIconTint="@color/tint_image_icon_light"
-        app:endIconMode="clear_text"
-        app:errorEnabled="true"
-        app:helperText="@string/helper_birth_hover"
-        app:helperTextEnabled="true"
-        app:hintTextColor="@color/tint_hint_no_focused"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/txtGenderSignUpLayout"
-        app:layout_constraintTop_toBottomOf="@+id/txtSurnameSignUpLayout">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtBirthSignUp"
+            <!--BIRTHDAY-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtBirthSignUpLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/birthDay"
+                android:textSize="18sp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_birth_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:startIconDrawable="@drawable/ic_cake"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtBirthSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:fontFamily="@font/avenirltstdlight"
+                    android:inputType="none"
+                    android:textColor="@color/tint_hint_focuses" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+
+        <!--LOCATION-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtLocationSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/avenirltstdlight"
-            android:inputType="none"
-            android:textColor="@color/tint_hint_focuses" />
+            android:hint="@string/prompt_address"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_address_hover_signUp"
+            app:helperTextEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtBirthSignUpLayout"
+            app:startIconDrawable="@drawable/ic_place"
+            app:startIconTint="@color/tint_image_icon_light">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtLocationSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenirltstdlight"
+                app:hintTextColor="@color/tint_hint_focuses" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
+        <!--PHONE-->
 
-
-    <!--LOCATION-->
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtLocationSignUpLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/avenirltstdlight"
-        android:hint="@string/prompt_address"
-        android:textSize="18sp"
-        app:startIconDrawable="@drawable/ic_place"
-        app:startIconTint="@color/tint_image_icon_light"
-        app:errorEnabled="true"
-        app:helperText="@string/helper_address_hover_signUp"
-        app:helperTextEnabled="true"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/tint_hint_no_focused"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBirthSignUpLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtLocationSignUp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPhoneSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintTextColor="@color/tint_hint_focuses"
-            android:fontFamily="@font/avenirltstdlight" />
+            android:layout_marginTop="8dp"
+            android:hint="@string/phoneNumber"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_phone_hover_signUp"
+            app:helperTextEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtLocationSignUpLayout"
+            app:layout_constraintVertical_bias="0.0"
+            app:startIconDrawable="@drawable/ic_phone"
+            app:startIconTint="@color/tint_image_icon_light">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtPhoneSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/avenirltstdlight"
+                android:inputType="number"
+                android:textColor="@color/tint_hint_focuses" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
+    </LinearLayout>
 
-    <!--PHONE-->
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtPhoneSignUpLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="68dp"
-        android:hint="@string/phoneNumber"
-        android:textSize="18sp"
-        app:startIconDrawable="@drawable/ic_phone"
-        app:startIconTint="@color/tint_image_icon_light"
-        app:errorEnabled="true"
-        app:helperText="@string/helper_phone_hover_signUp"
-        app:helperTextEnabled="true"
-        app:endIconMode="clear_text"
-        app:hintTextColor="@color/tint_hint_no_focused"
-        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLocationSignUpLayout"
-        app:layout_constraintVertical_bias="0.0">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtPhoneSignUp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/avenirltstdlight"
-            android:inputType="number"
-            android:textColor="@color/tint_hint_focuses" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnContinue"

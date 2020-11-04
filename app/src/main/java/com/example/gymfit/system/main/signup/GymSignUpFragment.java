@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
@@ -79,6 +80,7 @@ public class GymSignUpFragment extends Fragment {
     Gym gym = null;
 
     private CircleImageView profilePic;
+    private ProgressBar progressBar;
     private Uri selectedImage;
     private LatLng locationLatLng;
     private Button btnSignUpGym;
@@ -168,17 +170,21 @@ public class GymSignUpFragment extends Fragment {
 
 
         profilePic = view.findViewById(R.id.profile_image);
+        progressBar = view.findViewById(R.id.progressBar_gym_signup);
         btnSignUpGym = view.findViewById(R.id.btn_register);
         initializeObjects(view);
 
         btnSignUpGym.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 boolean error = controlfields(view);
                 if (!error) {
                     //SE NON CI SONO ERRORI NEI CAMPI, CREO UN ACCOUNT SU FIREBASE
                     GymCallBack gymCallBack = null;
                     createAuthFirebase();
+                } else {
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
             }
         });
