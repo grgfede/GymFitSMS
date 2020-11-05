@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -35,10 +36,20 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_signup_user);
+        if (savedInstanceState == null) {
+            SignUpFragment fragmentOne = new SignUpFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.viewPager, fragmentOne).commit();
+        }
         Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
         toolbarSettings();
-        SignUpFragment fragmentOne = new SignUpFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.viewPager, fragmentOne).commit();
+        //SignUpFragment fragmentOne = new SignUpFragment();
+        //getSupportFragmentManager().beginTransaction().add(R.id.viewPager, fragmentOne).commit();
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration config){
+        super.onConfigurationChanged(config);
     }
 
 

@@ -9,7 +9,7 @@
     android:background="@color/background_ui_default"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".system.main.signup.SignUpFragment">
+    tools:context=".system.main.signup.SignUp2Fragment">
 
 
     <TextView

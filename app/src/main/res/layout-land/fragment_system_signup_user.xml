@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginStart="25dp"
+    android:layout_marginEnd="25dp"
+    android:background="@color/background_ui_default"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".system.main.signup.SignUpFragment">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/signUpTitle"
+        android:textAlignment="viewStart"
+        android:textColor="@color/tint_title"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:text="@string/signUpSubTitle"
+        android:textColor="@color/tint_second_line_light"
+        android:textSize="20sp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_logo" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle">
+
+
+        <!--NOME-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtNameSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_name_hover"
+            app:helperTextEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
+            app:startIconDrawable="@drawable/ic_user"
+            app:startIconTint="@color/tint_image_icon_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtNameSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/tint_hint_focuses" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <!--COGNOME-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtSurnameSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/surname"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_surname_hover"
+            app:helperTextEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtNameSignUpLayout"
+            app:layout_constraintVertical_bias="0.0"
+            app:startIconDrawable="@drawable/ic_user"
+            app:startIconTint="@color/tint_image_icon_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtSurnameSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:textColor="@color/tint_hint_focuses" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <!--GENDER-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtGenderSignUpLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/select_gender"
+                android:textSize="18sp"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_gender_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:startIconDrawable="@drawable/ic_gender"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <AutoCompleteTextView
+                    android:id="@+id/txtGenderSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:textColor="@color/tint_hint_focuses" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!--BIRTHDAY-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtBirthSignUpLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:hint="@string/birthDay"
+                android:textSize="18sp"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:helperText="@string/helper_birth_hover"
+                app:helperTextEnabled="true"
+                app:hintTextColor="@color/tint_hint_no_focused"
+                app:startIconDrawable="@drawable/ic_birthday"
+                app:startIconTint="@color/tint_image_icon_light">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txtBirthSignUp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:inputType="none"
+                    android:textColor="@color/tint_hint_focuses" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+
+        <!--LOCATION-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtLocationSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/prompt_address"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_address_hover_signUp"
+            app:helperTextEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtBirthSignUpLayout"
+            app:startIconDrawable="@drawable/ic_location"
+            app:startIconTint="@color/tint_image_icon_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtLocationSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintTextColor="@color/tint_hint_focuses" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <!--PHONE-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPhoneSignUpLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/phoneNumber"
+            android:textSize="18sp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="true"
+            app:helperText="@string/helper_phone_hover_signUp"
+            app:helperTextEnabled="true"
+            app:hintTextColor="@color/tint_hint_no_focused"
+            app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtLocationSignUpLayout"
+            app:layout_constraintVertical_bias="0.0"
+            app:startIconDrawable="@drawable/ic_phone"
+            app:startIconTint="@color/tint_image_icon_light">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txtPhoneSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColor="@color/tint_hint_focuses" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/btnContinue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/transparent"
+        android:drawableRight="@drawable/ic_arrow_right"
+        android:text="@string/continueSignUp"
+        android:textColor="@color/tint_second_line_light"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</ScrollView>
+
+
+
