@@ -559,6 +559,222 @@
 
                 </LinearLayout>
 
+                <!-- Birth -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="2dp"
+                    android:layout_marginVertical="5dp"
+                    android:baselineAligned="false"
+                    android:weightSum="2"
+                    android:orientation="vertical">
+
+                    <!-- Input Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/userBoxBirth"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:hint="@string/prompt_birth"
+                        android:textColorHint="@color/tint_hint_no_focused"
+
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="2dp"
+
+                        app:counterEnabled="false"
+                        app:counterMaxLength="15"
+                        app:errorEnabled="true"
+
+                        app:endIconContentDescription="@string/edit_button"
+                        app:endIconDrawable="@drawable/ic_edit"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/tint_image_icon_light"
+
+                        app:startIconContentDescription="@string/phone_img"
+                        app:startIconDrawable="@drawable/ic_birthday"
+                        app:startIconTint="@color/tint_image_icon_light">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/userTextBirth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number|text|phone"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:textColor="@color/tint_input_text"
+                            android:textStyle="bold" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Buttons Field -->
+                    <LinearLayout
+                        android:id="@+id/userBirthButtonRight"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/userAbortBirth"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/delete_button"
+
+                            android:focusable="true"
+
+                            android:text="@string/prompt_cancel"
+                            android:textColor="@color/background_button_error"
+                            android:textSize="12sp"
+
+                            app:icon="@drawable/ic_delete"
+                            app:iconTint="@color/tint_error_text"
+                            app:rippleColor="@color/background_ripple_error" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/userSaveBirth"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/save_button"
+
+                            android:focusable="true"
+
+                            android:text="@string/prompt_send"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="12sp"
+                            app:icon="@drawable/ic_save"
+
+                            app:iconTint="@color/colorPrimary"
+                            app:rippleColor="@color/background_ripple_default" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <!-- Gender -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="2dp"
+                    android:layout_marginVertical="5dp"
+                    android:baselineAligned="false"
+                    android:weightSum="2"
+                    android:orientation="vertical">
+
+                    <!-- Input Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/userBoxGender"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:hint="@string/prompt_gender"
+                        android:textColorHint="@color/tint_hint_no_focused"
+
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="2dp"
+
+                        app:counterEnabled="false"
+                        app:counterMaxLength="15"
+                        app:errorEnabled="true"
+
+                        app:endIconContentDescription="@string/edit_button"
+                        app:endIconDrawable="@drawable/ic_edit"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/tint_image_icon_light"
+
+                        app:startIconContentDescription="@string/phone_img"
+                        app:startIconDrawable="@drawable/ic_gender"
+                        app:startIconTint="@color/tint_image_icon_light">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/userTextGender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number|text|phone"
+                            android:selectAllOnFocus="false"
+                            android:singleLine="true"
+                            android:textColor="@color/tint_input_text"
+                            android:textStyle="bold" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Buttons Field -->
+                    <LinearLayout
+                        android:id="@+id/userGenderButtonRight"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/userAbortGender"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/delete_button"
+
+                            android:focusable="true"
+
+                            android:text="@string/prompt_cancel"
+                            android:textColor="@color/background_button_error"
+                            android:textSize="12sp"
+
+                            app:icon="@drawable/ic_delete"
+                            app:iconTint="@color/tint_error_text"
+                            app:rippleColor="@color/background_ripple_error" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/userSaveGender"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/save_button"
+
+                            android:focusable="true"
+
+                            android:text="@string/prompt_send"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="12sp"
+                            app:icon="@drawable/ic_save"
+
+                            app:iconTint="@color/colorPrimary"
+                            app:rippleColor="@color/background_ripple_default" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

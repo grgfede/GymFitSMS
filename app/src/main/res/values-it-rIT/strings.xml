@@ -130,4 +130,6 @@
     <string name="gyms_filter">Filtra per distanza</string>
     <string name="title_gyms_list">Palestre</string>
     <string name="recycleview_gyms_void">Nessuna palestra iscritta.</string>
+    <string name="prompt_birth">Data di nascita</string>
+    <string name="prompt_gender">Genere</string>
 </resources>

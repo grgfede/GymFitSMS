@@ -174,5 +174,7 @@
 
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
     <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>
+    <string name="prompt_birth">Data di nascita</string>
+    <string name="prompt_gender">Genere</string>
 
 </resources>

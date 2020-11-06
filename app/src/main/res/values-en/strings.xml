@@ -130,4 +130,6 @@
     <string name="gyms_filter">Filter by distance</string>
     <string name="title_gyms_list">Gyms</string>
     <string name="recycleview_gyms_void">No gym subscribed.</string>
+    <string name="prompt_birth">Date of birth</string>
+    <string name="prompt_gender">Gender</string>
 </resources>
