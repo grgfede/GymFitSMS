@@ -2,6 +2,7 @@
 <resources>
     <string name="edit_button" translatable="false">edit button</string>
     <string name="save_button" translatable="false">save button</string>
+    <string name="archive_button" translatable="false">archive button</string>
     <string name="delete_button" translatable="false">delete button</string>
     <string name="menu_button" translatable="false">menu button</string>
 

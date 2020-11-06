@@ -64,6 +64,10 @@
     <string name="prompt_delete">Cancella</string>
     <string name="prompt_confirm">Conferma</string>
     <string name="prompt_update">Aggiorna</string>
+    <string name="prompt_available">Disponibile</string>
+    <string name="prompt_not_available">Non disponibile</string>
+    <string name="prompt_subscribe">Iscriviti</string>
+    <string name="prompt_unsubscribe">Disiscriviti</string>
     <!-- TODO: migrate from database strings -->
     <string name="prompt_subscribers" translatable="false">subscribers</string>
     <string name="prompt_subscription" translatable="false">subscription</string>
@@ -79,7 +83,6 @@
 
     <!-- TODO: this is not a prompt but a message so move it into messages.xml without "prompt" -->
     <string name="prompt_email_not_found">Attenzione! Email non trovata</string>
-    <string name="message_user_removing">sarà eliminato…</string>
 
     <!-- TODO: rename with "prompt_key" when they are system string -->
     <string name="birthDay">Data di nascita</string>
@@ -112,12 +115,14 @@
     <string name="dialog_item_pickimage_gallery">Galleria</string>
 
     <string name="title_subscription">Abbonamento</string>
+    <string name="subscription_available">Abbonamenti disponibili</string>
     <string name="monthly_subscription">Mensile</string>
     <string name="quarterly_subscription">Trimestrale</string>
     <string name="six_month_subscription">Semestrale</string>
     <string name="annual_subscription">Annuale</string>
 
     <string name="title_session">Turno settimanale</string>
+    <string name="turn_available">Turni disponibili</string>
     <string name="morning_session">Turni mattutini</string>
     <string-array name="morning_session_value">
         <!-- [0] --> <item name="first_morning_session" translatable="false">09:00 – 10:00</item>
@@ -161,12 +166,13 @@
     <string name="changepic" translatable="false">todo</string>
 
     <string name="title_users_list">Iscritti</string>
+    <string name="title_user_subscription">La tua palestra</string>
     <string name="title_gyms_list">Palestre</string>
     <string name="subscription_filter">Filtra per abbonamento</string>
     <string name="gyms_filter">Filtra per distanza</string>
     <string name="user_sort">Ordina per</string>
     <string name="filter_by_distance_10" translatable="false">10 Km</string>
-    <string name="filter_by_distance_20" translatable="false">20 Km</string>
+    <string name="filter_by_distance_25" translatable="false">25 Km</string>
     <string name="filter_by_distance_50" translatable="false">50 Km</string>
 
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>

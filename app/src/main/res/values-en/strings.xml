@@ -117,7 +117,7 @@
     <string name="helper_phone_hover_signUp">Insert phone</string>
     <string name="helper_birth_hover">Insert date of birth</string>
     <string name="helper_psw_not_equal_error">Passwords do not match</string>
-    <string name="message_user_removing">removing…</string>
+    <string name="recycleview_user_removing">removing…</string>
     <string name="prompt_confirm">Apply</string>
     <string name="profile_not_completed">Profile not completed.\nSet your empty field…</string>
     <string name="recycleview_subs_void">No subscribers.</string>
@@ -129,6 +129,18 @@
     <string name="gyms_filter">Filter by distance</string>
     <string name="title_gyms_list">Gyms</string>
     <string name="recycleview_gyms_void">No gym subscribed.</string>
+    <string name="subscription_available">Subscriptions available</string>
+    <string name="turn_available">Turns available</string>
+    <string name="prompt_available">Available</string>
+    <string name="prompt_not_available">Not available</string>
+    <string name="prompt_subscribe">Subscribe</string>
+    <string name="recycleview_already_subscribed">Already subscribed…</string>
+    <string name="recycleview_user_subscribing">"Subsribing to: \n"</string>
+    <string name="recycleview_user_subscribed">"Subscribed to: "</string>
+    <string name="title_user_subscription">Your gym</string>
+    <string name="prompt_unsubscribe">Unsubscribe</string>
+    <string name="recycleview_user_unsubscribing">"Are you sure you want to unsubscribe from "</string>
+    <string name="recycleview_user_unsubscribed">"Unsubscribed from: \n"</string>
     <string name="dont_have_account_gym">Are you a gym?</string>
     <string name="create_account_gym">Sign up</string>
     <string name="prompt_birth">Date of birth</string>

@@ -29,11 +29,11 @@
                             <item android:id="@+id/action_filter_10"
                                 android:title="@string/filter_by_distance_10"
                                 app:showAsAction="never" />
-                            <item android:id="@+id/action_filter_20"
-                                android:title="@string/filter_by_distance_10"
+                            <item android:id="@+id/action_filter_25"
+                                android:title="@string/filter_by_distance_25"
                                 app:showAsAction="never" />
                             <item android:id="@+id/action_filter_50"
-                                android:title="@string/filter_by_distance_10"
+                                android:title="@string/filter_by_distance_50"
                                 app:showAsAction="never" />
                         </group>
                     </menu>

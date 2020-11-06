@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -293,13 +294,13 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         data.put(userKeys[7], "null"); // phone
         data.put(userKeys[8], ResourceUtils.getURIForResource(R.drawable.default_user)); // img
         data.put(userKeys[9], "null"); // address
-        data.put(userKeys[10], "null"); // subscription
+        data.put(userKeys[10], new String[] {"null", "null"}); // subscription
         data.put(userKeys[11], new ArrayList<Map<String, Object>>()); // turns
 
         return new User((String) data.get(userKeys[0]), (String) data.get(userKeys[1]), (String) data.get(userKeys[2]),
                 (String) data.get(userKeys[5]), (Date) data.get(userKeys[4]), (String) data.get(userKeys[9]),
                 (String) data.get(userKeys[6]), (String) data.get(userKeys[8]), (String) data.get(userKeys[7]),
-                (String) data.get(userKeys[10]), (ArrayList<Map<String, Object>>) data.get(userKeys[11]));
+                (String[]) data.get(userKeys[10]), (ArrayList<Map<String, Object>>) data.get(userKeys[11]));
     }
 
     /**
@@ -324,6 +325,9 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
                     case "img":
                         data.put(key, ResourceUtils.getURIForResource(R.drawable.default_user));
                         break;
+                    case "subscription":
+                        data.put(key, new String[] {"null", "null"});
+                        break;
                     case "turns":
                         data.put(key, new ArrayList<Map<String, Object>>());
                         break;
@@ -339,8 +343,11 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
                     case "img":
                         data.put(userKeys[8], ds.getString(userKeys[8]));
                         break;
+                    case "subscription":
+                        data.put(key, ((ArrayList<String>) ds.get(userKeys[10])).toArray(new String[0]));
+                        break;
                     case "turns":
-                        data.put(key, (ArrayList<Map<String, Object>>) ds.get(userKeys[11]));
+                        data.put(key, ds.get(userKeys[11]));
                         break;
                     default:
                         data.put(key, value);
@@ -352,7 +359,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         return new User((String) data.get(userKeys[0]), (String) data.get(userKeys[1]), (String) data.get(userKeys[2]),
                 (String) data.get(userKeys[5]), (Date) data.get(userKeys[4]), (String) data.get(userKeys[9]),
                 (String) data.get(userKeys[6]), (String) data.get(userKeys[8]), (String) data.get(userKeys[7]),
-                (String) data.get(userKeys[10]), (ArrayList<Map<String, Object>>) data.get(userKeys[11]));
+                (String[]) data.get(userKeys[10]), (ArrayList<Map<String, Object>>) data.get(userKeys[11]));
     }
 
     // Other methods

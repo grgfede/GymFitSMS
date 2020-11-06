@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymfit.R;
 
-public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
+public class ItemTouchHelperSubscribersCallback extends ItemTouchHelper.Callback {
 
     private final OnItemSwipeListener actionListener;
 
-    public ItemTouchHelperCallback(OnItemSwipeListener actionListener) {
+    public ItemTouchHelperSubscribersCallback(OnItemSwipeListener actionListener) {
         this.actionListener = actionListener;
     }
 
@@ -105,8 +105,6 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
      */
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        //super.clearView(recyclerView, viewHolder);
-
         final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
         foregroundView.setBackgroundColor(ContextCompat.getColor(((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
         getDefaultUIUtil().clearView(foregroundView);

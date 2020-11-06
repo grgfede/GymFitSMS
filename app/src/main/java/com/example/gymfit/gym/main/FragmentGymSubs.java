@@ -29,7 +29,7 @@ import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.GenericUser;
 import com.example.gymfit.system.conf.OnUserCallback;
-import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
+import com.example.gymfit.system.conf.recycleview.ItemTouchHelperSubscribersCallback;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
 import com.example.gymfit.system.conf.recycleview.ListSubscriberAdapter;
 import com.example.gymfit.system.conf.utils.AppUtils;
@@ -113,7 +113,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
                             @SuppressWarnings("unchecked")
                             List<Map<String, Object>> turns = (List<Map<String, Object>>) documentSnapshot.get("turns");
-                            User user = new User(name, surname, phone, email, gender, uid, img, subscription[1], turns);
+                            User user = new User(name, surname, phone, email, gender, uid, img, subscription, turns);
 
                             addOnSuccessCallback(user);
                         }
@@ -212,15 +212,13 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
         // Remove the item from recycleView
         this.listSubscriberAdapter.removeItem(position);
-        AppUtils.message(this.messageAnchor, username + " " + getResources().getString(R.string.message_user_removing), Snackbar.LENGTH_SHORT)
+        AppUtils.message(this.messageAnchor, username + " " + getResources().getString(R.string.recycleview_user_removing), Snackbar.LENGTH_LONG)
             .setAction(getResources().getString(R.string.prompt_cancel), v -> this.listSubscriberAdapter.restoreItem(item, position))
             .setActionTextColor(requireContext().getColor(R.color.tint_message_text))
             .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-
                 @Override
                 public void onDismissed(Snackbar transientBottomBar, int event) {
                     super.onDismissed(transientBottomBar, event);
-
                     if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
                         AppUtils.log(Thread.currentThread().getStackTrace(),"User " + item.getFullname() + " is removed from UserAdapter");
                         removeUserFromGym(item.getUid());
@@ -358,7 +356,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         });
         recyclerView.setAdapter(listSubscriberAdapter);
 
-        ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(this);
+        ItemTouchHelper.Callback callback = new ItemTouchHelperSubscribersCallback(this);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
@@ -449,16 +447,16 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
             // remove this user from gym db node
             this.db.collection("gyms").document(this.gym.getUid())
-                .update("subscribers", usersUID)
-                .addOnCompleteListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"User is removed from Gym node database"))
-                .addOnFailureListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"User is not removed from Gym node database"));
+                    .update("subscribers", usersUID)
+                    .addOnSuccessListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"User is removed from Gym node database"))
+                    .addOnFailureListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"User is not removed from Gym node database"));
 
             // remove gym from user db node and clear all his turns
             this.db.collection("users").document(uid)
-                .update("subscription", null,
+                    .update("subscription", null,
                         "turns", null)
-                .addOnCompleteListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"Gym and all Users' turns are removed from user node database"))
-                .addOnFailureListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"Gym and all Users' turns are not removed from user node database"));
+                    .addOnSuccessListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"Gym and all Users' turns are removed from user node database"))
+                    .addOnFailureListener(v -> AppUtils.log(Thread.currentThread().getStackTrace(),"Gym and all Users' turns are not removed from user node database"));
         } else {
             AppUtils.log(Thread.currentThread().getStackTrace(),"User is removed from gym node database");
         }

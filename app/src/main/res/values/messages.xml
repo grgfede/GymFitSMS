@@ -31,9 +31,16 @@
     <string name="evening_turn_enabled">Turni serali attivati.</string>
     <string name="evening_turn_disabled">Turni serali disattivati.</string>
 
-    <string name="profile_not_completed">Profilo non completato.\nCompleta i campi mancanti…</string>
+    <string name="profile_not_completed">Profilo non completato. Completa i campi mancanti…</string>
 
     <string name="recycleview_subs_void">Nessun iscritto.</string>
     <string name="recycleview_gyms_void">Nessuna palestra iscritta.</string>
+
+    <string name="recycleview_user_removing">sarà eliminato…</string>
+    <string name="recycleview_user_subscribing">Ti stai iscrivendo a: \n</string>
+    <string name="recycleview_user_unsubscribing">Sei sicuro di volerti disiscrivere dalla palestra</string>
+    <string name="recycleview_user_subscribed">"Ti sei iscritto a: "</string>
+    <string name="recycleview_user_unsubscribed">"Ti sei disiscritto da: \n"</string>
+    <string name="recycleview_already_subscribed">Sei già iscritto…</string>
 
 </resources>

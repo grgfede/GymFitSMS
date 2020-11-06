@@ -70,7 +70,8 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         }
 
         public void bind(final Context context, final User user, final int position, final OnItemClickListener listener) {
-            int turnCount = user.getTurns().size();
+            final int turnCount = user.getTurns().size();
+
             turnList.clear();
             turnContainer.removeAllViews();
 
@@ -102,7 +103,7 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         String username = this.users.get(position).getName() + " " + this.users.get(position).getSurname();
         holder.username.setText(username);
 
-        String subscription = getSubscription(this.users.get(position).getSubscription());
+        String subscription = getSubscription(this.users.get(position).getSubscription()[1]);
         holder.details.setText(subscription);
 
         List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
@@ -262,19 +263,22 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         if (rule.equals("sort") && (constraint.equals(context.getString(R.string.prompt_name).toLowerCase()) || constraint.equals("default"))) {
             filteredList.addAll(usersFull);
             filteredList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
-        } else if (rule.equals("sort") && constraint.equals(context.getString(R.string.prompt_surname).toLowerCase())) {
+        }
+        else if (rule.equals("sort") && constraint.equals(context.getString(R.string.prompt_surname).toLowerCase())) {
             filteredList.addAll(usersFull);
             filteredList.sort((o1, o2) -> o1.getSurname().compareTo(o2.getSurname()));
-        } else if (rule.equals("username")) {
+        }
+        else if (rule.equals("username")) {
             usersFull.forEach(user -> {
                 if (user.getFullname().toLowerCase().trim().contains(constraint)) {
                     filteredList.add(user);
                 }
             });
             filteredList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
-        } else if (rule.equals("subscription")) {
+        }
+        else if (rule.equals("subscription")) {
             usersFull.forEach(user -> {
-                if (user.getSubscription().toLowerCase().trim().equals(constraint)) {
+                if (user.getSubscription()[1].toLowerCase().trim().equals(constraint)) {
                     filteredList.add(user);
                 }
             });

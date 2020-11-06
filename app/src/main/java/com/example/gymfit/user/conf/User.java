@@ -23,7 +23,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
     private String address;
     private String gender;
     private String img;
-    private String subscription;
+    private String[] subscription;
     private List<Map<String, Object>> turns;
 
     public User (String name, String surname, String phone, String email, String gender, String uid) {
@@ -41,7 +41,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
         this.dateOfBirthday = dateOfBirthday;
     }
 
-    public User(String name, String surname, String phone, String email, String gender, String uid, String img, String subscription, List<Map<String, Object>> turns) {
+    public User(String name, String surname, String phone, String email, String gender, String uid, String img, String[] subscription, List<Map<String, Object>> turns) {
         this(name, surname, phone, email, gender, uid);
         this.img = img;
         this.subscription = subscription;
@@ -51,7 +51,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
     // Constructor with all new values
     public User(String uid, String name, String surname, String email,
                 Date dateOfBirthday, String address, String gender, String img, String phone,
-                String subscription, List<Map<String, Object>> turns) {
+                String[] subscription, List<Map<String, Object>> turns) {
         this(name, surname, phone, email, gender, uid);
         this.dateOfBirthday = dateOfBirthday;
         this.address = address;
@@ -75,7 +75,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
         setEmail(in.readString());
         setUid(in.readString());
         setImg(in.readString());
-        setSubscription(in.readString());
+        in.readStringArray(this.subscription);
         setGender(in.readString());
     }
 
@@ -107,7 +107,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
         dest.writeString(getEmail());
         dest.writeString(getUid());
         dest.writeString(getImg());
-        dest.writeString(getSubscription());
+        dest.writeStringArray(getSubscription());
         dest.writeString(getGender());
     }
 
@@ -137,7 +137,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
 
     public String getAddress(){return address;}
 
-    public String getSubscription() {
+    public String[] getSubscription() {
         return subscription;
     }
 
@@ -147,35 +147,35 @@ public class User extends GenericUser implements Serializable, Parcelable {
 
     // Set methods
 
-    private void setFullname(String fullname) {
+    public void setFullname(String fullname) {
         this.fullname = fullname;
     }
 
-    private void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    private void setSurname(String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 
-    private void setGender(String gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    private void setAddress(String address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 
-    private void setImg(String img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
-    private void setSubscription(String subscription) {
+    public void setSubscription(String[] subscription) {
         this.subscription = subscription;
     }
 
-    private void setTurns(List<Map<String, Object>> turns) {
+    public void setTurns(List<Map<String, Object>> turns) {
         this.turns = turns;
     }
 

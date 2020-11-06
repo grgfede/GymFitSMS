@@ -42,6 +42,6 @@
 
     <string-array name="collections">
         <!-- [0] --> <item name="users" translatable="false">users</item>
-        <!-- [0] --> <item name="gyms" translatable="false">gyms</item>
+        <!-- [1] --> <item name="gyms" translatable="false">gyms</item>
     </string-array>
 </resources>
