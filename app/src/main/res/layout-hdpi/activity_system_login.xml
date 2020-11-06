@@ -5,8 +5,6 @@
     android:id="@+id/loginParentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -16,6 +14,8 @@
         android:id="@+id/txtTitleLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
         android:text="@string/login_email"
         android:textAlignment="viewStart"
         android:textColor="@color/colorPrimary"
@@ -25,13 +25,15 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06" />
+        app:layout_constraintVertical_bias="0.188" />
 
     <TextView
         android:id="@+id/textSubTitleLogin"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
         android:textSize="16sp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeMinTextSize="12sp"
@@ -52,6 +54,8 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -142,6 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:layout_marginStart="24dp"
             android:text="@string/forgot_password"
 
             app:layout_constraintBottom_toTopOf="@+id/btnLogin"
@@ -156,7 +161,9 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="53dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginTop="24dp"
+        android:layout_marginRight="25dp"
         android:text="@string/signin"
         android:textColor="@color/white"
         android:textColorLink="@color/colorPrimary"
@@ -165,91 +172,68 @@
         app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.425" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dont_have_account_user" />
+
+        <TextView
+            android:id="@+id/textCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="5dp"
+            android:onClick="signUpIntent"
+            android:text="@string/create_account_user" />
+    </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.060000002">
+        app:layout_constraintVertical_bias="0.55">
 
 
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-            app:layout_constraintVertical_bias="0.0">
+            android:text="@string/dont_have_account_gym" />
 
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="@string/dont_have_account_user" />
-
-            <TextView
-                android:id="@+id/textCreate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:textSize="10sp"
-                android:onClick="signUpIntent"
-                android:text="@string/create_account_user" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/linearLayout6"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/textCreate2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-            app:layout_constraintVertical_bias="0.55">
-
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="@string/dont_have_account_gym" />
-
-            <TextView
-                android:id="@+id/textCreate2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:textSize="10sp"
-
-                android:onClick="signUpGymIntent"
-                android:text="@string/create_account_gym" />
-        </LinearLayout>
-
-
+            android:layout_gravity="right"
+            android:layout_marginLeft="5dp"
+            android:onClick="signUpGymIntent"
+            android:text="@string/create_account_gym" />
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,15 +6,12 @@
     <string name="action_sign_in_short">Registrati</string>
     <string name="login_email">"Login via Email"</string>
     <string name="login_gym">"Sei una palestra? Registrati"</string>
-    <string name="no_account">"Non hai un account?"</string>
     <string name="signup">"Registrati"</string>
     <string name="accept_condition">"Continuando accetti termini e condizioni dell'applicazione"</string>
     <string name="title_main_page">"Inizia il cambiamento"</string>
     <string name="subtitle_main_page">Accedi subito per prenotare un turno nella tua palestra preferita</string>
     <string name="subtitle_login_page">Compila le informazioni sottostanti per effettuare il login ed accedere al tuo profilo</string>
     <string name="forgot_password">Password dimenticata?</string>
-    <string name="dont_have_account">Non hai un account?</string>
-    <string name="create_account">Creane uno</string>
     <string name="male">Maschio</string>
     <string name="female">Femmina</string>
     <string name="select_gender">Seleziona genere</string>
@@ -174,7 +171,11 @@
 
     <string name="title_open_drawer" translatable="false">Navigation Open Drawer</string>
     <string name="title_close_open_drawer" translatable="false">Navigation Close Drawer</string>
+    <string name="dont_have_account_gym">Sei una palestra?</string>
+    <string name="create_account_gym">Registrati</string>
     <string name="prompt_birth">Data di nascita</string>
     <string name="prompt_gender">Genere</string>
+    <string name="dont_have_account_user">Non hai un account?</string>
+    <string name="create_account_user">Crealo</string>
 
 </resources>

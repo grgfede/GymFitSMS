@@ -8,13 +8,10 @@
     <string name="subtitle_main_page">Accedi subito per prenotare un turno nella tua palestra preferita</string>
     <string name="subtitle_login_page">Compila le informazioni sottostanti per effettuare il login ed accedere al tuo profilo</string>
     <string name="forgot_password">Password dimenticata?</string>
-    <string name="dont_have_account">Non hai un account?</string>
-    <string name="create_account">Creane uno</string>
     <string name="next">Successivo</string>
     <string name="previous">Precedente</string>
     <string name="gym_button_calendar">Orari</string>
     <string name="gym_button_map">Mappa</string>
-    <string name="no_account">Non hai un account?</string>
     <string name="action_sign_in_short">Registrati</string>
     <string name="male">Maschio</string>
     <string name="female">Femmina</string>
@@ -130,6 +127,10 @@
     <string name="gyms_filter">Filtra per distanza</string>
     <string name="title_gyms_list">Palestre</string>
     <string name="recycleview_gyms_void">Nessuna palestra iscritta.</string>
+    <string name="dont_have_account_gym">Sei una palestra?</string>
+    <string name="create_account_gym">Registrati</string>
     <string name="prompt_birth">Data di nascita</string>
     <string name="prompt_gender">Genere</string>
+    <string name="dont_have_account_user">Non hai un account?</string>
+    <string name="create_account_user">Crealo</string>
 </resources>
