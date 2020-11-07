@@ -51,7 +51,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -70,7 +72,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     private final String[] collections = ResourceUtils.getStringArrayFromID(R.array.collections);
 
     private View messageAnchor = null;
-    private boolean isVisible;
+    private final Map<String, Boolean> viewVisibility = new HashMap<>();
     private boolean isEmptyData = false;
 
     private User user = null;
@@ -322,13 +324,11 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         RecyclerView listUserSubscriptionRecycle = requireView().getRootView().findViewById(R.id.rv_subscribed);
         listUserSubscriptionRecycle.setHasFixedSize(false);
         listUserSubscriptionRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
-        this.listUserSubscribedAdapter = new ListUserSubscribedAdapter(requireActivity(), gym, (viewHolder, position) -> {
-            isListVisibility(
-                    viewHolder.itemView.findViewById(R.id.m_content_toggle_container),
-                    viewHolder.itemView.findViewById(R.id.m_end_icon),
-                    isVisible);
-            isVisible = !isVisible;
-        });
+        this.listUserSubscribedAdapter = new ListUserSubscribedAdapter(requireActivity(), gym, (viewHolder, position) ->
+                isListVisibility(
+                        viewHolder.itemView.findViewById(R.id.m_content_toggle_container),
+                        viewHolder.itemView.findViewById(R.id.m_end_icon),
+                        gym.getUid()));
         listUserSubscriptionRecycle.setAdapter(this.listUserSubscribedAdapter);
 
         final ItemTouchHelper.Callback callback = new ItemTouchHelperRecycleCallback(this);
@@ -340,13 +340,12 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         RecyclerView listGymRecycle = requireView().getRootView().findViewById(R.id.rv_gyms);
         listGymRecycle.setHasFixedSize(false);
         listGymRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
-        this.listGymAdapter = new ListGymAdapter(requireActivity(), this.gyms, (viewHolder, position) -> {
-            isListVisibility(
-                    viewHolder.itemView.findViewById(R.id.content_toggle_container),
-                    viewHolder.itemView.findViewById(R.id.end_icon),
-                    isVisible);
-            isVisible = !isVisible;
-        });
+        this.listGymAdapter = new ListGymAdapter(requireActivity(), this.gyms, (viewHolder, position) ->
+                isListVisibility(
+                        viewHolder.itemView.findViewById(R.id.content_toggle_container),
+                        viewHolder.itemView.findViewById(R.id.end_icon),
+                        this.gyms.get(position).getUid()
+                    ));
         listGymRecycle.setAdapter(this.listGymAdapter);
 
         final ItemTouchHelper.Callback callback = new ItemTouchHelperRecycleCallback(this);
@@ -356,14 +355,22 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
 
     // Other methods
 
-    private void isListVisibility(@NonNull final LinearLayout container, @NonNull final ImageView arrow, boolean isVisible) {
+    private void isListVisibility(@NonNull final LinearLayout container, @NonNull final ImageView arrow, @NonNull final String viewName) {
 
-        if (!isVisible) {
+        // reaction of null pointer with a new creation of card visibility
+        if (!this.viewVisibility.containsKey(viewName)) {
+            this.viewVisibility.put(viewName, false);
+        }
+
+        // if card selected is not in visible mode so enable it and replace its state, icon and layout height
+        if (!this.viewVisibility.get(viewName)) {
             arrow.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_up));
             AppUtils.expandCard(container);
+            this.viewVisibility.replace(viewName, true);
         } else {
             arrow.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_down));
             AppUtils.collapseCard(container);
+            this.viewVisibility.replace(viewName, false);
         }
     }
 
