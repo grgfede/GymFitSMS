@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="24dp"
+    android:layout_marginRight="24dp"
+    android:background="@color/background_ui_default"
+    tools:context=".system.main.FragmentSystemOnBoarding3">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="274dp"
+        android:layout_height="191dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_onboarding3" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80sp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38">
+
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:paddingBottom="32sp"
+            android:text="@string/title_onBoarding3"
+            android:textColor="@color/tint_title"
+            android:textSize="29sp" />
+
+        <TextView
+            android:id="@+id/textSubTitle"
+            android:layout_width="280sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            android:inputType="text|textMultiLine|textCapSentences"
+            android:text="@string/subtitle_onBoarding3"
+            android:textAlignment="center"
+            android:textColor="@color/tint_second_line_light"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

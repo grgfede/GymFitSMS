@@ -8,8 +8,7 @@
     <string name="login_gym">"Sei una palestra? Registrati"</string>
     <string name="signup">"Registrati"</string>
     <string name="accept_condition">"Continuando accetti termini e condizioni dell'applicazione"</string>
-    <string name="title_main_page">"Inizia il cambiamento"</string>
-    <string name="subtitle_main_page">Accedi subito per prenotare un turno nella tua palestra preferita</string>
+    <string name="subtitle_onBoarding1">Per iniziare, registrati o accedi alla piattaforma per scoprire tutti i vantaggi</string>
     <string name="subtitle_login_page">Compila le informazioni sottostanti per effettuare il login ed accedere al tuo profilo</string>
     <string name="forgot_password">Password dimenticata?</string>
     <string name="male">Maschio</string>
@@ -125,36 +124,54 @@
     <string name="turn_available">Turni disponibili</string>
     <string name="morning_session">Turni mattutini</string>
     <string-array name="morning_session_value">
-        <!-- [0] --> <item name="first_morning_session" translatable="false">09:00 – 10:00</item>
-        <!-- [1] --> <item name="second_morning_session" translatable="false">10:00 – 11:00</item>
-        <!-- [2] --> <item name="third_morning_session" translatable="false">11:00 – 12:00</item>
+        <!-- [0] -->
+        <item name="first_morning_session" translatable="false">09:00 – 10:00</item>
+        <!-- [1] -->
+        <item name="second_morning_session" translatable="false">10:00 – 11:00</item>
+        <!-- [2] -->
+        <item name="third_morning_session" translatable="false">11:00 – 12:00</item>
     </string-array>
     <string-array name="morning_session_name">
-        <!-- [0] --> <item name="first_morning_session" translatable="false">morningFirst</item>
-        <!-- [1] --> <item name="second_morning_session" translatable="false">morningSecond</item>
-        <!-- [2] --> <item name="third_morning_session" translatable="false">morningThird</item>
+        <!-- [0] -->
+        <item name="first_morning_session" translatable="false">morningFirst</item>
+        <!-- [1] -->
+        <item name="second_morning_session" translatable="false">morningSecond</item>
+        <!-- [2] -->
+        <item name="third_morning_session" translatable="false">morningThird</item>
     </string-array>
     <string name="afternoon_session">Turni pomeridiani</string>
     <string-array name="afternoon_session_value">
-        <!-- [0] --> <item name="first_afternoon_session" translatable="false">14:00 – 15:00</item>
-        <!-- [1] --> <item name="second_afternoon_session" translatable="false">15:00 – 16:00</item>
-        <!-- [2] --> <item name="third_afternoon_session" translatable="false">16:00 – 17:00</item>
+        <!-- [0] -->
+        <item name="first_afternoon_session" translatable="false">14:00 – 15:00</item>
+        <!-- [1] -->
+        <item name="second_afternoon_session" translatable="false">15:00 – 16:00</item>
+        <!-- [2] -->
+        <item name="third_afternoon_session" translatable="false">16:00 – 17:00</item>
     </string-array>
     <string-array name="afternoon_session_name">
-        <!-- [0] --> <item name="first_afternoon_session" translatable="false">afternoonFirst</item>
-        <!-- [1] --> <item name="second_afternoon_session" translatable="false">afternoonSecond</item>
-        <!-- [2] --> <item name="third_afternoon_session" translatable="false">afternoonThird</item>
+        <!-- [0] -->
+        <item name="first_afternoon_session" translatable="false">afternoonFirst</item>
+        <!-- [1] -->
+        <item name="second_afternoon_session" translatable="false">afternoonSecond</item>
+        <!-- [2] -->
+        <item name="third_afternoon_session" translatable="false">afternoonThird</item>
     </string-array>
     <string name="evening_session">Turni serali</string>
     <string-array name="evening_session_value">
-        <!-- [0] --> <item name="first_evening_session" translatable="false">17:00 – 18:00</item>
-        <!-- [1] --> <item name="second_evening_session" translatable="false">18:00 – 19:00</item>
-        <!-- [2] --> <item name="third_evening_session" translatable="false">19:00 – 20:00</item>
+        <!-- [0] -->
+        <item name="first_evening_session" translatable="false">17:00 – 18:00</item>
+        <!-- [1] -->
+        <item name="second_evening_session" translatable="false">18:00 – 19:00</item>
+        <!-- [2] -->
+        <item name="third_evening_session" translatable="false">19:00 – 20:00</item>
     </string-array>
     <string-array name="evening_session_name">
-        <!-- [0] --> <item name="first_evening_session" translatable="false">eveningFirst</item>
-        <!-- [1] --> <item name="second_evening_session" translatable="false">eveningSecond</item>
-        <!-- [2] --> <item name="third_evening_session" translatable="false">eveningThird</item>
+        <!-- [0] -->
+        <item name="first_evening_session" translatable="false">eveningFirst</item>
+        <!-- [1] -->
+        <item name="second_evening_session" translatable="false">eveningSecond</item>
+        <!-- [2] -->
+        <item name="third_evening_session" translatable="false">eveningThird</item>
     </string-array>
 
     <string name="signUpSubTitle3">Imposta una tua foto del profilo per farti riconoscere in modo semplice</string>
@@ -183,5 +200,13 @@
     <string name="prompt_gender">Genere</string>
     <string name="dont_have_account_user">Non hai un account?</string>
     <string name="create_account_user">Crealo</string>
+    <string name="onboarding_next">Avanti</string>
+    <string name="onboarding_skip">Salta</string>
+    <string name="title_onBoarding1">Registrati</string>
+    <string name="title_onBoarding2">Prenotati</string>
+    <string name="subtitle_onBoarding2">Abbonati nella tua palestra preferita, dopodiché prenota un turno per quando vuoi allenarti</string>
+    <string name="title_onBoarding3">Allenati</string>
+    <string name="subtitle_onBoarding3">Presentati in palestra nel giorno da te scelto per allenarti. E’ semplice!</string>
+    <string name="onboarding_done">Fatto</string>
 
 </resources>

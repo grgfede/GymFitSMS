@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,17 +7,25 @@
     android:layout_marginTop="64dp"
     android:layout_marginRight="24dp"
     android:layout_marginBottom="10dp"
-    tools:context=".system.main.MainActivity">
+    android:background="@color/background_ui_default"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".system.main.FragmentSystemOnBoarding2">
+
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_main" />
-
+        app:layout_constraintVertical_bias="0.085"
+        app:srcCompat="@drawable/ic_onboarding3" />
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -31,64 +38,35 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.311">
+        app:layout_constraintVertical_bias="0.38">
 
 
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/onboarding_next"
-            android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textSize="29sp"
+            android:paddingBottom="32sp"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="2sp"
-            android:autoSizeTextType="uniform"/>
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:text="@string/title_onBoarding3"
+            android:textColor="@color/tint_title"
+            android:textSize="29sp" />
 
         <TextView
             android:id="@+id/textSubTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20sp"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="2sp"
             android:autoSizeTextType="uniform"
-            android:text="@string/subtitle_onBoarding1"
+            android:text="@string/subtitle_onBoarding3"
             android:textAlignment="center"
+            android:textColor="@color/tint_second_line_light"
             android:textSize="16sp" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btnLoginEmail"
-        android:layout_width="match_parent"
-        android:layout_height="53dp"
-
-        android:onClick="loginIntent"
-        android:text="@string/login_email"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/textCondition"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="OnClick" />
-
-    <TextView
-        android:id="@+id/textCondition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/accept_condition"
-        android:textAlignment="center"
-        android:textColor="@color/stringColor"
-        android:textSize="12sp"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

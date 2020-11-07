@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gymfit">
-    
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".system.main.App"
@@ -20,10 +20,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".system.main.signup.GymSignUp"
-            android:windowSoftInputMode="adjustPan"
-            />
-        <activity android:name=".system.main.PasswordRecovery" android:parentActivityName=".system.main.signin.Login" />
+        <activity android:name=".system.main.ActivitySystemOnBoarding"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"></activity>
+        <activity
+            android:name=".system.main.signup.GymSignUp"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".system.main.PasswordRecovery"
+            android:parentActivityName=".system.main.signin.Login" />
         <activity
             android:name=".gym.main.ActivityGymProfile"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
@@ -31,13 +35,15 @@
         <activity
             android:name=".user.main.ActivityUserProfile"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:parentActivityName=".system.main.signin.Login" />
-        <activity android:name=".system.main.signup.SignUp"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".system.main.signin.Login" />
-        <activity android:name=".system.main.MainActivity">
+            android:parentActivityName=".system.main.MainActivity" />
+        <activity
+            android:name=".system.main.signup.SignUp"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".system.main.signin.Login"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

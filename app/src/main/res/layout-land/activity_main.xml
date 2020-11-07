@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/title_main_page"
+            android:text="@string/onboarding_next"
             android:textColor="@color/colorPrimary"
             android:textSize="29sp"
             android:autoSizeMaxTextSize="60sp"
@@ -62,7 +62,7 @@
             android:autoSizeStepGranularity="2sp"
             android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:text="@string/subtitle_main_page"
+            android:text="@string/subtitle_onBoarding1"
             android:textSize="16sp" />
 
 

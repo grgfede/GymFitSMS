@@ -5,8 +5,7 @@
     <string name="login_gym">Are you a gym? Sign in</string>
     <string name="signup">Sign up</string>
     <string name="accept_condition">By continuing you accept the terms and conditions of the application</string>
-    <string name="title_main_page">"The change begins "</string>
-    <string name="subtitle_main_page">Log in now to book a shift at your favorite gym</string>
+    <string name="subtitle_onBoarding1">To get started, register or login to the platform to discover all the benefits</string>
     <string name="subtitle_login_page">Fill in the information below to login and access your profile</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="dont_have_account_user">Don\'t have an account?</string>
@@ -145,4 +144,12 @@
     <string name="create_account_gym">Sign up</string>
     <string name="prompt_birth">Date of birth</string>
     <string name="prompt_gender">Gender</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="title_onBoarding1">Sign up</string>
+    <string name="title_onBoarding2">Booked</string>
+    <string name="subtitle_onBoarding2">Subscribe to your favorite gym, then book a session for when you want to work out</string>
+    <string name="title_onBoarding3">Work out</string>
+    <string name="subtitle_onBoarding3">Show up at the gym on the day of your choice to train. Is simple!</string>
+    <string name="onboarding_done">Done</string>
 </resources>

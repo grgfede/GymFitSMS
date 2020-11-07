@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
+import com.example.gymfit.system.main.ActivitySystemOnBoarding;
 import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.system.main.signup.GymSignUp;
 import com.example.gymfit.user.main.ActivityUserProfile;
@@ -41,6 +43,17 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_system_login);
 
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
+        // CONTROLLO SE L'ONBOARDING DEVE ESSERE VISUALIZZATO SFRUTTANDO LE PREFERENZE DI SISTEMA DELL'APP
+        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+
+        if(!preferences.getBoolean("onboarding_complete",false)){
+
+            Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
+            startActivity(onboarding);
+            finish();
+            return;
+        }
 
         mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
         //MI INSTANZIO GLI ELEMENTI
