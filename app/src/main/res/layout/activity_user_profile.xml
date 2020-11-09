@@ -16,11 +16,11 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/menu_user_toolbar"
-                app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
@@ -31,7 +31,7 @@
             android:id="@+id/fragment_container_view_tag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="?attr/actionBarSize">
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         </FrameLayout>
 
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/nav_user"
-        app:headerLayout="@layout/layout_system_drawer_user" />
+        app:headerLayout="@layout/layout_system_drawer_user"
+        app:menu="@menu/nav_user" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

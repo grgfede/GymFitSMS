@@ -170,7 +170,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
 
             if (!this.user.getSubscription()[0].equals("null")) {
                 AppUtils.log(Thread.currentThread().getStackTrace(), this.user.getFullname() + " has already a Gym subscription: " + this.user.getSubscription()[0]);
-                AppUtils.message(this.messageAnchor, getString(R.string.recycleview_already_subscribed), Snackbar.LENGTH_SHORT).show();
+                AppUtils.message(this.messageAnchor, getString(R.string.user_already_subscribed), Snackbar.LENGTH_SHORT).show();
                 this.listGymAdapter.notifyItemChanged(position);
             } else {
                 createSubscriptionDialog(item, result -> {
@@ -181,7 +181,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                     } else {
                         // Backup gym item to restore
                         this.listGymAdapter.removeItem(position);
-                        AppUtils.message(this.messageAnchor, getString(R.string.recycleview_user_subscribing) + name, Snackbar.LENGTH_LONG)
+                        AppUtils.message(this.messageAnchor, getString(R.string.user_subscribing) + name, Snackbar.LENGTH_LONG)
                                 .setAction(getResources().getString(R.string.prompt_cancel), v -> this.listGymAdapter.restoreItem(item, position))
                                 .setActionTextColor(requireContext().getColor(R.color.tint_message_text))
                                 .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -202,7 +202,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                 });
             }
         } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
-            DatabaseUtils.getGymByUID(this.user.getSubscription()[0], item -> createUnsubscribeDialog(item, result -> {
+            DatabaseUtils.getGym(this.user.getSubscription()[0], item -> createUnsubscribeDialog(item, result -> {
                 // Restore same item in the same position for abort action
                 if (result == null) {
                     this.listUserSubscribedAdapter.notifyItemChanged(position);
@@ -212,8 +212,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                     this.listUserSubscribedAdapter.removeItem(position);
 
                     // Show message for user to restore or unsubscribe from current Gym
-                    AppUtils.message(this.messageAnchor, getString(R.string.recycleview_user_unsubscribed) + item.getName(), Snackbar.LENGTH_SHORT)
-                            .setAction(getResources().getString(R.string.prompt_cancel), v -> this.listUserSubscribedAdapter.restoreItem(item, position))
+                    AppUtils.message(this.messageAnchor, getString(R.string.user_unsubscribed) + item.getName(), Snackbar.LENGTH_SHORT)
+                            .setAction(getString(R.string.prompt_cancel), v -> this.listUserSubscribedAdapter.restoreItem(item, position))
                             .setActionTextColor(requireContext().getColor(R.color.tint_message_text))
                             .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
                                 @Override
@@ -264,6 +264,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
 
         // Abilities toolbar item options
         setHasOptionsMenu(true);
+
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.user_gyms_toolbar_title));
 
@@ -282,7 +283,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
 
         if (!this.user.getSubscription()[0].equals("null")) {
             // Get from Database subscribed Gym for current User
-            DatabaseUtils.getGymByUID(this.user.getSubscription()[0], this::setUpSubscribedRecycleView);
+            DatabaseUtils.getGym(this.user.getSubscription()[0], this::setUpSubscribedRecycleView);
             AppUtils.log(Thread.currentThread().getStackTrace(), "Subscribed Gym cardview is created and shown into interface");
         }
         getGymsUIDFromDatabase(new OnUserCallback() {
@@ -292,7 +293,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
             @Override
             public void addOnCallback(List<String> usersID) {
                 gymsSize = usersID.size();
-                usersID.forEach(userID -> DatabaseUtils.getGymByUID(userID, this::addOnSuccessCallback));
+                usersID.forEach(userID -> DatabaseUtils.getGym(userID, this::addOnSuccessCallback));
             }
 
             @Override
@@ -300,7 +301,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                 if (isEmpty) {
                     isEmptyData = true;
                     AppUtils.log(Thread.currentThread().getStackTrace(), "No gyms into Database");
-                    AppUtils.message(messageAnchor, getString(R.string.recycleview_gyms_void), Snackbar.LENGTH_LONG).show();
+                    AppUtils.message(messageAnchor, getString(R.string.user_gyms_void), Snackbar.LENGTH_LONG).show();
                 }
             }
 
@@ -363,7 +364,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         }
 
         // if card selected is not in visible mode so enable it and replace its state, icon and layout height
-        if (!this.viewVisibility.get(viewName)) {
+        if (!Objects.requireNonNull(this.viewVisibility.get(viewName))) {
             arrow.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_up));
             AppUtils.expandCard(container);
             this.viewVisibility.replace(viewName, true);
@@ -415,7 +416,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     private void createUnsubscribeDialog(@NonNull Gym gym, OnUserSubscriptionResultCallback callback) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(getString(R.string.prompt_unsubscribe));
-        final String placeholder = getString(R.string.recycleview_user_unsubscribing) + " " + gym.getName() + " ?";
+        final String placeholder = getString(R.string.user_unsubscribing) + " " + gym.getName() + " ?";
         builder.setMessage(placeholder);
         builder.setPositiveButton(getString(R.string.prompt_unsubscribe), (dialog, which) -> callback.onCallback(Boolean.toString(true)));
         builder.setNegativeButton(getString(R.string.prompt_cancel), (dialog, which) -> callback.onCallback(null));
@@ -518,7 +519,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                 .update(userKeys[10], FieldValue.arrayUnion(uid, subscriptionKey))
                 .addOnSuccessListener(task -> {
                     AppUtils.log(Thread.currentThread().getStackTrace(),"Gym is added into User node database");
-                    AppUtils.message(this.messageAnchor, getString(R.string.recycleview_user_subscribed) + Objects.requireNonNull(name), Snackbar.LENGTH_LONG)
+                    AppUtils.message(this.messageAnchor, getString(R.string.user_subscribed) + Objects.requireNonNull(name), Snackbar.LENGTH_LONG)
                             .show();
                 })
                 .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
@@ -537,30 +538,37 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      * @param gym current Gym of recycleview. Used to find respective Database document and set new subscribers
      */
     private void removeGymIntoUser(@NonNull final Gym gym) {
+        final String[] userKeys = getResources().getStringArray(R.array.user_field);
+
         // Remove Gym into User object
         this.user.setSubscription(new String[] {
                 "null", "null"
         });
 
-        // Remove Gym into User Database
-        final String[] userKeys = getResources().getStringArray(R.array.user_field);
+        // Remove Turns from User object
+        this.user.setTurns(new ArrayList<>());
+
+        // Remove Gym from User Database
         this.db.collection(collections[0]).document(this.user.getUid())
                 .update(userKeys[10], null)
                 .addOnSuccessListener(task -> {
                     AppUtils.log(Thread.currentThread().getStackTrace(),"Gym is removed into User node database");
-                    AppUtils.message(this.messageAnchor, getString(R.string.recycleview_user_unsubscribed) + Objects.requireNonNull(gym.getName()), Snackbar.LENGTH_LONG)
+                    AppUtils.message(this.messageAnchor, getString(R.string.user_unsubscribed) + Objects.requireNonNull(gym.getName()), Snackbar.LENGTH_LONG)
                             .show();
                 })
                 .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
 
-        // Remove User UID into Gym node Database
+        // Remove Turns from User Database node
+        DatabaseUtils.removeUserTurns(this.user.getUid(), result -> {});
+
+        // Remove User UID from Gym node Database
         final String[] gymKeys = getResources().getStringArray(R.array.gym_field);
         this.db.collection(collections[1]).document(gym.getUid())
                 .update(gymKeys[8], FieldValue.arrayRemove(this.user.getUid()))
                 .addOnSuccessListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),"Current User is removed from Gym subscribers node database"))
                 .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
 
-        // Null Gym node Databse is empty
+        // Null Gym node Database is empty
         DatabaseUtils.isGymSubscribersEmpty(gym.getUid(), result -> {
             if (result) {
                 this.db.collection(collections[1]).document(gym.getUid())

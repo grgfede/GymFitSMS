@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/anchor"
+    android:backgroundTint="@color/background_ui_default"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".user.main.FragmentUserListTurns">
+
+    <!-- Scroll -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Date picker -->
+            <LinearLayout
+                android:id="@+id/date_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                app:layout_constraintTop_toTopOf="parent"
+                android:orientation="vertical">
+
+                <!--  Top bar -->
+                <LinearLayout
+                    android:id="@+id/date_picker_top_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="124dp"
+                    android:orientation="vertical"
+                    android:weightSum="2"
+                    android:background="@color/background_button_default"
+                    android:padding="16dp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textAlignment="textStart"
+                        android:textAllCaps="true"
+                        android:textColor="@color/tint_first_line_dark"
+                        android:textSize="12sp"
+                        android:text="@string/helper_user_date_picker" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/date_picker_curr_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:textColor="@color/tint_first_line_dark"
+                        android:textAlignment="textStart"
+                        android:textSize="24sp" />
+
+                </LinearLayout>
+
+                <!-- Content -->
+                <LinearLayout
+                    android:id="@+id/date_picker_values"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="16dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/date_picker_rv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"/>
+
+                </LinearLayout>
+
+                <!-- Bottom Divider -->
+                <View android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="?android:attr/listDivider"/>
+
+            </LinearLayout>
+
+            <!-- Turn picker -->
+            <LinearLayout
+                android:id="@+id/turn_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                app:layout_constraintTop_toBottomOf="@id/date_picker"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <!-- Gym name -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:padding="16dp"
+                    android:baselineAligned="false">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/tint_title"
+                        android:textSize="14sp"
+                        android:text="@string/gym_profile_toolbar_title" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/turn_picker_name_gym"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/tint_title"
+                        android:textAlignment="textEnd"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- Morning turn -->
+                <LinearLayout
+                    android:id="@+id/turn_picker_morning"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+                    <!-- Description -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <!-- Start icon -->
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:src="@drawable/ic_weather_morning"/>
+
+                        <!-- Title, subtitle -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:paddingVertical="16dp">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:text="@string/morning_session"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:id="@+id/turn_morning_details"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <!-- End icon -->
+                        <ImageView
+                            android:id="@+id/end_icon_morning"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:contentDescription="@string/menu_button"
+                            app:srcCompat="@drawable/ic_arrow_down"
+                            app:tint="@color/quantum_grey600" />
+
+                    </LinearLayout>
+
+                    <!-- Turns -->
+                    <LinearLayout
+                        android:id="@+id/turn_container_morning"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="72dp"
+                        android:paddingEnd="16dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/turn_picker_morning_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Afternoon turn -->
+                <LinearLayout
+                    android:id="@+id/turn_picker_afternoon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+                    <!-- Description -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <!-- Start icon -->
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:src="@drawable/ic_weather_afternoon"/>
+
+                        <!-- Title, subtitle -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:paddingVertical="16dp">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:text="@string/afternoon_session"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/turn_afternoon_details"
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <!-- End icon -->
+                        <ImageView
+                            android:id="@+id/end_icon_afternoon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:contentDescription="@string/menu_button"
+                            app:srcCompat="@drawable/ic_arrow_down"
+                            app:tint="@color/quantum_grey600" />
+
+                    </LinearLayout>
+
+                    <!-- Turns -->
+                    <LinearLayout
+                        android:id="@+id/turn_container_afternoon"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="72dp"
+                        android:paddingEnd="16dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/turn_picker_afternoon_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Evening turn -->
+                <LinearLayout
+                    android:id="@+id/turn_picker_evening"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:minHeight="72dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+                    <!-- Description -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <!-- Start icon -->
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:src="@drawable/ic_weather_evening"/>
+
+                        <!-- Title, subtitle -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:paddingVertical="16dp">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                style="@style/TextAppearance.AppCompat.Body2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:text="@string/evening_session"/>
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/turn_evening_details"
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <!-- End icon -->
+                        <ImageView
+                            android:id="@+id/end_icon_evening"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="16dp"
+                            android:contentDescription="@string/menu_button"
+                            app:srcCompat="@drawable/ic_arrow_down"
+                            app:tint="@color/quantum_grey600" />
+
+                    </LinearLayout>
+
+                    <!-- Turns -->
+                    <LinearLayout
+                        android:id="@+id/turn_container_evening"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="vertical"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="72dp"
+                        android:paddingEnd="16dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/turn_picker_evening_rv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

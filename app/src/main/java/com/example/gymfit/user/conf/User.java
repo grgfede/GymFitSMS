@@ -3,6 +3,8 @@ package com.example.gymfit.user.conf;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.example.gymfit.system.conf.GenericUser;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -58,7 +60,6 @@ public class User extends GenericUser implements Serializable, Parcelable {
         this.img = img;
         this.subscription = subscription;
         this.turns = turns;
-
     }
 
 
@@ -171,12 +172,16 @@ public class User extends GenericUser implements Serializable, Parcelable {
         this.img = img;
     }
 
-    public void setSubscription(String[] subscription) {
+    public void setSubscription(@NonNull String[] subscription) {
         this.subscription = subscription;
     }
 
-    public void setTurns(List<Map<String, Object>> turns) {
+    public void setTurns(@NonNull List<Map<String, Object>> turns) {
         this.turns = turns;
+    }
+
+    public void setTurn(@NonNull Map<String, Object> turn) {
+        this.turns.add(turn);
     }
 
 }

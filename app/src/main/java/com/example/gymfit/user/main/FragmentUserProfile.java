@@ -103,6 +103,7 @@ public class FragmentUserProfile extends Fragment {
 
         // Abilities toolbar item options
         setHasOptionsMenu(true);
+
         // Change toolbar title
         requireActivity().setTitle(getResources().getString(R.string.user_profile_toolbar_title));
 

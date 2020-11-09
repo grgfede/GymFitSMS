@@ -5,6 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,13 +13,13 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 
 
 import com.example.gymfit.R;
@@ -27,9 +28,11 @@ import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.ResourceUtils;
 import com.example.gymfit.user.conf.InitUserCallback;
 import com.example.gymfit.user.conf.User;
+import com.example.gymfit.user.conf.UserViewPagerAdapter;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.Timestamp;
@@ -151,7 +154,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         if (item.getItemId() == R.id.nav_menu_home && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentUserProfile.newInstance(this.user, this.isEmptyData, (ArrayList<String>) this.emptyData), false);
         } else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
-            // TODO: Start FragmentUserSubscriptions
+            AppUtils.startFragment(this, FragmentUserMainTurn.newInstance(this.user), true);
         } else if (item.getItemId() == R.id.nav_menu_gyms && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentUserListGyms.newInstance(this.user), true);
         } else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {

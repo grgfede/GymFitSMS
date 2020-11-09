@@ -135,7 +135,7 @@ public class Login extends AppCompatActivity {
 
     private void signInIntent(String uid) {
         // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
-        if(uid.endsWith("2")) {
+        if(uid.endsWith("2") && !uid.endsWith("Xhy2")) {
             startActivity(new Intent(Login.this, ActivityGymProfile.class));
             //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
             preferences.edit().putString("uid", uid).apply();

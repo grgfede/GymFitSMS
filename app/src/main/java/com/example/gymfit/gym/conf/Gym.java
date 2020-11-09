@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -229,7 +230,7 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     @NotNull
-    public static String getSubscriptionFromTranslated(@NotNull String subscriptionTranslated) {
+    public static String getSubscriptionFromTranslated(@NotNull final String subscriptionTranslated) {
         final String[] subscriptionTranslatedKeys = new String[] {
                 ResourceUtils.getStringFromID(R.string.monthly_subscription),
                 ResourceUtils.getStringFromID(R.string.quarterly_subscription),

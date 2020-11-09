@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -22,6 +23,10 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public final class AppUtils {
     private static final String LOG = "KEY_LOG";
@@ -124,6 +129,47 @@ public final class AppUtils {
         // Expansion speed of 1dp/ms: (int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)
         a.setDuration(150);
         view.startAnimation(a);
+    }
+
+    // Users class
+
+    @NonNull
+    public static String getTurnValueFromKey(@NonNull final String key) {
+        final List<String> keys = new LinkedList<String>() {
+            {
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.morning_session_name)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.afternoon_session_name)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.evening_session_name)));
+            }
+        };
+        final List<String> values = new LinkedList<String>() {
+            {
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.morning_session_value)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.afternoon_session_value)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.evening_session_value)));
+            }
+        };
+
+        return values.get(keys.indexOf(key));
+    }
+
+    @NonNull
+    public static String[] getTurnKeysFromCategory(@NonNull final  String category) {
+        final String[] types = new String[] {"morning", "afternoon", "evening"};
+        final List<String[]> keys = new LinkedList<String[]>() {
+            {
+                add(ResourceUtils.getStringArrayFromID(R.array.morning_session_name));
+                add(ResourceUtils.getStringArrayFromID(R.array.afternoon_session_name));
+                add(ResourceUtils.getStringArrayFromID(R.array.evening_session_name));
+            }
+        };
+
+        for (int i=0; i<types.length; i++) {
+            if (types[i].equals(category)) {
+                return keys.get(i);
+            }
+        }
+        return new String[] {"null", "null", "null"};
     }
 
     // Log and Message

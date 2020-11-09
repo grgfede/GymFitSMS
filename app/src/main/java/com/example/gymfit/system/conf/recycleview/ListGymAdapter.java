@@ -409,16 +409,12 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
         this.gyms.remove(position);
         this.gymsFull.remove(position);
         notifyItemRemoved(position);
-
-        Log.d("KEY_LOG", this.gyms.size() + " " + this.gymsFull.size());
     }
 
     public void restoreItem(@NonNull Gym item, int position) {
         this.gyms.add(position, item);
         this.gymsFull.add(position, item);
         notifyItemInserted(position);
-
-        Log.d("KEY_LOG", this.gyms.size() + " " + this.gymsFull.size());
     }
 
     public void addItem(@NonNull Gym item) {

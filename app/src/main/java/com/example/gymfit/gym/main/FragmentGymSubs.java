@@ -212,7 +212,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
 
         // Remove the item from recycleView
         this.listSubscriberAdapter.removeItem(position);
-        AppUtils.message(this.messageAnchor, username + " " + getResources().getString(R.string.recycleview_user_removing), Snackbar.LENGTH_LONG)
+        AppUtils.message(this.messageAnchor, username + " " + getResources().getString(R.string.gym_subscriber_removing), Snackbar.LENGTH_LONG)
             .setAction(getResources().getString(R.string.prompt_cancel), v -> this.listSubscriberAdapter.restoreItem(item, position))
             .setActionTextColor(requireContext().getColor(R.color.tint_message_text))
             .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
@@ -274,7 +274,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
                         isEmptyData = true;
                         AppUtils.log(Thread.currentThread().getStackTrace(), "No subscribers for this gym");
 
-                        Snackbar message = AppUtils.message(messageAnchor, getString(R.string.recycleview_subs_void), Snackbar.LENGTH_INDEFINITE)
+                        Snackbar message = AppUtils.message(messageAnchor, getString(R.string.gym_subscriptions_void), Snackbar.LENGTH_INDEFINITE)
                                 .setAction(getString(R.string.prompt_update), v -> {})
                                 .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null));
                         Button actionBtn = message.getView().findViewById(com.google.android.material.R.id.snackbar_action);
