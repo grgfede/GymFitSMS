@@ -36,6 +36,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     FirebaseAuth mFirebaseAuth;
 
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,8 @@ public class Login extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         // CONTROLLO SE L'ONBOARDING DEVE ESSERE VISUALIZZATO SFRUTTANDO LE PREFERENZE DI SISTEMA DELL'APP
-        SharedPreferences preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+        preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+
 
         if(!preferences.getBoolean("onboarding_complete",false)){
 
@@ -53,6 +55,13 @@ public class Login extends AppCompatActivity {
             startActivity(onboarding);
             finish();
             return;
+        } else if (preferences.getString("uid", null) != null){
+            /*
+             * CONTROLLO SE L'UTENTE HA EFFETTUATO IL LOGIN PRECEDENTEMENTE
+             * COME? Se nelle impostazioni di sistema, la chiave "uid" è null, allora non ha effettuato il login, se non è null
+             *  mi riporta nell'activity del profio
+             */
+            signInIntent(preferences.getString("uid", null));
         }
 
         mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
@@ -128,8 +137,12 @@ public class Login extends AppCompatActivity {
         // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
         if(uid.endsWith("2")) {
             startActivity(new Intent(Login.this, ActivityGymProfile.class));
+            //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
+            preferences.edit().putString("uid", uid).apply();
         } else {
             startActivity(new Intent(Login.this, ActivityUserProfile.class));
+            //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
+            preferences.edit().putString("uid", uid).apply();
         }
     }
 
