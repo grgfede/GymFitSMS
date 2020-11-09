@@ -179,13 +179,13 @@ public class FragmentUserListTurns extends Fragment {
             // show turn picker layout
             Objects.requireNonNull(this.containerMap.get("turnPicker")).setVisibility(View.VISIBLE);
 
-            DatabaseUtils.getGym(this.user.getSubscription()[0], gym -> {
+            DatabaseUtils.getGym(this.user.getSubscription()[0], (data, result) -> {
                 // set all text view details with gym info
                 this.textViewMap.forEach((key, textView) -> {
                     if (key.equals("name")) {
-                        textView.setText(gym.getName());
+                        textView.setText(data.getName());
                     } else if (!key.equals("currDate")) {
-                        textView.setText(getSubscriptionsAvailable(key, gym));
+                        textView.setText(getSubscriptionsAvailable(key, data));
                     }
                 });
 
@@ -199,7 +199,7 @@ public class FragmentUserListTurns extends Fragment {
                     }
                 };
                 turnKeys.forEach(key -> {
-                    final List<String> turnAvailable = getUserTurnAvailable(new LinkedList<>(Arrays.asList(getSubscriptionsAvailable(key, gym).split(", "))));
+                    final List<String> turnAvailable = getUserTurnAvailable(new LinkedList<>(Arrays.asList(getSubscriptionsAvailable(key, data).split(", "))));
 
                     setRecycleViewTurnPicker(rootView, turnAvailable, key, (Integer) Objects.requireNonNull(this.recycleViewTurnMap.get(key))[2],
                         ((viewHolder, position) -> {
@@ -210,8 +210,8 @@ public class FragmentUserListTurns extends Fragment {
                             final Date currentDate = FragmentUserListTurns.getDaysOfWeek(Calendar.getInstance().getTime())[checkedDayPosition];
                             final String message = DateFormat.format("EEEE", currentDate.getTime()) + " " + item;
 
-                            createSubscribeDialog(message, result -> {
-                                if (result != null) {
+                            createSubscribeDialog(message, resultDialog -> {
+                                if (resultDialog != null) {
                                     // remove item from adapter
                                     ((ListTurnAdapter) Objects.requireNonNull(this.recycleViewTurnMap.get(key))[1]).removeItem(position);
 
@@ -437,7 +437,7 @@ public class FragmentUserListTurns extends Fragment {
         this.user.setTurn(turn);
 
         // set current User database note turn
-        DatabaseUtils.updateUserTurn(this.user.getUid(), turn, result -> {});
+        DatabaseUtils.updateUserTurn(this.user.getUid(), turn, (data, result) -> {});
     }
 
     @NonNull

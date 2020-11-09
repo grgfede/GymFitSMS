@@ -5,13 +5,19 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.example.gymfit.R;
 import com.example.gymfit.system.conf.GenericUser;
+import com.example.gymfit.system.conf.utils.ResourceUtils;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class User extends GenericUser implements Serializable, Parcelable {
 
@@ -182,6 +188,28 @@ public class User extends GenericUser implements Serializable, Parcelable {
 
     public void setTurn(@NonNull Map<String, Object> turn) {
         this.turns.add(turn);
+    }
+
+    // Other methods
+
+    @NonNull
+    public List<String> getEmptyValues() {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.user_field);
+        final List<String> emptyKeyOfValues = new ArrayList<>();
+        final String emptyValue = "null";
+
+        if (this.getName().equals(emptyValue)) emptyKeyOfValues.add(keys[1]);
+        if (this.getSurname().equals(emptyValue)) emptyKeyOfValues.add(keys[2]);
+        if (this.getDateOfBirthday().equals(new GregorianCalendar(1900, Calendar.JANUARY, 1).getTime())) emptyKeyOfValues.add(keys[4]);
+        if (this.getEmail().equals(emptyValue)) emptyKeyOfValues.add(keys[5]);
+        if (this.getGender().equals(emptyValue)) emptyKeyOfValues.add(keys[6]);
+        if (this.getPhone().equals(emptyValue)) emptyKeyOfValues.add(keys[7]);
+        if (this.getImg().equals(ResourceUtils.getURIForResource(R.drawable.default_user))) emptyKeyOfValues.add(keys[8]);
+        if (this.getAddress().equals(emptyValue)) emptyKeyOfValues.add(keys[9]);
+        if (this.getSubscription()[0].equals(emptyValue)) emptyKeyOfValues.add(keys[10]);
+        if (this.getTurns().isEmpty()) emptyKeyOfValues.add(keys[11]);
+
+        return emptyKeyOfValues;
     }
 
 }

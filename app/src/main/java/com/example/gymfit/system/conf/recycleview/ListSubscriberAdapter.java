@@ -70,7 +70,9 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         }
 
         public void bind(final Context context, final User user, final int position, final OnItemClickListener listener) {
-            final int turnCount = user.getTurns().size();
+            final int turnCount = user.getTurns() != null
+                    ? user.getTurns().size()
+                    : 0;
 
             turnList.clear();
             turnContainer.removeAllViews();
@@ -106,27 +108,29 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         String subscription = getSubscription(this.users.get(position).getSubscription()[1]);
         holder.details.setText(subscription);
 
-        List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
+        if (this.users.get(position).getTurns() != null) {
+            List<Map<String, Object>> turnMap = this.users.get(position).getTurns();
 
-        turnMap.sort((map1, map2) -> {
-            Date date1 = ((Timestamp) Objects.requireNonNull(map1.get("date"))).toDate();
-            Date date2 = ((Timestamp) Objects.requireNonNull(map2.get("date"))).toDate();
-            return date1.compareTo(date2);
-        });
+            turnMap.sort((map1, map2) -> {
+                Date date1 = ((Timestamp) Objects.requireNonNull(map1.get("date"))).toDate();
+                Date date2 = ((Timestamp) Objects.requireNonNull(map2.get("date"))).toDate();
+                return date1.compareTo(date2);
+            });
 
-        for (int i=0; i<holder.turnList.size(); i++) {
-            String type = getTurn(Objects.requireNonNull(turnMap.get(i).get("type")).toString());
+            for (int i=0; i<holder.turnList.size(); i++) {
+                String type = getTurn(Objects.requireNonNull(turnMap.get(i).get("type")).toString());
 
-            Timestamp timestamp = (Timestamp) Objects.requireNonNull(turnMap.get(i).get("date"));
-            Date date = timestamp.toDate();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-            sdf.format(date);
-            Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-            cal.setTime(date);
-            String dateString = cal.get(Calendar.DAY_OF_MONTH) + " " + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + cal.get(Calendar.YEAR);
+                Timestamp timestamp = (Timestamp) Objects.requireNonNull(turnMap.get(i).get("date"));
+                Date date = timestamp.toDate();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+                sdf.format(date);
+                Calendar cal = Calendar.getInstance(TimeZone.getDefault());
+                cal.setTime(date);
+                String dateString = cal.get(Calendar.DAY_OF_MONTH) + " " + cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()) + " " + cal.get(Calendar.YEAR);
 
-            String placeHolder = dateString + ": " + type;
-            holder.turnList.get(i).setText(placeHolder);
+                String placeHolder = dateString + ": " + type;
+                holder.turnList.get(i).setText(placeHolder);
+            }
         }
     }
 

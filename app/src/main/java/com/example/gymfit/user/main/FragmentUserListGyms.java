@@ -4,15 +4,19 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,8 +34,6 @@ import android.widget.SearchView;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.system.conf.GenericUser;
-import com.example.gymfit.system.conf.OnUserCallback;
 import com.example.gymfit.system.conf.recycleview.ItemTouchHelperRecycleCallback;
 import com.example.gymfit.system.conf.recycleview.ListGymAdapter;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
@@ -39,22 +41,19 @@ import com.example.gymfit.system.conf.recycleview.OnUserSubscriptionResultCallba
 import com.example.gymfit.system.conf.recycleview.ListUserSubscribedAdapter;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.DatabaseUtils;
-import com.example.gymfit.system.conf.utils.ResourceUtils;
 import com.example.gymfit.user.conf.User;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,9 +66,6 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
 
     private ListGymAdapter listGymAdapter;
     private ListUserSubscribedAdapter listUserSubscribedAdapter;
-
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final String[] collections = ResourceUtils.getStringArrayFromID(R.array.collections);
 
     private View messageAnchor = null;
     private final Map<String, Boolean> viewVisibility = new HashMap<>();
@@ -202,9 +198,9 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                 });
             }
         } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
-            DatabaseUtils.getGym(this.user.getSubscription()[0], item -> createUnsubscribeDialog(item, result -> {
+            DatabaseUtils.getGym(this.user.getSubscription()[0], (item, result) -> createUnsubscribeDialog(item, resultDialog -> {
                 // Restore same item in the same position for abort action
-                if (result == null) {
+                if (resultDialog == null) {
                     this.listUserSubscribedAdapter.notifyItemChanged(position);
                     AppUtils.log(Thread.currentThread().getStackTrace(), "Abort unsubscribe of: " + item.getName());
                 } else {
@@ -281,44 +277,36 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     private void initInterface() {
         this.isEmptyData = false;
 
+        // Set and init cardview of current gym subscribed by User
         if (!this.user.getSubscription()[0].equals("null")) {
-            // Get from Database subscribed Gym for current User
-            DatabaseUtils.getGym(this.user.getSubscription()[0], this::setUpSubscribedRecycleView);
+            // Get from Database the subscribed Gym for current User
+            DatabaseUtils.getGym(this.user.getSubscription()[0], ((data, result) -> setUpSubscribedRecycleView(data)));
             AppUtils.log(Thread.currentThread().getStackTrace(), "Subscribed Gym cardview is created and shown into interface");
         }
-        getGymsUIDFromDatabase(new OnUserCallback() {
-            int gymsCount = 0;
-            int gymsSize = 0;
 
-            @Override
-            public void addOnCallback(List<String> usersID) {
-                gymsSize = usersID.size();
-                usersID.forEach(userID -> DatabaseUtils.getGym(userID, this::addOnSuccessCallback));
-            }
+        // Set and init all cardview of gyms subscribed into Database
+        DatabaseUtils.getGymsID(((data, result) -> {
+            if (result == DatabaseUtils.RESULT_OK) {
+                final int size = data.contains(this.user.getSubscription()[0])
+                        ? (data.size()-1) : data.size();
+                final AtomicInteger count = new AtomicInteger(0);
 
-            @Override
-            public void addOnCallback(boolean isEmpty) {
-                if (isEmpty) {
-                    isEmptyData = true;
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "No gyms into Database");
-                    AppUtils.message(messageAnchor, getString(R.string.user_gyms_void), Snackbar.LENGTH_LONG).show();
-                }
-            }
+                data.forEach(uid -> {
+                    if (!uid.equals(this.user.getSubscription()[0])) {
+                        DatabaseUtils.getGym(uid, ((dataGym, resultGym) -> {
+                            if (resultGym == DatabaseUtils.RESULT_OK) {
+                                this.gyms.add(dataGym);
+                                count.incrementAndGet();
+                            }
 
-            @Override
-            public <T extends GenericUser> void addOnSuccessCallback(T user) {
-                gyms.add((Gym) user);
-                gymsCount++;
-                addOnSuccessListener();
+                            if (count.get() == size) {
+                                setUpRecycleView();
+                            }
+                        }));
+                    }
+                });
             }
-
-            @Override
-            public void addOnSuccessListener() {
-                if (gymsCount == gymsSize) {
-                    setUpRecycleView();
-                }
-            }
-        });
+        }));
     }
 
     private void setUpSubscribedRecycleView(@NonNull Gym gym) {
@@ -462,74 +450,28 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     // Database methods
 
     /**
-     * Find any gyms from Database and return a callback with status of empty
-     *
-     * @param onUserCallback callback to init gym
-     */
-    private void getGymsUIDFromDatabase(OnUserCallback onUserCallback) {
-        AppUtils.log(Thread.currentThread().getStackTrace(), "Searching gyms...");
-
-        this.db.collection(collections[1]).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        final List<String> gymsID = new ArrayList<>();
-
-                        if (!task.getResult().getDocuments().isEmpty()) {
-                            for (QueryDocumentSnapshot ds : task.getResult()) {
-                                // Take all Gym document from Database without UID already subscribed for current User
-                                if (!ds.getId().equals(this.user.getSubscription()[0])) {
-                                    gymsID.add(ds.getId());
-                                }
-                            }
-                            onUserCallback.addOnCallback(gymsID);
-                            onUserCallback.addOnCallback(false);
-                        } else {
-                            AppUtils.log(Thread.currentThread().getStackTrace(), "Gyms not found");
-                            onUserCallback.addOnCallback(true);
-                        }
-                    } else {
-                        AppUtils.log(Thread.currentThread().getStackTrace(), "Gyms not found");
-                        onUserCallback.addOnCallback(true);
-                    }
-                })
-                .addOnFailureListener(task -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gyms not found");
-                    onUserCallback.addOnCallback(true);
-                });
-
-    }
-
-    /**
      * Find and set User document with current Gym UID and add current User UID into respective Gym document
      *
      * @param uid current Gym UID of recycleview. Used to find respective Database document and set new subscribers
      * @param name current Gym name of recycleview. Used into Log and Snackbar message
-     * @param result current subscription key resource to add into Gym document
+     * @param resultDialog current subscription key resource to add into Gym document
      */
-    private void addGymIntoUser(@NonNull final String uid, @NonNull final String name, @NonNull final String result) {
-        final String subscriptionKey = Gym.getSubscriptionFromTranslated(result);
+    private void addGymIntoUser(@NonNull final String uid, @NonNull final String name, @NonNull final String resultDialog) {
+        final String subscriptionKey = Gym.getSubscriptionFromTranslated(resultDialog);
         // Add Gym into User object
         this.user.setSubscription(new String[] {
                 Objects.requireNonNull(uid), Objects.requireNonNull(subscriptionKey)
         });
 
         // Add Gym into User Database
-        final String[] userKeys = getResources().getStringArray(R.array.user_field);
-        this.db.collection(collections[0]).document(this.user.getUid())
-                .update(userKeys[10], FieldValue.arrayUnion(uid, subscriptionKey))
-                .addOnSuccessListener(task -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(),"Gym is added into User node database");
-                    AppUtils.message(this.messageAnchor, getString(R.string.user_subscribed) + Objects.requireNonNull(name), Snackbar.LENGTH_LONG)
-                            .show();
-                })
-                .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
+        DatabaseUtils.updateUserSubscription(this.user.getUid(), new String[] { uid, subscriptionKey }, ((data, result) -> {
+            if (result == DatabaseUtils.RESULT_OK) {
+                AppUtils.message(this.messageAnchor, getString(R.string.user_subscribed) + Objects.requireNonNull(name), Snackbar.LENGTH_LONG).show();
+            }
+        }));
 
         // Add User UID into Gym node Database
-        final String[] gymKeys = getResources().getStringArray(R.array.gym_field);
-        this.db.collection(collections[1]).document(uid)
-                .update(gymKeys[8], FieldValue.arrayUnion(this.user.getUid()))
-                .addOnSuccessListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),"Current User is added into Gym subscribers node database"))
-                .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
+        DatabaseUtils.updateGymSubscribers(uid, this.user.getUid(), (data, result) -> {});
     }
 
     /**
@@ -538,45 +480,24 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      * @param gym current Gym of recycleview. Used to find respective Database document and set new subscribers
      */
     private void removeGymIntoUser(@NonNull final Gym gym) {
-        final String[] userKeys = getResources().getStringArray(R.array.user_field);
-
         // Remove Gym into User object
-        this.user.setSubscription(new String[] {
-                "null", "null"
-        });
+        this.user.setSubscription(new String[] { "null", "null" });
 
         // Remove Turns from User object
         this.user.setTurns(new ArrayList<>());
 
         // Remove Gym from User Database
-        this.db.collection(collections[0]).document(this.user.getUid())
-                .update(userKeys[10], null)
-                .addOnSuccessListener(task -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(),"Gym is removed into User node database");
-                    AppUtils.message(this.messageAnchor, getString(R.string.user_unsubscribed) + Objects.requireNonNull(gym.getName()), Snackbar.LENGTH_LONG)
-                            .show();
-                })
-                .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
+        DatabaseUtils.removeUserSubscription(this.user.getUid(), ((data, result) -> {
+            if (result == DatabaseUtils.RESULT_OK) {
+                AppUtils.message(this.messageAnchor, getString(R.string.user_unsubscribed) + Objects.requireNonNull(gym.getName()), Snackbar.LENGTH_LONG).show();
+            }
+        }));
 
         // Remove Turns from User Database node
-        DatabaseUtils.removeUserTurns(this.user.getUid(), result -> {});
+        DatabaseUtils.removeUserTurns(this.user.getUid(), (data, result) -> {});
 
         // Remove User UID from Gym node Database
-        final String[] gymKeys = getResources().getStringArray(R.array.gym_field);
-        this.db.collection(collections[1]).document(gym.getUid())
-                .update(gymKeys[8], FieldValue.arrayRemove(this.user.getUid()))
-                .addOnSuccessListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),"Current User is removed from Gym subscribers node database"))
-                .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
-
-        // Null Gym node Database is empty
-        DatabaseUtils.isGymSubscribersEmpty(gym.getUid(), result -> {
-            if (result) {
-                this.db.collection(collections[1]).document(gym.getUid())
-                        .update(gymKeys[8], null)
-                        .addOnSuccessListener(task -> AppUtils.log(Thread.currentThread().getStackTrace()," Gym subscribers node database is clear"))
-                        .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(),task.getMessage()));
-            }
-        });
+        DatabaseUtils.removeGymSubscriber(gym.getUid(), this.user.getUid(), (data, result) -> {});
     }
 
 }

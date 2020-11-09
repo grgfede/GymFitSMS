@@ -429,7 +429,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         // if get boolean return true means that there are empty value into Gym node of Database.
         // So throw Exception and init a message to show at User after layout XML inflate
         if (flag.get()) {
-            throw new NullDataException(this.emptyData);
+            throw new NullDataException();
         }
     }
 

@@ -255,4 +255,40 @@ public class Gym extends GenericUser implements Serializable {
         }
     }
 
+    /**
+     * Init and return a default map of boolean array for set turn gym's node
+     *
+     * @return Map of Boolean arrays
+     */
+    @NonNull
+    public static Map<String, Object> getDefaultGymTurn()
+    {
+        final String[] gymKeys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+        return new HashMap<String, Object>() {
+            {
+                put(gymKeys[14], new Boolean[] { true, true, true });
+                put(gymKeys[15], new Boolean[] { true, true, true });
+                put(gymKeys[15], new Boolean[] { true, true, true });
+            }
+        };
+    }
+
+    /**
+     * Init and return a default map of boolean for set subscription gym's node
+     *
+     * @return Map of Boolean
+     */
+    @NonNull
+    public static Map<String, Boolean> getDefaultGymSubscription() {
+        final String[] gymKeys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+        return new HashMap<String, Boolean>() {
+            {
+                put(gymKeys[10], true);
+                put(gymKeys[11], true);
+                put(gymKeys[12], true);
+                put(gymKeys[13], true);
+            }
+        };
+    }
+
 }

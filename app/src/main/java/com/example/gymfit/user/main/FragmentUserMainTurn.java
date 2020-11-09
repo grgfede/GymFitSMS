@@ -1,11 +1,15 @@
 package com.example.gymfit.user.main;
 
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
@@ -18,6 +22,7 @@ import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.user.conf.User;
 import com.example.gymfit.user.conf.UserViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 /**
@@ -63,6 +68,30 @@ public class FragmentUserMainTurn extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Orientation changed: " + newConfig.orientation);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            try {
+                FragmentTransaction ft = getParentFragmentManager().beginTransaction();
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ft.setReorderingAllowed(false);
+                }
+                ft.detach(this).attach(this).commit();
+
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Orientation changed: replaced interface");
+
+            } catch (Exception e) {
+                AppUtils.log(Thread.currentThread().getStackTrace(), e.getMessage());
+                AppUtils.message(this.messageAnchor, e.toString(), Snackbar.LENGTH_SHORT).show();
+                AppUtils.restartActivity((AppCompatActivity) requireActivity());
+            }
+        }
+    }
+
     // Interface methods
 
     /**
@@ -96,7 +125,5 @@ public class FragmentUserMainTurn extends Fragment {
 
         AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of FragmentUserMainTurn initialized");
     }
-
-    // Other methods
 
 }

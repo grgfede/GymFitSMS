@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
-import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.system.main.ActivitySystemOnBoarding;
 import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.system.main.signup.GymSignUp;
@@ -38,7 +36,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     FirebaseAuth mFirebaseAuth;
 
-    private DatabaseUtils dbUtils;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,22 +46,22 @@ public class Login extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         // CONTROLLO SE L'ONBOARDING DEVE ESSERE VISUALIZZATO SFRUTTANDO LE PREFERENZE DI SISTEMA DELL'APP
+        preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
 
 
-
-        if(dbUtils.isFirstRun()){
+        if(!preferences.getBoolean("onboarding_complete",false)){
 
             Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
             startActivity(onboarding);
             finish();
             return;
-        }
-        if (dbUtils.isLoggedUser()){
+        } else if (preferences.getString("uid", null) != null){
             /*
              * CONTROLLO SE L'UTENTE HA EFFETTUATO IL LOGIN PRECEDENTEMENTE
-             * COME? Se nelle impostazioni di sistema, la chiave "uid" è null, allora non ha effettuato il login, se non è null, mi riporta nell'activity del profio
+             * COME? Se nelle impostazioni di sistema, la chiave "uid" è null, allora non ha effettuato il login, se non è null
+             *  mi riporta nell'activity del profio
              */
-            signInIntent(dbUtils.getUidLoggedUser());
+            signInIntent(preferences.getString("uid", null));
         }
 
         mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
@@ -89,8 +87,8 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onClick (View v){
-            String email = emailId.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA EMAIL INSERITA DALL'UTENTE
-            String pswd = password.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA PASSWORD INSERITA DALL'UTENTE
+                String email = emailId.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA EMAIL INSERITA DALL'UTENTE
+                String pswd = password.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA PASSWORD INSERITA DALL'UTENTE
                 if (email.isEmpty()) {
                     emailId.setError("Attenzione! Inserisci email");
                     emailId.requestFocus();
@@ -127,23 +125,27 @@ public class Login extends AppCompatActivity {
         //CODICE CHE PERMETTE DI CHIUDERE LA TASTIERA IN AUTOMATICO QUANDO SI CLICCA SULLO SCHERMO
         findViewById(R.id.loginParentLayout).
 
-        setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view){
-                hideKeyboard(view);
-            }
-        });
+                setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View view){
+                        hideKeyboard(view);
+                    }
+                });
     }
 
-    private void signInIntent(String uid) {
+    private void signInIntent(@NonNull final String uid) {
+        final Intent intent;
+
         // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
-        if(uid.endsWith("2")) {
-            startActivity(new Intent(Login.this, ActivityGymProfile.class));
-            dbUtils.setUidLoggedUser(uid);
+        if(uid.endsWith("2") && !uid.endsWith("Xhy2")) {
+            intent = new Intent(Login.this, ActivityGymProfile.class);
         } else {
-            startActivity(new Intent(Login.this, ActivityUserProfile.class));
-            dbUtils.setUidLoggedUser(uid);
+            intent = new Intent(Login.this, ActivityUserProfile.class);
         }
+
+        preferences.edit().putString("uid", uid).apply();
+        intent.putExtra("uid", uid);
+        startActivity(intent);
     }
 
     private void hideKeyboard(View view) {

@@ -32,11 +32,6 @@ public class FragmentUserProfile extends Fragment {
     private static final String IS_EMPTY_KEY = "is_empty_key";
     private static final String EMPTY_DATA_KEY = "empty_data_key";
 
-    private static final int MY_ADDRESS_REQUEST_CODE = 100, MY_CAMERA_REQUEST_CODE = 10, MY_GALLERY_REQUEST_CODE = 11, MY_CAMERA_PERMISSION_CODE = 9;
-
-    private final FirebaseStorage storage = FirebaseStorage.getInstance();
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     // Screen orientation
     private int orientation;
     private View messageAnchor = null;
