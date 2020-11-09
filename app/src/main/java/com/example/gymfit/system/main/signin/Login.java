@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.gymfit.R;
+import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.system.main.ActivitySystemOnBoarding;
 import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.system.main.signup.GymSignUp;
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     FirebaseAuth mFirebaseAuth;
 
-    private SharedPreferences preferences;
+    private DatabaseUtils dbUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,22 +47,17 @@ public class Login extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         // CONTROLLO SE L'ONBOARDING DEVE ESSERE VISUALIZZATO SFRUTTANDO LE PREFERENZE DI SISTEMA DELL'APP
-        preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
 
 
-        if(!preferences.getBoolean("onboarding_complete",false)){
 
+        if(dbUtils.isFirstTime()){
             Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
             startActivity(onboarding);
             finish();
             return;
-        } else if (preferences.getString("uid", null) != null){
-            /*
-             * CONTROLLO SE L'UTENTE HA EFFETTUATO IL LOGIN PRECEDENTEMENTE
-             * COME? Se nelle impostazioni di sistema, la chiave "uid" è null, allora non ha effettuato il login, se non è null
-             *  mi riporta nell'activity del profio
-             */
-            signInIntent(preferences.getString("uid", null));
+        }
+        if (dbUtils.isLogged()){
+            signInIntent(dbUtils.getUidLogged());
         }
 
         mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
@@ -138,11 +134,11 @@ public class Login extends AppCompatActivity {
         if(uid.endsWith("2")) {
             startActivity(new Intent(Login.this, ActivityGymProfile.class));
             //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
-            preferences.edit().putString("uid", uid).apply();
+            dbUtils.setUidLogged(uid);
         } else {
             startActivity(new Intent(Login.this, ActivityUserProfile.class));
             //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
-            preferences.edit().putString("uid", uid).apply();
+            dbUtils.setUidLogged(uid);
         }
     }
 
