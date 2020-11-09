@@ -49,6 +49,8 @@
     <string name="system_toolbar_edit">Modifica</string>
     <string name="system_toolbar_logout">Esci</string>
     <string name="system_toolbar_help">Aiuto</string>
+    <string name="system_tab_list_turns">Lista prenotazioni</string>
+    <string name="system_tab_main_turn">Personale</string>
     <string name="system_nav_title_home" translatable="false">Home</string>
     <string name="system_nav_title_other">Altro</string>
 
@@ -66,6 +68,7 @@
     <string name="prompt_available">Disponibile</string>
     <string name="prompt_not_available">Non disponibile</string>
     <string name="prompt_subscribe">Iscriviti</string>
+    <string name="prompt_book">Prenotati</string>
     <string name="prompt_unsubscribe">Disiscriviti</string>
     <!-- TODO: migrate from database strings -->
     <string name="prompt_subscribers" translatable="false">subscribers</string>
@@ -208,5 +211,7 @@
     <string name="title_onBoarding3">Allenati</string>
     <string name="subtitle_onBoarding3">Presentati in palestra nel giorno da te scelto per allenarti. E’ semplice!</string>
     <string name="onboarding_done">Fatto</string>
+
+    <string name="helper_user_date_picker">Seleziona il giorno</string>
 
 </resources>

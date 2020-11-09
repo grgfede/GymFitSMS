@@ -33,14 +33,18 @@
 
     <string name="profile_not_completed">Profilo non completato. Completa i campi mancanti…</string>
 
-    <string name="recycleview_subs_void">Nessun iscritto.</string>
-    <string name="recycleview_gyms_void">Nessuna palestra iscritta.</string>
+    <!-- Turn and Subscription messages -->
+    <string name="gym_subscriptions_void">Nessun iscritto.</string>
+    <string name="gym_subscriber_removing">sarà eliminato…</string>
 
-    <string name="recycleview_user_removing">sarà eliminato…</string>
-    <string name="recycleview_user_subscribing">Ti stai iscrivendo a: \n</string>
-    <string name="recycleview_user_unsubscribing">Sei sicuro di volerti disiscrivere dalla palestra</string>
-    <string name="recycleview_user_subscribed">"Ti sei iscritto a: "</string>
-    <string name="recycleview_user_unsubscribed">"Ti sei disiscritto da: \n"</string>
-    <string name="recycleview_already_subscribed">Sei già iscritto…</string>
+    <string name="user_subscriptions_void">Non sei iscritto a nessuna palestra.</string>
+    <string name="user_gyms_void">Nessuna palestra iscritta.</string>
+    <string name="user_subscribing">Ti stai iscrivendo a: \n</string>
+    <string name="user_subscribed">"Ti sei iscritto a: "</string>
+    <string name="user_booking">"Sei sicuro di volerti prenotare per: "</string>
+    <string name="user_booked">"Ti sei prenotato per: \n"</string>
+    <string name="user_unsubscribing">Sei sicuro di volerti disiscrivere dalla palestra</string>
+    <string name="user_unsubscribed">"Ti sei disiscritto da: \n"</string>
+    <string name="user_already_subscribed">Sei già iscritto…</string>
 
 </resources>

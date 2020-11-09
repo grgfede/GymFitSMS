@@ -2,6 +2,7 @@ package com.example.gymfit.system.conf.utils;
 
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,16 @@ public final class ResourceUtils {
      */
     public static int getColorFromID(int resourceId) {
         return ResourcesCompat.getColor(App.getResource(), resourceId, null);
+    }
+
+    /**
+     * This method get from project folder the Drawable from resource using respective ID
+     *
+     * @param resourceId origin ID resource file
+     * @return origin Drawable resource file
+     */
+    public static Drawable getDrawableFromID(int resourceId) {
+        return ResourcesCompat.getDrawable(App.getResource(), resourceId, null);
     }
 
 }

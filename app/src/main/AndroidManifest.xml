@@ -20,8 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".system.main.ActivitySystemOnBoarding"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"></activity>
+        <activity
+            android:name=".system.main.ActivitySystemOnBoarding"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden" />
         <activity
             android:name=".system.main.signup.GymSignUp"
             android:windowSoftInputMode="adjustPan" />
