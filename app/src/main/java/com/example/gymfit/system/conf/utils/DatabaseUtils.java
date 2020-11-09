@@ -1,6 +1,8 @@
 package com.example.gymfit.system.conf.utils;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
@@ -25,6 +27,10 @@ public class DatabaseUtils {
     @SuppressLint("StaticFieldLeak")
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String[] collections = ResourceUtils.getStringArrayFromID(R.array.collections);
+
+    private static Context mContext;
+    private static SharedPreferences preferences = mContext.getSharedPreferences("my_preferences", mContext.MODE_PRIVATE);
+
 
     public interface FindItemCallback<T> {
         void onCallback(T value);
@@ -140,6 +146,31 @@ public class DatabaseUtils {
                     }
                 })
                 .addOnFailureListener(task -> AppUtils.log(Thread.currentThread().getStackTrace(), "Gym not found"));
+    }
+
+
+    public static boolean isFirstRun(){
+        boolean result = false;
+        if(!preferences.getBoolean("onboarding_complete",false)){
+            result = true;
+        }
+        return result;
+    }
+
+    public static boolean isLoggedUser(){
+        boolean result = false;
+        if (preferences.getString("uid", null) != null){
+            result = true;
+        }
+        return result;
+    }
+
+    public static String getUidLoggedUser(){
+        return preferences.getString("uid", null);
+    }
+
+    public static void setUidLoggedUser(String uid){
+        preferences.edit().putString("uid", uid).apply();
     }
 
 }

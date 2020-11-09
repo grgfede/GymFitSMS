@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -50,14 +51,19 @@ public class Login extends AppCompatActivity {
 
 
 
-        if(dbUtils.isFirstTime()){
+        if(dbUtils.isFirstRun()){
+
             Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
             startActivity(onboarding);
             finish();
             return;
         }
-        if (dbUtils.isLogged()){
-            signInIntent(dbUtils.getUidLogged());
+        if (dbUtils.isLoggedUser()){
+            /*
+             * CONTROLLO SE L'UTENTE HA EFFETTUATO IL LOGIN PRECEDENTEMENTE
+             * COME? Se nelle impostazioni di sistema, la chiave "uid" è null, allora non ha effettuato il login, se non è null, mi riporta nell'activity del profio
+             */
+            signInIntent(dbUtils.getUidLoggedUser());
         }
 
         mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
@@ -131,14 +137,12 @@ public class Login extends AppCompatActivity {
 
     private void signInIntent(String uid) {
         // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
-        if(uid.endsWith("2") && !uid.endsWith("Xhy2")) {
+        if(uid.endsWith("2")) {
             startActivity(new Intent(Login.this, ActivityGymProfile.class));
-            //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
-            dbUtils.setUidLogged(uid);
+            dbUtils.setUidLoggedUser(uid);
         } else {
             startActivity(new Intent(Login.this, ActivityUserProfile.class));
-            //SETTO LE IMPOSTAZIONI PER FAR SI CHE ALLA RIAPERTURA DELL'APP, IL LOGIN SIA AUTOMATICO
-            dbUtils.setUidLogged(uid);
+            dbUtils.setUidLoggedUser(uid);
         }
     }
 
