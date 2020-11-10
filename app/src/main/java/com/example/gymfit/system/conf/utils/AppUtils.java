@@ -133,6 +133,13 @@ public final class AppUtils {
 
     // Users class
 
+    /**
+     * This methods converts all turn key and turn values strings as lists.
+     * So find from value list the correspondents key passed by param and return its.
+     *
+     * @param key database turn key (morningFirst, afternoonSecond...) used to find correspondents a turn value (10:00 - 11:00, 17:00-18:00)
+     * @return turn value as String
+     */
     @NonNull
     public static String getTurnValueFromKey(@NonNull final String key) {
         final List<String> keys = new LinkedList<String>() {
@@ -153,8 +160,43 @@ public final class AppUtils {
         return values.get(keys.indexOf(key));
     }
 
+    /**
+     * This methods converts all turn key and turn values strings as lists.
+     * So find from key list the correspondents value passed by param and return its.
+     *
+     * @param value database turn value (10:00 - 11:00, 17:00-18:00) used to find correspondents a turn key (morningFirst, afternoonSecond...)
+     * @return turn value as String
+     */
     @NonNull
-    public static String[] getTurnKeysFromCategory(@NonNull final  String category) {
+    public static String getTurnKeyFromValue(@NonNull final String value) {
+        final List<String> keys = new LinkedList<String>() {
+            {
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.morning_session_name)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.afternoon_session_name)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.evening_session_name)));
+            }
+        };
+        final List<String> values = new LinkedList<String>() {
+            {
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.morning_session_value)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.afternoon_session_value)));
+                addAll(Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.evening_session_value)));
+            }
+        };
+
+        return keys.get(values.indexOf(value));
+    }
+
+    /**
+     * This methods converts all turn keys (of morning, afternoon and evening) as a list of string arrays and all category in another string array.
+     * So find, in a loop, the correspondents category of which passed by param and return its keys.
+     * In the end (with all negative responses) return a string array fill of "null" string value.
+     *
+     * @param category project turn key (morning, afternoon, evening) used to find correspondents a same turn keys (morningFirst, morningSecond, morningThird)
+     * @return turn value as String array
+     */
+    @NonNull
+    public static String[] getTurnKeysFromCategory(@NonNull final String category) {
         final String[] types = new String[] {"morning", "afternoon", "evening"};
         final List<String[]> keys = new LinkedList<String[]>() {
             {

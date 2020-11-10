@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gymfit.R;
 
-public class ItemTouchHelperSubscribersCallback extends ItemTouchHelper.Callback {
+public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final OnItemSwipeListener actionListener;
 
-    public ItemTouchHelperSubscribersCallback(OnItemSwipeListener actionListener) {
+    public ItemTouchHelperCallback(OnItemSwipeListener actionListener) {
         this.actionListener = actionListener;
     }
 
@@ -71,7 +71,14 @@ public class ItemTouchHelperSubscribersCallback extends ItemTouchHelper.Callback
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         } else {
-            final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
+            final View foregroundView;
+            if (viewHolder instanceof ListGymAdapter.MyViewHolder) {
+                foregroundView = ((ListGymAdapter.MyViewHolder) viewHolder).cardContainer;
+            } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
+                foregroundView = ((ListUserSubscribedAdapter.MyViewHolder) viewHolder).cardContainer;
+            } else {
+                foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
+            }
             getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
         }
     }
@@ -92,7 +99,14 @@ public class ItemTouchHelperSubscribersCallback extends ItemTouchHelper.Callback
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         } else {
-            final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).deleteContainer;
+            final View foregroundView;
+            if (viewHolder instanceof ListGymAdapter.MyViewHolder) {
+                foregroundView = ((ListGymAdapter.MyViewHolder) viewHolder).bcContainer;
+            } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
+                foregroundView = ((ListUserSubscribedAdapter.MyViewHolder) viewHolder).bcContainer;
+            } else {
+                foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).deleteContainer;
+            }
             getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
         }
     }
@@ -105,8 +119,17 @@ public class ItemTouchHelperSubscribersCallback extends ItemTouchHelper.Callback
      */
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        final View foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
-        foregroundView.setBackgroundColor(ContextCompat.getColor(((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
+        final View foregroundView;
+        if (viewHolder instanceof ListGymAdapter.MyViewHolder) {
+            foregroundView = ((ListGymAdapter.MyViewHolder) viewHolder).cardContainer;
+            foregroundView.setBackgroundColor(ContextCompat.getColor(((ListGymAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
+        } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
+            foregroundView = ((ListUserSubscribedAdapter.MyViewHolder) viewHolder).cardContainer;
+            foregroundView.setBackgroundColor(ContextCompat.getColor(((ListUserSubscribedAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
+        } else {
+            foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
+            foregroundView.setBackgroundColor(ContextCompat.getColor(((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
+        }
         getDefaultUIUtil().clearView(foregroundView);
     }
 

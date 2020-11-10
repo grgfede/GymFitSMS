@@ -1,7 +1,6 @@
 package com.example.gymfit.system.conf.recycleview;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gymfit.R;
 import com.example.gymfit.system.conf.utils.ResourceUtils;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.database.annotations.NotNull;
 
 import java.util.Calendar;
 import java.util.List;
@@ -22,12 +22,16 @@ public class ListDatePickerAdapter extends RecyclerView.Adapter<ListDatePickerAd
     private final Context context;
     public int itemCheckedPosition = RecyclerView.NO_POSITION;
 
+    private final OnItemClickListener listener;
+
     private boolean isCurrentDayChecked = false;
 
-    public ListDatePickerAdapter(@NonNull Context context, @NonNull List<String> dayPickerValues, @NonNull List<String> dayPickerKeys) {
+    public ListDatePickerAdapter(@NonNull final Context context, @NonNull final List<String> dayPickerValues, @NonNull final List<String> dayPickerKeys,
+                                 final OnItemClickListener listener) {
         this.dayPickerValue = dayPickerValues;
         this.dayPickerKeys = dayPickerKeys;
         this.context = context;
+        this.listener = listener;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -40,9 +44,10 @@ public class ListDatePickerAdapter extends RecyclerView.Adapter<ListDatePickerAd
             this.textViewValue = itemView.findViewById(R.id.date_picker_value);
         }
 
-        public void bind(final int position) {
+        public void bind(final int position, final int numberOfDay, OnItemClickListener listener) {
             this.textViewValue.setOnClickListener(v -> {
-                if (itemCheckedPosition != RecyclerView.NO_POSITION) {
+                if (itemCheckedPosition != RecyclerView.NO_POSITION && !isLowerDate(numberOfDay)) {
+                    listener.onItemClick(this, position);
                     itemCheckedPosition = position;
                     notifyDataSetChanged();
                 }
@@ -61,7 +66,7 @@ public class ListDatePickerAdapter extends RecyclerView.Adapter<ListDatePickerAd
 
     @Override
     public void onBindViewHolder(@NonNull ListDatePickerAdapter.MyViewHolder holder, int position) {
-        holder.bind(position);
+        holder.bind(position, Integer.parseInt(this.dayPickerValue.get(position)), this.listener);
 
         String datePickerKey = this.dayPickerKeys.get(position);
         holder.textViewKey.setText(datePickerKey);
@@ -75,11 +80,16 @@ public class ListDatePickerAdapter extends RecyclerView.Adapter<ListDatePickerAd
             this.itemCheckedPosition = position;
         }
 
-        if (this.itemCheckedPosition == position) {
-            checkedItem(holder.textViewValue);
+        if (isLowerDate(Integer.parseInt(this.dayPickerValue.get(position)))) {
+            disabledItem(holder.textViewValue);
         } else {
-            uncheckedItem(holder.textViewValue);
+            if (this.itemCheckedPosition == position) {
+                checkedItem(holder.textViewValue);
+            } else {
+                uncheckedItem(holder.textViewValue);
+            }
         }
+
     }
 
     @Override
@@ -99,8 +109,21 @@ public class ListDatePickerAdapter extends RecyclerView.Adapter<ListDatePickerAd
         textView.setTextColor(ResourceUtils.getColorFromID(R.color.tint_first_line_light));
     }
 
-    public int getCheckedItem() {
+    private void disabledItem(@NotNull MaterialTextView textView) {
+        textView.setBackground(ResourceUtils.getDrawableFromID(R.drawable.ic_date_picker_unchecked));
+        textView.setTextColor(ResourceUtils.getColorFromID(R.color.tint_third_line));
+    }
+
+    public int getItemChecked() {
+        return Integer.parseInt(this.dayPickerValue.get(this.itemCheckedPosition));
+    }
+
+    public int getItemCheckedPosition() {
         return this.itemCheckedPosition;
+    }
+
+    private boolean isLowerDate(final int numberOfDay) {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH) > numberOfDay;
     }
 
 }

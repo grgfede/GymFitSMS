@@ -6,6 +6,7 @@ import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.user.conf.User;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -184,11 +185,41 @@ public class DatabaseUtils {
         db.collection(collections[1]).document(uid)
                 .update(keys[8], FieldValue.arrayUnion(subscribe))
                 .addOnSuccessListener(aVoid -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym updated.");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers updated.");
                     callback.onCallback(true, RESULT_OK);
                 })
                 .addOnFailureListener(e -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym not updated. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateUserImg(@NonNull final String uid, @NonNull final String img, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.user_field);
+
+        db.collection(collections[0]).document(uid)
+                .update(keys[8], img)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User img updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User img not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateUserDateOfBirthday(@NonNull final String uid, @NonNull final Date dateOfBirthday, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.user_field);
+
+        db.collection(collections[0]).document(uid)
+                .update(keys[4], new Timestamp(dateOfBirthday))
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User dateOfBirthday updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User dateOfBirthday not updated. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
@@ -199,11 +230,11 @@ public class DatabaseUtils {
         db.collection(collections[0]).document(uid)
                 .update(keys[11], FieldValue.arrayUnion(turn))
                 .addOnSuccessListener(aVoid -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User updated.");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turn updated.");
                     callback.onCallback(true, RESULT_OK);
                 })
                 .addOnFailureListener(e -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User not updated. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turn not updated. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
@@ -214,11 +245,11 @@ public class DatabaseUtils {
         db.collection(collections[0]).document(uid)
                 .update(keys[10], FieldValue.arrayUnion(subscription[0], subscription[1]))
                 .addOnSuccessListener(aVoid -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User updated.");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User subscription updated.");
                     callback.onCallback(true, RESULT_OK);
                 })
                 .addOnFailureListener(e -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User not updated. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User subscription not updated. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
@@ -229,20 +260,20 @@ public class DatabaseUtils {
 
         reference.update(keys[8], FieldValue.arrayRemove(subscribe))
                 .addOnSuccessListener(aVoid -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym updated.");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscriber removed.");
                     isGymSubscribersEmpty(uid, ((data, result) -> {
                         if (data) {
                             reference.update(keys[8], null)
-                                    .addOnSuccessListener(aVoid1 -> AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers node cleared"))
-                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers node not cleared. " + e.getMessage()));
+                                    .addOnSuccessListener(aVoid1 -> AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers cleared"))
+                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers not cleared. " + e.getMessage()));
                         } else {
-                            AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers node not cleared");
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers not cleared");
                         }
                     }));
                     callback.onCallback(true, RESULT_OK);
                 })
                 .addOnFailureListener(e -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym not updated. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscriber not removed. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
@@ -253,20 +284,20 @@ public class DatabaseUtils {
 
         reference.update(keys[11], FieldValue.arrayRemove(turn))
                 .addOnSuccessListener(aVoid -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User updated.");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turn removed.");
                     isUserTurnsEmpty(uid, (data, result) -> {
                         if (data) {
                             reference.update(keys[11], null)
-                                    .addOnSuccessListener(aVoid1 -> AppUtils.log(Thread.currentThread().getStackTrace(), "User turns node cleared"))
-                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "User turns node not cleared. " + e.getMessage()));
+                                    .addOnSuccessListener(aVoid1 -> AppUtils.log(Thread.currentThread().getStackTrace(), "User turns cleared"))
+                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "User turns not cleared. " + e.getMessage()));
                         } else {
-                            AppUtils.log(Thread.currentThread().getStackTrace(), "User turns node not cleared");
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "User turns not cleared");
                         }
                     });
                     callback.onCallback(true, RESULT_OK);
                 })
                 .addOnFailureListener(e -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User not updated. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turn not removed. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
@@ -278,11 +309,11 @@ public class DatabaseUtils {
                 .update(keys[11], null)
                 .addOnSuccessListener(aVoid1 -> {
                     callback.onCallback(true, RESULT_OK);
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turns node cleared");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turns cleared");
                 })
                 .addOnFailureListener(e -> {
                     callback.onCallback(false, RESULT_FAILED);
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turns node not cleared. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User turns not cleared. " + e.getMessage());
                 });
     }
 
@@ -292,11 +323,11 @@ public class DatabaseUtils {
         db.collection(collections[0]).document(uid)
                 .update(keys[10], null)
                 .addOnSuccessListener(aVoid -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User updated.");
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User subscription cleared.");
                     callback.onCallback(true, RESULT_OK);
                 })
                 .addOnFailureListener(e -> {
-                    AppUtils.log(Thread.currentThread().getStackTrace(), "User not updated. " + e.getMessage());
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User subscription not cleared. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }

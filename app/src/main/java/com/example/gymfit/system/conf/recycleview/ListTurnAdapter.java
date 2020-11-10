@@ -22,7 +22,7 @@ public class ListTurnAdapter extends RecyclerView.Adapter<ListTurnAdapter.MyView
 
     private final OnItemClickListener listener;
 
-    public ListTurnAdapter(@NonNull Context context, @NonNull List<String> turns, OnItemClickListener listener) {
+    public ListTurnAdapter(@NonNull final Context context, @NonNull final List<String> turns, final OnItemClickListener listener) {
         this.turns = turns;
         this.context = context;
         this.listener = listener;
@@ -73,6 +73,12 @@ public class ListTurnAdapter extends RecyclerView.Adapter<ListTurnAdapter.MyView
     public void restoreItem(@NonNull String item, int position) {
         this.turns.add(position, item);
         notifyItemInserted(position);
+    }
+
+    public void replaceItems(@NonNull List<String> items) {
+        this.turns.clear();
+        this.turns.addAll(items);
+        notifyDataSetChanged();
     }
 
 }

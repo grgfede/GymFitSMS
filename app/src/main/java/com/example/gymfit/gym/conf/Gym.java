@@ -231,28 +231,41 @@ public class Gym extends GenericUser implements Serializable {
 
     @NotNull
     public static String getSubscriptionFromTranslated(@NotNull final String subscriptionTranslated) {
-        final String[] subscriptionTranslatedKeys = new String[] {
-                ResourceUtils.getStringFromID(R.string.monthly_subscription),
-                ResourceUtils.getStringFromID(R.string.quarterly_subscription),
-                ResourceUtils.getStringFromID(R.string.six_month_subscription),
-                ResourceUtils.getStringFromID(R.string.annual_subscription)
+        final List<String> translatedKeys = new ArrayList<String>() {
+            {
+                add(ResourceUtils.getStringFromID(R.string.monthly_subscription));
+                add(ResourceUtils.getStringFromID(R.string.quarterly_subscription));
+                add(ResourceUtils.getStringFromID(R.string.six_month_subscription));
+                add(ResourceUtils.getStringFromID(R.string.annual_subscription));
+            }
         };
-        final String[] subscriptionKeys = new String[] {
+        final String[] keys = new String[] {
                 ResourceUtils.getStringArrayFromID(R.array.gym_field)[10],
                 ResourceUtils.getStringArrayFromID(R.array.gym_field)[11],
                 ResourceUtils.getStringArrayFromID(R.array.gym_field)[12],
                 ResourceUtils.getStringArrayFromID(R.array.gym_field)[13]
         };
 
-        if (subscriptionTranslated.equals(subscriptionTranslatedKeys[0])) {
-            return subscriptionKeys[0];
-        } else if (subscriptionTranslated.equals(subscriptionTranslatedKeys[1])) {
-            return subscriptionKeys[1];
-        } else if (subscriptionTranslated.equals(subscriptionTranslatedKeys[2])) {
-            return subscriptionKeys[2];
-        } else {
-            return subscriptionKeys[3];
-        }
+        return  keys[translatedKeys.indexOf(subscriptionTranslated)];
+    }
+
+    public static String getTranslatedFromSubscription(@NotNull final String subscription) {
+        final List<String> keys = new ArrayList<String>() {
+            {
+                add(ResourceUtils.getStringArrayFromID(R.array.gym_field)[10]);
+                add(ResourceUtils.getStringArrayFromID(R.array.gym_field)[11]);
+                add(ResourceUtils.getStringArrayFromID(R.array.gym_field)[12]);
+                add(ResourceUtils.getStringArrayFromID(R.array.gym_field)[13]);
+            }
+        };
+        final String[] translatedKeys = new String[] {
+                ResourceUtils.getStringFromID(R.string.monthly_subscription),
+                ResourceUtils.getStringFromID(R.string.quarterly_subscription),
+                ResourceUtils.getStringFromID(R.string.six_month_subscription),
+                ResourceUtils.getStringFromID(R.string.annual_subscription)
+        };
+
+        return translatedKeys[keys.indexOf(subscription)];
     }
 
     /**

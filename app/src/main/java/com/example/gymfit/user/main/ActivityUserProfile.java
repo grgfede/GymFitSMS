@@ -45,7 +45,6 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ActivityUserProfile extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
 
     private String userUID;
@@ -184,19 +183,14 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
                 storageReference.putFile(Uri.parse(ResourceUtils.getURIForResource(R.drawable.default_user)))
                         .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                             String uriString = uri.toString();
-                            this.db.collection("users").document(this.userUID).update(key, uriString)
-                                    .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is added into Database"))
-                                    .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is not added into Database"));
-
+                            DatabaseUtils.updateUserImg(this.userUID, uriString, ((data, result) -> {}));
                             AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is added into Storage");
                         }))
                         .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Default image is deleted"));
             }
             // If empty value is Date, init Database with another default
             else if (key.equals(keys[4])) {
-                this.db.collection("users").document(this.userUID).update(key, new Timestamp(new Date()))
-                        .addOnSuccessListener(aVoid -> AppUtils.log(Thread.currentThread().getStackTrace(), "Date is added into Database"))
-                        .addOnFailureListener(e -> AppUtils.log(Thread.currentThread().getStackTrace(), "Date is not added into Database"));
+                DatabaseUtils.updateUserDateOfBirthday(this.userUID, new Date(), ((data, result) -> {}));
             }
         });
 

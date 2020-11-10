@@ -29,7 +29,7 @@ import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.GenericUser;
 import com.example.gymfit.system.conf.OnUserCallback;
-import com.example.gymfit.system.conf.recycleview.ItemTouchHelperSubscribersCallback;
+import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
 import com.example.gymfit.system.conf.recycleview.ListSubscriberAdapter;
 import com.example.gymfit.system.conf.utils.AppUtils;
@@ -344,7 +344,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
     }
 
     private void setUpRecycleView() {
-        RecyclerView recyclerView = requireView().getRootView().findViewById(R.id.rv_users);
+        final RecyclerView recyclerView = requireView().getRootView().findViewById(R.id.rv_users);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 1));
         this.listSubscriberAdapter = new ListSubscriberAdapter(requireActivity(), this.users, (viewHolder, position) -> {
@@ -356,8 +356,8 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener {
         });
         recyclerView.setAdapter(listSubscriberAdapter);
 
-        ItemTouchHelper.Callback callback = new ItemTouchHelperSubscribersCallback(this);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        final ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(this);
+        final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
     }

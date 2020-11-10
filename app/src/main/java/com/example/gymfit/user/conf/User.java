@@ -31,8 +31,8 @@ public class User extends GenericUser implements Serializable, Parcelable {
     private String address;
     private String gender;
     private String img;
-    private String[] subscription;
-    private List<Map<String, Object>> turns;
+    private String[] subscription; // 0 - GymID, 1 - subscriptionType
+    private List<Map<String, Object>> turns; // Map at index 0 - turnDate (as Timestamp), Map at index 1 - turnVale (morningFirst, afternoonSecond...)
 
     public User (String name, String surname, String phone, String email, String gender, String uid) {
         super(uid, email, phone);

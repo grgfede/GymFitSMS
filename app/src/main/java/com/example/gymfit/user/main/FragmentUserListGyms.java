@@ -4,19 +4,15 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +30,7 @@ import android.widget.SearchView;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
-import com.example.gymfit.system.conf.recycleview.ItemTouchHelperRecycleCallback;
+import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
 import com.example.gymfit.system.conf.recycleview.ListGymAdapter;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
 import com.example.gymfit.system.conf.recycleview.OnUserSubscriptionResultCallback;
@@ -320,7 +316,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                         gym.getUid()));
         listUserSubscriptionRecycle.setAdapter(this.listUserSubscribedAdapter);
 
-        final ItemTouchHelper.Callback callback = new ItemTouchHelperRecycleCallback(this);
+        final ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(this);
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listUserSubscriptionRecycle);
     }
@@ -337,7 +333,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                     ));
         listGymRecycle.setAdapter(this.listGymAdapter);
 
-        final ItemTouchHelper.Callback callback = new ItemTouchHelperRecycleCallback(this);
+        final ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(this);
         final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(listGymRecycle);
     }
