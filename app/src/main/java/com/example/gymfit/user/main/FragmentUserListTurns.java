@@ -20,11 +20,12 @@ import android.widget.LinearLayout;
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.recycleview.ListDatePickerAdapter;
-import com.example.gymfit.system.conf.recycleview.ListTurnAdapter;
+import com.example.gymfit.system.conf.recycleview.ListTurnPickerAdapter;
 import com.example.gymfit.system.conf.recycleview.OnItemClickListener;
 import com.example.gymfit.system.conf.recycleview.OnUserSubscriptionResultCallback;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.DatabaseUtils;
+import com.example.gymfit.user.conf.OnTurnFragment;
 import com.example.gymfit.user.conf.User;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -51,7 +52,7 @@ import java.util.StringJoiner;
  * Use the {@link FragmentUserListTurns#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentUserListTurns extends Fragment {
+public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
     private static final String USER_KEY = "user_key";
 
     private View messageAnchor = null;
@@ -68,7 +69,9 @@ public class FragmentUserListTurns extends Fragment {
 
     private ListDatePickerAdapter listDatePickerAdapter = null;
 
-    public static FragmentUserListTurns newInstance(@NonNull User user) {
+    private boolean fragmentLaid = false;
+
+    public static FragmentUserListTurns newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserListTurns created");
 
         FragmentUserListTurns fragment = new FragmentUserListTurns();
@@ -104,6 +107,20 @@ public class FragmentUserListTurns extends Fragment {
         AppUtils.log(Thread.currentThread().getStackTrace(), "FragmentUserListTurns layout XML created");
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        fragmentLaid = true;
+    }
+
+    @Override
+    public void onFragmentBecomeVisible() {
+        // if change fragment then refresh turn picker view
+        if (fragmentLaid && !this.user.getSubscription()[0].equals("null")) {
+            refreshTurnPickerAdapter();
+        }
     }
 
     // Interface methods
@@ -167,27 +184,9 @@ public class FragmentUserListTurns extends Fragment {
             dateKeys[i] = String.valueOf(DateFormat.format("EEEE", days[i].getTime()).charAt(0));
         }
         setRecycleViewDatePicker(rootView, Arrays.asList(dateValues), Arrays.asList(dateKeys), ((viewHolder, position) -> {
-
-            // If User has already subscribed to any gym can see turn and book them.
+            // if change date picker item checked then refresh turn picker view
             if (!this.user.getSubscription()[0].equals("null")) {
-                DatabaseUtils.getGym(this.user.getSubscription()[0], ((data, result) -> {
-                    // reset all recycle view:
-                    // key (morning, afternoon, evening), data (0 - recycleView, 1 - adapter, 3 - layout recycleView container)
-                    final List<String> turnKeys = new ArrayList<String>() {
-                        {
-                            add(getString(R.string.prompt_morning));
-                            add(getString(R.string.prompt_afternoon));
-                            add(getString(R.string.prompt_evening));
-                        }
-                    };
-                    turnKeys.forEach(turnKey -> {
-                        final List<String> turnAvailable = getUserTurnAvailable(
-                                Collections.synchronizedList(new LinkedList<>(Arrays.asList(getSubscriptionsAvailable(turnKey, data).split(", ")))),
-                                this.listDatePickerAdapter.getItemChecked());
-
-                        ((ListTurnAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).replaceItems(turnAvailable);
-                    });
-                }));
+                refreshTurnPickerAdapter();
             }
         }));
     }
@@ -246,13 +245,13 @@ public class FragmentUserListTurns extends Fragment {
                             createSubscribeDialog(message, resultDialog -> {
                                 if (resultDialog != null) {
                                     // remove item from adapter
-                                    ((ListTurnAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).removeItem(position);
-                                    ((ListTurnAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).notifyDataSetChanged();
+                                    ((ListTurnPickerAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).removeItem(position);
+                                    ((ListTurnPickerAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).notifyDataSetChanged();
 
                                     AppUtils.message(this.messageAnchor, getString(R.string.user_booked) + message, Snackbar.LENGTH_LONG)
                                         .setAction(getString(R.string.prompt_cancel), v -> {
                                             // restore item from adapter
-                                            ((ListTurnAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).restoreItem(item, position);
+                                            ((ListTurnPickerAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).restoreItem(item, position);
                                             AppUtils.log(Thread.currentThread().getStackTrace(), "Abort booking at: " + message);
                                         })
                                         .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null))
@@ -265,7 +264,7 @@ public class FragmentUserListTurns extends Fragment {
                                                     addTurnIntoUser(currentDate, item);
                                                     AppUtils.log(Thread.currentThread().getStackTrace(), "Booking at: " + message);
                                                 } else if (event == Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                                                    AppUtils.log(Thread.currentThread().getStackTrace(), message + " is restored into ListTurnAdapter");
+                                                    AppUtils.log(Thread.currentThread().getStackTrace(), message + " is restored into ListTurnPickerAdapter");
                                                 }
                                             }
                                         })
@@ -373,7 +372,7 @@ public class FragmentUserListTurns extends Fragment {
         turnPickerRecycleView.setHasFixedSize(true);
         turnPickerRecycleView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 1));
 
-        final ListTurnAdapter adapter = new ListTurnAdapter(rootView.getContext(), turnValue, listener);
+        final ListTurnPickerAdapter adapter = new ListTurnPickerAdapter(rootView.getContext(), turnValue, listener);
         turnPickerRecycleView.setAdapter(adapter);
 
         this.recycleViewTurnMap.replace(turnKey, new Object[] {
@@ -447,6 +446,36 @@ public class FragmentUserListTurns extends Fragment {
         return joiner.toString();
     }
 
+    @NonNull
+    private List<String> getUserTurnAvailable(@NonNull final List<String> subscriptionAvailable, final int checkedDay) {
+        final String[] userKeys = getResources().getStringArray(R.array.user_field);
+
+        // get all turn keys
+        final List<String> allTurnKeys = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.morning_session_name)));
+        allTurnKeys.addAll(Arrays.asList(getResources().getStringArray(R.array.afternoon_session_name)));
+        allTurnKeys.addAll(Arrays.asList(getResources().getStringArray(R.array.evening_session_name)));
+
+        // In the first time, take turn type value and turn date value for each current User turns.
+        // So, in the case of turn date value is same of date-picker item selected or checked remove respective turn key from all Gym's turn available.
+        this.user.getTurns().forEach(turn -> {
+            final String turnType = turn.get(userKeys[13]) != null
+                    ? String.valueOf(turn.get(userKeys[13])) : null;
+            final Date turnDate = turn.get(userKeys[12]) != null
+                    ? ((Timestamp) Objects.requireNonNull(turn.get(userKeys[12]))).toDate() : null;
+
+            if (turnType != null && turnDate != null) {
+                final int currentDay = Integer.parseInt(new SimpleDateFormat("dd", Locale.getDefault()).format(turnDate));
+
+                if (currentDay == checkedDay) {
+                    final String turnKey = allTurnKeys.get(allTurnKeys.indexOf(turnType));
+                    subscriptionAvailable.remove(AppUtils.getTurnValueFromKey(turnKey));
+                }
+            }
+        });
+
+        return subscriptionAvailable;
+    }
+
     /**
      * Create and set a Material dialog to show which are current turn selected from User
      * Return item checked if positive, otherwise nothing
@@ -482,36 +511,6 @@ public class FragmentUserListTurns extends Fragment {
         DatabaseUtils.updateUserTurn(this.user.getUid(), turn, (data, result) -> {});
     }
 
-    @NonNull
-    private List<String> getUserTurnAvailable(@NonNull final List<String> subscriptionAvailable, final int checkedDay) {
-        final String[] userKeys = getResources().getStringArray(R.array.user_field);
-
-        // get all turn keys
-        final List<String> allTurnKeys = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.morning_session_name)));
-        allTurnKeys.addAll(Arrays.asList(getResources().getStringArray(R.array.afternoon_session_name)));
-        allTurnKeys.addAll(Arrays.asList(getResources().getStringArray(R.array.evening_session_name)));
-
-        // check for each turn (map of <turnKey, turnValue>) if the key is same with "type" key, because it contains (<date, value>, <type, value>)
-        // In the positive case, take from turn keys list the correspondents turn key and remove it from Gym turn available (param)
-        this.user.getTurns().forEach(data -> {
-            final String turnType = data.get(userKeys[13]) != null
-                    ? String.valueOf(data.get(userKeys[13])) : null;
-            final Date turnDate = data.get(userKeys[12]) != null
-                    ? ((Timestamp) Objects.requireNonNull(data.get(userKeys[12]))).toDate() : null;
-
-            if (turnType != null && turnDate != null) {
-                final int currentDay = Integer.parseInt(new SimpleDateFormat("dd", Locale.getDefault()).format(turnDate));
-
-                if (currentDay == checkedDay) {
-                    final String turnKey = allTurnKeys.get(allTurnKeys.indexOf(turnType));
-                    subscriptionAvailable.remove(AppUtils.getTurnValueFromKey(turnKey));
-                }
-            }
-        });
-
-        return subscriptionAvailable;
-    }
-
     private void isListVisibility(@NonNull final LinearLayout container, @NonNull final ImageView arrow, @NonNull final String viewName) {
 
         // reaction of null pointer with a new creation of card visibility
@@ -529,6 +528,31 @@ public class FragmentUserListTurns extends Fragment {
             AppUtils.collapseCard(container);
             this.cardViewStatus.replace(viewName, false);
         }
+    }
+
+    private void refreshTurnPickerAdapter() {
+        DatabaseUtils.getGym(this.user.getSubscription()[0], ((data, result) -> {
+            // refresh turn picker recycleview:
+            // key (morning, afternoon, evening), data (0 - recycleView, 1 - adapter, 3 - layout recycleView container)
+            final List<String> turnKeys = new ArrayList<String>() {
+                {
+                    add(getString(R.string.prompt_morning));
+                    add(getString(R.string.prompt_afternoon));
+                    add(getString(R.string.prompt_evening));
+                }
+            };
+            turnKeys.forEach(turnKey -> {
+                final List<String> turnAvailable = getUserTurnAvailable(
+                        Collections.synchronizedList(new LinkedList<>(Arrays.asList(getSubscriptionsAvailable(turnKey, data).split(", ")))),
+                        this.listDatePickerAdapter.getItemChecked());
+
+                if (turnAvailable != null) {
+
+                }
+
+                ((ListTurnPickerAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).replaceItems(turnAvailable);
+            });
+        }));
     }
 
 }

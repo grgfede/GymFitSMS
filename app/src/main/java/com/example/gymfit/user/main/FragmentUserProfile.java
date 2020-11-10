@@ -42,7 +42,7 @@ public class FragmentUserProfile extends Fragment {
     private boolean isEmptyData = false;
     private List<String> emptyData = new ArrayList<>();
 
-    public static FragmentUserProfile newInstance(User user, boolean isEmptyData, ArrayList<String> emptyData) {
+    public static FragmentUserProfile newInstance(@NonNull final User user, final boolean isEmptyData, @NonNull final ArrayList<String> emptyData) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserProfile created");
 
         FragmentUserProfile fragment = new FragmentUserProfile();
@@ -91,7 +91,7 @@ public class FragmentUserProfile extends Fragment {
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void initSystemInterface(View rootView) {
+    private void initSystemInterface(@NonNull final View rootView) {
         // init new checked item on navigation Drawer
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
         navigationView.getMenu().findItem(R.id.nav_menu_home).setChecked(true);

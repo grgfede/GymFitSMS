@@ -76,8 +76,10 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
                 foregroundView = ((ListGymAdapter.MyViewHolder) viewHolder).cardContainer;
             } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
                 foregroundView = ((ListUserSubscribedAdapter.MyViewHolder) viewHolder).cardContainer;
-            } else {
+            } else if (viewHolder instanceof ListSubscriberAdapter.MyViewHolder) {
                 foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
+            } else {
+                foregroundView = ((ListTurnPickedAdapter.MyViewHolder) viewHolder).cardContainer;
             }
             getDefaultUIUtil().onDraw(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
         }
@@ -104,8 +106,10 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
                 foregroundView = ((ListGymAdapter.MyViewHolder) viewHolder).bcContainer;
             } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
                 foregroundView = ((ListUserSubscribedAdapter.MyViewHolder) viewHolder).bcContainer;
-            } else {
+            } else if (viewHolder instanceof ListSubscriberAdapter.MyViewHolder) {
                 foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).deleteContainer;
+            } else {
+                foregroundView = ((ListTurnPickedAdapter.MyViewHolder) viewHolder).deleteContainer;
             }
             getDefaultUIUtil().onDrawOver(c, recyclerView, foregroundView, dX, dY, actionState, isCurrentlyActive);
         }
@@ -126,9 +130,12 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback {
         } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
             foregroundView = ((ListUserSubscribedAdapter.MyViewHolder) viewHolder).cardContainer;
             foregroundView.setBackgroundColor(ContextCompat.getColor(((ListUserSubscribedAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
-        } else {
+        } else if (viewHolder instanceof ListSubscriberAdapter.MyViewHolder) {
             foregroundView = ((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer;
             foregroundView.setBackgroundColor(ContextCompat.getColor(((ListSubscriberAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
+        } else {
+            foregroundView = ((ListTurnPickedAdapter.MyViewHolder) viewHolder).cardContainer;
+            foregroundView.setBackgroundColor(ContextCompat.getColor(((ListTurnPickedAdapter.MyViewHolder) viewHolder).cardContainer.getContext(), R.color.quantum_white_100));
         }
         getDefaultUIUtil().clearView(foregroundView);
     }

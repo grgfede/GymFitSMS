@@ -2,18 +2,14 @@ package com.example.gymfit.system.conf.utils;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -24,9 +20,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class AppUtils {
     private static final String LOG = "KEY_LOG";
@@ -212,6 +210,25 @@ public final class AppUtils {
             }
         }
         return new String[] {"null", "null", "null"};
+    }
+
+    @NonNull
+    public static String getCategoryFromTurnKey(@NonNull final String key) {
+        final String[] gymKeys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        final List<String> types = new ArrayList<String>() {
+            {
+                add(gymKeys[14]);
+                add(gymKeys[15]);
+                add(gymKeys[16]);
+            }
+        };
+
+        final AtomicReference<String> type = new AtomicReference<>();
+        types.stream().filter(key::contains).findFirst()
+                .ifPresent(type::set);
+
+        return type.get();
     }
 
     // Log and Message

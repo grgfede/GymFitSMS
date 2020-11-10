@@ -20,7 +20,7 @@ public class ListDatePickerAdapter extends RecyclerView.Adapter<ListDatePickerAd
     private final List<String> dayPickerValue;
     private final List<String> dayPickerKeys;
     private final Context context;
-    public int itemCheckedPosition = RecyclerView.NO_POSITION;
+    private int itemCheckedPosition = RecyclerView.NO_POSITION;
 
     private final OnItemClickListener listener;
 

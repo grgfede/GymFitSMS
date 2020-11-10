@@ -69,6 +69,7 @@
     <string name="prompt_not_available">Non disponibile</string>
     <string name="prompt_subscribe">Iscriviti</string>
     <string name="prompt_book">Prenotati</string>
+    <string name="prompt_unbook">Annulla prenotazione</string>
     <string name="prompt_unsubscribe">Disiscriviti</string>
     <!-- TODO: migrate from database strings -->
     <string name="prompt_subscribers" translatable="false">subscribers</string>

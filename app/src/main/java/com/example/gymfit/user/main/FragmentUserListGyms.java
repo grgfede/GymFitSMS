@@ -70,7 +70,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     private User user = null;
     private final List<Gym> gyms = new ArrayList<>();
 
-    public static FragmentUserListGyms newInstance(User user) {
+    public static FragmentUserListGyms newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserListGyms created");
 
         FragmentUserListGyms fragment = new FragmentUserListGyms();
@@ -164,7 +164,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                 AppUtils.log(Thread.currentThread().getStackTrace(), this.user.getFullname() + " has already a Gym subscription: " + this.user.getSubscription()[0]);
                 AppUtils.message(this.messageAnchor, getString(R.string.user_already_subscribed), Snackbar.LENGTH_SHORT).show();
                 this.listGymAdapter.notifyItemChanged(position);
-            } else {
+            }
+            else {
                 createSubscriptionDialog(item, result -> {
                     // Restore same item in the same position for abord action
                     if (result == null) {
@@ -193,7 +194,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                     }
                 });
             }
-        } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
+        }
+        else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
             DatabaseUtils.getGym(this.user.getSubscription()[0], (item, result) -> createUnsubscribeDialog(item, resultDialog -> {
                 // Restore same item in the same position for abort action
                 if (resultDialog == null) {
@@ -249,7 +251,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void initSystemInterface(@NonNull View rootView) {
+    private void initSystemInterface(@NonNull final View rootView) {
         // init new checked item on navigation Drawer
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
         navigationView.getMenu().findItem(R.id.nav_menu_gyms).setChecked(true);
@@ -305,7 +307,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         }));
     }
 
-    private void setUpSubscribedRecycleView(@NonNull Gym gym) {
+    private void setUpSubscribedRecycleView(@NonNull final Gym gym) {
         RecyclerView listUserSubscriptionRecycle = requireView().getRootView().findViewById(R.id.rv_subscribed);
         listUserSubscriptionRecycle.setHasFixedSize(false);
         listUserSubscriptionRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
@@ -365,7 +367,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      *
      * @param gym Gym object current of swipe event from recycle Adapter
      */
-    private void createSubscriptionDialog(@NonNull Gym gym, OnUserSubscriptionResultCallback callback) {
+    private void createSubscriptionDialog(@NonNull final Gym gym, OnUserSubscriptionResultCallback callback) {
         List<String> subscriptionList = new ArrayList<>();
         gym.getTranslatedSubscriptions().forEach((key, isAvailable) -> {
             if (isAvailable) {
@@ -397,7 +399,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      *
      * @param gym Gym object current of swipe event from recycle Adapter
      */
-    private void createUnsubscribeDialog(@NonNull Gym gym, OnUserSubscriptionResultCallback callback) {
+    private void createUnsubscribeDialog(@NonNull final Gym gym, OnUserSubscriptionResultCallback callback) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(getString(R.string.prompt_unsubscribe));
         final String placeholder = getString(R.string.user_unsubscribing) + " " + gym.getName() + " ?";

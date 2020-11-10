@@ -159,4 +159,7 @@
     <string name="title_onBoarding3">Allenati</string>
     <string name="subtitle_onBoarding3">Presentati in palestra nel giorno da te scelto per allenarti. E’ semplice!</string>
     <string name="onboarding_done">Fatto</string>
+    <string name="prompt_unbook">Annulla prenotazione</string>
+    <string name="user_unbooking">"Stai annullando la prenotazione di "</string>
+    <string name="user_unbooked">Hai annullato la prenotazione.</string>
 </resources>

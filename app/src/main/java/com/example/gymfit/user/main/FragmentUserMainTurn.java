@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 
 import com.example.gymfit.R;
 import com.example.gymfit.system.conf.utils.AppUtils;
+import com.example.gymfit.user.conf.OnTurnFragment;
 import com.example.gymfit.user.conf.User;
 import com.example.gymfit.user.conf.UserViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
@@ -37,7 +38,7 @@ public class FragmentUserMainTurn extends Fragment {
 
     private User user = null;
 
-    public static FragmentUserMainTurn newInstance(@NonNull User user) {
+    public static FragmentUserMainTurn newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserMainTurn created");
 
         FragmentUserMainTurn fragment = new FragmentUserMainTurn();
@@ -99,7 +100,7 @@ public class FragmentUserMainTurn extends Fragment {
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void initSystemInterface(@NonNull View rootView) {
+    private void initSystemInterface(@NonNull final View rootView) {
         // init new checked item on navigation Drawer
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
         navigationView.getMenu().findItem(R.id.nav_menu_subs).setChecked(true);
@@ -111,9 +112,24 @@ public class FragmentUserMainTurn extends Fragment {
         UserViewPagerAdapter adapter = new UserViewPagerAdapter(getChildFragmentManager(), 0);
         adapter.addFragment(FragmentUserListTurns.newInstance(this.user), getString(R.string.system_tab_list_turns));
         adapter.addFragment(FragmentUserPersonalTurn.newInstance(this.user), getString(R.string.system_tab_main_turn));
-
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(final int position) {
+                OnTurnFragment fragment = (OnTurnFragment) adapter.instantiateItem(viewPager, position);
+                fragment.onFragmentBecomeVisible();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(final int state) {
+            }
+        });
 
         // Abilities toolbar item options
         setHasOptionsMenu(true);
