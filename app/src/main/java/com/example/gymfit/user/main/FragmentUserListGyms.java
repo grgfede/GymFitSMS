@@ -16,7 +16,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,7 +73,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     private User user = null;
     private final List<Gym> gyms = new ArrayList<>();
 
-    public static FragmentUserListGyms newInstance(User user) {
+    public static FragmentUserListGyms newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserListGyms created");
 
         FragmentUserListGyms fragment = new FragmentUserListGyms();
@@ -82,7 +85,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(USER_KEY);
@@ -90,7 +93,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_list_gyms, container, false);
 
@@ -103,14 +106,35 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        final SwipeRefreshLayout refreshLayout = view.findViewById(R.id.refresher);
+        refreshLayout.setColorSchemeResources(R.color.tint_refresher,
+                R.color.tint_refresher_first, R.color.tint_refresher_second, R.color.tint_refresher_third);
+
+        // if pull down with gesture refresh all available gyms adapter
+        refreshLayout.setOnRefreshListener(() -> {
+            AppUtils.message(this.messageAnchor, getString(R.string.refresh_gyms_available), Snackbar.LENGTH_SHORT).show();
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                refreshLayout.setRefreshing(false);
+                refreshGymAvailableAdapter();
+
+                AppUtils.message(this.messageAnchor, getString(R.string.refresh_completed), Snackbar.LENGTH_SHORT).show();
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Refresh gyms available adapter.");
+            }, AppUtils.getRandomDelayMillis());
+        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull final MenuInflater inflater) {
         inflater.inflate(R.menu.menu_user_list_gyms_toolbar, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @SuppressLint("NonConstantResourceId")
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         // If there are some subscribers so enable actions of new menu, otherwise keep them disabled (no effects on recycle) to avoid exception
         if (!this.isEmptyData) {
             switch (item.getItemId()) {
@@ -154,7 +178,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     @Override
-    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onItemSwipe(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         if (viewHolder instanceof ListGymAdapter.MyViewHolder) {
             final String name = this.gyms.get(position).getName();
             final String uid = this.gyms.get(position).getUid();
@@ -164,7 +188,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                 AppUtils.log(Thread.currentThread().getStackTrace(), this.user.getFullname() + " has already a Gym subscription: " + this.user.getSubscription()[0]);
                 AppUtils.message(this.messageAnchor, getString(R.string.user_already_subscribed), Snackbar.LENGTH_SHORT).show();
                 this.listGymAdapter.notifyItemChanged(position);
-            } else {
+            }
+            else {
                 createSubscriptionDialog(item, result -> {
                     // Restore same item in the same position for abord action
                     if (result == null) {
@@ -193,7 +218,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                     }
                 });
             }
-        } else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
+        }
+        else if (viewHolder instanceof ListUserSubscribedAdapter.MyViewHolder) {
             DatabaseUtils.getGym(this.user.getSubscription()[0], (item, result) -> createUnsubscribeDialog(item, resultDialog -> {
                 // Restore same item in the same position for abort action
                 if (resultDialog == null) {
@@ -230,7 +256,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == MY_GPS_TRACKER_CODE) {
@@ -249,7 +275,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void initSystemInterface(@NonNull View rootView) {
+    private void initSystemInterface(@NonNull final View rootView) {
         // init new checked item on navigation Drawer
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
         navigationView.getMenu().findItem(R.id.nav_menu_gyms).setChecked(true);
@@ -296,7 +322,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                             }
 
                             if (count.get() == size) {
-                                setUpRecycleView();
+                                setUpGymAvailableRecycleView();
                             }
                         }));
                     }
@@ -305,7 +331,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         }));
     }
 
-    private void setUpSubscribedRecycleView(@NonNull Gym gym) {
+    private void setUpSubscribedRecycleView(@NonNull final Gym gym) {
         RecyclerView listUserSubscriptionRecycle = requireView().getRootView().findViewById(R.id.rv_subscribed);
         listUserSubscriptionRecycle.setHasFixedSize(false);
         listUserSubscriptionRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
@@ -321,7 +347,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         itemTouchHelper.attachToRecyclerView(listUserSubscriptionRecycle);
     }
 
-    private void setUpRecycleView() {
+    private void setUpGymAvailableRecycleView() {
         RecyclerView listGymRecycle = requireView().getRootView().findViewById(R.id.rv_gyms);
         listGymRecycle.setHasFixedSize(false);
         listGymRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
@@ -365,7 +391,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      *
      * @param gym Gym object current of swipe event from recycle Adapter
      */
-    private void createSubscriptionDialog(@NonNull Gym gym, OnUserSubscriptionResultCallback callback) {
+    private void createSubscriptionDialog(@NonNull final Gym gym, @NonNull final OnUserSubscriptionResultCallback callback) {
         List<String> subscriptionList = new ArrayList<>();
         gym.getTranslatedSubscriptions().forEach((key, isAvailable) -> {
             if (isAvailable) {
@@ -397,7 +423,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
      *
      * @param gym Gym object current of swipe event from recycle Adapter
      */
-    private void createUnsubscribeDialog(@NonNull Gym gym, OnUserSubscriptionResultCallback callback) {
+    private void createUnsubscribeDialog(@NonNull final Gym gym, @NonNull final OnUserSubscriptionResultCallback callback) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(getString(R.string.prompt_unsubscribe));
         final String placeholder = getString(R.string.user_unsubscribing) + " " + gym.getName() + " ?";
@@ -494,6 +520,36 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
 
         // Remove User UID from Gym node Database
         DatabaseUtils.removeGymSubscriber(gym.getUid(), this.user.getUid(), (data, result) -> {});
+    }
+
+    private void refreshGymAvailableAdapter() {
+        final List<Gym> filteredList = new ArrayList<>();
+
+        // After reset of Gyms available list, take again from Database all gyms and replace them into Adapter to refresh it.
+        DatabaseUtils.getGymsID(((data, result) -> {
+            if (result == DatabaseUtils.RESULT_OK) {
+                final int size = data.contains(this.user.getSubscription()[0])
+                        ? (data.size()-1) : data.size();
+                final AtomicInteger count = new AtomicInteger(0);
+
+                data.forEach(uid -> {
+                    if (!uid.equals(this.user.getSubscription()[0])) {
+                        DatabaseUtils.getGym(uid, ((dataGym, resultGym) -> {
+                            if (resultGym == DatabaseUtils.RESULT_OK) {
+                                filteredList.add(dataGym);
+                                count.incrementAndGet();
+                            }
+
+                            if (count.get() == size) {
+                                this.listGymAdapter.refreshItems(filteredList);
+                                this.gyms.clear();
+                                this.gyms.addAll(filteredList);
+                            }
+                        }));
+                    }
+                });
+            }
+        }));
     }
 
 }

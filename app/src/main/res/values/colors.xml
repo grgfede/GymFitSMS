@@ -51,4 +51,10 @@
     <color name="tint_image_icon_light">@color/quantum_grey600</color>
     <color name="tint_image_icon_dark">@color/quantum_greywhite1000</color>
 
+    <!-- Refresher -->
+    <color name="tint_refresher">@color/quantum_deeppurpleA700</color>
+    <color name="tint_refresher_first">@color/quantum_amberA700</color>
+    <color name="tint_refresher_second">@color/quantum_googredA700</color>
+    <color name="tint_refresher_third">@color/quantum_googblueA700</color>
+
 </resources>

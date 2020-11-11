@@ -22,52 +22,21 @@
             <LinearLayout
                 android:id="@+id/date_picker"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:baselineAligned="false"
-                app:layout_constraintTop_toTopOf="parent"
-                android:orientation="vertical">
-
-                <!--  Top bar -->
-                <LinearLayout
-                    android:id="@+id/date_picker_top_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="124dp"
-                    android:orientation="vertical"
-                    android:weightSum="2"
-                    android:background="@color/background_button_default"
-                    android:padding="16dp">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:textAlignment="textStart"
-                        android:textAllCaps="true"
-                        android:textColor="@color/tint_first_line_dark"
-                        android:textSize="12sp"
-                        android:text="@string/helper_user_date_picker" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/date_picker_curr_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0"
-                        android:textColor="@color/tint_first_line_dark"
-                        android:textAlignment="textStart"
-                        android:textSize="24sp" />
-
-                </LinearLayout>
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <!-- Content -->
                 <LinearLayout
                     android:id="@+id/date_picker_values"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:minHeight="124dp"
                     android:orientation="horizontal"
-                    android:paddingHorizontal="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="16dp">
+                    android:paddingHorizontal="16dp">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/date_picker_rv"
@@ -77,22 +46,38 @@
 
                 </LinearLayout>
 
-                <!-- Bottom Divider -->
-                <View android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="?android:attr/listDivider"/>
+                <!--  Top bar -->
+                <LinearLayout
+                    android:id="@+id/date_picker_top_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:gravity="bottom"
+                    android:background="@color/background_button_default">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/date_picker_curr_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/tint_first_line_dark"
+                        android:textAlignment="textEnd"
+                        android:textSize="24sp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Turn picker -->
+            <!-- Turn picked -->
             <LinearLayout
                 android:id="@+id/turn_picker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:baselineAligned="false"
-                app:layout_constraintTop_toBottomOf="@id/date_picker"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/date_picker">
 
                 <!-- Gym info -->
                 <LinearLayout
@@ -100,7 +85,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:weightSum="2"
-                    android:padding="16dp"
+                    android:paddingHorizontal="16dp"
+                    android:paddingTop="8dp"
                     android:baselineAligned="false">
 
                     <com.google.android.material.textview.MaterialTextView
@@ -121,7 +107,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                         android:textColor="@color/tint_title"
                         android:textAlignment="textEnd"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 

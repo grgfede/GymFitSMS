@@ -1,11 +1,9 @@
 package com.example.gymfit.system.conf.recycleview;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -16,13 +14,13 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.List;
 
-public class ListTurnAdapter extends RecyclerView.Adapter<ListTurnAdapter.MyViewHolder> {
+public class ListTurnPickerAdapter extends RecyclerView.Adapter<ListTurnPickerAdapter.MyViewHolder> {
     private final List<String> turns;
     private final Context context;
 
     private final OnItemClickListener listener;
 
-    public ListTurnAdapter(@NonNull final Context context, @NonNull final List<String> turns, final OnItemClickListener listener) {
+    public ListTurnPickerAdapter(@NonNull final Context context, @NonNull final List<String> turns, final OnItemClickListener listener) {
         this.turns = turns;
         this.context = context;
         this.listener = listener;
@@ -47,14 +45,14 @@ public class ListTurnAdapter extends RecyclerView.Adapter<ListTurnAdapter.MyView
 
     @NonNull
     @Override
-    public ListTurnAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListTurnPickerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(R.layout.layout_recycleview_turn_picker, parent, false);
-        return new ListTurnAdapter.MyViewHolder(view);
+        return new ListTurnPickerAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListTurnAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListTurnPickerAdapter.MyViewHolder holder, int position) {
         holder.bind(position, this.listener);
 
         holder.title.setText(this.turns.get(position));

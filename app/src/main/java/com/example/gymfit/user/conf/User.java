@@ -190,6 +190,10 @@ public class User extends GenericUser implements Serializable, Parcelable {
         this.turns.add(turn);
     }
 
+    public void removeTurn(@NonNull Map<String, Object> turn) {
+        this.turns.remove(turn);
+    }
+
     // Other methods
 
     @NonNull

@@ -159,4 +159,11 @@
     <string name="user_booking">"Are you sure you want to subscribe at: "</string>
     <string name="prompt_book">Book</string>
     <string name="user_booked">You booked at: \n</string>
+    <string name="prompt_unbook">Unbook</string>
+    <string name="user_unbooking">"Are you unbooking the turn at "</string>
+    <string name="user_unbooked">You unbooked the turn.</string>
+    <string name="refresh_gyms_available">Search new available gyms…</string>
+    <string name="refresh_turns_available">Refresh available turns…</string>
+    <string name="refresh_turns_picked">Refresh booked turns…</string>
+    <string name="refresh_completed">Refresh completed</string>
 </resources>

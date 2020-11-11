@@ -35,7 +35,7 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
 
     private final OnItemClickListener listener;
 
-    public ListGymAdapter(@NonNull Context ct, @NonNull List<Gym> gyms, OnItemClickListener listener) {
+    public ListGymAdapter(@NonNull final Context ct, @NonNull final List<Gym> gyms, OnItemClickListener listener) {
         this.context = ct;
         this.gyms = gyms;
         this.gymsFull = new ArrayList<>(this.gyms);
@@ -353,7 +353,7 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
         }
     };
 
-    private void filterCompare(List<Gym> filteredList, @NonNull String constraint, @NonNull String rule) {
+    private void filterCompare(@NonNull List<Gym> filteredList, @NonNull final String constraint, @NonNull final String rule) {
         filteredList.clear();
 
         if (rule.equals("search")) {
@@ -405,19 +405,19 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
 
     // Other methods
 
-    public void removeItem(int position) {
+    public void removeItem(final int position) {
         this.gyms.remove(position);
         this.gymsFull.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(@NonNull Gym item, int position) {
+    public void restoreItem(@NonNull final Gym item, final int position) {
         this.gyms.add(position, item);
         this.gymsFull.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void addItem(@NonNull Gym item) {
+    public void addItem(@NonNull final Gym item) {
         this.gyms.add(item);
         this.gymsFull.add(item);
         notifyItemInserted(this.gyms.indexOf(item));
@@ -425,7 +425,15 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
         Log.d("KEY_LOG", this.gyms.size() + " " + this.gymsFull.size());
     }
 
-    public void setCurrentLocation(@NonNull LatLng currentLocation) {
+    public void refreshItems(@NonNull final List<Gym> gyms) {
+        this.gyms.clear();
+        this.gyms.addAll(gyms);
+        this.gymsFull.clear();
+        this.gymsFull.addAll(gyms);
+        notifyDataSetChanged();
+    }
+
+    public void setCurrentLocation(@NonNull final LatLng currentLocation) {
         this.currentLocation = currentLocation;
         AppUtils.log(Thread.currentThread().getStackTrace(), "Current location is:" +
                 " lat " + currentLocation.latitude +
@@ -438,7 +446,7 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
      *
      * @return Distance in Meters
      */
-    private static double distance(@NonNull LatLng startPoint, @NonNull LatLng endPoint) {
+    private static double distance(@NonNull final LatLng startPoint, @NonNull final LatLng endPoint) {
         final int R = 6371; // Radius of the earth
 
         double latDistance = Math.toRadians(endPoint.latitude - startPoint.latitude);

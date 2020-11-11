@@ -3,6 +3,7 @@ package com.example.gymfit.user.main;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ public class FragmentUserProfile extends Fragment {
     private boolean isEmptyData = false;
     private List<String> emptyData = new ArrayList<>();
 
-    public static FragmentUserProfile newInstance(User user, boolean isEmptyData, ArrayList<String> emptyData) {
+    public static FragmentUserProfile newInstance(@NonNull final User user, final boolean isEmptyData, @NonNull final ArrayList<String> emptyData) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserProfile created");
 
         FragmentUserProfile fragment = new FragmentUserProfile();
@@ -56,7 +57,7 @@ public class FragmentUserProfile extends Fragment {
     }
 
     @Override
-    public void onCreate(@NotNull Bundle savedInstanceState) {
+    public void onCreate(@NotNull final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(USER_KEY);
@@ -66,7 +67,7 @@ public class FragmentUserProfile extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
@@ -76,7 +77,7 @@ public class FragmentUserProfile extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull final MenuInflater inflater) {
         inflater.inflate(R.menu.menu_user_profile_toolbar, menu);
         this.toolbar = menu;
         super.onCreateOptionsMenu(menu, inflater);
@@ -91,7 +92,7 @@ public class FragmentUserProfile extends Fragment {
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void initSystemInterface(View rootView) {
+    private void initSystemInterface(@NonNull final View rootView) {
         // init new checked item on navigation Drawer
         NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
         navigationView.getMenu().findItem(R.id.nav_menu_home).setChecked(true);

@@ -57,7 +57,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     private boolean isEmptyData = false;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
@@ -80,14 +80,14 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(@NonNull final Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_user_toolbar, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         if (item.getItemId() == R.id.system_toolbar_logout){
             FirebaseAuth.getInstance().signOut();
             finish();
@@ -105,7 +105,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
+    public boolean dispatchTouchEvent(@NonNull final MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
             if ( v instanceof TextInputEditText) {
@@ -122,7 +122,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         if (item.getItemId() == R.id.nav_menu_home && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentUserProfile.newInstance(this.user, !this.isEmptyData, (ArrayList<String>) this.emptyData), false);
         } else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
@@ -141,7 +141,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     }
 
     @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE || newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
