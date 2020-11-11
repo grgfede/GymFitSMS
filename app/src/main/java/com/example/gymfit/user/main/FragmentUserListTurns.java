@@ -9,7 +9,10 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,7 +86,7 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(USER_KEY);
@@ -91,7 +94,7 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_user_list_turns, container, false);
 
@@ -110,9 +113,9 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentLaid = true;
+        this.fragmentLaid = true;
     }
 
     @Override
@@ -121,6 +124,13 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
         if (fragmentLaid && !this.user.getSubscription()[0].equals("null")) {
             refreshTurnPickerAdapter();
         }
+    }
+
+    @Override
+    public void onFragmentRefresh() {
+        refreshTurnPickerAdapter();
+        AppUtils.message(this.messageAnchor, getString(R.string.refresh_completed), Snackbar.LENGTH_SHORT).show();
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Refresh turns available adapter.");
     }
 
     // Interface methods
@@ -482,7 +492,7 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
      *
      * @param message date string complete of turn selected from user
      */
-    private void createSubscribeDialog(@NonNull final String message, OnUserSubscriptionResultCallback callback) {
+    private void createSubscribeDialog(@NonNull final String message, @NonNull final OnUserSubscriptionResultCallback callback) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(getString(R.string.prompt_book));
         final String placeholder = getString(R.string.user_booking) + "\n" + message + " ?";
@@ -547,10 +557,8 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
                         this.listDatePickerAdapter.getItemChecked());
 
                 if (turnAvailable != null) {
-
+                    ((ListTurnPickerAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).replaceItems(turnAvailable);
                 }
-
-                ((ListTurnPickerAdapter) Objects.requireNonNull(recycleViewTurnMap.get(turnKey))[1]).replaceItems(turnAvailable);
             });
         }));
     }

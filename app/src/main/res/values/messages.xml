@@ -49,4 +49,9 @@
     <string name="user_unbooked">Hai annullato la prenotazione.</string>
     <string name="user_already_subscribed">Sei già iscritto…</string>
 
+    <string name="refresh_gyms_available">Ricerca nuove palestre disponibili…</string>
+    <string name="refresh_turns_available">Ricerca nuovi turni disponibili…</string>
+    <string name="refresh_turns_picked">Ricarica turni prenotati…</string>
+    <string name="refresh_completed">Ricerca completata</string>
+
 </resources>

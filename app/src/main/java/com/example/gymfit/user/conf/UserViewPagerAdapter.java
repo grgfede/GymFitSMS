@@ -14,13 +14,13 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> fragments = new ArrayList<>();
     private final List<String> fragmentTitles = new ArrayList<>();
 
-    public UserViewPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+    public UserViewPagerAdapter(@NonNull final FragmentManager fm, final int behavior) {
         super(fm, behavior);
     }
 
     @NonNull
     @Override
-    public Fragment getItem(int position) {
+    public Fragment getItem(final int position) {
         return fragments.get(position);
     }
 
@@ -31,11 +31,11 @@ public class UserViewPagerAdapter extends FragmentPagerAdapter {
 
     @Nullable
     @Override
-    public CharSequence getPageTitle(int position) {
+    public CharSequence getPageTitle(final int position) {
         return fragmentTitles.get(position);
     }
 
-    public void addFragment(@NonNull Fragment fragment, @NonNull String title) {
+    public void addFragment(@NonNull final Fragment fragment, @NonNull final String title) {
         this.fragments.add(fragment);
         this.fragmentTitles.add(title);
     }

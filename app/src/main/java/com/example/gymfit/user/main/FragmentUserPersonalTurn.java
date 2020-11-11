@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +57,6 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
     private static final String USER_KEY = "user_key";
 
     private View messageAnchor = null;
-
     private User user = null;
 
     private final Map<String, MaterialTextView> textViewMap = new HashMap<>();
@@ -77,7 +79,7 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
     private boolean fragmentLaid = false;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(USER_KEY);
@@ -85,7 +87,7 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_personal_turn, container, false);
 
@@ -98,13 +100,13 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        fragmentLaid = true;
+        this.fragmentLaid = true;
     }
 
     @Override
-    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int position) {
+    public void onItemSwipe(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
         final String itemDate = new SimpleDateFormat("EEEE dd, ", Locale.getDefault())
                 .format(((Date) ((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn()[0]));
         final String itemType = AppUtils.getTurnValueFromKey(String.valueOf(((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn()[1]));
@@ -141,6 +143,13 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
         }
     }
 
+    @Override
+    public void onFragmentRefresh() {
+        refreshTurnPickedAdapter();
+        AppUtils.message(this.messageAnchor, getString(R.string.refresh_completed), Snackbar.LENGTH_SHORT).show();
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Refresh turns available adapter.");
+    }
+
     // Interface methods
 
     /**
@@ -148,7 +157,7 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
      *
      * @param rootView Root View object of Fragment. From it can be get the context.
      */
-    private void initSystemInterface(@NonNull View rootView) {
+    private void initSystemInterface(@NonNull final View rootView) {
         // init message Anchor for Snackbar
         this.messageAnchor = rootView.findViewById(R.id.anchor);
 
@@ -270,7 +279,7 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
     }
 
     private void setRecycleViewDatePicker(@NonNull final View rootView, @NonNull final List<String> dateValues, @NonNull final List<String> dateKeys,
-                                          OnItemClickListener listener) {
+                                          @NonNull final OnItemClickListener listener) {
         final RecyclerView datePickerRecycleView = rootView.findViewById(R.id.date_picker_rv);
         datePickerRecycleView.setHasFixedSize(true);
         datePickerRecycleView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 7));
@@ -345,7 +354,7 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
         return filteredList;
     }
 
-    private void removeTurnFromUser(@NonNull Object[] turn) {
+    private void removeTurnFromUser(@NonNull final Object[] turn) {
         final String[] userKeys = getResources().getStringArray(R.array.user_field);
 
         // remove current User object turn

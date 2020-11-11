@@ -30,7 +30,7 @@
         </com.google.android.material.tabs.TabLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
+    
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresher"
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:id="@+id/user_view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
+        
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+    
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

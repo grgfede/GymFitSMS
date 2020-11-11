@@ -3,6 +3,7 @@ package com.example.gymfit.user.main;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -56,7 +57,7 @@ public class FragmentUserProfile extends Fragment {
     }
 
     @Override
-    public void onCreate(@NotNull Bundle savedInstanceState) {
+    public void onCreate(@NotNull final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.user = (User) getArguments().getSerializable(USER_KEY);
@@ -66,7 +67,7 @@ public class FragmentUserProfile extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
@@ -76,7 +77,7 @@ public class FragmentUserProfile extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull final Menu menu, @NonNull final MenuInflater inflater) {
         inflater.inflate(R.menu.menu_user_profile_toolbar, menu);
         this.toolbar = menu;
         super.onCreateOptionsMenu(menu, inflater);

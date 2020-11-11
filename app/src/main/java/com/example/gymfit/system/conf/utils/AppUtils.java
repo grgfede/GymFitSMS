@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 public final class AppUtils {
@@ -127,6 +128,18 @@ public final class AppUtils {
         // Expansion speed of 1dp/ms: (int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)
         a.setDuration(150);
         view.startAnimation(a);
+    }
+
+    /**
+     * Return a simple random delay millis time
+     *
+     * @return random delay millis time between 2-8s
+     */
+    public static int getRandomDelayMillis() {
+        final int minDelay = 2000;
+        final int maxDelay = 6000;
+
+        return minDelay + (new Random().nextInt(maxDelay));
     }
 
     // Users class
