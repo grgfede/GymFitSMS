@@ -17,24 +17,21 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class User extends GenericUser implements Serializable, Parcelable {
-
-    private LatLng location; // TODO: safe delete
-
-    // New value
     private String fullname;
     private String name;
     private String surname;
     private Date dateOfBirthday;
+    private LatLng location;
     private String address;
     private String gender;
     private String img;
     private String[] subscription; // 0 - GymID, 1 - subscriptionType
     private List<Map<String, Object>> turns; // Map at index 0 - turnDate (as Timestamp), Map at index 1 - turnVale (morningFirst, afternoonSecond...)
 
-    public User (String name, String surname, String phone, String email, String gender, String uid) {
+    public User (@NonNull final String name, @NonNull final String surname, @NonNull final String phone,
+                 @NonNull final String email, @NonNull final String gender, @NonNull final String uid) {
         super(uid, email, phone);
         this.fullname = name + " " + surname;
         this.name = name;
@@ -42,14 +39,17 @@ public class User extends GenericUser implements Serializable, Parcelable {
         this.gender = gender;
     }
 
-    public User(String name, String surname, String gender, Date dateOfBirthday, LatLng location, String address, String phone) {
+    public User(@NonNull final String name, @NonNull final String surname, @NonNull final String gender, @NonNull final Date dateOfBirthday,
+                @NonNull final LatLng location, @NonNull final String address, String phone) {
         this(name, surname, phone, "", gender, "");
         this.location = location;
         this.address = address;
         this.dateOfBirthday = dateOfBirthday;
     }
 
-    public User(String name, String surname, String phone, String email, String gender, String uid, String img, String[] subscription, List<Map<String, Object>> turns) {
+    public User(@NonNull final String name, @NonNull final String surname, @NonNull final String phone,
+                @NonNull final String email, @NonNull final String gender, @NonNull final String uid, @NonNull final String img, @NonNull final String[] subscription,
+                @NonNull final List<Map<String, Object>> turns) {
         this(name, surname, phone, email, gender, uid);
         this.img = img;
         this.subscription = subscription;
@@ -57,9 +57,9 @@ public class User extends GenericUser implements Serializable, Parcelable {
     }
 
     // Constructor with all new values
-    public User(String uid, String name, String surname, String email,
-                Date dateOfBirthday, String address, String gender, String img, String phone,
-                String[] subscription, List<Map<String, Object>> turns) {
+    public User(@NonNull final String uid, @NonNull final String name, @NonNull final String surname, @NonNull final String email,
+                @NonNull final Date dateOfBirthday, @NonNull final String address, @NonNull final String gender, @NonNull final String img,
+                @NonNull final String phone, @NonNull final String[] subscription, @NonNull final List<Map<String, Object>> turns) {
         this(name, surname, phone, email, gender, uid);
         this.dateOfBirthday = dateOfBirthday;
         this.address = address;
@@ -71,7 +71,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
 
     // Get methods
 
-    protected User(Parcel in) {
+    protected User(@NonNull final Parcel in) {
         super("", "", "");
         setFullname(in.readString());
         setName(in.readString());
@@ -86,6 +86,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
         setGender(in.readString());
     }
 
+    @NonNull
     public static final Creator<User> CREATOR = new Creator<User>() {
         @Override
         public User createFromParcel(Parcel in) {
@@ -104,7 +105,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull final Parcel dest, final int flags) {
         dest.writeString(getFullname());
         dest.writeString(getName());
         dest.writeString(getSurname());
@@ -118,18 +119,22 @@ public class User extends GenericUser implements Serializable, Parcelable {
         dest.writeString(getGender());
     }
 
+    @NonNull
     public String getFullname() {
         return fullname;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
+    @NonNull
     public String getSurname() {
         return surname;
     }
 
+    @NonNull
     public String getGender() {
         return gender;
     }
@@ -138,59 +143,64 @@ public class User extends GenericUser implements Serializable, Parcelable {
         return dateOfBirthday;
     }
 
+    @NonNull
     public String getImg(){ return img;}
 
+    @NonNull
     public LatLng getLocation(){return location;}
 
+    @NonNull
     public String getAddress(){return address;}
 
+    @NonNull
     public String[] getSubscription() {
         return subscription;
     }
 
+    @NonNull
     public List<Map<String, Object>> getTurns() {
         return turns;
     }
 
     // Set methods
 
-    public void setFullname(String fullname) {
+    public void setFullname(@NonNull final String fullname) {
         this.fullname = fullname;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull final String name) {
         this.name = name;
     }
 
-    public void setSurname(String surname) {
+    public void setSurname(@NonNull final String surname) {
         this.surname = surname;
     }
 
-    public void setGender(String gender) {
+    public void setGender(@NonNull final String gender) {
         this.gender = gender;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(@NonNull final String address) {
         this.address = address;
     }
 
-    public void setImg(String img) {
+    public void setImg(@NonNull final String img) {
         this.img = img;
     }
 
-    public void setSubscription(@NonNull String[] subscription) {
+    public void setSubscription(@NonNull final String[] subscription) {
         this.subscription = subscription;
     }
 
-    public void setTurns(@NonNull List<Map<String, Object>> turns) {
+    public void setTurns(@NonNull final List<Map<String, Object>> turns) {
         this.turns = turns;
     }
 
-    public void setTurn(@NonNull Map<String, Object> turn) {
+    public void setTurn(@NonNull final Map<String, Object> turn) {
         this.turns.add(turn);
     }
 
-    public void removeTurn(@NonNull Map<String, Object> turn) {
+    public void removeTurn(@NonNull final Map<String, Object> turn) {
         this.turns.remove(turn);
     }
 

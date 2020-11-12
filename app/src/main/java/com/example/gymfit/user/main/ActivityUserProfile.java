@@ -70,13 +70,16 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
             DatabaseUtils.getUser(this.userUID, ((data, result) -> {
                 if (result == DatabaseUtils.RESULT_OK) {
                     this.user = data;
-                    isEmptyData = initDatabaseFromEmpty().isEmpty();
+                    this.emptyData.clear();
+                    this.emptyData.addAll(initDatabaseFromEmpty());
+                    this.isEmptyData = this.emptyData.isEmpty();
                     AppUtils.startFragment(this, FragmentUserProfile.newInstance(this.user, !this.isEmptyData, (ArrayList<String>) this.emptyData), false);
                     navigationView.setCheckedItem(R.id.nav_menu_home);
                 }
             }));
-        }
 
+            AppUtils.log(Thread.currentThread().getStackTrace(), "ActivityUserProfile created.");
+        }
     }
 
     @Override
@@ -169,6 +172,32 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     // Set methods
 
     /**
+     * Initialize toolbar, drawer, tab and current User logged uid
+     *
+     * @param uid current User uid used to get from database values and to init other fragments
+     */
+    private void initSystemInterface(@NonNull final String uid) {
+        this.userUID = uid;
+
+        // Initialize Google Place API
+        Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
+
+        // Get Toolbar from layout XML and init it
+        MaterialToolbar materialToolbar = findViewById(R.id.menu_user_toolbar);
+        setSupportActionBar(materialToolbar);
+
+        // Get Drawer from layout XML and init it
+        this.drawer = findViewById(R.id.drawer_user);
+        this.navigationView = findViewById(R.id.navigation_user);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, this.drawer, materialToolbar, R.string.title_open_drawer, R.string.title_close_open_drawer);
+        this.drawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        this.navigationView.setNavigationItemSelectedListener(this);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of ActivityUserProfile initialized");
+    }
+
+    /**
      * Init Database critical node with default values
      */
     @NonNull
@@ -199,32 +228,6 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
 
         AppUtils.log(Thread.currentThread().getStackTrace(), "Empty keys: " + emptyKeys.toString());
         return emptyKeys;
-    }
-
-    /**
-     * Initialize toolbar, drawer, tab and current User logged uid
-     *
-     * @param uid current User uid used to get from database values and to init other fragments
-     */
-    private void initSystemInterface(@NonNull final String uid) {
-        this.userUID = uid;
-
-        // Initialize Google Place API
-        Places.initialize(getApplicationContext(), getResources().getString(R.string.map_key));
-
-        // Get Toolbar from layout XML and init it
-        MaterialToolbar materialToolbar = findViewById(R.id.menu_user_toolbar);
-        setSupportActionBar(materialToolbar);
-
-        // Get Drawer from layout XML and init it
-        this.drawer = findViewById(R.id.drawer_user);
-        this.navigationView = findViewById(R.id.navigation_user);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, this.drawer, materialToolbar, R.string.title_open_drawer, R.string.title_close_open_drawer);
-        this.drawer.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-        this.navigationView.setNavigationItemSelectedListener(this);
-
-        AppUtils.log(Thread.currentThread().getStackTrace(), "System interface of ActivityUserProfile initialized");
     }
 
 }

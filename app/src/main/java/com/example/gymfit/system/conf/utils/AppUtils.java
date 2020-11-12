@@ -225,6 +225,33 @@ public final class AppUtils {
         return new String[] {"null", "null", "null"};
     }
 
+    /**
+     * This methods converts all turn keys (of morning, afternoon and evening) as a list of string arrays and all category in another string array.
+     * So find, in a loop, the correspondents category of which passed by param and return its values.
+     * In the end (with all negative responses) return a string array fill of "null" string value.
+     *
+     * @param category project turn key (morning, afternoon, evening) used to find correspondents a same turn values (10:00-11:0, 15:00-16:00, 19:00-20:00)
+     * @return turn value as String array
+     */
+    @NonNull
+    public static String[] getTurnValuesFromCategory(@NonNull final String category) {
+        final String[] types = new String[] {"morning", "afternoon", "evening"};
+        final List<String[]> values = new LinkedList<String[]>() {
+            {
+                add(ResourceUtils.getStringArrayFromID(R.array.morning_session_value));
+                add(ResourceUtils.getStringArrayFromID(R.array.afternoon_session_value));
+                add(ResourceUtils.getStringArrayFromID(R.array.evening_session_value));
+            }
+        };
+
+        for (int i=0; i<types.length; i++) {
+            if (types[i].equals(category)) {
+                return values.get(i);
+            }
+        }
+        return new String[] {"null", "null", "null"};
+    }
+
     @NonNull
     public static String getCategoryFromTurnKey(@NonNull final String key) {
         final String[] gymKeys = ResourceUtils.getStringArrayFromID(R.array.gym_field);

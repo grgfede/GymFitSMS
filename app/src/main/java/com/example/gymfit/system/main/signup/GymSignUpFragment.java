@@ -375,7 +375,7 @@ public class GymSignUpFragment extends Fragment {
         data.put("subscription", subscriptions);
 
 
-        gym = new Gym(uid, email, phone, name, address, null, new LatLng(latitude, longitude), null);
+        gym = new Gym(uid, email, phone, name, address, new ArrayList<>(), new LatLng(latitude, longitude), "null");
 
 
         db = FirebaseFirestore.getInstance();

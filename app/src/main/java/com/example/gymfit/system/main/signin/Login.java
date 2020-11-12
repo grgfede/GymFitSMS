@@ -1,6 +1,7 @@
 package com.example.gymfit.system.main.signin;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -13,153 +14,165 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.gymfit.R;
+import com.example.gymfit.system.conf.utils.AppUtils;
+import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.system.main.ActivitySystemOnBoarding;
 import com.example.gymfit.system.main.PasswordRecovery;
 import com.example.gymfit.system.main.signup.GymSignUp;
 import com.example.gymfit.user.main.ActivityUserProfile;
 import com.example.gymfit.system.main.signup.SignUp;
 import com.example.gymfit.gym.main.ActivityGymProfile;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class Login extends AppCompatActivity {
 
-    EditText emailId, password;
-    TextView signUp, signUpGym;
-    TextView forgotPsw;
-    Button btnLogin;
-    FirebaseAuth mFirebaseAuth;
+    private EditText emailId, password;
+    private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
     private SharedPreferences preferences;
 
+    private View messageAnchor;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_login);
 
+        initSystemInterface();
+        initInterface();
+
+        // To close automatically keyboard on click on screen
+        this.messageAnchor.setOnClickListener(this::hideKeyboard);
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Login activity created.");
+    }
+
+    // Set interface
+
+    private void initSystemInterface() {
+        // its used to support vector in Android API less then 21
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
-        // CONTROLLO SE L'ONBOARDING DEVE ESSERE VISUALIZZATO SFRUTTANDO LE PREFERENZE DI SISTEMA DELL'APP
-        preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+        // used to anchor Snackbar messages at interface layout xml
+        this.messageAnchor = findViewById(R.id.loginParentLayout);
 
+        // get system preferences to init onboard initialization
+        this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
 
-        if(!preferences.getBoolean("onboarding_complete",false)){
-
-            Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
+        if(!this.preferences.getBoolean("onboarding_complete",false)) {
+            final Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
             startActivity(onboarding);
             finish();
-            return;
-        } else if (preferences.getString("uid", null) != null){
-            /*
-             * CONTROLLO SE L'UTENTE HA EFFETTUATO IL LOGIN PRECEDENTEMENTE
-             * COME? Se nelle impostazioni di sistema, la chiave "uid" è null, allora non ha effettuato il login, se non è null
-             *  mi riporta nell'activity del profio
-             */
-            signInIntent(preferences.getString("uid", null));
         }
-
-        mFirebaseAuth = FirebaseAuth.getInstance(); //INSTANZIO L'OGGETTO FIREBASE PER L'AUTENTICAZIONE
-        //MI INSTANZIO GLI ELEMENTI
-        emailId = findViewById(R.id.txtEmail);
-        password = findViewById(R.id.txtPassword);
-        forgotPsw = findViewById(R.id.txtForgotPsw);
-        signUp = findViewById(R.id.textCreate);
-        signUpGym = findViewById(R.id.textCreate2);
-        btnLogin = findViewById(R.id.btnLogin);
-
-
-
-        forgotPsw.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Login.this, PasswordRecovery.class);
-                startActivity(intent);
+        // if the "onboard" key of system preference is null means that this is first time of login for User,
+        // otherwise just skip login and start correct activity
+        else {
+            final String uid = this.preferences.getString("uid", null);
+            if (uid != null) {
+                signInIntent(uid);
             }
+        }
+    }
+
+    private void initInterface() {
+        this.emailId = findViewById(R.id.txtEmail);
+        this.password = findViewById(R.id.txtPassword);
+        final TextView forgotPsw = findViewById(R.id.txtForgotPsw);
+        final Button btnLogin = findViewById(R.id.btnLogin);
+
+        forgotPsw.setOnClickListener(v -> {
+            final Intent intent = new Intent(Login.this, PasswordRecovery.class);
+            startActivity(intent);
         });
-        //CREO UN LISTENER CHE E' SEMPRE IN ASCOLTO SUL CLICK DEL BOTTONE DI LOGIN
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick (View v){
-                String email = emailId.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA EMAIL INSERITA DALL'UTENTE
-                String pswd = password.getText().toString();            //MI SALVO IL VALORE DELLA TEXTBOX CHE CONTIENE LA PASSWORD INSERITA DALL'UTENTE
-                if (email.isEmpty()) {
-                    emailId.setError("Attenzione! Inserisci email");
-                    emailId.requestFocus();
-                } else if (pswd.isEmpty()) {
-                    password.setError("Attenzione! Inserisci password");
-                    password.requestFocus();
-                } else {
-                    //SE I CAMPI RICHIESTI SONO CORRETTAMENTE COMPILATI, VADO AD ESEGUIRE IL LOGIN
-                    mFirebaseAuth.signInWithEmailAndPassword(email, pswd).addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                /*
-                                 * SE IL LOGIN VA A BUON FINE, PASSO ALL'ALTRA ACTIVITY
-                                 * E MI MEMORIZZO LE INFORMAZIONI DELL'UTENTE IN UN OGGETTO
-                                 */
-                                FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                                Toast.makeText(Login.this, "Autenticazione riuscita.",
-                                        Toast.LENGTH_SHORT).show();
-
-                                assert user != null;
-                                signInIntent(user.getUid());
-
-                            } else {
-                                // SE IL LOGIN NON VA A BUON FINE, MOSTRO UN MESSAGGIO POPUP ALL'UTENTE PER AVVISARLO
-                                Toast.makeText(Login.this, "Autenticazione fallita.", Toast.LENGTH_SHORT).show();
-                            }
+        btnLogin.setOnClickListener(v -> {
+            final String email = emailId.getText().toString();
+            final String psw = password.getText().toString();
+            if (email.isEmpty()) {
+                // TODO: create a message into message.xml
+                this.emailId.setError("Attenzione! Inserisci email");
+                this.emailId.requestFocus();
+            } else if (psw.isEmpty()) {
+                // TODO: create a message into message.xml
+                this.password.setError("Attenzione! Inserisci password");
+                this.password.requestFocus();
+            } else {
+                this.mFirebaseAuth.signInWithEmailAndPassword(email, psw).addOnCompleteListener(Login.this, task -> {
+                    if (task.isSuccessful()) {
+                        final FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                        final String uid = user != null ? user.getUid() : null;
+                        if (uid != null) {
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Logging successfully with Firebase Auth.");
+                            signInIntent(user.getUid());
                         }
-                    });
-                }
-            }
-        });
-
-        //CODICE CHE PERMETTE DI CHIUDERE LA TASTIERA IN AUTOMATICO QUANDO SI CLICCA SULLO SCHERMO
-        findViewById(R.id.loginParentLayout).
-
-                setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick (View view){
-                        hideKeyboard(view);
+                    } else {
+                        AppUtils.log(Thread.currentThread().getStackTrace(), "Logging failed with Firebase Auth.");
                     }
                 });
+            }
+        });
     }
 
-    private void signInIntent(@NonNull final String uid) {
-        final Intent intent;
+    // Other methods
 
-        // TODO: end with _GYM means open Gym Activity, with _USER means open User Activity
-        if(uid.endsWith("2") && !uid.endsWith("Xhy2")) {
-            intent = new Intent(Login.this, ActivityGymProfile.class);
-        } else {
-            intent = new Intent(Login.this, ActivityUserProfile.class);
-        }
+    private void signInIntent(@NonNull final String userUid) {
+        final AtomicBoolean isContains = new AtomicBoolean(false);
 
-        preferences.edit().putString("uid", uid).apply();
-        intent.putExtra("uid", uid);
-        startActivity(intent);
+        DatabaseUtils.isUserContains(userUid, ((isUserContained, resultUser) -> {
+            if (resultUser == DatabaseUtils.RESULT_OK && isUserContained != null) {
+                if (isUserContained) {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User found: " + userUid);
+                    AppUtils.message(this.messageAnchor, getString(R.string.user_logged), Snackbar.LENGTH_SHORT).show();
+                    isContains.set(true);
+
+                    final Intent intent = new Intent(Login.this, ActivityUserProfile.class);
+                    this.preferences.edit().putString("uid", userUid).apply();
+                    intent.putExtra("uid", userUid);
+                    startActivity(intent);
+                } else {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User not found: " + userUid);
+                }
+            } else {
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Users not found");
+            }
+        }));
+        DatabaseUtils.isGymContains(userUid, ((isGymContained, resultGym) -> {
+            if (resultGym == DatabaseUtils.RESULT_OK && isGymContained != null) {
+                if (isGymContained) {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym found: " + userUid);
+                    AppUtils.message(this.messageAnchor, getString(R.string.user_logged), Snackbar.LENGTH_SHORT).show();
+                    isContains.set(true);
+
+                    final Intent intent = new Intent(Login.this, ActivityGymProfile.class);
+                    this.preferences.edit().putString("uid", userUid).apply();
+                    intent.putExtra("uid", userUid);
+                    startActivity(intent);
+                } else {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym not found: " + userUid);
+                }
+            } else {
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Gyms not found");
+            }
+        }));
     }
 
-    private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    public void signUpIntent(View v){
+    public void signUpIntent(@NonNull final View v){
         startActivity(new Intent(Login.this, SignUp.class));
     }
 
-    public void signUpGymIntent(View v){
+    public void signUpGymIntent(@NonNull final View v){
         startActivity(new Intent(Login.this, GymSignUp.class));
     }
 
+    private void hideKeyboard(@NonNull final View view) {
+        final InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }

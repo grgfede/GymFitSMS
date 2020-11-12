@@ -1,5 +1,7 @@
 package com.example.gymfit.gym.conf;
 
+import androidx.annotation.NonNull;
+
 public interface InitGymCallback {
-    void onCallback(Gym gym);
+    void onCallback(@NonNull final Gym gym);
 }

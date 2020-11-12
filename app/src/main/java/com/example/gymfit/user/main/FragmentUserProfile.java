@@ -46,8 +46,8 @@ public class FragmentUserProfile extends Fragment {
     public static FragmentUserProfile newInstance(@NonNull final User user, final boolean isEmptyData, @NonNull final ArrayList<String> emptyData) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserProfile created");
 
-        FragmentUserProfile fragment = new FragmentUserProfile();
-        Bundle bundle = new Bundle();
+        final FragmentUserProfile fragment = new FragmentUserProfile();
+        final Bundle bundle = new Bundle();
         bundle.putSerializable(USER_KEY, user);
         bundle.putBoolean(IS_EMPTY_KEY, isEmptyData);
         bundle.putStringArrayList(EMPTY_DATA_KEY, emptyData);

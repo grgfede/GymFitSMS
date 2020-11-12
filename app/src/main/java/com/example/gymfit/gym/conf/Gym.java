@@ -7,17 +7,16 @@ import com.example.gymfit.system.conf.GenericUser;
 import com.example.gymfit.system.conf.utils.ResourceUtils;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.annotations.NotNull;
-import com.google.firebase.database.core.utilities.Tree;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Gym extends GenericUser implements Serializable {
     private String address;
@@ -25,10 +24,15 @@ public class Gym extends GenericUser implements Serializable {
     private String image;
     private final Double[] positionArray;
     private final List<String> subscribers;
-    private final Map<String, Boolean> subscription;
+    private final Map<String, Boolean> subscription; // 0 - monthly, 1 - quarterly, 2 - sixMonth, 3 - annual
     private final Map<String, Boolean[]> turns;
 
-    public Gym(String uid, String email, String phone, String name, String address, List<String> subscribers, LatLng position, String image) {
+    private final AtomicBoolean isSubscriptionNewest = new AtomicBoolean(false);
+    private final AtomicBoolean isTurnNewest = new AtomicBoolean(false);
+
+    public Gym(@NonNull final String uid, @NonNull final String email, @NonNull final String phone,
+               @NonNull final String name, @NonNull final String address, @NonNull final List<String> subscribers,
+               @NonNull final LatLng position, @NonNull final String image) {
         super(uid, email, phone);
         this.name = name;
         this.address = address;
@@ -50,92 +54,105 @@ public class Gym extends GenericUser implements Serializable {
             }
         };
         this.subscribers = subscribers;
-
     }
 
     // Get methods
 
+    @NonNull
     public Map<String, Boolean[]> getTurns() {
         return turns;
     }
 
+    @NonNull
     public Map<String, Boolean> getSubscription() {
         return subscription;
     }
 
+    @NonNull
     public List<String> getSubscribers() {
         return subscribers;
     }
 
+    @NonNull
     public String getImage() {
         return image;
     }
 
+    @NonNull
     public String getAddress() {
         return address;
     }
 
+    @NonNull
     public LatLng getPosition() {
         return new LatLng(this.positionArray[0], this.positionArray[1]);
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
     // Set methods
 
-    public void setAddress(String address) {
+    public void setAddress(@NonNull final String address) {
         this.address = address;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull final String name) {
         this.name = name;
     }
 
-    public void setPosition(LatLng position) {
+    public void setPosition(@NonNull final LatLng position) {
         this.positionArray[0] = position.latitude;
         this.positionArray[1] = position.longitude;
     }
 
-    public void setImage(String image) {
+    public void setImage(@NonNull final String image) {
         this.image = image;
     }
 
-    public void setSubscription(Map<String, Boolean> subscription) {
+    public void setSubscription(@NonNull final String key, @NonNull final Boolean value) {
+        this.subscription.replace(key, value);
+    }
+
+    public void setSubscriptions(@NonNull final Map<String, Boolean> subscription) {
         this.subscription.clear();
         this.subscription.putAll(subscription);
     }
 
-    public void setTurn(String key, int position, boolean value) {
+    public void setTurn(@NonNull final String key, final int position, final boolean value) {
         Objects.requireNonNull(this.turns.get(key))[position] = value;
     }
 
-    public void setTurns(Map<String, Boolean[]> turns) {
+    public void setTurns(@NonNull final Map<String, Boolean[]> turns) {
         this.turns.clear();
         this.turns.putAll(turns);
     }
 
-    public void setSubscribers(List<String> subscribers) {
+    public void setSubscribers(@NonNull final List<String> subscribers) {
         this.subscribers.clear();
         this.subscribers.addAll(subscribers);
     }
 
-    // Remove methods
-
-    public void removeSubscriber(String subscriber) {
-        this.subscribers.remove(subscriber);
+    public void setIsSubscriptionNewest(@NonNull final Boolean isSubscriptionNewest) {
+        this.isSubscriptionNewest.set(isSubscriptionNewest);
     }
 
-    // Update methods
+    public void setIsTurnNewest(@NonNull final Boolean isTurnNewest) {
+        this.isTurnNewest.set(isTurnNewest);
+    }
 
-    public void updateSubscription(String key, Boolean value) {
-        this.subscription.replace(key, value);
+    // Remove methods
+
+    public void removeSubscriber(@NonNull final String subscriber) {
+        this.subscribers.remove(subscriber);
     }
 
     // Sort methods
 
-    public static Map<String, Boolean> sortValueTurn(@NonNull final String keyTurn, @NonNull HashMap<String, Boolean> turn) {
+    @NonNull
+    public static Map<String, Boolean> sortValueTurn(@NonNull final String keyTurn, @NonNull final HashMap<String, Boolean> turn) {
         final String[] gymKeys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
         final String[] turnKeys = new String[] { gymKeys[14], gymKeys[15], gymKeys[16] };
         final String[] morningTurnKeys = ResourceUtils.getStringArrayFromID(R.array.morning_session_name);
@@ -269,19 +286,40 @@ public class Gym extends GenericUser implements Serializable {
     }
 
     /**
-     * Init and return a default map of boolean array for set turn gym's node
+     * Init and return a default map of boolean array for set turn database gym's node
      *
-     * @return Map of Boolean arrays
+     * @return Map inserted of Boolean arrays
      */
     @NonNull
-    public static Map<String, Object> getDefaultGymTurn()
-    {
-        final String[] gymKeys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
-        return new HashMap<String, Object>() {
+    public static HashMap<String, Map<String, Boolean>> getDefaultGymDatabaseTurn() {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+        final String[] keysMorning = ResourceUtils.getStringArrayFromID(R.array.morning_session_name);
+        final String[] keysAfternoon = ResourceUtils.getStringArrayFromID(R.array.afternoon_session_name);
+        final String[] keysEvening = ResourceUtils.getStringArrayFromID(R.array.evening_session_name);
+
+        return new HashMap<String, Map<String, Boolean>>() {
             {
-                put(gymKeys[14], new Boolean[] { true, true, true });
-                put(gymKeys[15], new Boolean[] { true, true, true });
-                put(gymKeys[15], new Boolean[] { true, true, true });
+                put(keys[14], new HashMap<String, Boolean>() {
+                    {
+                        put(keysMorning[0], true);
+                        put(keysMorning[1], true);
+                        put(keysMorning[2], true);
+                    }
+                });
+                put(keys[15], new HashMap<String, Boolean>() {
+                    {
+                        put(keysAfternoon[0], true);
+                        put(keysAfternoon[1], true);
+                        put(keysAfternoon[2], true);
+                    }
+                });
+                put(keys[16], new HashMap<String, Boolean>() {
+                    {
+                        put(keysEvening[0], true);
+                        put(keysEvening[1], true);
+                        put(keysEvening[2], true);
+                    }
+                });
             }
         };
     }
@@ -304,4 +342,23 @@ public class Gym extends GenericUser implements Serializable {
         };
     }
 
+    @NonNull
+    public List<String> getEmptyValues() {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+        final List<String> emptyKeyOfValues = new ArrayList<>();
+        final String emptyValue = "null";
+
+        if (this.getName().equals(emptyValue)) emptyKeyOfValues.add(keys[1]);
+        if (this.getEmail().equals(emptyValue)) emptyKeyOfValues.add(keys[2]);
+        if (this.getImage().equals(ResourceUtils.getURIForResource(R.drawable.default_user))) emptyKeyOfValues.add(keys[3]);
+        if (this.getPhone().equals(emptyValue)) emptyKeyOfValues.add(keys[4]);
+        if (this.getAddress().equals(emptyValue)) emptyKeyOfValues.add(keys[5]);
+        if (this.getPosition().equals(new LatLng(0, 0))) emptyKeyOfValues.add(keys[6]);
+        if (this.getSubscribers().isEmpty()) emptyKeyOfValues.add(keys[8]);
+        if (this.isSubscriptionNewest.get()) emptyKeyOfValues.add(keys[7]);
+        if (this.isTurnNewest.get()) emptyKeyOfValues.add(keys[9]);
+
+
+        return emptyKeyOfValues;
+    }
 }

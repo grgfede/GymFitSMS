@@ -166,4 +166,8 @@
     <string name="refresh_turns_available">Ricerca nuovi turni disponibili…</string>
     <string name="refresh_turns_picked">Ricarica turni prenotati…</string>
     <string name="refresh_completed">Ricerca completata</string>
+    <string name="refresh_gym_settings">Ricarica impostazioni dal database…</string>
+    <string name="refresh_users_available">Ricerca nuovi iscritti disponibili…</string>
+    <string name="user_logged">Accesso effettuato.</string>
+    <string name="user_not_logged">Nessun account trovato.</string>
 </resources>

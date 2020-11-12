@@ -12,9 +12,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DatabaseUtils {
     public static final int RESULT_OK = 1;
@@ -37,7 +41,7 @@ public class DatabaseUtils {
     private static final String[] collections = ResourceUtils.getStringArrayFromID(R.array.collections);
 
     public interface FindItemCallback<T> {
-        void onCallback(T data, int result);
+        void onCallback(@Nullable T data, final int result);
     }
 
     // Get methods
@@ -63,7 +67,9 @@ public class DatabaseUtils {
                         final String phone = ds.getString(keys[4]) != null ? ds.getString(keys[4]) : "null";
                         final String name = ds.getString(keys[1]) != null ? ds.getString(keys[1]) : "null";
                         final String address = ds.getString(keys[5]) != null ? ds.getString(keys[5]) : "null";
-                        final String image = ds.getString(keys[3]) != null ? ds.getString(keys[3]) : "null";
+                        final String img = ds.getString(keys[3]) != null
+                                ? ds.getString(keys[3])
+                                : ResourceUtils.getURIForResource(R.drawable.default_user);;
                         final LatLng position = ds.getGeoPoint(keys[6]) != null
                                 ? new LatLng(
                                 Objects.requireNonNull(ds.getGeoPoint(keys[6])).getLatitude(),
@@ -72,13 +78,25 @@ public class DatabaseUtils {
                         final List<String> subscribers = ds.get(keys[8]) != null
                                 ? ((ArrayList<String>) ds.get(keys[8]))
                                 : new ArrayList<>();
-                        final Map<String, Boolean> subscription = ds.get(keys[7]) != null
-                                ? (HashMap<String, Boolean>) ds.get(keys[7])
-                                : Gym.getDefaultGymSubscription();
+
+                        final AtomicBoolean isSubscriptionNewest = new AtomicBoolean(false);
+                        final Map<String, Boolean> subscription;
+                        if (ds.get(keys[7]) != null) {
+                            subscription = (HashMap<String, Boolean>) ds.get(keys[7]);
+                        } else {
+                            subscription = Gym.getDefaultGymSubscription();
+                            isSubscriptionNewest.set(true);
+                        }
+
                         final Map<String, Boolean[]> turn = new TreeMap<>();
-                        final Map<String, Object> turns = ds.get(keys[9]) != null
-                                ? (HashMap<String, Object>) ds.get(keys[9])
-                                : Gym.getDefaultGymTurn();
+                        final AtomicBoolean isTurnNewest = new AtomicBoolean(false);
+                        final Map<String, Map<String, Boolean>> turns;
+                        if (ds.get(keys[9]) != null) {
+                            turns = (HashMap<String, Map<String, Boolean>>) ds.get(keys[9]);
+                        } else {
+                            turns = Gym.getDefaultGymDatabaseTurn();
+                            isTurnNewest.set(true);
+                        }
                         Objects.requireNonNull(turns).forEach((keyTurn, valueTurn) -> {
                             final Map<String, Boolean> turnTmp = Gym.sortValueTurn(keyTurn, (HashMap<String, Boolean>) valueTurn);
                             turn.put(keyTurn, Arrays.copyOf(
@@ -87,9 +105,11 @@ public class DatabaseUtils {
                                     Boolean[].class));
                         });
 
-                        final Gym gym = new Gym(uid, email, phone, name, address, subscribers, position, image);
-                        gym.setSubscription(subscription);
+                        final Gym gym = new Gym(uid, email, phone, name, address, subscribers, position, img);
+                        gym.setSubscriptions(subscription);
+                        gym.setIsSubscriptionNewest(isSubscriptionNewest.get());
                         gym.setTurns(turn);
+                        gym.setIsTurnNewest(isTurnNewest.get());
                         callback.onCallback(gym, RESULT_OK);
                     } else {
                         callback.onCallback(null, RESULT_VOID);
@@ -177,7 +197,35 @@ public class DatabaseUtils {
 
     }
 
-    // Set methods
+    public static void getUsersID(FindItemCallback<List<String>> callback) {
+        db.collection(collections[0]).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        final List<String> usersID = new ArrayList<>();
+
+                        if (!task.getResult().getDocuments().isEmpty()) {
+                            for (QueryDocumentSnapshot ds : task.getResult()) {
+                                // Take all Gym document from Database
+                                usersID.add(ds.getId());
+                            }
+                            callback.onCallback(usersID, RESULT_OK);
+                        } else {
+                            callback.onCallback(null, RESULT_VOID);
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Users not found. ");
+                        }
+                    } else {
+                        callback.onCallback(null, RESULT_VOID);
+                        AppUtils.log(Thread.currentThread().getStackTrace(), "Users not found. ");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallback(null, RESULT_FAILED);
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Collection not found. " + e.getMessage());
+                });
+
+    }
+
+    // Update methods
 
     public static void updateGymSubscribers(@NonNull final String uid, @NonNull final String subscribe, FindItemCallback<Boolean> callback) {
         final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
@@ -190,6 +238,109 @@ public class DatabaseUtils {
                 })
                 .addOnFailureListener(e -> {
                     AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscribers not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymField(@NonNull final String uid, @NonNull final String key, @NonNull final String value, FindItemCallback<Boolean> callback) {
+        db.collection(collections[1]).document(uid)
+                .update(key, value)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym " + key + " updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym " + key + " not updated." + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymImg(@NonNull final String uid, @NonNull final String img, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        db.collection(collections[1]).document(uid)
+                .update(keys[3], img)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym img updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym img not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymPosition(@NonNull final String uid, @NonNull final LatLng position, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        db.collection(collections[1]).document(uid)
+                .update(keys[6], new GeoPoint(position.latitude, position.longitude))
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym position updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym position not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymSubscription(@NonNull final String uid, @NonNull final String key, final boolean isEnable, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        db.collection(collections[1]).document(uid)
+                .update(keys[7] + "." + key, isEnable)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscription " + key + " updated with: " + isEnable);
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscription " + key + " not updated." + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymSubscriptions(@NonNull final String uid, @NonNull final Map<String, Boolean> subscription, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        db.collection(collections[1]).document(uid)
+                .update(keys[7], subscription)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscriptions updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym subscriptions not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymTurn(@NonNull final String uid, @NonNull final String category, @NonNull final String key, final boolean isEnable, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        db.collection(collections[1]).document(uid)
+                .update(keys[9] + "." + category + "." + key, isEnable)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym turn " + key + " updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym turn " + key + " not updated." + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateGymTurns(@NonNull final String uid, @NonNull final Map<String, Map<String, Boolean>> turns, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
+
+        db.collection(collections[1]).document(uid)
+                .update(keys[9], turns)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym turns updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym turns not updated. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
@@ -253,6 +404,8 @@ public class DatabaseUtils {
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }
+
+    // Remove methods
 
     public static void removeGymSubscriber(@NonNull final String uid, @NonNull final String subscribe, FindItemCallback<Boolean> callback) {
         final String[] keys = ResourceUtils.getStringArrayFromID(R.array.gym_field);
@@ -380,5 +533,48 @@ public class DatabaseUtils {
                 });
     }
 
+    public static void isGymContains(@NotNull final String uid, FindItemCallback<Boolean> callback) {
+        db.collection(collections[1]).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().getDocuments().isEmpty()) {
+                            final List<DocumentSnapshot> qs = task.getResult().getDocuments();
+                            callback.onCallback(qs.stream().anyMatch(ds -> ds.getId().equals(uid)), RESULT_OK);
+                        } else {
+                            callback.onCallback(false, RESULT_VOID);
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Gyms not found. ");
+                        }
+                    } else {
+                        callback.onCallback(false, RESULT_VOID);
+                        AppUtils.log(Thread.currentThread().getStackTrace(), "Gyms not found. ");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallback(false, RESULT_FAILED);
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Collection not found. " + e.getMessage());
+                });
+    }
+
+    public static void isUserContains(@NotNull final String uid, FindItemCallback<Boolean> callback) {
+        db.collection(collections[0]).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (!task.getResult().getDocuments().isEmpty()) {
+                            final List<DocumentSnapshot> qs = task.getResult().getDocuments();
+                            callback.onCallback(qs.stream().anyMatch(ds -> ds.getId().equals(uid)), RESULT_OK);
+                        } else {
+                            callback.onCallback(false, RESULT_VOID);
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Users not found. ");
+                        }
+                    } else {
+                        callback.onCallback(false, RESULT_VOID);
+                        AppUtils.log(Thread.currentThread().getStackTrace(), "Users not found. ");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    callback.onCallback(false, RESULT_FAILED);
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Collection not found. " + e.getMessage());
+                });
+    }
 
 }

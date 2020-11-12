@@ -9,10 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,18 +62,18 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
     private ListDatePickerAdapter listDatePickerAdapter = null;
     private ListTurnPickedAdapter listTurnPickedAdapter = null;
 
+    private boolean fragmentLaid = false;
+
     public static FragmentUserPersonalTurn newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserPersonalTurn created");
 
-        FragmentUserPersonalTurn fragment = new FragmentUserPersonalTurn();
-        Bundle bundle = new Bundle();
+        final FragmentUserPersonalTurn fragment = new FragmentUserPersonalTurn();
+        final Bundle bundle = new Bundle();
         bundle.putSerializable(USER_KEY, user);
         fragment.setArguments(bundle);
 
         return fragment;
     }
-
-    private boolean fragmentLaid = false;
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {

@@ -1,5 +1,5 @@
 package com.example.gymfit.gym.conf;
 
 public interface IsWritableOnDbCallback {
-    void isWriteDb(boolean write);
+    void isWriteDb(final boolean write);
 }

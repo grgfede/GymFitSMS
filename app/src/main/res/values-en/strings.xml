@@ -166,4 +166,8 @@
     <string name="refresh_turns_available">Refresh available turns…</string>
     <string name="refresh_turns_picked">Refresh booked turns…</string>
     <string name="refresh_completed">Refresh completed</string>
+    <string name="refresh_gym_settings">Loading settings from database…</string>
+    <string name="refresh_users_available">Loading new subscribers…</string>
+    <string name="user_logged">Login successfully.</string>
+    <string name="user_not_logged">No account found. Retry.</string>
 </resources>

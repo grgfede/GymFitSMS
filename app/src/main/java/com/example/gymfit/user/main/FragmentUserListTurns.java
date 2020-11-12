@@ -9,10 +9,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,8 +74,8 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
     public static FragmentUserListTurns newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserListTurns created");
 
-        FragmentUserListTurns fragment = new FragmentUserListTurns();
-        Bundle bundle = new Bundle();
+        final FragmentUserListTurns fragment = new FragmentUserListTurns();
+        final Bundle bundle = new Bundle();
         bundle.putSerializable(USER_KEY, user);
         fragment.setArguments(bundle);
 

@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -18,7 +17,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.example.gymfit.R;
 import com.example.gymfit.system.conf.utils.AppUtils;
@@ -44,8 +42,8 @@ public class FragmentUserMainTurn extends Fragment {
     public static FragmentUserMainTurn newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserMainTurn created");
 
-        FragmentUserMainTurn fragment = new FragmentUserMainTurn();
-        Bundle bundle = new Bundle();
+        final FragmentUserMainTurn fragment = new FragmentUserMainTurn();
+        final Bundle bundle = new Bundle();
         bundle.putSerializable(USER_KEY, user);
         fragment.setArguments(bundle);
 

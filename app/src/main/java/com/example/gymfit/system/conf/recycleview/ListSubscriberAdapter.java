@@ -1,12 +1,12 @@
 package com.example.gymfit.system.conf.recycleview;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -39,7 +39,7 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
 
     private final OnItemClickListener listener;
 
-    public ListSubscriberAdapter(Context ct, List<User> users, OnItemClickListener listener) {
+    public ListSubscriberAdapter(@NonNull final Context ct, @NonNull final List<User> users, @NonNull final OnItemClickListener listener) {
         this.context = ct;
         this.users = users;
         this.usersFull = new ArrayList<>(this.users);
@@ -49,9 +49,8 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public final RelativeLayout cardContainer, deleteContainer;
-        private final LinearLayout toggleContainer, turnContainer;
+        private final LinearLayout turnContainer;
         private final CircleImageView startIcon;
-        private final ImageView endIcon;
         private final TextView username, details;
         private final List<TextView> turnList = new ArrayList<>();
 
@@ -59,14 +58,12 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
             super(itemView);
 
             startIcon = itemView.findViewById(R.id.start_icon);
-            endIcon = itemView.findViewById(R.id.end_icon);
             username = itemView.findViewById(R.id.user_name);
             details = itemView.findViewById(R.id.user_details);
 
             cardContainer = itemView.findViewById(R.id.card_container);
             deleteContainer = itemView.findViewById(R.id.delete_container);
             turnContainer = itemView.findViewById(R.id.turn_container);
-            toggleContainer = itemView.findViewById(R.id.content_toggle_container);
         }
 
         public void bind(final Context context, final User user, final int position, final OnItemClickListener listener) {
@@ -89,14 +86,14 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.layout_recycleview_subscriber, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
         holder.bind(this.context, this.users.get(position), position, listener);
 
         // load
@@ -144,18 +141,22 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
     }
 
     @Override
+    @NonNull
     public Filter getFilter() {
         return this.filter;
     }
 
+    @NonNull
     public Filter getFilterSub() {
         return this.filterSub;
     }
 
+    @NonNull
     public Filter getSort() {
         return this.filterSort;
     }
 
+    @NonNull
     private final Filter filter = new Filter() {
 
         @Override
@@ -187,6 +188,7 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         }
     };
 
+    @NonNull
     private final Filter filterSub = new Filter() {
 
         @Override
@@ -227,6 +229,7 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         }
     };
 
+    @NonNull
     private final Filter filterSort = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -261,7 +264,7 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         }
     };
 
-    private void filterCompare(List<User> filteredList, String constraint, String rule) {
+    private void filterCompare(@NonNull final List<User> filteredList, @NonNull final String constraint, @NonNull final String rule) {
         filteredList.clear();
 
         if (rule.equals("sort") && (constraint.equals(context.getString(R.string.prompt_name).toLowerCase()) || constraint.equals("default"))) {
@@ -293,7 +296,8 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
 
     // Other methods
 
-    private String getSubscription(String subscription) {
+    @NonNull
+    private String getSubscription(@NonNull String subscription) {
         String titleSubscription = this.context.getResources().getString(R.string.title_subscription);
 
         switch (subscription) {
@@ -314,7 +318,8 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         return titleSubscription + subscription;
     }
 
-    private String getTurn(String turn) {
+    @NonNull
+    private String getTurn(@NonNull String turn) {
         switch (turn) {
             case "morningFirst":
                 turn = this.context.getResources().getStringArray(R.array.morning_session_value)[0];
@@ -348,16 +353,24 @@ public class ListSubscriberAdapter extends RecyclerView.Adapter<ListSubscriberAd
         return turn;
     }
 
-    public void removeItem(int position) {
+    public void removeItem(final int position) {
         this.users.remove(position);
         this.usersFull.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(User item, int position) {
+    public void restoreItem(@NonNull final User item, final int position) {
         this.users.add(position, item);
         this.usersFull.add(position, item);
         notifyItemInserted(position);
+    }
+
+    public void refreshItems(@NonNull final List<User> items) {
+        this.users.clear();
+        this.users.addAll(items);
+        this.usersFull.clear();
+        this.usersFull.addAll(items);
+        notifyDataSetChanged();
     }
 
 }

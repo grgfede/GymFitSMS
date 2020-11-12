@@ -76,8 +76,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     public static FragmentUserListGyms newInstance(@NonNull final User user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserListGyms created");
 
-        FragmentUserListGyms fragment = new FragmentUserListGyms();
-        Bundle bundle = new Bundle();
+        final FragmentUserListGyms fragment = new FragmentUserListGyms();
+        final Bundle bundle = new Bundle();
         bundle.putSerializable(USER_KEY, user);
         fragment.setArguments(bundle);
 
