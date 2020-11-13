@@ -24,9 +24,15 @@ import com.example.gymfit.system.main.signup.GymSignUp;
 import com.example.gymfit.user.main.ActivityUserProfile;
 import com.example.gymfit.system.main.signup.SignUp;
 import com.example.gymfit.gym.main.ActivityGymProfile;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -105,7 +111,7 @@ public class Login extends AppCompatActivity {
             } else {
                 this.mFirebaseAuth.signInWithEmailAndPassword(email, psw).addOnCompleteListener(Login.this, task -> {
                     if (task.isSuccessful()) {
-                        final FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                        final FirebaseUser user = this.mFirebaseAuth.getCurrentUser();
                         final String uid = user != null ? user.getUid() : null;
                         if (uid != null) {
                             AppUtils.log(Thread.currentThread().getStackTrace(), "Logging successfully with Firebase Auth.");
@@ -122,14 +128,11 @@ public class Login extends AppCompatActivity {
     // Other methods
 
     private void signInIntent(@NonNull final String userUid) {
-        final AtomicBoolean isContains = new AtomicBoolean(false);
-
         DatabaseUtils.isUserContains(userUid, ((isUserContained, resultUser) -> {
             if (resultUser == DatabaseUtils.RESULT_OK && isUserContained != null) {
                 if (isUserContained) {
                     AppUtils.log(Thread.currentThread().getStackTrace(), "User found: " + userUid);
                     AppUtils.message(this.messageAnchor, getString(R.string.user_logged), Snackbar.LENGTH_SHORT).show();
-                    isContains.set(true);
 
                     final Intent intent = new Intent(Login.this, ActivityUserProfile.class);
                     this.preferences.edit().putString("uid", userUid).apply();
@@ -147,7 +150,6 @@ public class Login extends AppCompatActivity {
                 if (isGymContained) {
                     AppUtils.log(Thread.currentThread().getStackTrace(), "Gym found: " + userUid);
                     AppUtils.message(this.messageAnchor, getString(R.string.user_logged), Snackbar.LENGTH_SHORT).show();
-                    isContains.set(true);
 
                     final Intent intent = new Intent(Login.this, ActivityGymProfile.class);
                     this.preferences.edit().putString("uid", userUid).apply();

@@ -1,6 +1,7 @@
 package com.example.gymfit.gym.main;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -19,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -104,7 +107,6 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
     private View messageAnchor = null;
     private Menu toolbar = null;
 
-    private String gymUID = null;
     private Gym gym = null;
     private boolean isEmptyData = false;
     private List<String> emptyData = new ArrayList<>();
@@ -307,9 +309,6 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         // init origin screen orientation
         this.orientation = rootView.getResources().getConfiguration().orientation;
-
-        // init gym ID from Gym Object
-        this.gymUID = this.gym.getUid();
 
         // init message Anchor for Snackbar
         this.messageAnchor = rootView.findViewById(R.id.anchor);
@@ -532,6 +531,16 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
                         }
                     });
+
+                    field.setOnEditorActionListener((v, actionId, event) -> {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            // hide virtual keyboard
+                            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(field.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                            return true;
+                        }
+                        return false;
+                    });
                     break;
                 case "key":
                     field.setOnClickListener(v -> inputFieldFocused(
@@ -574,6 +583,16 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                         public void afterTextChanged(Editable s) {
 
                         }
+                    });
+
+                    field.setOnEditorActionListener((v, actionId, event) -> {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            // hide virtual keyboard
+                            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(field.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                            return true;
+                        }
+                        return false;
                     });
                     break;
                 case "phone":
@@ -695,6 +714,16 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
                         }
                     });
+
+                    field.setOnEditorActionListener((v, actionId, event) -> {
+                        if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                            // hide virtual keyboard
+                            InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(field.getWindowToken(), InputMethodManager.RESULT_UNCHANGED_SHOWN);
+                            return true;
+                        }
+                        return false;
+                    });
                     break;
             }
         });
@@ -812,7 +841,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     btn.setOnClickListener(v -> {
                         final String name = String.valueOf(this.tempTextMap.get(gymKeys[1]));
                         DatabaseUtils.updateGymField(this.gym.getUid(), gymKeys[1], name, ((data, result) -> {
-                            this.gym.setPhone(name);
+                            this.gym.setName(name);
                             this.emptyData.remove(key);
                         }));
 
@@ -877,6 +906,8 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
                     break;
             }
         });
+
+        AppUtils.log(Thread.currentThread().getStackTrace(), "Listener of interface of FragmentGymProfile initialized");
     }
 
     // Animation methods
@@ -1016,7 +1047,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         Picasso.get().load(data).into((CircleImageView) this.imageMap.get("imageIcon"));
         Picasso.get().load(data).into((CircleImageView) this.imageMap.get("imageMenu"));
 
-        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gymUID + "/profilePic");
+        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gym.getUid() + "/profilePic");
         storageReference.putFile(data)
                 .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                     String uriString = uri.toString();
@@ -1058,7 +1089,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] bytes = baos.toByteArray();
 
-        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gymUID + "/profilePic");
+        StorageReference storageReference = this.storage.getReference().child("img/gyms/" + this.gym.getUid()  + "/profilePic");
         storageReference.putBytes(bytes)
                 .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
                     String uriString = uri.toString();
@@ -1216,11 +1247,11 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         text.requestFocus();
         box.setEndIconDrawable(R.drawable.ic_clear);
-        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, requireActivity().getTheme())));
+        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.tint_image_icon_light, requireActivity().getTheme())));
 
         box.setHelperTextEnabled(true);
         box.setHelperText(helperText);
-        box.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary, requireActivity().getTheme())));
+        box.setHelperTextColor(ColorStateList.valueOf(getResources().getColor(R.color.tint_helper_text_focused, requireActivity().getTheme())));
 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
@@ -1230,7 +1261,7 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
 
         text.requestFocus();
         box.setEndIconDrawable(R.drawable.ic_clear);
-        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, requireActivity().getTheme())));
+        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.tint_image_icon_light, requireActivity().getTheme())));
 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
     }
@@ -1240,10 +1271,10 @@ public class FragmentGymProfile extends Fragment implements OnMapReadyCallback {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Field dispatched: " + box.getId());
 
         textField.setText(originText);
-        textField.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_high_type, requireActivity().getTheme())));
+        textField.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.tint_input_text, requireActivity().getTheme())));
 
         box.setEndIconDrawable(R.drawable.ic_edit);
-        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.material_on_background_emphasis_medium, requireActivity().getTheme())));
+        box.setEndIconTintList(ColorStateList.valueOf(getResources().getColor(R.color.tint_image_icon_light, requireActivity().getTheme())));
         box.setHelperTextEnabled(helperEnable);
 
         container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0));

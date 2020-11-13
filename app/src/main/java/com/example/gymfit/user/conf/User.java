@@ -23,7 +23,7 @@ public class User extends GenericUser implements Serializable, Parcelable {
     private String name;
     private String surname;
     private Date dateOfBirthday;
-    private LatLng location;
+    private LatLng location; // TODO: refact code removing this useless attribute
     private String address;
     private String gender;
     private String img;
@@ -182,6 +182,14 @@ public class User extends GenericUser implements Serializable, Parcelable {
 
     public void setAddress(@NonNull final String address) {
         this.address = address;
+    }
+
+    public void setLocation(@NonNull final LatLng location) {
+        this.location = location;
+    }
+
+    public void setDateOfBirthday(@NonNull final Date dateOfBirthday) {
+        this.dateOfBirthday = dateOfBirthday;
     }
 
     public void setImg(@NonNull final String img) {

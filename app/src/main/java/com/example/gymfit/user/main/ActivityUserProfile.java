@@ -223,6 +223,8 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
             }
         });
 
+        emptyKeys.remove(keys[4]);
+        emptyKeys.remove(keys[6]);
         emptyKeys.remove(keys[10]);
         emptyKeys.remove(keys[11]);
 

@@ -566,7 +566,6 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="5dp"
-                    android:paddingVertical="2dp"
                     android:layout_marginVertical="5dp"
                     android:baselineAligned="false"
                     android:orientation="vertical">

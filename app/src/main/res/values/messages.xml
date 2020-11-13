@@ -16,6 +16,10 @@
     <string name="update_name_error">Il nuovo nome non è stato aggiornato.</string>
     <string name="update_image_success">La nuova immagine è stata aggiornata.</string>
     <string name="update_image_error">La nuova immagine non è stata aggiornata.</string>
+    <string name="update_gender_success">Il sesso è stato aggiornato.</string>
+    <string name="update_gender_error">Il sesso non è stato aggiornato.</string>
+    <string name="update_birthday_success">La nuova data di nascita è stata aggiornata.</string>
+    <string name="update_birthday_error">La nuova data di nascita non è stata aggiornata.</string>
 
     <string name="permission_camera_success">Permesso camera autorizzato.</string>
     <string name="permission_camera_error">Permesso camera negato.</string>

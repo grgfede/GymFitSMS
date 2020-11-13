@@ -110,7 +110,7 @@
     <string name="gym_subscriber_removing">sarà eliminato…</string>
     <string name="helper_name_hover">Inserisci nome</string>
     <string name="helper_surname_hover">Inserisci cognome</string>
-    <string name="helper_gender_hover">Inserisci gender</string>
+    <string name="helper_gender_hover">Inserisci un sesso</string>
     <string name="helper_address_hover_signUp">Inserisci indirizzo</string>
     <string name="helper_phone_hover_signUp">Inserisci telefono</string>
     <string name="helper_birth_hover">Inserisci data di nascita</string>
@@ -170,4 +170,11 @@
     <string name="refresh_users_available">Ricerca nuovi iscritti disponibili…</string>
     <string name="user_logged">Accesso effettuato.</string>
     <string name="user_not_logged">Nessun account trovato.</string>
+    <string name="update_gender_success">Il sesso è stato aggiornato.</string>
+    <string name="update_gender_error">Il sesso non è stato aggiornato.</string>
+    <string name="prompt_gender_man">Uomo</string>
+    <string name="prompt_gender_woman">Donna</string>
+    <string name="prompt_gender_other">Altro</string>
+    <string name="update_birthday_success">La nuova data di nascita è stata aggiornata.</string>
+    <string name="update_birthday_error">La nuova data di nascita non è stata aggiornata.</string>
 </resources>

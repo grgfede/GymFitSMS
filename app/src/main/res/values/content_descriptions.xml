@@ -10,6 +10,8 @@
     <string name="key_img" translatable="false">key button</string>
     <string name="location_img" translatable="false">location button</string>
     <string name="phone_img" translatable="false">phone button</string>
+    <string name="gender_img" translatable="false">gender button</string>
+    <string name="birthday_img" translatable="false">date of birthday button</string>
     <string name="morning_list_img" translatable="false">morning turn</string>
     <string name="afternoon_list_img" translatable="false">afternoon turn</string>
     <string name="evening_list_img" translatable="false">evening turn</string>

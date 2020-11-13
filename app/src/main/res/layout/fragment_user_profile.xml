@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/anchor"
@@ -28,17 +29,17 @@
                 app:borderWidth="0dp"
                 app:elevation="6dp"
                 app:fabSize="normal"
-                app:layout_constraintBottom_toTopOf="@+id/infoBlock"
+                app:layout_constraintBottom_toTopOf="@+id/container_info"
                 app:layout_constraintEnd_toEndOf="parent"
 
-                app:layout_constraintTop_toBottomOf="@id/imageBlock"
+                app:layout_constraintTop_toBottomOf="@id/container_main_image"
                 app:rippleColor="@color/background_ripple_default"
                 app:srcCompat="@drawable/ic_add"
                 app:tint="@color/tint_image_icon_dark" />
 
-            <!-- Settings menu -->
+            <!-- Subscription menu -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_setting"
+                android:id="@+id/fab_subscription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/fab_margin"
@@ -54,12 +55,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/fab_add"
 
                 app:rippleColor="@color/background_ripple_second"
-                app:srcCompat="@drawable/ic_setting"
+                app:srcCompat="@drawable/ic_gym"
                 app:tint="@color/tint_image_icon_dark" />
 
-            <!-- Subscribers menu -->
+            <!-- Turns menu -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_subs"
+                android:id="@+id/fab_turns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/fab_margin"
@@ -72,15 +73,15 @@
                 app:elevation="6dp"
                 app:fabSize="normal"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fab_setting"
+                app:layout_constraintTop_toBottomOf="@+id/fab_subscription"
 
                 app:rippleColor="@color/background_ripple_second"
-                app:srcCompat="@drawable/ic_group"
+                app:srcCompat="@drawable/ic_subscription"
                 app:tint="@color/tint_image_icon_dark" />
 
             <!-- Edit image button -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/userEditImg"
+                android:id="@+id/edit_main_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
@@ -99,7 +100,7 @@
 
             <!-- Image container -->
             <LinearLayout
-                android:id="@+id/imageBlock"
+                android:id="@+id/container_main_image"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:gravity="center"
@@ -110,7 +111,7 @@
 
                 <!-- Image -->
                 <ImageView
-                    android:id="@+id/ImgField"
+                    android:id="@+id/main_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/user_img_profile"
@@ -120,35 +121,36 @@
 
             <!-- Info Container -->
             <LinearLayout
-                android:id="@+id/infoBlock"
+                android:id="@+id/container_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
                 android:orientation="horizontal"
+                android:layout_marginHorizontal="20dp"
                 android:paddingHorizontal="5dp"
                 android:paddingTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageBlock">
+                app:layout_constraintTop_toBottomOf="@id/container_main_image">
 
                 <!-- Info Media -->
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/userImgName"
+                    android:id="@+id/small_image"
                     android:layout_width="56dp"
-                    android:layout_height="62dp"
+                    android:layout_height="56dp"
                     android:layout_gravity="top"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="@string/user_img_profile" />
 
                 <!-- Info Field -->
                 <LinearLayout
+                    android:id="@+id/container_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/userBoxName"
+                        android:id="@+id/input_name"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -163,12 +165,12 @@
                         app:endIconMode="custom"
                         app:endIconTint="@color/tint_image_icon_light"
 
-                        app:helperText="User"
+                        app:helperText="@string/helper_name_user"
                         app:helperTextEnabled="true"
                         app:hintEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/userTxtName"
+                            android:id="@+id/text_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textNoSuggestions|textFilter"
@@ -182,13 +184,13 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/userNameButtonRight"
+                        android:id="@+id/buttons_name"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userAbortName"
+                            android:id="@+id/cancel_name"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -204,10 +206,10 @@
 
                             app:icon="@drawable/ic_delete"
                             app:iconTint="@color/background_button_error"
-                            app:rippleColor="@color/background_ripple_error" />
+                            app:rippleColor="@color/background_ripple_error"/>
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userSaveName"
+                            android:id="@+id/save_name"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -218,8 +220,8 @@
                             android:focusable="true"
 
                             android:text="@string/prompt_send"
-                            android:textColor="@color/colorPrimary"
                             android:textSize="12sp"
+                            android:textColor="@color/colorPrimary"
 
                             app:icon="@drawable/ic_save"
                             app:iconTint="@color/colorPrimary"
@@ -233,33 +235,34 @@
 
             <!-- Content Block -->
             <LinearLayout
-                android:id="@+id/contentBlock"
+                android:id="@+id/container_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:paddingTop="15dp"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/infoBlock"
+                app:layout_constraintTop_toBottomOf="@+id/container_info"
                 app:layout_constraintVertical_bias="0.0">
 
                 <!-- Email -->
                 <LinearLayout
+                    android:id="@+id/container_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="5dp"
-                    android:baselineAligned="false"
-                    android:orientation="vertical"
                     android:paddingHorizontal="5dp"
                     android:paddingVertical="2dp"
-                    android:weightSum="2">
+                    android:layout_marginVertical="5dp"
+                    android:baselineAligned="false"
+                    android:weightSum="2"
+                    android:orientation="vertical">
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/userBoxEmail"
+                        android:id="@+id/input_email"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -286,7 +289,7 @@
                         app:startIconTint="@color/tint_image_icon_light">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/userTxtEmail"
+                            android:id="@+id/text_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textEmailAddress"
@@ -299,14 +302,14 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/userEmailButtonRight"
+                        android:id="@+id/buttons_email"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userAbortMail"
+                            android:id="@+id/cancel_email"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -325,7 +328,7 @@
                             app:rippleColor="@color/background_ripple_error" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userSaveMail"
+                            android:id="@+id/save_email"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -349,20 +352,21 @@
 
                 <!-- Key -->
                 <LinearLayout
+                    android:id="@+id/container_key"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="5dp"
-                    android:baselineAligned="false"
-                    android:orientation="vertical"
                     android:paddingHorizontal="5dp"
                     android:paddingVertical="2dp"
-                    android:weightSum="2">
+                    android:layout_marginVertical="5dp"
+                    android:baselineAligned="false"
+                    android:weightSum="2"
+                    android:orientation="vertical">
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/userBoxKey"
+                        android:id="@+id/input_key"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -371,25 +375,25 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
 
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:hint="@string/prompt_password"
                         android:textColorHint="@color/tint_hint_no_focused"
+
                         app:boxStrokeWidth="0dp"
                         app:boxStrokeWidthFocused="2dp"
 
                         app:endIconContentDescription="@string/edit_button"
                         app:endIconDrawable="@drawable/ic_edit"
-
                         app:endIconMode="custom"
                         app:endIconTint="@color/tint_image_icon_light"
-                        app:hintEnabled="true"
-                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
 
                         app:startIconContentDescription="@string/key_img"
                         app:startIconDrawable="@drawable/ic_psw"
                         app:startIconTint="@color/tint_image_icon_light">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/userTextKey"
+                            android:id="@+id/text_key"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPassword"
@@ -403,14 +407,14 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/userKeyButtonRight"
+                        android:id="@+id/buttons_key"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userAbortKey"
+                            android:id="@+id/cancel_key"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -429,7 +433,7 @@
                             app:rippleColor="@color/material_on_background_disabled" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userSaveKey"
+                            android:id="@+id/save_key"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -453,20 +457,21 @@
 
                 <!-- Phone -->
                 <LinearLayout
+                    android:id="@+id/container_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="5dp"
-                    android:baselineAligned="false"
-                    android:orientation="vertical"
                     android:paddingHorizontal="5dp"
                     android:paddingVertical="2dp"
-                    android:weightSum="2">
+                    android:layout_marginVertical="5dp"
+                    android:baselineAligned="false"
+                    android:weightSum="2"
+                    android:orientation="vertical">
 
                     <!-- Input Field -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/userBoxPhone"
+                        android:id="@+id/input_phone"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -475,29 +480,29 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
 
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:hint="@string/prompt_phone"
                         android:textColorHint="@color/tint_hint_no_focused"
+
                         app:boxStrokeWidth="0dp"
                         app:boxStrokeWidthFocused="2dp"
 
                         app:counterEnabled="false"
                         app:counterMaxLength="15"
+                        app:errorEnabled="true"
 
                         app:endIconContentDescription="@string/edit_button"
                         app:endIconDrawable="@drawable/ic_edit"
                         app:endIconMode="custom"
-
                         app:endIconTint="@color/tint_image_icon_light"
-                        app:errorEnabled="true"
-                        app:hintEnabled="true"
-                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
 
                         app:startIconContentDescription="@string/phone_img"
                         app:startIconDrawable="@drawable/ic_phone"
                         app:startIconTint="@color/tint_image_icon_light">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/userTextPhone"
+                            android:id="@+id/text_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number|text|phone"
@@ -510,14 +515,14 @@
 
                     <!-- Buttons Field -->
                     <LinearLayout
-                        android:id="@+id/userPhoneButtonRight"
+                        android:id="@+id/buttons_phone"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="0"
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userAbortPhone"
+                            android:id="@+id/cancel_phone"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -536,7 +541,7 @@
                             app:rippleColor="@color/background_ripple_error" />
 
                         <com.google.android.material.button.MaterialButton
-                            android:id="@+id/userSavePhone"
+                            android:id="@+id/save_phone"
                             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -558,251 +563,196 @@
 
                 </LinearLayout>
 
-
+                <!-- Gender and Date -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:paddingHorizontal="5dp"
+                    android:baselineAligned="false"
+                    android:weightSum="2"
                     android:orientation="horizontal">
 
-
-                    <!-- Birth -->
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <!--Gender -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_gender"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginVertical="5dp"
-                        android:layout_weight="1"
-                        android:baselineAligned="false"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="2dp"
-                        android:weightSum="2">
+                        android:layout_weight="1.1"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
 
-                        <!-- Input Field -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/userBoxBirth"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:hint="@string/prompt_gender"
+                        android:textColorHint="@color/tint_hint_no_focused"
+
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="2dp"
+
+                        app:endIconMode="dropdown_menu"
+                        app:endIconTint="@color/tint_image_icon_light"
+                        app:startIconContentDescription="@string/gender_img"
+                        app:startIconDrawable="@drawable/ic_gender"
+                        app:startIconTint="@color/tint_image_icon_light">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/text_gender"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:enabled="false"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
+                            android:inputType="none"
+                            android:textColor="@color/tint_input_text"
+                            android:textStyle="bold"
+                            tools:ignore="LabelFor" />
 
-                            android:hint="@string/prompt_birth"
-                            android:textColorHint="@color/tint_hint_no_focused"
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="2dp"
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                            app:counterEnabled="false"
-                            app:counterMaxLength="15"
-
-                            app:endIconContentDescription="@string/edit_button"
-                            app:endIconDrawable="@drawable/ic_edit"
-                            app:endIconMode="custom"
-
-                            app:endIconTint="@color/tint_image_icon_light"
-                            app:errorEnabled="true"
-                            app:hintEnabled="true"
-                            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
-
-                            app:startIconContentDescription="@string/phone_img"
-                            app:startIconDrawable="@drawable/ic_birthday"
-                            app:startIconTint="@color/tint_image_icon_light">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/userTextBirth"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="number|text|phone"
-                                android:selectAllOnFocus="false"
-                                android:singleLine="true"
-                                android:textColor="@color/tint_input_text"
-                                android:textStyle="bold" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- Buttons Field -->
-                        <LinearLayout
-                            android:id="@+id/userBirthButtonRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/userAbortBirth"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/delete_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_cancel"
-                                android:textColor="@color/background_button_error"
-                                android:textSize="12sp"
-
-                                app:icon="@drawable/ic_delete"
-                                app:iconTint="@color/tint_error_text"
-                                app:rippleColor="@color/background_ripple_error" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/userSaveBirth"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/save_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_send"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="12sp"
-                                app:icon="@drawable/ic_save"
-
-                                app:iconTint="@color/colorPrimary"
-                                app:rippleColor="@color/background_ripple_default" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-
-                    <!-- Gender -->
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <!--Birthday -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_birthday"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginVertical="5dp"
-                        android:layout_weight="1"
-                        android:baselineAligned="false"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="5dp"
-                        android:paddingVertical="2dp"
-                        >
+                        android:layout_weight="0.9"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
 
-                        <!-- Input Field -->
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/userBoxGender"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:hint="@string/prompt_birth"
+                        android:textColorHint="@color/tint_hint_no_focused"
+
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="2dp"
+
+                        app:endIconContentDescription="@string/edit_button"
+                        app:endIconDrawable="@drawable/ic_edit"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/tint_image_icon_light"
+
+                        app:startIconContentDescription="@string/birthday_img"
+                        app:startIconDrawable="@drawable/ic_birthday"
+                        app:startIconTint="@color/tint_image_icon_light">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/text_birthday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:enabled="false"
+                            android:clickable="true"
                             android:focusable="false"
-                            android:focusableInTouchMode="false"
+                            android:editable="false"
+                            android:longClickable="false"
+                            android:textColor="@color/tint_input_text"
+                            android:textStyle="bold"
+                            android:labelFor="@+id/text_birthday"
+                            tools:ignore="KeyboardInaccessibleWidget" />
 
-                            android:hint="@string/prompt_gender"
-                            android:textColorHint="@color/tint_hint_no_focused"
-                            app:boxStrokeWidth="0dp"
-                            app:boxStrokeWidthFocused="2dp"
-
-                            app:counterEnabled="false"
-                            app:counterMaxLength="15"
-
-                            app:endIconContentDescription="@string/edit_button"
-                            app:endIconDrawable="@drawable/ic_edit"
-                            app:endIconMode="custom"
-
-                            app:endIconTint="@color/tint_image_icon_light"
-                            app:errorEnabled="true"
-                            app:hintEnabled="true"
-                            app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
-
-                            app:startIconContentDescription="@string/phone_img"
-                            app:startIconDrawable="@drawable/ic_gender"
-                            app:startIconTint="@color/tint_image_icon_light">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/userTextGender"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="number|text|phone"
-                                android:selectAllOnFocus="false"
-                                android:singleLine="true"
-                                android:textColor="@color/tint_input_text"
-                                android:textStyle="bold" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <!-- Buttons Field -->
-                        <LinearLayout
-                            android:id="@+id/userGenderButtonRight"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="0"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/userAbortGender"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/delete_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_cancel"
-                                android:textColor="@color/background_button_error"
-                                android:textSize="12sp"
-
-                                app:icon="@drawable/ic_delete"
-                                app:iconTint="@color/tint_error_text"
-                                app:rippleColor="@color/background_ripple_error" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/userSaveGender"
-                                style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginVertical="1dp"
-                                android:clickable="true"
-                                android:contentDescription="@string/save_button"
-
-                                android:focusable="true"
-
-                                android:text="@string/prompt_send"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="12sp"
-                                app:icon="@drawable/ic_save"
-
-                                app:iconTint="@color/colorPrimary"
-                                app:rippleColor="@color/background_ripple_default" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/userAbort"
-                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
-                    android:layout_width="wrap_content"
+
+                <!-- Address -->
+                <LinearLayout
+                    android:id="@+id/container_address"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="1dp"
-                    android:clickable="true"
-                    android:contentDescription="@string/delete_button"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:paddingHorizontal="5dp"
+                    android:paddingVertical="2dp"
+                    android:layout_marginVertical="5dp"
+                    android:baselineAligned="false"
+                    android:orientation="vertical">
 
-                    android:focusable="true"
+                    <!-- Input Field -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/input_address"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
 
-                    android:text="@string/prompt_cancel"
-                    android:textColor="@color/background_button_error"
-                    android:textSize="12sp"
+                        app:hintEnabled="true"
+                        app:hintTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:hint="@string/prompt_address"
+                        android:textColorHint="@color/tint_hint_no_focused"
 
-                    app:icon="@drawable/ic_delete"
-                    app:iconTint="@color/tint_error_text"
-                    app:rippleColor="@color/background_ripple_error" />
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="2dp"
 
+                        app:endIconContentDescription="@string/edit_button"
+                        app:endIconDrawable="@drawable/ic_edit"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/tint_image_icon_light"
+
+                        app:startIconContentDescription="@string/location_img"
+                        app:startIconDrawable="@drawable/ic_location"
+                        app:startIconTint="@color/tint_image_icon_light">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/text_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:shadowColor="#FFFFFF"
+                            android:textColor="@color/tint_input_text"
+                            android:textStyle="bold" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Buttons Field -->
+                    <LinearLayout
+                        android:id="@+id/buttons_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/cancel_address"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/delete_button"
+
+                            android:focusable="true"
+
+                            android:text="@string/prompt_cancel"
+                            android:textColor="@color/background_button_error"
+                            android:textSize="12sp"
+
+                            app:icon="@drawable/ic_delete"
+                            app:iconTint="@color/tint_error_text"
+                            app:rippleColor="@color/background_ripple_error" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/save_address"
+                            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="1dp"
+                            android:clickable="true"
+                            android:contentDescription="@string/save_button"
+
+                            android:focusable="true"
+
+                            android:text="@string/prompt_send"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="12sp"
+                            app:icon="@drawable/ic_save"
+
+                            app:iconTint="@color/colorPrimary"
+                            app:rippleColor="@color/background_ripple_default" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 

@@ -131,6 +131,12 @@ public class DatabaseUtils {
     @SuppressWarnings("unchecked")
     public static void getUser(@NonNull final String uid, FindItemCallback<User> callback) {
         final String[] keys = ResourceUtils.getStringArrayFromID(R.array.user_field);
+        final List<String> genderKeys = Arrays.asList(ResourceUtils.getStringArrayFromID(R.array.genders_name));
+        final String[] genderValues = new String[] {
+                ResourceUtils.getStringFromID(R.string.prompt_gender_man),
+                ResourceUtils.getStringFromID(R.string.prompt_gender_woman),
+                ResourceUtils.getStringFromID(R.string.prompt_gender_other)
+        };
         final DocumentReference reference = db.collection(collections[0]).document(uid);
 
         reference.get()
@@ -144,7 +150,9 @@ public class DatabaseUtils {
                                 ? Objects.requireNonNull(ds.getTimestamp(keys[4])).toDate()
                                 : new GregorianCalendar(1900, Calendar.JANUARY, 1).getTime();
                         final String email = ds.get(keys[5]) != null ? ds.getString(keys[5]) : "null";
-                        final String gender = ds.get(keys[6]) != null ? ds.getString(keys[6]) : "null";
+                        final String gender = ds.get(keys[6]) != null
+                                ?  genderValues[genderKeys.indexOf(String.valueOf(ds.get(keys[6])))]
+                                : "null";
                         final String phone = ds.get(keys[7]) != null ? ds.getString(keys[7]) : "null";
                         final String img = ds.get(keys[8]) != null
                                 ? ds.getString(keys[8])
@@ -345,6 +353,19 @@ public class DatabaseUtils {
                 });
     }
 
+    public static void updateUserField(@NonNull final String uid, @NonNull final String key, @NonNull final String value, FindItemCallback<Boolean> callback) {
+        db.collection(collections[0]).document(uid)
+                .update(key, value)
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User " + key + " updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "User " + key + " not updated." + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
     public static void updateUserImg(@NonNull final String uid, @NonNull final String img, FindItemCallback<Boolean> callback) {
         final String[] keys = ResourceUtils.getStringArrayFromID(R.array.user_field);
 
@@ -356,6 +377,26 @@ public class DatabaseUtils {
                 })
                 .addOnFailureListener(e -> {
                     AppUtils.log(Thread.currentThread().getStackTrace(), "User img not updated. " + e.getMessage());
+                    callback.onCallback(false, RESULT_FAILED);
+                });
+    }
+
+    public static void updateUserPosition(@NonNull final String uid, @NonNull final LatLng position, FindItemCallback<Boolean> callback) {
+        final String[] keys = ResourceUtils.getStringArrayFromID(R.array.user_field);
+
+        db.collection(collections[0]).document(uid)
+                .update(keys[14], new HashMap<String, Double>() {
+                    {
+                        put(keys[15], position.latitude);
+                        put(keys[16], position.longitude);
+                    }
+                })
+                .addOnSuccessListener(aVoid -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym position updated.");
+                    callback.onCallback(true, RESULT_OK);
+                })
+                .addOnFailureListener(e -> {
+                    AppUtils.log(Thread.currentThread().getStackTrace(), "Gym position not updated. " + e.getMessage());
                     callback.onCallback(false, RESULT_FAILED);
                 });
     }

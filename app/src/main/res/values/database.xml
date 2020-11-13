@@ -38,6 +38,11 @@
 
         <!-- [12] --> <item name="date" translatable="false">date</item>
         <!-- [13] --> <item name="type" translatable="false">type</item>
+
+        <!-- [14] --> <item name="location" translatable="false">location</item>
+        <!-- [15] --> <item name="latitude" translatable="false">latitude</item>
+        <!-- [16] --> <item name="longitude" translatable="false">longitude</item>
+
     </string-array>
 
     <string-array name="collections">
