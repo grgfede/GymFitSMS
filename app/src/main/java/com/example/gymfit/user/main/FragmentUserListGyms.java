@@ -332,7 +332,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     private void setUpSubscribedRecycleView(@NonNull final Gym gym) {
-        RecyclerView listUserSubscriptionRecycle = requireView().getRootView().findViewById(R.id.rv_subscribed);
+        final RecyclerView listUserSubscriptionRecycle = requireView().getRootView().findViewById(R.id.rv_subscribed);
         listUserSubscriptionRecycle.setHasFixedSize(false);
         listUserSubscriptionRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
         this.listUserSubscribedAdapter = new ListUserSubscribedAdapter(requireActivity(), gym, (viewHolder, position) ->
@@ -348,7 +348,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     }
 
     private void setUpGymAvailableRecycleView() {
-        RecyclerView listGymRecycle = requireView().getRootView().findViewById(R.id.rv_gyms);
+        final RecyclerView listGymRecycle = requireView().getRootView().findViewById(R.id.rv_gyms);
         listGymRecycle.setHasFixedSize(false);
         listGymRecycle.setLayoutManager(new GridLayoutManager(requireContext(), 1));
         this.listGymAdapter = new ListGymAdapter(requireActivity(), this.gyms, (viewHolder, position) ->

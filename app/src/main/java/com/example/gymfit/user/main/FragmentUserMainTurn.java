@@ -103,20 +103,20 @@ public class FragmentUserMainTurn extends Fragment {
      */
     private void initSystemInterface(@NonNull final View rootView) {
         // init new checked item on navigation Drawer
-        NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
+        final NavigationView navigationView = requireActivity().findViewById(R.id.navigation_user);
         navigationView.getMenu().findItem(R.id.nav_menu_subs).setChecked(true);
 
         // get ViewPager and TabLayout from Layout XML and init them
-        ViewPager viewPager = rootView.findViewById(R.id.user_view_pager);
-        TabLayout tabLayout = rootView.findViewById(R.id.menu_user_tab);
+        final ViewPager viewPager = rootView.findViewById(R.id.user_view_pager);
+        final TabLayout tabLayout = rootView.findViewById(R.id.menu_user_tab);
 
         // init refresher layout
-        SwipeRefreshLayout refreshLayout = rootView.findViewById(R.id.refresher);
+        final SwipeRefreshLayout refreshLayout = rootView.findViewById(R.id.refresher);
         refreshLayout.setColorSchemeResources(R.color.tint_refresher,
                 R.color.tint_refresher_first, R.color.tint_refresher_second, R.color.tint_refresher_third);
 
 
-        UserViewPagerAdapter adapter = new UserViewPagerAdapter(getChildFragmentManager(), 0);
+        final UserViewPagerAdapter adapter = new UserViewPagerAdapter(getChildFragmentManager(), 0);
         adapter.addFragment(FragmentUserListTurns.newInstance(this.user), getString(R.string.system_tab_list_turns));
         adapter.addFragment(FragmentUserPersonalTurn.newInstance(this.user), getString(R.string.system_tab_main_turn));
         viewPager.setAdapter(adapter);
@@ -129,7 +129,7 @@ public class FragmentUserMainTurn extends Fragment {
 
             @Override
             public void onPageSelected(final int position) {
-                OnTurnFragment fragment = (OnTurnFragment) adapter.instantiateItem(viewPager, position);
+                final OnTurnFragment fragment = (OnTurnFragment) adapter.instantiateItem(viewPager, position);
                 fragment.onFragmentBecomeVisible();
             }
 
@@ -141,7 +141,7 @@ public class FragmentUserMainTurn extends Fragment {
 
         // if pull down with gesture refresh all picker turn from adapter
         refreshLayout.setOnRefreshListener(() -> {
-            OnTurnFragment fragment = (OnTurnFragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
+            final OnTurnFragment fragment = (OnTurnFragment) adapter.instantiateItem(viewPager, viewPager.getCurrentItem());
             AppUtils.message(this.messageAnchor, getString(R.string.refresh_turns_available), Snackbar.LENGTH_SHORT).show();
 
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
@@ -163,9 +163,7 @@ public class FragmentUserMainTurn extends Fragment {
     }
 
     private void toggleRefreshing(@NonNull final SwipeRefreshLayout swipeRefreshLayout, final boolean enabled) {
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setEnabled(enabled);
-        }
+        swipeRefreshLayout.setEnabled(enabled);
     }
 
 }

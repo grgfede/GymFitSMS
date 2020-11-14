@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Row -->
+    <RelativeLayout
+        android:id="@+id/faq_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="72dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- Question -->
+        <LinearLayout
+            android:id="@+id/container_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="72dp"
+            android:orientation="horizontal"
+            android:baselineAligned="true"
+            android:weightSum="2">
+
+            <!-- Title, subtitle -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="16sp"/>
+
+            <!-- End icon -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/end_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="12sp"
+                android:layout_weight="0"
+                android:contentDescription="@string/menu_button"
+                android:src="@drawable/ic_arrow_down"
+                android:tint="@color/tint_image_icon_light"/>
+
+        </LinearLayout>
+
+        <!-- Answer -->
+        <LinearLayout
+            android:id="@+id/container_answer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_below="@+id/container_question">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/answer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="start"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/tint_second_line_light"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

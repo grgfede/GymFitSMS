@@ -177,4 +177,15 @@
     <string name="prompt_gender_other">Altro</string>
     <string name="update_birthday_success">La nuova data di nascita è stata aggiornata.</string>
     <string name="update_birthday_error">La nuova data di nascita non è stata aggiornata.</string>
+    <string name="system_tab_help_about">Ringraziamenti</string>
+    <string name="system_about_app">Questa applicazione è stata sviluppata per soli scopi istituzionali e dimostrativi. \n
+        I suoi obietti sono molto chiari, permette alle infrastrutture ginniche di gestire turni, abbonamenti e iscritti.
+        Riciprocamente, essa permette agli utenti iscritti di scegliere una palestra, il rispettivo abbonamento e i specifici turni.</string>
+    <string name="system_device_os_version">Versione del sistema operativo</string>
+    <string name="system_app_version">Versione dell\'app</string>
+    <string name="system_device_country">Paese</string>
+    <string name="system_device_lang">Lingua</string>
+    <string name="system_device_conn">Connessione</string>
+    <string name="title_system_info">Informazioni sull\'app</string>
+    <string name="refresh_system_info">Ricarica nuove informazioni…</string>
 </resources>

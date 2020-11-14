@@ -25,6 +25,7 @@ import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.system.conf.utils.ResourceUtils;
+import com.example.gymfit.system.main.FragmentSystemMainHelp;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -132,7 +133,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
         } else if (item.getItemId() == R.id.nav_menu_subs && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentGymSubs.newInstance(this.gym), true);
         } else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {
-            // TODO: help fragment
+            AppUtils.startFragment(this, FragmentSystemMainHelp.newInstance(this.gym), true);
         } else if (item.getItemId() == R.id.nav_menu_logout) {
             FirebaseAuth.getInstance().signOut();
             finish();

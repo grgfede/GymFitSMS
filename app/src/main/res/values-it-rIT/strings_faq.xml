@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+    <!-- User Questions -->
+    <string-array name="user_questions">
+        <item>Quanto costa GymFit ?</item>
+
+        <item>Come ci si iscrive ad una palestra ?</item>
+        <item>Se sono già iscritto ad una palestra posso re-iscrivermi ?</item>
+
+        <item>Come ci si prenota ad un turno ?</item>
+        <item>E\' possibile modificare un turno già prenotato ?</item>
+
+        <item>E\' possibile modificare le proprie generalità ?</item>
+        <item>E\' possibile eliminare il proprio account ?</item>
+    </string-array>
+
+    <!-- Gym Questions -->
+    <string-array name="gym_questions">
+        <item>Quanto costa GymFit ?</item>
+
+        <item>Come si gestiscono i propri abbonamento ?</item>
+        <item>Come si gestiscono i propri turni ?</item>
+
+        <item>Come si gestiscono i propri iscritti ?</item>
+        <item>E\' possibile eliminare la prenotazione/abbonamento di un iscritto?</item>
+
+        <item>E\' possibile modificare le proprie generalità ?</item>
+        <item>E\' possibile eliminare il proprio account ?</item>
+    </string-array>
+
+    <!-- User Answer -->
+    <string-array name="user_answers">
+        <item>GymFit (applicazione Smartphone e tablet) è gratuita per tutti i clienti delle palestre registrate.
+            \nEssa è realizzata per soli scopi didattici, dimostrtivi e istituzionali.</item>
+
+        <item>Per iscriversi ad una palestra è necessario accedere alla pagina [Elenco palestre]
+            ed eseguire uno swipe verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
+            riga con le informazioni della palestra desiderata.
+            \nPotrà risultare molto utile l\'utilizzo delle funzionalità di ricerca, filtraggio e ordinamento
+            presenti nella barra superiore dello schermo.</item>
+        <item>E\' sempre possibile disiscriversi dalla palestra attuale (quella a cui si è già iscritti).
+            \nPer disiscriversi è necessario accedere alla pagina [Elenco palestre] ed eseguire uno swipe
+            verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
+            riga con le informazioni della propria palestra (appena sotto la scritta [La tua palestra]).
+            \nEvidentemente l\'eliminazione dell\'iscrizione dalla prorpia palestra eliminerà ogni prenotazione e turno ad essa.
+            \nIn seguito a tale azione, sarà nuovamente possibile iscriversi ad un\'altra palestra.</item>
+
+        <item>Per prenotarsi ad un turno della palestra a cui si è già iscritti è necessario accedere alla pagina [Prenotazioni], dunque
+            [Lista prenotazioni], selezionare il giorno della settimana desiderato e clicare su una delle tre fasce di turni possibili (mattutini, pomeridiani e serali).
+            \nIn seguito cliccare nuovamente su uno dei turni (ove possibile) la palestra fornisce la propria disponibilià.</item>
+        <item>Non è possibile ancora modificare un turno già prenotato ma sarà sempre possibile eliminarlo in qualsiasi momento.
+            \nPer poter eliminare un turno è necessario accedere alla pagina [Prenotazioni], dunque [Personale], selezionare il giorno
+            della settimana a cui ci si è prenotati ed eseguire uno swipe verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
+            riga con le informazioni della prenotazione.</item>
+
+        <item>E\' sempre possibile modificare le proprie informazioni registrate al momento dell\'iscrizione all\'app.
+            \nPer poter modificare definitivamente e singolarmente ciascuna informazione è necessario accedere alla pagina [Utente] e cliccare sul pulsante
+            in alto a destra (a forma di penna) nella barra superiore.
+            \nUna volta cliccato si sarà entrati nella modalità di modifica profilo, con la quale ciascun campo sarà cliccabile e aggiornabile.
+            \nSeppur ciascuna modifica è eseguita in tempo reale sarà consigliato uscire dalla modalità di modifica e ritornare a quella classica.</item>
+        <item>Non è purtroppo ancora possibile disiscriversi ufficialmente dall\'applicazione.
+            \nBen presto lo renderemo possibile.</item>
+    </string-array>
+
+    <!-- Gym Answer -->
+    <string-array name="gym_answers">
+        <item>GymFit (applicazione Smartphone e tablet) è gratuita per tutti i titolari delle palestra registrate.
+            \nEssa è realizzata per soli scopi didattici, dimostrtivi e istituzionali.</item>
+
+        <item>Per gestire (attivazione/disattivazione) i propri abbonamenti è necessario accedere alla pagina [Impostazioni] ed
+            attivare o disattivare il pulsante di riferimento.
+            \nEvidentemente la disattivazione di un abbonamento disabiliterà tutti i turni, abbonamenti e quindi i propri iscritti.
+            \nEsegui con estrema cautela questa attività.</item>
+        <item>Per gestire (attivazione/disattivazione) i propri turni è necessario accedere alla pagina [Impostazioni], cliccare sulla categoria
+            di turno voluta (mattutini, pomeridiani, serali) e selezionare le caselle riferite ai turni singoli.
+            \nEvidentemente la disattivazione di un turno si ripercuoterà su tutti gli iscritti
+            \nEsegui con estrema cautela questa attività.</item>
+
+        <item>Per gestire gli utenti iscritti alla propria palestra è necessario accedere alla pagina [Elenco iscritti].
+            \nE\' possibile esclusivamente eliminare questi ultimi ma non effettuare manipolazioni sui rispettividi dati.</item>
+        <item>E\' esclusivamente possibile disattivare, dunque eliminare definitivamente un utente dalla propria palestra.
+            \nPer poter eliminare un iscritto è necessario accedere alla pagina [Elenco iscritti], ed eseguire uno swipe verso sinistra
+            (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della riga con le informazioni dell\'utente.
+            \nPotrà risultare molto utile l\'utilizzo delle funzionalità di ricerca, filtraggio e ordinamento
+            presenti nella barra superiore dello schermo.</item>
+
+        <item>E\' sempre possibile modificare le proprie informazioni registrate al momento dell\'iscrizione all\'app.
+            \nPer poter modificare definitivamente e singolarmente ciascuna informazione è necessario accedere alla pagina [Palestra] e cliccare sul pulsante
+            in alto a destra (a forma di penna) nella barra superiore.
+            \nUna volta cliccato si sarà entrati nella modalità di modifica profilo, con la quale ciascun campo sarà cliccabile e aggiornabile.
+            \nSeppur ciascuna modifica è eseguita in tempo reale sarà consigliato uscire dalla modalità di modifica e ritornare a quella classica.</item>
+        <item>Non è purtroppo ancora possibile disiscriversi ufficialmente dall\'applicazione.
+            \nBen presto lo renderemo possibile.</item>
+    </string-array>
+
+</resources>
