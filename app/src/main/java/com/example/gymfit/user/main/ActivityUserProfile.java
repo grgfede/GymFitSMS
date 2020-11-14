@@ -24,6 +24,7 @@ import com.example.gymfit.R;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.system.conf.utils.ResourceUtils;
+import com.example.gymfit.system.main.FragmentSystemMainHelp;
 import com.example.gymfit.user.conf.User;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -133,7 +134,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         } else if (item.getItemId() == R.id.nav_menu_gyms && !item.isChecked()) {
             AppUtils.startFragment(this, FragmentUserListGyms.newInstance(this.user), true);
         } else if (item.getItemId() == R.id.nav_menu_help && !item.isChecked()) {
-            // TODO: help fragment
+            AppUtils.startFragment(this, FragmentSystemMainHelp.newInstance(this.user), true);
         } else if (item.getItemId() == R.id.nav_menu_logout) {
             FirebaseAuth.getInstance().signOut();
             finish();

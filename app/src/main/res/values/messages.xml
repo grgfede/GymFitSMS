@@ -62,6 +62,7 @@
     <string name="refresh_gym_settings">Ricarica impostazioni dal database…</string>
     <string name="refresh_turns_available">Ricerca nuovi turni disponibili…</string>
     <string name="refresh_turns_picked">Ricarica turni prenotati…</string>
+    <string name="refresh_system_info">Ricarica nuove informazioni…</string>
     <string name="refresh_completed">Ricerca completata</string>
 
 </resources>

@@ -51,8 +51,35 @@
     <string name="system_toolbar_help">Aiuto</string>
     <string name="system_tab_list_turns">Lista prenotazioni</string>
     <string name="system_tab_main_turn">Personale</string>
+    <string name="system_tab_help_faq" translatable="false">FAQ</string>
+    <string name="system_tab_help_about">Ringraziamenti</string>
     <string name="system_nav_title_home" translatable="false">Home</string>
     <string name="system_nav_title_other">Altro</string>
+
+    <string name="system_about_app">Questa applicazione è stata sviluppata per soli scopi istituzionali e dimostrativi. <br/>
+        I suoi obietti sono molto chiari, permette alle infrastrutture ginniche di gestire turni, abbonamenti e iscritti.
+        Riciprocamente, essa permette agli utenti iscritti di scegliere una palestra, il rispettivo abbonamento e i specifici turni.</string>
+    <string-array name="system_developer_name">
+        <!-- 0 --> <item name="dev_1">Alessio Toscano</item>
+        <!-- 1 --> <item name="dev_2">Caterina Bianca Maggio</item>
+        <!-- 2 --> <item name="dev_3">Federico Frari</item>
+        <!-- 3 --> <item name="dev_4">Giuseppe Mondelli</item>
+    </string-array>
+    <string name="title_system_info">Informazioni sull\'app</string>
+    <string name="system_device_os_version">Versione del sistema operativo</string>
+    <string name="system_app_version">Versione dell\'app</string>
+    <string name="system_device_country">Paese</string>
+    <string name="system_device_lang">Lingua</string>
+    <string name="system_device_conn">Connessione</string>
+    <string-array name="system_connection_types">
+        <!-- 0 --> <item name="none">None</item>
+        <!-- 1 --> <item name="wifi">Wifi</item>
+        <!-- 2 --> <item name="ethernet">Ethernet</item>
+        <!-- 3 --> <item name="mobile_2G">2G</item>
+        <!-- 4 --> <item name="mobile_3G">3G</item>
+        <!-- 5 --> <item name="mobile_4G">4G</item>
+        <!-- 6 --> <item name="mobile_5G">5G</item>
+    </string-array>
 
     <string name="prompt_email" translatable="false">Email</string>
     <string name="prompt_password" translatable="false">Password</string>

@@ -137,7 +137,7 @@ public final class AppUtils {
      */
     public static int getRandomDelayMillis() {
         final int minDelay = 2000;
-        final int maxDelay = 6000;
+        final int maxDelay = 3000;
 
         return minDelay + (new Random().nextInt(maxDelay));
     }

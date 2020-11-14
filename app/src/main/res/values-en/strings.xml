@@ -177,4 +177,15 @@
     <string name="prompt_gender_other">Other</string>
     <string name="update_birthday_success">New date of birthday is updated.</string>
     <string name="update_birthday_error">New date of birthday is not updated.</string>
+    <string name="system_tab_help_about">Credits</string>
+    <string name="system_about_app">This application was developed for institutional and demonstration purposes only. \n
+        Its objectives are very clear, it allows gymnastic infrastructures to manage shifts, subscriptions and members.
+        Reciprocally, it allows registered users to choose a gym, the respective subscription and specific shifts.</string>
+    <string name="system_device_lang">Language</string>
+    <string name="system_device_country">Country</string>
+    <string name="system_device_conn">Connection</string>
+    <string name="system_app_version">" App version"</string>
+    <string name="system_device_os_version">Operating system version</string>
+    <string name="title_system_info">App info</string>
+    <string name="refresh_system_info">Loading new info…</string>
 </resources>
