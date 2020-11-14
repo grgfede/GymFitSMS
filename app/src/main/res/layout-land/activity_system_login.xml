@@ -100,7 +100,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
-                android:layout_height="30sp"
+                android:layout_height="40sp"
                 android:inputType="text|textEmailAddress|textEmailSubject"
                 android:textColor="@color/tint_hint_focuses" />
         </com.google.android.material.textfield.TextInputLayout>
