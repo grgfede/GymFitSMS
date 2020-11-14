@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- User Questions -->
+    <string-array name="user_questions">
+        <item>How much does GymFit cost?</item>
+
+        <item>How do I join a gym?</item>
+        <item>If I am already registered in a gym, can I re-register?</item>
+
+        <item>How do you book a turn?</item>
+        <item>Is it possible to modify a turn already booked?</item>
+
+        <item>Is it possible to change your personal details?</item>
+        <item>Is it possible to delete your account?</item>
+    </string-array>
+
+    <!-- Gym Questions -->
+    <string-array name="gym_questions">
+        <item>How much does GymFit cost?</item>
+
+        <item>How do you manage your subscription?</item>
+        <item>How do you manage your turns?</item>
+
+        <item>How do you manage your subscribers?</item>
+        <item>Is it possible to cancel the subscriptions/turns of a member?</item>
+
+        <item>Is it possible to change your personal details?</item>
+        <item>Is it possible to delete your account?</item>
+    </string-array>
+
+    <!-- User Answer -->
+    <string-array name="user_answers">
+        <item>GymFit (Smartphone and tablet application) is free for all gym customers.
+            \nIt is made for educational, demonstrative and institutional purposes only.</item>
+
+        <item>To subscribe to a gym you need to access the page [List gyms] and swipe to the left (hold and drag your finger from right to left) above the
+            line with the information of the desired gym.
+            \nUsing the search, filtering and sorting features can be very useful in the top bar of the screen.</item>
+        <item>It is always possible to unsubscribe from the current gym (the one to which you are already registered).
+            \nTo unsubscribe, you need to access the [List gyms] page and swipe to the left (hold and drag your finger from right to left) above the
+             line with your gym information (just below [List gyms]).
+            \nObviously, the elimination of the registration from your gym will eliminate every reservation and turn to it.
+            \nFollowing this action, it will again be possible to register for another gym.</item>
+
+        <item>To book a gym session to which you have already registered, you need to access the [Subscription] page, therefore
+             [List gym], select the desired day of the week and click on one of the three possible turn ranges (morning, afternoon and evening).
+            \nThen click again on one of the turn (where possible) the gym provides its availability.</item>
+        <item>It is not yet possible to modify a turn that has already been booked but it will always be possible to delete it at any time.
+            \nIn order to delete a shift it is necessary to access the [Subscription] page, then [Personal], select the day
+             of the week you booked and swipe to the left (hold down and drag your finger from right to left) above the
+             line with booking information.</item>
+
+        <item>It is always possible to change your information registered at the time of subscription to the app.
+            \nTo be able to permanently and individually modify each information it is necessary to access the [User] page and click on the button
+             at the top right (pen-shaped) of the top bar.
+            \nOnce clicked, you will have entered the profile editing mode, with which each field will be clickable and updatable.
+            \nEven if each modification is performed in real time, it will be advisable to exit the modification mode and return to the classic one.</item>
+        <item>Unfortunately, it is not yet possible to officially unsubscribe from the application.
+            \nWe will soon make it possible.</item>
+    </string-array>
+
+    <!-- Gym Answer -->
+    <string-array name="gym_answers">
+        <item>GymFit (Smartphone and tablet application) is free for all gym owners.
+            \nIt is made for educational, demonstrative and institutional purposes only.</item>
+
+        <item>To manage (enable/disable) your subscriptions you need to access the [Settings] page ed enable or disable the reference button.
+             \nEvidently the deactivation of a subscription will disable all turns, subscriptions and therefore its subscribers.
+             \nPerform this activity with extreme caution.</item>
+        <item>To manage (enable/disable) your turns you need to access the [Settings] page, click on the category
+             desired turn (morning, afternoon, evening) and select the boxes referring to single shifts.
+             \nEvidently the deactivation of a shift will affect all subscribers
+             \nPerform this activity with extreme caution.</item>
+
+        <item>To manage the users of your gym, you must access the [Subscribers] page.
+             \nIt is only possible to delete the latter but not to manipulate the respective data.</item>
+        <item>It is only possible to deactivate, therefore permanently delete a user from your gym.
+             \nTo delete a subscriber, you need to access the [Subscribers] page, and swipe to the left
+             (hold and drag your finger from right to left) above the row with user information.
+             \nThe use of the search, filter and sort features may be very useful in the top bar of the screen</item>
+
+        <item>It is always possible to change your information registered at the time of subscription to the app.
+            \nTo be able to permanently and individually modify each information it is necessary to access the [User] page and click on the button
+             at the top right (pen-shaped) of the top bar.
+            \nOnce clicked, you will have entered the profile editing mode, with which each field will be clickable and updatable.
+            \nEven if each modification is performed in real time, it will be advisable to exit the modification mode and return to the classic one.</item>
+        <item>Unfortunately, it is not yet possible to officially unsubscribe from the application.
+            \nWe will soon make it possible.</item>
+    </string-array>
+
+</resources>

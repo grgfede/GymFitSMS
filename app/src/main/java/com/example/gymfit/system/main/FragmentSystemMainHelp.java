@@ -14,7 +14,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,17 +34,17 @@ import com.google.android.material.tabs.TabLayout;
  * Use the {@link FragmentSystemMainHelp#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentSystemMainHelp<T extends GenericUser> extends Fragment {
+public class FragmentSystemMainHelp extends Fragment {
     private static final String USER_KEY = "user_key";
 
     private View messageAnchor = null;
 
     private GenericUser user = null;
 
-    public static <T extends GenericUser> FragmentSystemMainHelp<T> newInstance(@NonNull final T user) {
+    public static <T extends GenericUser> FragmentSystemMainHelp newInstance(@NonNull final T user) {
         AppUtils.log(Thread.currentThread().getStackTrace(), "Instance of FragmentUserMainTurn created");
 
-        final FragmentSystemMainHelp<T> fragment = new FragmentSystemMainHelp<>();
+        final FragmentSystemMainHelp fragment = new FragmentSystemMainHelp();
         final Bundle bundle = new Bundle();
 
         if (user instanceof User) {
@@ -135,7 +134,7 @@ public class FragmentSystemMainHelp<T extends GenericUser> extends Fragment {
                 R.color.tint_refresher_first, R.color.tint_refresher_second, R.color.tint_refresher_third);
 
         final UserViewPagerAdapter adapter = new UserViewPagerAdapter(getChildFragmentManager(), 0);
-        adapter.addFragment(FragmentSystemHelpFaq.newInstance(), getString(R.string.system_tab_help_faq));
+        adapter.addFragment(FragmentSystemHelpFaq.newInstance(this.user), getString(R.string.system_tab_help_faq));
         adapter.addFragment(FragmentSystemHelpAbout.newInstance(), getString(R.string.system_tab_help_about));
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

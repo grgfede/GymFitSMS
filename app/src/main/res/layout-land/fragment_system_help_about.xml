@@ -60,7 +60,6 @@
                             android:textAllCaps="true"
                             android:letterSpacing="0.15"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/tint_first_line_light"
                             android:textSize="20sp" />
 
                     </LinearLayout>

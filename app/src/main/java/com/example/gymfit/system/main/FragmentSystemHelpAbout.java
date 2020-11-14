@@ -146,8 +146,7 @@ public class FragmentSystemHelpAbout extends Fragment implements OnTurnFragment 
             recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 2));
         }
 
-
-        ListDevelopersAdapter developersAdapter = new ListDevelopersAdapter(rootView.getContext(), developers, listener);
+        final ListDevelopersAdapter developersAdapter = new ListDevelopersAdapter(rootView.getContext(), developers, listener);
         recyclerView.setAdapter(developersAdapter);
 
         AppUtils.log(Thread.currentThread().getStackTrace(), "Developer adapter initialized");
