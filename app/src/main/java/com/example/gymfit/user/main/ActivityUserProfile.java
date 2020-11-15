@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -57,11 +58,14 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     private final List<String> emptyData = new ArrayList<>();
     private boolean isEmptyData = false;
 
+    private SharedPreferences preferences;
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             // Initialization interface
@@ -94,6 +98,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         if (item.getItemId() == R.id.system_toolbar_logout){
             FirebaseAuth.getInstance().signOut();
+            this.preferences.edit().putString("uid", null).apply();
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -137,6 +142,7 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
             AppUtils.startFragment(this, FragmentSystemMainHelp.newInstance(this.user), true);
         } else if (item.getItemId() == R.id.nav_menu_logout) {
             FirebaseAuth.getInstance().signOut();
+            this.preferences.edit().putString("uid", null).apply();
             finish();
         }
 

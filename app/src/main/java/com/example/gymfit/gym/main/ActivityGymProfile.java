@@ -2,6 +2,7 @@ package com.example.gymfit.gym.main;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -55,11 +56,15 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     private final List<String> emptyData = new ArrayList<>();
     private boolean isEmptyData = false;
 
+    private SharedPreferences preferences;
+
+
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
 
+        this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             // Initialization interface
@@ -93,6 +98,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         if (item.getItemId() == R.id.system_toolbar_logout) {
             FirebaseAuth.getInstance().signOut();
+            this.preferences.edit().putString("uid", null).apply();
             finish();
         }
         return super.onOptionsItemSelected(item);
@@ -136,6 +142,7 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
             AppUtils.startFragment(this, FragmentSystemMainHelp.newInstance(this.gym), true);
         } else if (item.getItemId() == R.id.nav_menu_logout) {
             FirebaseAuth.getInstance().signOut();
+            this.preferences.edit().putString("uid", null).apply();
             finish();
         }
 
