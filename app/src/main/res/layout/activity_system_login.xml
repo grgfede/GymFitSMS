@@ -111,15 +111,10 @@
             android:textSize="18sp"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-
-
-            app:endIconMode="clear_text"
-
+            app:endIconMode="password_toggle"
             app:errorEnabled="true"
             app:helperText="@string/helper_psw_hover"
-
             app:helperTextEnabled="true"
-
             app:hintEnabled="true"
             app:hintTextColor="@color/tint_hint_no_focused"
             app:layout_constraintBottom_toTopOf="@+id/txtPassword"
@@ -133,7 +128,7 @@
                 android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textVisiblePassword|textPassword"
+                android:inputType="textPassword"
                 android:textColor="@color/tint_hint_focuses" />
         </com.google.android.material.textfield.TextInputLayout>
 
