@@ -31,6 +31,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -190,15 +192,30 @@ public class SignUp2Fragment extends Fragment {
                             String uid = mFirebaseAuth.getUid();
                             user.setUid(uid);
                             user.setEmail(email);
-                            writeDb(uid);
+                            writeDb(uid, email);
                         }
                     }
                 });
     }
 
-    private void writeDb(String uid) {
+    private void writeDb(String uid, String email) {
         db = FirebaseFirestore.getInstance();
-        db.collection("users").document(uid).set(user)
+        Map<String, Object> data = new HashMap<>();
+        data.put("uid", uid);
+        data.put("name", user.getName());
+        data.put("surname", user.getSurname());
+        data.put("fullname", null);
+        data.put("email", email);
+        data.put("img", null);
+        data.put("dateOfBirthday", user.getDateOfBirthday());
+        data.put("location", user.getLocation());
+        data.put("address", user.getAddress());
+        data.put("phone", user.getPhone());
+        data.put("gender", user.getGender());
+        data.put("subscription", null);
+        data.put("turns", null);
+
+        db.collection("users").document(uid).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
