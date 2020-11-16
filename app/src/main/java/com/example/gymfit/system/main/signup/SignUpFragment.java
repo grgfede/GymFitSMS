@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -13,10 +14,10 @@ import androidx.fragment.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.main.ActivityGymProfile;
@@ -34,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,10 +54,8 @@ public class SignUpFragment extends Fragment {
     private TextInputEditText birthSignUp;
     private TextInputEditText locationSignUp;
     private Date dateOfBirth;
-
-
-
     private LatLng locationLatLng;
+    private final AtomicInteger genderSelectedPosition = new AtomicInteger(0);
 
     private static final int MY_ADDRESS_REQUEST_CODE = 100;
     final Calendar myCalendar = Calendar.getInstance();
@@ -66,16 +66,13 @@ public class SignUpFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public SignUpFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    @SuppressWarnings("deprecated")
+    public void onAttach(@NonNull Activity activity) {
         myContext = (FragmentActivity) activity;
         super.onAttach(activity);
     }
@@ -103,8 +100,9 @@ public class SignUpFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
 
 
         }
@@ -126,35 +124,29 @@ public class SignUpFragment extends Fragment {
         locationSignUp = (TextInputEditText) view.findViewById(R.id.txtLocationSignUp);
 
         //CREO IL CALENDARIO
-        DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                myCalendar.set(Calendar.YEAR, year);
-                myCalendar.set(Calendar.MONTH, monthOfYear);
-                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
-            }
+        DatePickerDialog.OnDateSetListener date = (view1, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            updateLabel();
         };
 
 
         //INIZIALIZZO IL CAMPO DEL GENDER
         setAutoComplete(view);
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnContinue.setOnClickListener(v -> {
 
-                //FACCIO CONTROLLI SUI CAMPI INSERITI DALL'UTENTE
-                boolean errors = controlFields(view);
+            //FACCIO CONTROLLI SUI CAMPI INSERITI DALL'UTENTE
+            boolean errors = controlFields(view);
 
-                if (!(errors)) {
-                    Fragment fragment2 = new SignUp2Fragment();
-                    FragmentManager fragManager = myContext.getSupportFragmentManager();
-                    //SALVO I DATI DA PASSARE AL SECONDO FRAGMENT
-                    saveData(fragment2, fragManager);
-                    //FACCIO IL CAMBIO DEL FRAGMENT
-                    changeFragment(fragManager, fragment2);
-                }
+            if (!(errors)) {
+                Fragment fragment2 = new SignUp2Fragment();
+                FragmentManager fragManager = myContext.getSupportFragmentManager();
+                //SALVO I DATI DA PASSARE AL SECONDO FRAGMENT
+                saveData(fragment2);
+                //FACCIO IL CAMBIO DEL FRAGMENT
+                changeFragment(fragManager, fragment2);
             }
         });
 
@@ -202,12 +194,14 @@ public class SignUpFragment extends Fragment {
                 .commit();
     }
 
-    private void saveData(Fragment fragment2, FragmentManager fragmentManager) {
+    private void saveData(Fragment fragment2) {
+        final List<String> genders = Arrays.asList(getResources().getStringArray(R.array.genders_name));
+
         String name, surname, phone, gender, position;
         name = nameSignUp.getText().toString();
         surname = surnameSignUp.getText().toString();
         phone = phoneSignUp.getText().toString();
-        gender = genderSignUp.getText().toString();
+        gender = genders.get(this.genderSelectedPosition.get());
         position = locationSignUp.getText().toString();
 
 
@@ -278,7 +272,7 @@ public class SignUpFragment extends Fragment {
 
     //METODO CHE AGGIUNGE I VALORI UOMO/DONNA NEL CAMPO DEL SESSO
     private void setAutoComplete(View view) {
-        String[] COUNTRIES = new String[]{"Uomo", "Donna"};
+        String[] COUNTRIES = new String[]{"Uomo", "Donna", "Altro"};
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
@@ -288,5 +282,16 @@ public class SignUpFragment extends Fragment {
 
         AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.txtGenderSignUp);
         editTextFilledExposedDropdown.setAdapter(adapter);
+        editTextFilledExposedDropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                genderSelectedPosition.set(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 }
