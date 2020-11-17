@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -268,6 +269,9 @@ public class GymSignUpFragment extends Fragment {
                                 Uri download = uri;
                                 //AGGIORNO I DATI DELL'UTENTE SUL DATABASE AGGIUNGENDO L'URL DELL'IMMAGINE CARICATA
                                 uploadInfoImageUser(uri, uid);
+                                Fragment finalSignUp = new SignUpFinish();
+                                FragmentManager fragManager = myContext.getSupportFragmentManager();
+                                changeFragment(fragManager, finalSignUp);
                             }
                         });
                     }
@@ -277,6 +281,20 @@ public class GymSignUpFragment extends Fragment {
                 Toast.makeText(getContext(), "Caricamento immagine fallita: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+
+
+    private void changeFragment(FragmentManager fragManager, Fragment fragment2){
+        fragManager.beginTransaction().setCustomAnimations(
+                R.anim.enter,  // enter
+                R.anim.exit,  // exit
+                R.anim.pop_enter,   // popEnter
+                R.anim.pop_exit  // popExit
+        )
+                .replace(R.id.viewPager, fragment2)
+                .addToBackStack("frags")
+                .commit();
     }
 
     private void uploadInfoImageUser(Uri selectedImage, String uid) {
