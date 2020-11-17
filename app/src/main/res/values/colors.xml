@@ -43,7 +43,7 @@
     <color name="tint_helper_text_no_focused">@color/quantum_grey300</color>
     <color name="tint_helper_text_focused">@color/quantum_deeppurpleA700</color>
     <color name="tint_error_text">@color/quantum_error_light</color>
-    <color name="tint_input_text">@color/places_text_black_alpha_87</color>
+    <color name="tint_input_text">@color/tint_first_line_light</color>
 
     <color name="tint_message_text">@color/quantum_amber400</color>
 
