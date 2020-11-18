@@ -22,7 +22,7 @@ import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.recycleview.ListDatePickerAdapter;
 import com.example.gymfit.system.conf.recycleview.ListTurnPickerAdapter;
 import com.example.gymfit.system.conf.recycleview.OnItemClickListener;
-import com.example.gymfit.system.conf.recycleview.OnUserSubscriptionResultCallback;
+import com.example.gymfit.system.conf.recycleview.OnDialogResultCallback;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.user.conf.OnTurnFragment;
@@ -489,9 +489,10 @@ public class FragmentUserListTurns extends Fragment implements OnTurnFragment {
      *
      * @param message date string complete of turn selected from user
      */
-    private void createSubscribeDialog(@NonNull final String message, @NonNull final OnUserSubscriptionResultCallback callback) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+    private void createSubscribeDialog(@NonNull final String message, @NonNull final OnDialogResultCallback callback) {
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle(getString(R.string.prompt_book));
+
         final String placeholder = getString(R.string.user_booking) + "\n" + message + " ?";
         builder.setMessage(placeholder);
         builder.setPositiveButton(getString(R.string.prompt_book), (dialog, which) -> callback.onCallback(Boolean.toString(true)));

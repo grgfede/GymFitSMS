@@ -21,12 +21,15 @@ import com.example.gymfit.gym.conf.Gym;
 import com.example.gymfit.system.conf.recycleview.ItemTouchHelperCallback;
 import com.example.gymfit.system.conf.recycleview.ListDatePickerAdapter;
 import com.example.gymfit.system.conf.recycleview.ListTurnPickedAdapter;
+import com.example.gymfit.system.conf.recycleview.OnDialogResultCallback;
 import com.example.gymfit.system.conf.recycleview.OnItemClickListener;
+import com.example.gymfit.system.conf.recycleview.OnItemLongClickListener;
 import com.example.gymfit.system.conf.recycleview.OnItemSwipeListener;
 import com.example.gymfit.system.conf.utils.AppUtils;
 import com.example.gymfit.system.conf.utils.DatabaseUtils;
 import com.example.gymfit.user.conf.OnTurnFragment;
 import com.example.gymfit.user.conf.User;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
@@ -50,7 +53,7 @@ import java.util.Objects;
  * Use the {@link FragmentUserPersonalTurn#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeListener, OnTurnFragment {
+public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeListener, OnTurnFragment, OnItemLongClickListener {
     private static final String USER_KEY = "user_key";
 
     private View messageAnchor = null;
@@ -107,29 +110,30 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
         final String itemDate = new SimpleDateFormat("EEEE dd, ", Locale.getDefault())
                 .format(((Date) ((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn()[0]));
         final String itemType = AppUtils.getTurnValueFromKey(String.valueOf(((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn()[1]));
+
+        // Backup before delete for undo action
         final Object[] item = ((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn();
 
-        this.listTurnPickedAdapter.removeItem(position);
+        unbookUser(item, itemDate, itemType, position);
+    }
 
-        final String placeholder = getString(R.string.user_unbooking) + itemDate + " " + itemType;
-        AppUtils.message(this.messageAnchor, placeholder, Snackbar.LENGTH_LONG)
-                .setAction(getString(R.string.prompt_cancel), v -> this.listTurnPickedAdapter.restoreItem(item, position))
-                .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null))
-                .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                    @Override
-                    public void onDismissed(Snackbar transientBottomBar, int event) {
-                        super.onDismissed(transientBottomBar, event);
+    @Override
+    public void onItemLongClick(@NonNull final RecyclerView.ViewHolder viewHolder, final int position) {
+        final String itemDate = new SimpleDateFormat("EEEE dd, ", Locale.getDefault())
+                .format(((Date) ((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn()[0]));
+        final String itemType = AppUtils.getTurnValueFromKey(String.valueOf(((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn()[1]));
 
-                        if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_CONSECUTIVE) {
-                            AppUtils.log(Thread.currentThread().getStackTrace(), "Turn picked removed definitely.");
-                            removeTurnFromUser(item);
-                            AppUtils.message(messageAnchor, getString(R.string.user_unbooked), Snackbar.LENGTH_SHORT).show();
-                        } else if (event == DISMISS_EVENT_ACTION) {
-                            AppUtils.log(Thread.currentThread().getStackTrace(), "Turn picked restored with action.");
-                        }
-                    }
-                })
-                .show();
+        // Backup before delete for undo action
+        final Object[] item = ((ListTurnPickedAdapter.MyViewHolder) viewHolder).getAdapterTurn();
+
+        showUnbookedDialog(itemDate, itemType, result -> {
+            if (result != null) {
+                unbookUser(item, itemDate, itemType, position);
+            } else {
+                AppUtils.log(Thread.currentThread().getStackTrace(), "Abort unbooked of: " + itemDate + " at " + itemType);
+            }
+
+        });
     }
 
     @Override
@@ -293,7 +297,8 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
         turnPickedRecycleView.setHasFixedSize(true);
         turnPickedRecycleView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 1));
 
-        this.listTurnPickedAdapter = new ListTurnPickedAdapter(rootView.getContext(), turns);
+        this.listTurnPickedAdapter = new ListTurnPickedAdapter(rootView.getContext(), turns,
+                (viewHolder, position) -> AppUtils.message(this.messageAnchor, getString(R.string.user_onclick) , Snackbar.LENGTH_LONG).show(), this);
         turnPickedRecycleView.setAdapter(this.listTurnPickedAdapter);
 
         final ItemTouchHelper.Callback callback = new ItemTouchHelperCallback(this);
@@ -350,6 +355,45 @@ public class FragmentUserPersonalTurn extends Fragment implements OnItemSwipeLis
 
         return filteredList;
     }
+
+    private void showUnbookedDialog(@NonNull final String itemDate, @NonNull final String itemType, @NonNull final OnDialogResultCallback callback) {
+        final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(getString(R.string.prompt_unbook));
+
+        final String placeholder = getString(R.string.user_unbooking_dialog) + " " + itemDate + " " + itemType + " ?";
+        builder.setMessage(placeholder);
+        builder.setPositiveButton(getString(R.string.prompt_confirm), (dialog, which) -> callback.onCallback(Boolean.toString(true)));
+        builder.setNegativeButton(getString(R.string.prompt_cancel), (dialog, which) -> callback.onCallback(null));
+        builder.setOnCancelListener(dialog -> callback.onCallback(null));
+        builder.create();
+        builder.show();
+    }
+
+    private void unbookUser(@NonNull final Object[] item, @NonNull final String itemDate, @NonNull final String itemType, final int position) {
+        this.listTurnPickedAdapter.removeItem(position);
+
+        final String placeholder = getString(R.string.user_unbooking) + itemDate + " " + itemType;
+        AppUtils.message(this.messageAnchor, placeholder, Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.prompt_cancel), v -> this.listTurnPickedAdapter.restoreItem(item, position))
+                .setActionTextColor(ResourcesCompat.getColor(getResources(), R.color.tint_message_text, null))
+                .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+
+                        if (event == DISMISS_EVENT_TIMEOUT || event == DISMISS_EVENT_CONSECUTIVE) {
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Turn picked removed definitely.");
+                            removeTurnFromUser(item);
+                            AppUtils.message(messageAnchor, getString(R.string.user_unbooked), Snackbar.LENGTH_SHORT).show();
+                        } else if (event == DISMISS_EVENT_ACTION) {
+                            AppUtils.log(Thread.currentThread().getStackTrace(), "Turn picked restored with action.");
+                        }
+                    }
+                })
+                .show();
+    }
+
+    // Database methods
 
     private void removeTurnFromUser(@NonNull final Object[] turn) {
         final String[] userKeys = getResources().getStringArray(R.array.user_field);

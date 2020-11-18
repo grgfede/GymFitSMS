@@ -34,12 +34,12 @@
             \nEssa è realizzata per soli scopi didattici, dimostrtivi e istituzionali.</item>
 
         <item>Per iscriversi ad una palestra è necessario accedere alla pagina [Elenco palestre]
-            ed eseguire uno swipe verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
+            e tener premuto o eseguire uno swipe verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
             riga con le informazioni della palestra desiderata.
             \nPotrà risultare molto utile l\'utilizzo delle funzionalità di ricerca, filtraggio e ordinamento
             presenti nella barra superiore dello schermo.</item>
         <item>E\' sempre possibile disiscriversi dalla palestra attuale (quella a cui si è già iscritti).
-            \nPer disiscriversi è necessario accedere alla pagina [Elenco palestre] ed eseguire uno swipe
+            \nPer disiscriversi è necessario accedere alla pagina [Elenco palestre] e tener premuto o eseguire uno swipe
             verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
             riga con le informazioni della propria palestra (appena sotto la scritta [La tua palestra]).
             \nEvidentemente l\'eliminazione dell\'iscrizione dalla prorpia palestra eliminerà ogni prenotazione e turno ad essa.
@@ -50,7 +50,7 @@
             \nIn seguito cliccare nuovamente su uno dei turni (ove possibile) la palestra fornisce la propria disponibilià.</item>
         <item>Non è possibile ancora modificare un turno già prenotato ma sarà sempre possibile eliminarlo in qualsiasi momento.
             \nPer poter eliminare un turno è necessario accedere alla pagina [Prenotazioni], dunque [Personale], selezionare il giorno
-            della settimana a cui ci si è prenotati ed eseguire uno swipe verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
+            della settimana a cui ci si è prenotati e tener premuto o eseguire uno swipe verso sinistra (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della
             riga con le informazioni della prenotazione.</item>
 
         <item>E\' sempre possibile modificare le proprie informazioni registrate al momento dell\'iscrizione all\'app.
@@ -79,7 +79,7 @@
         <item>Per gestire gli utenti iscritti alla propria palestra è necessario accedere alla pagina [Elenco iscritti].
             \nE\' possibile esclusivamente eliminare questi ultimi ma non effettuare manipolazioni sui rispettividi dati.</item>
         <item>E\' esclusivamente possibile disattivare, dunque eliminare definitivamente un utente dalla propria palestra.
-            \nPer poter eliminare un iscritto è necessario accedere alla pagina [Elenco iscritti], ed eseguire uno swipe verso sinistra
+            \nPer poter eliminare un iscritto è necessario accedere alla pagina [Elenco iscritti], e tener premuto o eseguire uno swipe verso sinistra
             (tener premuto e trascinare il dito da destra verso sinistra) al di sopra della riga con le informazioni dell\'utente.
             \nPotrà risultare molto utile l\'utilizzo delle funzionalità di ricerca, filtraggio e ordinamento
             presenti nella barra superiore dello schermo.</item>

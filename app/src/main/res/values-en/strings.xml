@@ -160,7 +160,7 @@
     <string name="prompt_book">Book</string>
     <string name="user_booked">You booked at: \n</string>
     <string name="prompt_unbook">Unbook</string>
-    <string name="user_unbooking">"Are you unbooking the turn at "</string>
+    <string name="user_unbooking">Are you unbooking at</string>
     <string name="user_unbooked">You unbooked the turn.</string>
     <string name="refresh_gyms_available">Search new available gyms…</string>
     <string name="refresh_turns_available">Refresh available turns…</string>
@@ -188,4 +188,8 @@
     <string name="system_device_os_version">Operating system version</string>
     <string name="title_system_info">App info</string>
     <string name="refresh_system_info">Loading new info…</string>
+    <string name="dialog_title_user_unsubcribe">Unsubscribe User</string>
+    <string name="gym_unsubscribing_user">Are you sure you want to unsubscribe from gym</string>
+    <string name="user_onclick">Press and hold to unbook.</string>
+    <string name="user_unbooking_dialog">Are you sure you want unbook at</string>
 </resources>

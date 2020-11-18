@@ -47,12 +47,15 @@
     <string name="user_subscriptions_void">Non sei iscritto a nessuna palestra.</string>
     <string name="user_gyms_void">Nessuna palestra iscritta.</string>
     <string name="user_subscribing">Ti stai iscrivendo a: \n</string>
-    <string name="user_subscribed">"Ti sei iscritto a: "</string>
+    <string name="user_subscribed">Ti sei iscritto a: </string>
     <string name="user_booking">Sei sicuro di volerti prenotare per: </string>
     <string name="user_booked">Ti sei prenotato per: \n</string>
     <string name="user_unsubscribing">Sei sicuro di volerti disiscrivere dalla palestra</string>
-    <string name="user_unsubscribed">"Ti sei disiscritto da: \n"</string>
+    <string name="user_unsubscribed">Ti sei disiscritto da: \n</string>
+    <string name="gym_unsubscribing_user">Sei sicuro di voler disiscrivere dalla palestra</string>
+    <string name="user_onclick">Tieni premuto per annullare la prenotazione.</string>
     <string name="user_unbooking">Stai annullando la prenotazione di </string>
+    <string name="user_unbooking_dialog">Sei sicuro di voler annulare la prenotazione di</string>
     <string name="user_unbooked">Hai annullato la prenotazione.</string>
     <string name="user_already_subscribed">Sei già iscritto…</string>
 

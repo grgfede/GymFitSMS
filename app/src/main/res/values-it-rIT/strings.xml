@@ -188,4 +188,8 @@
     <string name="system_device_conn">Connessione</string>
     <string name="title_system_info">Informazioni sull\'app</string>
     <string name="refresh_system_info">Ricarica nuove informazioni…</string>
+    <string name="dialog_title_user_unsubcribe">Disiscrivi utente</string>
+    <string name="gym_unsubscribing_user">Sei sicuro di voler disiscrivere dalla palestra</string>
+    <string name="user_onclick">Tieni premuto per annullare la prenotazione.</string>
+    <string name="user_unbooking_dialog">Sei sicuro di voler annulare la prenotazione di</string>
 </resources>

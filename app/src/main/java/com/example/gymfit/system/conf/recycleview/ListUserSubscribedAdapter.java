@@ -26,12 +26,15 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
     private final List<Gym> gyms = new ArrayList<>();
     private final Context context;
 
-    private final OnItemClickListener listener;
+    private final OnItemClickListener clickListener;
+    private final OnItemLongClickListener longClickListener;
 
-    public ListUserSubscribedAdapter(@NonNull Context ct, @NonNull Gym gym, OnItemClickListener listener) {
+    public ListUserSubscribedAdapter(@NonNull final Context ct, @NonNull final Gym gym,
+                                     @NonNull final OnItemClickListener clickListener, @NonNull final OnItemLongClickListener longClickListener) {
         this.context = ct;
         this.gyms.add(gym);
-        this.listener = listener;
+        this.clickListener = clickListener;
+        this.longClickListener = longClickListener;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -41,7 +44,7 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
         private final CircleImageView startIcon;
         private final TextView username, details;
 
-        public MyViewHolder(@NotNull View itemView) {
+        public MyViewHolder(@NotNull final View itemView) {
             super(itemView);
 
             this.startIcon = itemView.findViewById(R.id.m_start_icon);
@@ -54,7 +57,8 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
             this.turnsContainer = itemView.findViewById(R.id.m_turns_container);
         }
 
-        public void bind(@NotNull final Context context, @NotNull final Gym gym, @NotNull final int position, final OnItemClickListener listener) {
+        public void bind(@NotNull final Context context, @NotNull final Gym gym, @NotNull final int position,
+                         @NonNull final OnItemClickListener clickListener, @NonNull final OnItemLongClickListener longClickListener) {
             this.subsContainer.removeAllViews();
             this.turnsContainer.removeAllViews();
 
@@ -72,7 +76,12 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
                 ));
             }
 
-            this.cardContainer.setOnClickListener(v -> listener.onItemClick(this, position));
+            this.cardContainer.setOnClickListener(v -> clickListener.onItemClick(this, position));
+            this.cardContainer.setOnLongClickListener(v -> {
+                longClickListener.onItemLongClick(this, position);
+                return true;
+            });
+
         }
 
         /**
@@ -85,11 +94,11 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
          */
         @NotNull
         private LinearLayout createSubscriptionRow(final Context context, final String key, final Boolean value) {
-            LinearLayout layout = new LinearLayout(context);
+            final LinearLayout layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.HORIZONTAL);
             layout.setWeightSum(2);
 
-            MaterialTextView subscriptionType = new MaterialTextView(context);
+            final MaterialTextView subscriptionType = new MaterialTextView(context);
             subscriptionType.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 0));
@@ -98,7 +107,7 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
             subscriptionType.setTextAlignment(LinearLayout.TEXT_ALIGNMENT_TEXT_START);
             subscriptionType.setText(getSubscriptionResource(context, key));
 
-            MaterialTextView subscription = new MaterialTextView(context);
+            final MaterialTextView subscription = new MaterialTextView(context);
             subscription.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT, 2));
@@ -152,12 +161,12 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
          * @return View container
          */
         private LinearLayout createTurnRow(@NotNull final Context context, @NotNull final String key, final Boolean[] value) {
-            LinearLayout layout = new LinearLayout(context);
+            final LinearLayout layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
 
             for (int i=0; i<3; i++) {
                 if (value[i]) {
-                    MaterialTextView turnValue = new MaterialTextView(context);
+                    final MaterialTextView turnValue = new MaterialTextView(context);
                     turnValue.setLayoutParams(new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -192,7 +201,7 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
             final String[] afternoonTurnKeys = context.getResources().getStringArray(R.array.afternoon_session_value);
             final String[] eveningTurnKeys = context.getResources().getStringArray(R.array.evening_session_value);
 
-            String resource;
+            final String resource;
 
             if (turnKeys[0].equals(key)) resource = morningTurnKeys[position];
             else resource = turnKeys[1].equals(key) ? afternoonTurnKeys[position] : eveningTurnKeys[position];
@@ -204,23 +213,23 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
 
     @NonNull
     @Override
-    public ListUserSubscribedAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.layout_recycleview_user_subscribed, parent, false);
+    public ListUserSubscribedAdapter.MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        final View view = inflater.inflate(R.layout.layout_recycleview_user_subscribed, parent, false);
         return new ListUserSubscribedAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListUserSubscribedAdapter.MyViewHolder holder, int position) {
-        holder.bind(this.context, this.gyms.get(position), position, listener);
+    public void onBindViewHolder(@NonNull final ListUserSubscribedAdapter.MyViewHolder holder, final int position) {
+        holder.bind(this.context, this.gyms.get(position), position, this.clickListener, this.longClickListener);
 
         // load
         Picasso.get().load(this.gyms.get(position).getImage()).into(holder.startIcon);
 
-        String username = this.gyms.get(position).getName();
+        final String username = this.gyms.get(position).getName();
         holder.username.setText(username);
 
-        String address = this.gyms.get(position).getAddress();
+        final String address = this.gyms.get(position).getAddress();
         holder.details.setText(address);
     }
 
@@ -231,12 +240,12 @@ public class ListUserSubscribedAdapter extends RecyclerView.Adapter<ListUserSubs
 
     // Other methods
 
-    public void removeItem(int position) {
+    public void removeItem(final int position) {
         this.gyms.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(@NonNull Gym item, int position) {
+    public void restoreItem(@NonNull final Gym item, final int position) {
         this.gyms.add(position, item);
         notifyItemInserted(position);
     }

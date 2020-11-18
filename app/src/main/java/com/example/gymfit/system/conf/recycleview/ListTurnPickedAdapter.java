@@ -27,10 +27,16 @@ public class ListTurnPickedAdapter extends RecyclerView.Adapter<ListTurnPickedAd
     private final List<Object[]> turns;
     private final Context context;
 
-    public ListTurnPickedAdapter(@NonNull final Context context, @NonNull final List<Object[]> turns) {
+    private final OnItemClickListener clickListener;
+    private final OnItemLongClickListener longClickListener;
+
+    public ListTurnPickedAdapter(@NonNull final Context context, @NonNull final List<Object[]> turns,
+                                 @NonNull final OnItemClickListener clickListener, @NonNull final OnItemLongClickListener longClickListener) {
         this.turns = turns;
         this.turns.sort((o1, o2) -> ((Date) o2[0]).compareTo((Date) o1[0]));
         this.context = context;
+        this.clickListener = clickListener;
+        this.longClickListener = longClickListener;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -44,14 +50,24 @@ public class ListTurnPickedAdapter extends RecyclerView.Adapter<ListTurnPickedAd
             super(itemView);
 
             this.cardContainer = itemView.findViewById(R.id.card_container);
+            this.cardContainer.setClickable(true);
+            this.cardContainer.setLongClickable(true);
+
             this.deleteContainer = itemView.findViewById(R.id.delete_container);
             this.startIcon = itemView.findViewById(R.id.start_icon);
             this.date = itemView.findViewById(R.id.turn_date_value);
             this.type = itemView.findViewById(R.id.turn_type_value);
         }
 
-        public void bind(@NonNull final Object[] turn) {
-            adapterTurn = turn;
+        public void bind(@NonNull final Object[] turn, final int position,
+                         @NonNull final OnItemClickListener clickListener, @NonNull final OnItemLongClickListener longClickListener) {
+            this.adapterTurn = turn;
+
+            this.cardContainer.setOnClickListener(v -> clickListener.onItemClick(this, position));
+            this.cardContainer.setOnLongClickListener(v -> {
+                longClickListener.onItemLongClick(this, position);
+                return true;
+            });
         }
 
         @NonNull
@@ -63,15 +79,15 @@ public class ListTurnPickedAdapter extends RecyclerView.Adapter<ListTurnPickedAd
 
     @NonNull
     @Override
-    public ListTurnPickedAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(R.layout.layout_recycleview_turn_picked, parent, false);
+    public ListTurnPickedAdapter.MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        final LayoutInflater inflater = LayoutInflater.from(this.context);
+        final View view = inflater.inflate(R.layout.layout_recycleview_turn_picked, parent, false);
         return new ListTurnPickedAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListTurnPickedAdapter.MyViewHolder holder, int position) {
-        holder.bind(this.turns.get(position));
+    public void onBindViewHolder(@NonNull final ListTurnPickedAdapter.MyViewHolder holder, final int position) {
+        holder.bind(this.turns.get(position), position, this.clickListener, this.longClickListener);
 
         final String date = new SimpleDateFormat("EEEE, dd", Locale.getDefault()).format(((Date) this.turns.get(position)[0]));
         holder.date.setText(StringUtils.capitalize(date));
@@ -106,7 +122,7 @@ public class ListTurnPickedAdapter extends RecyclerView.Adapter<ListTurnPickedAd
         notifyDataSetChanged();
     }
 
-    public void removeItem(int position) {
+    public void removeItem(final int position) {
         this.turns.remove(position);
         notifyItemRemoved(position);
     }

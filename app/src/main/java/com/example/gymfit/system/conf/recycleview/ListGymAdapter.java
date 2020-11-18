@@ -33,13 +33,16 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
     private final Context context;
     private LatLng currentLocation;
 
-    private final OnItemClickListener listener;
+    private final OnItemClickListener clickListener;
+    private final OnItemLongClickListener longClickListener;
 
-    public ListGymAdapter(@NonNull final Context ct, @NonNull final List<Gym> gyms, OnItemClickListener listener) {
+    public ListGymAdapter(@NonNull final Context ct, @NonNull final List<Gym> gyms,
+                          @NonNull final OnItemClickListener clickListener, @NonNull final OnItemLongClickListener longClickListener) {
         this.context = ct;
         this.gyms = gyms;
         this.gymsFull = new ArrayList<>(this.gyms);
-        this.listener = listener;
+        this.clickListener = clickListener;
+        this.longClickListener = longClickListener;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -63,7 +66,8 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
             this.turnsContainer = itemView.findViewById(R.id.turns_container);
         }
 
-        public void bind(@NonNull final Context context, @NonNull final Gym gym, final int position, final OnItemClickListener listener) {
+        public void bind(@NonNull final Context context, @NonNull final Gym gym, final int position,
+                         @NonNull final OnItemClickListener clickListener, @NonNull final OnItemLongClickListener longClickListener) {
             this.subsContainer.removeAllViews();
             this.turnsContainer.removeAllViews();
 
@@ -81,7 +85,11 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
                 ));
             }
 
-            this.cardContainer.setOnClickListener(v -> listener.onItemClick(this, position));
+            this.cardContainer.setOnClickListener(v -> clickListener.onItemClick(this, position));
+            this.cardContainer.setOnLongClickListener(v -> {
+                longClickListener.onItemLongClick(this, position);
+                return true;
+            });
         }
 
         /**
@@ -93,7 +101,7 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
          * @return View container
          */
         @NonNull
-        private LinearLayout createSubscriptionRow(final Context context, final String key, final Boolean value) {
+        private LinearLayout createSubscriptionRow(@NonNull final Context context, @NonNull final String key, @NonNull final Boolean value) {
             LinearLayout layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.HORIZONTAL);
             layout.setWeightSum(2);
@@ -131,7 +139,7 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
          * @return String with subscription key translated from Resources
          */
         @NonNull
-        private String getSubscriptionResource(final Context context, final String key) {
+        private String getSubscriptionResource(@NonNull final Context context, @NonNull final String key) {
             final String[] gymKeys = context.getResources().getStringArray(R.array.gym_field);
             final String[] subscriptionKeys = new String[]{
                     gymKeys[10], gymKeys[11], gymKeys[12], gymKeys[13]
@@ -192,7 +200,7 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
          * @return String with turn value fom Resources
          */
         @NonNull
-        private String getTurnResource(final Context context, final String key, final int position) {
+        private String getTurnResource(@NonNull final Context context, @NonNull final String key, final int position) {
             final String[] gymKeys = context.getResources().getStringArray(R.array.gym_field);
             final String[] turnKeys = new String[]{
                     gymKeys[14], gymKeys[15], gymKeys[16],
@@ -212,25 +220,25 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
 
     }
 
-    @NonNull
     @Override
-    public ListGymAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.layout_recycleview_gyms, parent, false);
+    @NonNull
+    public ListGymAdapter.MyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
+        final View view = inflater.inflate(R.layout.layout_recycleview_gyms, parent, false);
         return new ListGymAdapter.MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListGymAdapter.MyViewHolder holder, int position) {
-        holder.bind(this.context, this.gyms.get(position), position, listener);
+    public void onBindViewHolder(@NonNull final ListGymAdapter.MyViewHolder holder, final int position) {
+        holder.bind(this.context, this.gyms.get(position), position, this.clickListener, this.longClickListener);
 
         // load
         Picasso.get().load(this.gyms.get(position).getImage()).into(holder.startIcon);
 
-        String username = this.gyms.get(position).getName();
+        final String username = this.gyms.get(position).getName();
         holder.username.setText(username);
 
-        String address = this.gyms.get(position).getAddress();
+        final String address = this.gyms.get(position).getAddress();
         holder.details.setText(address);
     }
 
@@ -263,8 +271,8 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
     private final Filter filter = new Filter() {
 
         @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Gym> filteredList = new ArrayList<>();
+        protected FilterResults performFiltering(@NonNull final CharSequence constraint) {
+            final List<Gym> filteredList = new ArrayList<>();
             gyms.clear();
 
             if (constraint == null || constraint.length() == 0) {
@@ -276,13 +284,13 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
                 filterCompare(filteredList, filterPattern, "search");
             }
 
-            FilterResults filterResults = new FilterResults();
+            final FilterResults filterResults = new FilterResults();
             filterResults.values = filteredList;
             return filterResults;
         }
 
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
+        protected void publishResults(@NonNull final CharSequence constraint, @NonNull final FilterResults results) {
             @SuppressWarnings("unchecked") final List<Gym> listTmp = (List<Gym>) results.values;
             gyms.clear();
             gyms.addAll(listTmp);
@@ -294,8 +302,8 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
     private final Filter filterMenu = new Filter() {
 
         @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Gym> filteredList = new ArrayList<>();
+        protected FilterResults performFiltering(@NonNull final CharSequence constraint) {
+            final List<Gym> filteredList = new ArrayList<>();
             gyms.clear();
 
             if (constraint.equals(context.getString(R.string.filter_by_distance_10))) {
@@ -312,13 +320,13 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
                 filterCompare(filteredList, filterPattern, "filter");
             }
 
-            FilterResults filterResults = new FilterResults();
+            final FilterResults filterResults = new FilterResults();
             filterResults.values = filteredList;
             return filterResults;
         }
 
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
+        protected void publishResults(@NonNull final CharSequence constraint, @NonNull final FilterResults results) {
             @SuppressWarnings("unchecked") final List<Gym> listTmp = (List<Gym>) results.values;
             gyms.clear();
             gyms.addAll(listTmp);
@@ -329,8 +337,8 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
     @NonNull
     private final Filter sorter = new Filter() {
         @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Gym> filteredList = new ArrayList<>();
+        protected FilterResults performFiltering(@NonNull final CharSequence constraint) {
+            final List<Gym> filteredList = new ArrayList<>();
 
             if (constraint.equals(context.getResources().getString(R.string.prompt_name))) {
                 filteredList.clear();
@@ -338,22 +346,22 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
                 filterCompare(filteredList, filterPattern, "sort");
             }
 
-            FilterResults filterResults = new FilterResults();
+            final FilterResults filterResults = new FilterResults();
             filterResults.values = filteredList;
             return filterResults;
         }
 
         @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
+        protected void publishResults(@NonNull final CharSequence constraint, @NonNull final FilterResults results) {
             @SuppressWarnings("unchecked")
-            List<Gym> listTmp = (List<Gym>) results.values;
+            final List<Gym> listTmp = (List<Gym>) results.values;
             gyms.clear();
             gyms.addAll(listTmp);
             notifyDataSetChanged();
         }
     };
 
-    private void filterCompare(@NonNull List<Gym> filteredList, @NonNull final String constraint, @NonNull final String rule) {
+    private void filterCompare(@NonNull final List<Gym> filteredList, @NonNull final String constraint, @NonNull final String rule) {
         filteredList.clear();
 
         if (rule.equals("search")) {
@@ -449,14 +457,14 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
     private static double distance(@NonNull final LatLng startPoint, @NonNull final LatLng endPoint) {
         final int R = 6371; // Radius of the earth
 
-        double latDistance = Math.toRadians(endPoint.latitude - startPoint.latitude);
-        double lonDistance = Math.toRadians(endPoint.longitude - startPoint.longitude);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+        final double latDistance = Math.toRadians(endPoint.latitude - startPoint.latitude);
+        final double lonDistance = Math.toRadians(endPoint.longitude - startPoint.longitude);
+        final double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
                 + Math.cos(Math.toRadians(startPoint.latitude)) * Math.cos(Math.toRadians(endPoint.latitude))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        final double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = R * c * 1000; // convert to meters
-        double height = 0.0;
+        final double height = 0.0;
 
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 

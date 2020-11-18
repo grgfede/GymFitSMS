@@ -146,6 +146,7 @@
     <string name="dialog_title_pickimage">Scegli una azione</string>
     <string name="dialog_item_pickimage_camera">Fotocamera</string>
     <string name="dialog_item_pickimage_gallery">Galleria</string>
+    <string name="dialog_title_user_unsubcribe">Disiscrivi utente</string>
 
     <string name="title_subscription">Abbonamento</string>
     <string name="subscription_available">Abbonamenti disponibili</string>
