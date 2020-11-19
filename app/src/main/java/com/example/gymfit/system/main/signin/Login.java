@@ -72,7 +72,7 @@ public class Login extends AppCompatActivity {
         // get system preferences to init onboard initialization
         this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
 
-        if(!this.preferences.getBoolean("onboarding_complete",false)) {
+        if (!this.preferences.getBoolean("onboarding_complete", false)) {
             final Intent onboarding = new Intent(this, ActivitySystemOnBoarding.class);
             startActivity(onboarding);
             finish();
@@ -109,18 +109,19 @@ public class Login extends AppCompatActivity {
                 this.password.setError("Attenzione! Inserisci password");
                 this.password.requestFocus();
             } else {
-                this.mFirebaseAuth.signInWithEmailAndPassword(email, psw).addOnCompleteListener(Login.this, task -> {
-                    if (task.isSuccessful()) {
-                        final FirebaseUser user = this.mFirebaseAuth.getCurrentUser();
-                        final String uid = user != null ? user.getUid() : null;
-                        if (uid != null) {
-                            AppUtils.log(Thread.currentThread().getStackTrace(), "Logging successfully with Firebase Auth.");
-                            signInIntent(user.getUid());
-                        }
-                    } else {
-                        AppUtils.log(Thread.currentThread().getStackTrace(), "Logging failed with Firebase Auth.");
-                    }
-                });
+                this.mFirebaseAuth.signInWithEmailAndPassword(email, psw)
+                        .addOnCompleteListener(Login.this, task -> {
+                            if (task.isSuccessful()) {
+                                final FirebaseUser user = this.mFirebaseAuth.getCurrentUser();
+                                final String uid = user != null ? user.getUid() : null;
+                                if (uid != null) {
+                                    AppUtils.log(Thread.currentThread().getStackTrace(), "Logging successfully with Firebase Auth.");
+                                    signInIntent(user.getUid());
+                                }
+                            } else {
+                                AppUtils.log(Thread.currentThread().getStackTrace(), "Logging failed with Firebase Auth.");
+                            }
+                        }).addOnFailureListener(e -> this.emailId.setError(getResources().getString(R.string.prompt_email_not_found)));
             }
         });
     }
@@ -164,11 +165,11 @@ public class Login extends AppCompatActivity {
         }));
     }
 
-    public void signUpIntent(@NonNull final View v){
+    public void signUpIntent(@NonNull final View v) {
         startActivity(new Intent(Login.this, SignUp.class));
     }
 
-    public void signUpGymIntent(@NonNull final View v){
+    public void signUpGymIntent(@NonNull final View v) {
         startActivity(new Intent(Login.this, GymSignUp.class));
     }
 
