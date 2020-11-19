@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/loginParentLayout"
@@ -18,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="@string/login_email"
         android:textAlignment="viewStart"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/tint_title"
         android:textSize="29sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +39,7 @@
         android:autoSizeTextType="uniform"
         android:text="@string/subtitle_login_page"
         android:textAlignment="viewStart"
-        android:textColor="#808080"
+        android:textColor="@color/tint_first_line_light"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +47,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtTitleLogin"
         app:layout_constraintVertical_bias="0.0" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -59,7 +59,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.613">
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/EmailLayoutLogin"
@@ -97,9 +96,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text|textEmailAddress|textEmailSubject"
-                android:textColor="@color/tint_hint_focuses" />
+                android:textColor="@color/tint_input_text" />
         </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/PasswordLayoutLogin"
@@ -129,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/tint_hint_focuses" />
+                android:textColor="@color/tint_input_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -137,6 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:textColor="@color/tint_second_line_light"
             android:text="@string/forgot_password"
 
             app:layout_constraintBottom_toTopOf="@+id/btnLogin"
@@ -145,6 +144,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtPassword"
             app:layout_constraintVertical_bias="0.127" />
+
     </LinearLayout>
 
     <Button
@@ -162,7 +162,6 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.0" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -172,15 +171,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.060000002">
-
+        app:layout_constraintVertical_bias="0.060000002"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
@@ -188,32 +188,35 @@
             app:layout_constraintTop_toBottomOf="@+id/btnLogin"
             app:layout_constraintVertical_bias="0.0">
 
-
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/tint_second_line_light"
+                android:textSize="14sp"
                 android:text="@string/dont_have_account_user" />
 
             <TextView
                 android:id="@+id/textCreate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/tint_third_line"
+                android:textSize="14sp"
                 android:onClick="signUpIntent"
                 android:text="@string/create_account_user" />
-        </LinearLayout>
 
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.52"
@@ -221,30 +224,27 @@
             app:layout_constraintTop_toBottomOf="@+id/btnLogin"
             app:layout_constraintVertical_bias="0.55">
 
-
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/tint_second_line_light"
+                android:textSize="14sp"
                 android:text="@string/dont_have_account_gym" />
 
             <TextView
                 android:id="@+id/textCreate2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginLeft="5dp"
-                android:textSize="10sp"
-
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="5dp"
+                android:textSize="14sp"
+                android:textColor="@color/tint_third_line"
                 android:onClick="signUpGymIntent"
                 android:text="@string/create_account_gym" />
         </LinearLayout>
 
-
     </LinearLayout>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@
     android:background="@color/background_ui_default"
     tools:context=".system.main.FragmentSystemOnBoarding3">
 
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="274dp"
@@ -22,7 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_onboarding1" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -65,7 +63,7 @@
             android:inputType="text|textMultiLine|textCapSentences"
             android:text="@string/subtitle_onBoarding1"
             android:textAlignment="center"
-            android:textColor="@color/tint_second_line_light"
+            android:textColor="@color/tint_first_line_light"
             android:textSize="16sp" />
     </LinearLayout>
 

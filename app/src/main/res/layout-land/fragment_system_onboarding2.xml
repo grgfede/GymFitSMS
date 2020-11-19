@@ -65,7 +65,7 @@
             android:inputType="text|textMultiLine|textCapSentences"
             android:text="@string/subtitle_onBoarding2"
             android:textAlignment="center"
-            android:textColor="@color/tint_second_line_light"
+            android:textColor="@color/tint_first_line_light"
             android:textSize="16sp" />
     </LinearLayout>
 

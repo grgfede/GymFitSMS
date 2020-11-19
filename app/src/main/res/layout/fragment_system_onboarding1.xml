@@ -59,7 +59,7 @@
             android:id="@+id/textSubTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/tint_second_line_light"
+            android:textColor="@color/tint_first_line_light"
             android:autoSizeMaxTextSize="100sp"
             android:autoSizeMinTextSize="12sp"
             android:autoSizeStepGranularity="2sp"

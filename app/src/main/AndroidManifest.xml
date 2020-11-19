@@ -40,8 +40,7 @@
         <activity
             android:name=".system.main.signup.SignUp"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".system.main.signin.Login"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
+        <activity android:name=".system.main.signin.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
