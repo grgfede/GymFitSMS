@@ -87,7 +87,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textColor="@color/tint_hint_focuses" />
+                android:textColor="@color/tint_input_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--PASSWORD-->
@@ -116,7 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/tint_hint_no_focused" />
+                android:textColor="@color/tint_input_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--REPEAT PASSWORD-->
@@ -145,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:textColor="@color/tint_hint_no_focused" />
+                android:textColor="@color/tint_input_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
 

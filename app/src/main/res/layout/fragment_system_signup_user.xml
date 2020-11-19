@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textColor="@color/tint_hint_focuses" />
+                android:textColor="@color/tint_input_text" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:textColor="@color/tint_hint_focuses" />
+                android:textColor="@color/tint_input_text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,7 +145,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:inputType="none"
-                    android:textColor="@color/tint_hint_focuses" />
+                    android:textColor="@color/tint_input_text" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -173,7 +173,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:inputType="none"
-                    android:textColor="@color/tint_hint_focuses" />
+                    android:textColor="@color/tint_input_text" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -206,7 +206,7 @@
                 android:id="@+id/txtLocationSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:hintTextColor="@color/tint_hint_focuses" />
+                app:hintTextColor="@color/tint_input_text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -240,7 +240,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:textColor="@color/tint_hint_focuses" />
+                android:textColor="@color/tint_input_text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
