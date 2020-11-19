@@ -135,7 +135,7 @@
                 android:textSize="15sp"
                 app:endIconMode="password_toggle"
                 app:errorEnabled="true"
-                app:helperText="@string/helper_surname_hover"
+                app:helperText="@string/repeat_password"
                 app:helperTextEnabled="true"
                 app:hintTextColor="@color/tint_hint_no_focused"
                 app:layout_constraintEnd_toEndOf="parent"
