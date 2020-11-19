@@ -1,6 +1,7 @@
 package com.example.gymfit.system.conf.utils;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 
 import com.example.gymfit.R;
 import com.example.gymfit.gym.conf.Gym;
@@ -164,8 +165,13 @@ public class DatabaseUtils {
                         final ArrayList<Map<String, Object>> turns = ds.get(keys[11]) != null
                                 ? (ArrayList<Map<String, Object>>) ds.get(keys[11])
                                 : new ArrayList<>();
+                        final LatLng location = ds.get(keys[14]) != null
+                                ? AppUtils.getLocationFromMap((HashMap<String, Double>) Objects.requireNonNull(ds.get(keys[14])))
+                                : new LatLng(0, 0);
 
                         final User user = new User(uid, name, surname, email, dateOfBirthday, address, gender, img, phone, subscription, turns);
+                        user.setLocation(location);
+
                         callback.onCallback(user, RESULT_OK);
                     } else {
                         callback.onCallback(null, RESULT_VOID);

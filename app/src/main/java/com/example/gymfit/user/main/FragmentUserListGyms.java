@@ -559,6 +559,8 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
             }
         }
 
+        Log.d("KEY_LOG", this.user.getLocation() != null ? this.user.getLocation().toString() : "null");
+
         return new LatLng(
                 bestLocation != null ? bestLocation.getLatitude() : 0,
                 bestLocation != null ? bestLocation.getLongitude() : 0);

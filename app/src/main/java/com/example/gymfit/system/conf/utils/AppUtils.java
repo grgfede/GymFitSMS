@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.gymfit.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -269,6 +271,12 @@ public final class AppUtils {
                 .ifPresent(type::set);
 
         return type.get();
+    }
+
+    public static LatLng getLocationFromMap(@NonNull final Map<String, Double> locationMap) {
+        final String[] userKeys = ResourceUtils.getStringArrayFromID(R.array.user_field);
+
+        return new LatLng(locationMap.get(userKeys[15]), locationMap.get(userKeys[16]));
     }
 
     // Log and Message
