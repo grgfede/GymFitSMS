@@ -3,12 +3,16 @@ package com.example.gymfit.system.main.signup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -36,7 +40,9 @@ import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.Manifest.permission_group.CAMERA;
 import static android.app.Activity.RESULT_OK;
+import static androidx.constraintlayout.motion.widget.Debug.getLocation;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +52,8 @@ import static android.app.Activity.RESULT_OK;
 public class SignUpProfilePicFragment extends Fragment {
 
     private static final int SELECT_PHOTO = 1;
+    private static final int REQUEST_WRITE_PERMISSION = 786;
+
     FirebaseStorage storage;
     StorageReference storageReference;
     private CircleImageView profilePic;
@@ -158,12 +166,17 @@ public class SignUpProfilePicFragment extends Fragment {
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                } else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                }
             }
         });
+
 
 
         //CREO UN LISTENER SULL'ONCLICK DEL PULSANTE PER SKIPPARE IL CARICAMENTO DELLA FOTO
@@ -178,6 +191,19 @@ public class SignUpProfilePicFragment extends Fragment {
 
 
     }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            progressBar.setVisibility(View.VISIBLE);
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);        }
+    }
+
+
 
 
 

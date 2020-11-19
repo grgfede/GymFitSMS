@@ -2,9 +2,11 @@ package com.example.gymfit.system.main.signup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -70,6 +72,7 @@ public class GymSignUpFragment extends Fragment {
     private FragmentActivity myContext;
 
     private static final int SELECT_PHOTO = 1;
+    private static final int REQUEST_WRITE_PERMISSION = 786;
     private static final int MY_ADDRESS_REQUEST_CODE = 100;
 
 
@@ -193,10 +196,14 @@ public class GymSignUpFragment extends Fragment {
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //progressBar.setVisibility(View.VISIBLE);
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
+                } else {
+                    //progressBar.setVisibility(View.VISIBLE);
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                }
             }
         });
 
@@ -212,6 +219,16 @@ public class GymSignUpFragment extends Fragment {
         return view;
     }
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            //progressBar.setVisibility(View.VISIBLE);
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        }
+    }
 
     private void createAuthFirebase() {
         mFirebaseAuth = FirebaseAuth.getInstance();
