@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,6 +55,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +72,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     private View messageAnchor = null;
     private final Map<String, Boolean> viewVisibility = new HashMap<>();
     private boolean isEmptyData = false;
+    private final AtomicReference<String> distanceFilterConstraint = new AtomicReference<>("null");
 
     private User user = null;
     private final List<Gym> gyms = new ArrayList<>();
@@ -139,7 +142,7 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         // If there are some subscribers so enable actions of new menu, otherwise keep them disabled (no effects on recycle) to avoid exception
         if (!this.isEmptyData) {
             switch (item.getItemId()) {
-                case R.id.app_bar_search:
+                case R.id.app_bar_search: {
                     SearchView searchView = (SearchView) item.getActionView();
                     searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -154,21 +157,29 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                             return false;
                         }
                     });
+                }
                     break;
-                case R.id.action_sort_by_name:
+                case R.id.action_sort_by_name: {
                     listGymAdapter.getSort().filter(getResources().getString(R.string.prompt_name));
+                }
                     break;
-                case R.id.action_filter_10:
+                case R.id.action_filter_10: {
+                    this.distanceFilterConstraint.set(getString(R.string.filter_by_distance_10));
                     listGymAdapter.setCurrentLocation(getLastKnownLocation());
                     listGymAdapter.getMenuFilter().filter(getResources().getString(R.string.filter_by_distance_10));
+                }
                     break;
-                case R.id.action_filter_25:
+                case R.id.action_filter_25: {
+                    this.distanceFilterConstraint.set(getString(R.string.filter_by_distance_25));
                     listGymAdapter.setCurrentLocation(getLastKnownLocation());
                     listGymAdapter.getMenuFilter().filter(getResources().getString(R.string.filter_by_distance_25));
+                }
                     break;
-                case R.id.action_filter_50:
+                case R.id.action_filter_50: {
+                    this.distanceFilterConstraint.set(getString(R.string.filter_by_distance_50));
                     listGymAdapter.setCurrentLocation(getLastKnownLocation());
                     listGymAdapter.getMenuFilter().filter(getResources().getString(R.string.filter_by_distance_50));
+                }
                     break;
                 default:
                     break;
@@ -341,6 +352,11 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
         if (requestCode == MY_GPS_TRACKER_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 AppUtils.log(Thread.currentThread().getStackTrace(), "GPS permission granted from ListGymAdapter");
+
+                if (!this.distanceFilterConstraint.get().equals("null")) {
+                    this.listGymAdapter.setCurrentLocation(getLastKnownLocation());
+                    this.listGymAdapter.getMenuFilter().filter(this.distanceFilterConstraint.get());
+                }
             } else {
                 AppUtils.log(Thread.currentThread().getStackTrace(), "GPS permission not granted ListGymAdapter");
             }
@@ -523,24 +539,23 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
     @NonNull
     private LatLng getLastKnownLocation() {
         final LocationManager mLocationManager = (LocationManager) requireActivity().getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        final List<String> providers = mLocationManager.getProviders(true);
         Location bestLocation = null;
 
-        for (String provider : providers) {
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, MY_GPS_TRACKER_CODE);
+        } else {
+            final List<String> providers = mLocationManager.getProviders(true);
 
-            if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                requestPermissions(new String[]{ Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION }, MY_GPS_TRACKER_CODE);
-            }
-
-            final Location location = mLocationManager.getLastKnownLocation(provider);
-            if (location == null) {
-                continue;
-            }
-            if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
-                // Found best last known location: %s", l);
-                bestLocation = location;
+            for (String provider : providers) {
+                final Location location = mLocationManager.getLastKnownLocation(provider);
+                if (location == null) {
+                    continue;
+                }
+                if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
+                    // Found best last known location: %s", l);
+                    bestLocation = location;
+                }
             }
         }
 

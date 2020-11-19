@@ -273,9 +273,8 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
         @Override
         protected FilterResults performFiltering(@NonNull final CharSequence constraint) {
             final List<Gym> filteredList = new ArrayList<>();
-            gyms.clear();
 
-            if (constraint == null || constraint.length() == 0) {
+            if (constraint.length() == 0) {
                 filteredList.clear();
                 filteredList.addAll(gymsFull);
             } else {
@@ -304,7 +303,8 @@ public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHo
         @Override
         protected FilterResults performFiltering(@NonNull final CharSequence constraint) {
             final List<Gym> filteredList = new ArrayList<>();
-            gyms.clear();
+
+            Log.d("KEY_LOG", (String) constraint);
 
             if (constraint.equals(context.getString(R.string.filter_by_distance_10))) {
                 filteredList.clear();
