@@ -49,4 +49,5 @@
         <!-- [0] --> <item name="users" translatable="false">users</item>
         <!-- [1] --> <item name="gyms" translatable="false">gyms</item>
     </string-array>
+
 </resources>

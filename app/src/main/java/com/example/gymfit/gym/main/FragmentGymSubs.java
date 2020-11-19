@@ -101,11 +101,9 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener, On
         // if pull down with gesture refresh all available gyms adapter
         refreshLayout.setOnRefreshListener(() -> {
             AppUtils.message(this.messageAnchor, getString(R.string.refresh_users_available), Snackbar.LENGTH_SHORT).show();
-
+            refreshUserAdapter();
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 refreshLayout.setRefreshing(false);
-                refreshUserAdapter();
-
                 AppUtils.message(this.messageAnchor, getString(R.string.refresh_completed), Snackbar.LENGTH_SHORT).show();
                 AppUtils.log(Thread.currentThread().getStackTrace(), "Refresh turns and subscriptions.");
             }, AppUtils.getRandomDelayMillis());
@@ -343,7 +341,7 @@ public class FragmentGymSubs extends Fragment implements OnItemSwipeListener, On
 
                 DatabaseUtils.getUsersID(((data, result) -> {
                     if (result == DatabaseUtils.RESULT_OK) {
-                        final int size = data.size();
+                        final int size = this.gym.getSubscribers().size();
                         final AtomicInteger count = new AtomicInteger(0);
 
                         data.forEach(uid -> {
