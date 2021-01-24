@@ -65,9 +65,10 @@ public class ActivityUserProfile extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
-        this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+            this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+
             // Initialization interface
             initSystemInterface(Objects.requireNonNull(bundle.getString("uid")));
 

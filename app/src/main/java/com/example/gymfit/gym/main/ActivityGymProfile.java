@@ -58,15 +58,15 @@ public class ActivityGymProfile extends AppCompatActivity implements NavigationV
 
     private SharedPreferences preferences;
 
-
     @Override
     protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_profile);
 
-        this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+            this.preferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+
             // Initialization interface
             initSystemInterface(Objects.requireNonNull(bundle.getString("uid")));
 

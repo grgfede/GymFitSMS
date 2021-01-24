@@ -553,15 +553,17 @@ public class FragmentUserListGyms extends Fragment implements OnItemSwipeListene
                     continue;
                 }
                 if (bestLocation == null || location.getAccuracy() < bestLocation.getAccuracy()) {
-                    // Found best last known location: %s", l);
+                    // Found best last known location;
                     bestLocation = location;
                 }
             }
         }
 
+        Log.d("KEY_LOG", this.user.getLocation() != null ? this.user.getLocation().toString() : "null");
+
         return new LatLng(
-                bestLocation != null ? bestLocation.getLatitude() : this.user.getLocation().latitude,
-                bestLocation != null ? bestLocation.getLongitude() : this.user.getLocation().longitude);
+                bestLocation != null ? bestLocation.getLatitude() : 0,
+                bestLocation != null ? bestLocation.getLongitude() : 0);
     }
 
     // Database methods

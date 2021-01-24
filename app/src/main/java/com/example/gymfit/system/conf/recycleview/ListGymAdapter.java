@@ -27,7 +27,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ListGymAdapter extends RecyclerView.Adapter<ListGymAdapter.MyViewHolder> implements Filterable {
-
     private final List<Gym> gyms;
     private final List<Gym> gymsFull;
     private final Context context;

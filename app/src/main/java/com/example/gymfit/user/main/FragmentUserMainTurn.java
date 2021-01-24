@@ -115,7 +115,6 @@ public class FragmentUserMainTurn extends Fragment {
         refreshLayout.setColorSchemeResources(R.color.tint_refresher,
                 R.color.tint_refresher_first, R.color.tint_refresher_second, R.color.tint_refresher_third);
 
-
         final UserViewPagerAdapter adapter = new UserViewPagerAdapter(getChildFragmentManager(), 0);
         adapter.addFragment(FragmentUserListTurns.newInstance(this.user), getString(R.string.system_tab_list_turns));
         adapter.addFragment(FragmentUserPersonalTurn.newInstance(this.user), getString(R.string.system_tab_main_turn));

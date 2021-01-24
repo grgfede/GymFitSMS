@@ -252,16 +252,7 @@ public class GymSignUpFragment extends Fragment {
                     }
                 } else {
                     String uid = mFirebaseAuth.getUid();
-                    writeDb(uid, new IsWritableOnDbCallback() {
-                        @Override
-                        public void isWriteDb(boolean write) {
-                            if (write) {
-                                uploadPic(uid);
-                            } else {
-                                // set the value of variable val or anything
-                            }
-                        }
-                    });
+                    writeDb(uid, write -> uploadPic(uid));
                 }
             }
         });
@@ -286,9 +277,6 @@ public class GymSignUpFragment extends Fragment {
                                 Uri download = uri;
                                 //AGGIORNO I DATI DELL'UTENTE SUL DATABASE AGGIUNGENDO L'URL DELL'IMMAGINE CARICATA
                                 uploadInfoImageUser(uri, uid);
-                                Fragment finalSignUp = new SignUpFinish();
-                                FragmentManager fragManager = myContext.getSupportFragmentManager();
-                                changeFragment(fragManager, finalSignUp);
                             }
                         });
                     }
@@ -299,8 +287,6 @@ public class GymSignUpFragment extends Fragment {
             }
         });
     }
-
-
 
     private void changeFragment(FragmentManager fragManager, Fragment fragment2){
         fragManager.beginTransaction().setCustomAnimations(
@@ -383,12 +369,10 @@ public class GymSignUpFragment extends Fragment {
 
     private void writeDb(String uid, IsWritableOnDbCallback isWritableOnDbCallback) {
         String[] keys = getResources().getStringArray(R.array.gym_field);
-        String urlImageString = selectedImage.toString();
         Double latitude = locationLatLng.latitude;
         Double longitude = locationLatLng.longitude;
         GeoPoint point = new GeoPoint(latitude, longitude);
-        ArrayList<String> subscribers = new ArrayList<>();
-        subscribers = null;
+        ArrayList<String> subscribers = null;
         //CREO LA MAPPA CHE CARICO SU FIREBASE
         Map<String, Object> data = new HashMap<>();
         data.put("uid", uid);
@@ -400,7 +384,6 @@ public class GymSignUpFragment extends Fragment {
         data.put("address", address);
         data.put("subscribers", subscribers);
 
-
         //INIZIALIZZO I TURNI
         Map<String, Map<String, Boolean>> turns = initializeTurns(keys);
         //INIZIALIZZO LE SUBSCRIPTION
@@ -409,9 +392,7 @@ public class GymSignUpFragment extends Fragment {
         data.put("turn", turns);
         data.put("subscription", subscriptions);
 
-
         gym = new Gym(uid, email, phone, name, address, new ArrayList<>(), new LatLng(latitude, longitude), "null");
-
 
         db = FirebaseFirestore.getInstance();
         db.collection("gyms").document(uid).set(data)
@@ -427,7 +408,9 @@ public class GymSignUpFragment extends Fragment {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid) {
-                                                        isWritableOnDbCallback.isWriteDb(true);
+                                                        Fragment finalSignUp = new SignUpFinish();
+                                                        FragmentManager fragManager = myContext.getSupportFragmentManager();
+                                                        changeFragment(fragManager, finalSignUp);
                                                     }
                                                 }).addOnFailureListener(new OnFailureListener() {
                                             @Override
@@ -514,12 +497,14 @@ public class GymSignUpFragment extends Fragment {
         psw1 = psw1SignUp.getText().toString();
         psw2 = psw2SignUp.getText().toString();
 
+        /*
+
         if (!picChoose){
-            AppUtils utils = null;
-            Snackbar snackbar = utils.message(v, "Attenzione, scegliere immagine del profilo",Snackbar.LENGTH_SHORT);
+            Snackbar snackbar = AppUtils.message(v, "Attenzione, scegliere immagine del profilo",Snackbar.LENGTH_SHORT);
             snackbar.show();
             error = true;
         }
+         */
 
         if (name.isEmpty()) {
             nameL.setError("Nome non valido");

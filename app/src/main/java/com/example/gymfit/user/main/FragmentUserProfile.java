@@ -360,10 +360,10 @@ public class FragmentUserProfile extends Fragment {
             }
 
             switch (key) {
-                case "subscription":
+                case "subscription": // elenco palestre
                     AppUtils.startFragment((ActivityUserProfile) requireActivity(), FragmentUserListGyms.newInstance(this.user), true);
                     break;
-                case "turns":
+                case "turns": // elenco turni
                     AppUtils.startFragment((ActivityUserProfile) requireActivity(), FragmentUserMainTurn.newInstance(this.user), true);
                     break;
                 case "main":
